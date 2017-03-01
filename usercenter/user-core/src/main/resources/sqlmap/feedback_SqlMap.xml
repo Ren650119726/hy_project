@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="feedback" >
+    <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.FeedbackDO" >
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="mobile" column="mobile" jdbcType="VARCHAR" />
+        <result property="content" column="content"  jdbcType="VARCHAR" />
+        <result property="deleteMark" column="delete_mark"  jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, biz_code, user_id, mobile, content, delete_mark, gmt_created, gmt_modified
+    </sql>
+    <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.FeedbackDO">
+        insert into feedback
+        <dynamic prepend="(" >
+            <isNotNull prepend="," property="bizCode" >
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="userId" >
+                user_id
+            </isNotNull>
+            <isNotNull prepend="," property="mobile" >
+                mobile
+            </isNotNull>
+            <isNotNull prepend="," property="content" >
+                content
+            </isNotNull>
+            ,delete_mark, gmt_created, gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(" >
+            <isNotNull prepend="," property="bizCode" >
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="userId" >
+                #userId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="mobile" >
+                #mobile:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="content" >
+                #content:VARCHAR#
+            </isNotNull>
+            ,0 ,now(),now()
+
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap" parameterClass="java.lang.Long" >
+        select
+        <include refid="feedback.Base_Column_List" />
+        from feedback
+        where id = #id:BIGINT# and delete_mark = 0
+    </select>
+
+    <sql id="DateQueryWhere">
+        where delete_mark=0
+        <dynamic prepend="">
+            <isNotNull prepend="AND" property="startDate">
+                <![CDATA[gmt_modified >= #startDate:DATETIME#]]>
+            </isNotNull>
+            <isNotNull prepend="AND" property="endDate">
+                <![CDATA[#endDate:DATETIME# >= gmt_modified]]>
+            </isNotNull>
+            <isNotNull prepend="AND" property="bizCode">
+                biz_code = #bizCode:VARCHAR#
+            </isNotNull>
+        </dynamic>
+    </sql>
+
+	 <sql id="qtoQueryWhere">
+        <dynamic prepend="">
+         <isNotNull prepend="AND" property="startDate">
+                gmt_created >= #startDate:DATETIME#
+         </isNotNull>
+         <isNotNull prepend="AND" property="endDate">
+            #endDate:DATETIME# >= gmt_created
+         </isNotNull>
+         <isNotNull prepend="AND" property="bizCode">
+             biz_code = #bizCode:VARCHAR#
+         </isNotNull>
+         </dynamic>
+    </sql>
+
+	
+	 <select id="queryFeedback" resultMap="BaseResultMap" 	
+	 parameterClass="com.mockuai.usercenter.common.qto.FeedbackQTO">
+        select
+        <include refid="feedback.Base_Column_List" />
+        from feedback where delete_mark = 0
+        <include refid="qtoQueryWhere" />
+         <isNotNull property="startRow">
+			  order by gmt_modified DESC limit #startRow:BIGINT# , #pageSize:BIGINT#
+		</isNotNull>
+    </select>
+    
+    <select id="getTotalCount" resultClass = "java.lang.Integer" 	
+	 	parameterClass="com.mockuai.usercenter.common.qto.FeedbackQTO">
+        select count(*)
+        from feedback where delete_mark = 0
+        <include refid="qtoQueryWhere" />
+    </select>
+
+    <select id="selectByDate" resultMap="BaseResultMap" parameterClass="java.util.Map" >
+        select
+        <include refid="feedback.Base_Column_List" />
+        from feedback
+        <include refid="DateQueryWhere" />
+        order by gmt_modified DESC limit #offset:BIGINT# , #count:BIGINT#
+    </select>
+	
+
+
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

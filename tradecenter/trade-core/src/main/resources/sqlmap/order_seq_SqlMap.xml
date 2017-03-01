@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_seq">
+	<resultMap id="BaseResultMap" class="com.mockuai.tradecenter.core.domain.OrderSeqDO">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="day" property="day" jdbcType="DATE" />
+		<result column="seq" property="seq" jdbcType="INTEGER" />
+		<result column="gmt_created" jdbcType="DATETIME" property="gmtCreated" />
+		<result column="gmt_modified" jdbcType="DATETIME" property="gmtModified" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, day, seq,gmt_created,gmt_modifed
+	</sql>
+
+	<insert id="addOrderSeq" parameterClass="com.mockuai.tradecenter.core.domain.OrderSeqDO">
+		insert into order_seq (id, day, seq,gmt_created,gmt_modified)
+		values (#id:INTEGER#, curdate(), #seq:INTEGER#,now(),now())
+	</insert>
+
+	<select id="getOrderSeq" resultClass="com.mockuai.tradecenter.core.domain.OrderSeqDO">
+		select id,day,seq,gmt_created,gmt_modified from order_seq where day = curdate() limit 1;
+	</select>
+
+	<update id="updateOrderSeq" >
+		update order_seq set seq = seq + 1,gmt_modified = now() where day = curdate()
+	</update>
+
+</sqlMap>

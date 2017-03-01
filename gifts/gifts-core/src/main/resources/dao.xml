@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="actionGiftDAO" class="com.mockuai.giftscenter.core.dao.impl.ActionGiftDAOImpl"/>
+    <bean id="actionGiftMarketingDAO" class="com.mockuai.giftscenter.core.dao.impl.ActionGiftMarketingDAOImpl"/>
+    <bean id="grantCouponRecordDAO" class="com.mockuai.giftscenter.core.dao.impl.GrantCouponRecordDAOImpl"/>
+    <bean id="giftsPacketDAO" class="com.mockuai.giftscenter.core.dao.impl.GiftsPacketDAOImpl"/>
+    <bean id="giftsPacketProfitDAO" class="com.mockuai.giftscenter.core.dao.impl.GiftsPacketProfitDAOImpl"/>
+</beans>

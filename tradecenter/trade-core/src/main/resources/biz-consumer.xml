@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       				http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <bean name="userClient" class="com.mockuai.usercenter.client.impl.UserClientImpl"></bean>
+    <bean name="consigneeClient" class="com.mockuai.usercenter.client.impl.ConsigneeClientImpl"></bean>
+    <bean name="deliveryInfoClient" class="com.mockuai.deliverycenter.client.impl.DeliveryInfoClientImpl"></bean>
+    <bean name="deliveryDetailClient" class="com.mockuai.deliverycenter.client.impl.DeliveryDetailClientImpl"></bean>
+    <bean name="marketingClient" class="com.mockuai.marketingcenter.client.impl.MarketingClientImpl"></bean>
+    <bean name="regionClient" class="com.mockuai.deliverycenter.client.impl.RegionClientImpl"></bean>
+    <bean id="itemClient" class="com.mockuai.itemcenter.client.impl.ItemClientImpl"/>
+    <bean id="itemSkuClient" class="com.mockuai.itemcenter.client.impl.ItemSkuClientImpl"/>
+    <bean id="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"/>
+     <bean id="itemBuylimitClient" class="com.mockuai.itemcenter.client.impl.ItemBuyLimitClientImpl"/>
+     
+ 	<bean id="selllerUserRelateClient" class="com.mockuai.usercenter.client.impl.SellerUserRelateClientImpl"/>
+    <bean id="shopClient" class="com.mockuai.shopcenter.impl.ShopClientImpl"/>
+    <bean id="dataClient" class="com.mockuai.datacenter.client.impl.DataClientImpl"/>
+    
+    <bean id="storeClient" class="com.mockuai.shopcenter.impl.StoreClientImpl"/>
+    <bean id="shopPropertyClient" class="com.mockuai.shopcenter.impl.ShopPropertyClientImpl"/>
+    
+     <bean id="itemPriceClient" class="com.mockuai.itemcenter.client.impl.ItemPriceClientImpl"/>
+    <bean id="itemSuitClient" class="com.mockuai.itemcenter.client.impl.ItemSuitClientImpl"/>
+    
+      <bean id="higoClient" class="com.mockuai.higocenter.client.impl.HigoClientImpl"/>
+      
+       <bean name="virtualWealthClient " class="com.mockuai.virtualwealthcenter.client.impl.VirtualWealthClientImpl"></bean>
+       
+       <bean id="shopCommissionClient" class="com.mockuai.itemcenter.client.impl.CommissionClientImpl"/>
+       <bean id="customerClient" class="com.mockuai.customer.client.impl.CustomerClientImpl"/>
+       <bean id="supplierClient" class="com.mockuai.itemcenter.client.impl.SupplierClientImpl"/>
+       <bean id="storeItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StoreItemSkuClientImpl"/>
+       <bean id="storeOrderNumClient" class="com.mockuai.suppliercenter.client.impl.StoreOrderNumClientImpl"/>
+       <bean id="customsConfClient" class="com.mockuai.higocenter.client.impl.CustomsConfClientImpl"/>
+       <bean id="distributionClient" class="com.mockuai.distributioncenter.client.impl.DistributionClientImpl"/>
+       <bean id="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl"/>
+      <bean id="orderConsigneeClient" class="com.mockuai.tradecenter.client.impl.OrderConsigneeClientImpl"/>
+      
+    <bean name="stockItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StockItemSkuClientImpl"></bean>
+</beans>

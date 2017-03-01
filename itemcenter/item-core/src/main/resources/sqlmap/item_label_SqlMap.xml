@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="item_label">
+
+    <typeAlias alias="ItemLabelQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemLabelQTO"/>
+    <typeAlias alias="ItemLabelDO" type="com.mockuai.itemcenter.core.domain.ItemLabelDO"/>
+    <resultMap class="ItemLabelDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="seller_id" jdbcType="BIGINT" property="sellerId"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="label_name" jdbcType="VARCHAR" property="labelName"/>
+        <result column="label_desc" jdbcType="VARCHAR" property="labelDesc"/>
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl"/>
+        <result column="scope" jdbcType="TINYINT" property="scope"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, seller_id, biz_code, delete_mark, gmt_created, gmt_modified, label_name, label_desc,
+        icon_url, scope
+    </sql>
+
+    <select id="ItemLabelDAO.getItemLabel" parameterClass="ItemLabelDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from item_label
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#
+    </select>
+
+    <update id="ItemLabelDAO.deleteItemLabel" parameterClass="ItemLabelDO">
+        update item_label
+        set delete_mark = 1
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <insert id="ItemLabelDAO.addItemLabel" parameterClass="ItemLabelDO">
+        insert into item_label
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="labelName">
+                label_name
+            </isNotNull>
+            <isNotNull prepend="," property="labelDesc">
+                label_desc
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                icon_url
+            </isNotNull>
+            <isNotNull prepend="," property="scope">
+                scope
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="labelName">
+                #labelName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="labelDesc">
+                #labelDesc:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                #iconUrl:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="scope">
+                #scope:TINYINT#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <update id="ItemLabelDAO.updateItemLabel" parameterClass="ItemLabelDO">
+        update item_label
+
+        set gmt_modified = now()
+        <dynamic>
+            <isNotNull prepend="," property="labelName">
+                label_name = #labelName#
+            </isNotNull>
+            <isNotNull prepend="," property="labelDesc">
+                label_desc = #labelDesc#
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                icon_url = #iconUrl#
+            </isNotNull>
+            <isNotNull prepend="," property="scope">
+                scope = #scope#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <select id="ItemLabelDAO.queryItemLabel" parameterClass="ItemLabelQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from item_label  where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="scope">
+            scope = #scope#
+        </isNotNull>
+        <isNotNull prepend="AND" property="labelName">
+            label_name like concat('%', #labelName#,'%')
+        </isNotNull>
+        <isNotEmpty property="idList" prepend="AND">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="ItemLabelDAO.countItemLabel" parameterClass="ItemLabelQTO" resultClass="Integer">
+        select count(1)
+        from item_label  where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="scope">
+            scope = #scope#
+        </isNotNull>
+        <isNotNull prepend="AND" property="labelName">
+            label_name like concat('%', #labelName#,'%')
+        </isNotNull>
+        <isNotEmpty property="idList" prepend="AND">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotEmpty>
+    </select>
+
+    <sql id="item_label.queryWhere">
+
+    </sql>
+
+</sqlMap>

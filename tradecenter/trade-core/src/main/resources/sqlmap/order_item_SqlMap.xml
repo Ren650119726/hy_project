@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_item">
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="itemSkuDesc" column="item_sku_desc" jdbcType="VARCHAR"/>
+       
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="itemImageUrl" column="item_image_url" jdbcType="VARCHAR"/>
+       <!--  > <result property="deliveryType" column="delivery_type" jdbcType="TINYINT"/>
+       -->
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="unitPrice" column="unit_price" jdbcType="BIGINT"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        
+        <!-- add refund -->
+        
+         <result property="paymentAmount" column="payment_amount" jdbcType="BIGINT"/>
+        <result property="refundStatus" column="refund_status"/>
+        <result property="refundAmount" column="refund_amount"/>
+        <result property="refundReasonId" column="refund_reason_id"/>
+         <result property="refundType" column="refund_type"/>
+         <result property="discountAmount" column="discount_amount"/>
+         <result property="point" column="point"/>
+         <result property="deliveryInfoId" column="delivery_info_id"/>
+          <result property="deliveryMark" column="delivery_mark"/>
+            <result property="pointAmount" column="point_amount"/>
+            <result property="categoryId" column="category_id"/>
+            <result property="itemBrandId" column="item_brand_id"/>
+            
+             <result property="itemType" column="item_type"/>
+              <result property="originalSkuId" column="original_sku_id"/>
+               <result property="activityId" column="activity_id"/>
+               <result property="higoMark" column="higo_mark"/>
+               <result property="higoExtraInfo" column="higo_extra_info"/>
+ 			<result property="virtualMark" column="virtual_mark"/>
+ 			<result property="distributorId" column="distributor_id"/>
+ 			<result property="distributorName" column="distributor_name"/>
+ 			<result property="virtualWealthAmount" column="virtual_wealth_amount"/>
+        <result property="shareUserId" column="share_user_id" jdbcType="BIGINT"/>
+ 			
+    </resultMap>
+    
+    <resultMap id="result_Wx_Refund" class="com.mockuai.tradecenter.core.domain.OrderItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>        
+    </resultMap>
+    
+    
+    <resultMap id="result_ext" class="com.mockuai.tradecenter.core.domain.OrderItemDO">
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="saleNumber" column="sale_number"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        user_id,
+        user_name,
+        order_id,
+        item_id,
+        item_sku_id,
+        item_sku_desc,
+        item_name,
+        item_image_url,
+     <!--     delivery_type,-->
+        seller_id,
+        unit_price,
+        number,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        payment_amount,
+        refund_status,
+        refund_amount,
+        refund_reason_id,
+        refund_type,
+	 	category_id,
+        item_brand_id,
+        discount_amount,
+        point,
+        delivery_info_id,
+        delivery_mark,
+        point_amount,
+        item_type,
+        original_sku_id,
+        activity_id,
+        higo_mark,
+        higo_extra_info,
+        virtual_mark,
+        distributor_id,
+        distributor_name,
+        virtual_wealth_amount,
+        share_user_id
+    </sql>
+
+
+    <insert id="addOrderItem" parameterClass="com.mockuai.tradecenter.core.domain.OrderItemDO">
+        insert into order_item(
+        biz_code,
+        user_id,
+        user_name,
+        order_id,
+        item_id,
+        item_sku_id,
+        item_sku_desc,
+        item_name,
+        item_image_url,
+        delivery_type,
+        seller_id,
+        unit_price,
+        number,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        category_id,
+        item_brand_id,
+        payment_amount,
+        discount_amount,
+        point_amount,
+        point,
+        item_type,
+        original_sku_id,
+        activity_id,
+        higo_mark,
+        higo_extra_info,
+        virtual_mark,
+        distributor_id,
+        distributor_name,
+        virtual_wealth_amount,
+        share_user_id
+        )
+        values(
+        #bizCode#,
+        #userId#,
+        #userName#,
+        #orderId#,
+        #itemId#,
+        #itemSkuId#,
+        #itemSkuDesc#,
+        #itemName#,
+        #itemImageUrl#,
+        #deliveryType#,
+        #sellerId#,
+        #unitPrice#,
+        #number#,
+        0,
+        now(),
+        now(),
+        #categoryId#,
+        #itemBrandId#,
+        #paymentAmount#,
+        #discountAmount#,
+        #pointAmount#,
+        #point#,
+        #itemType#,
+        #originalSkuId#,
+        #activityId#,
+        #higoMark#,
+        #higoExtraInfo#,
+        #virtualMark#,
+        #distributorId#,
+        #distributorName#,
+        #virtualWealthAmount#,
+        #shareUserId#
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+    <select id="queryOrderItem" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item
+        where user_id = #userId:BIGINT#
+        <dynamic>
+            <isNotNull property="orderIdList">
+                <isNotEmpty property="orderIdList" prepend="and">
+                    order_id in
+                    <iterate  property="orderIdList" conjunction="," open="(" close=")"  >
+                        #orderIdList[]#
+                    </iterate>
+                </isNotEmpty>
+            </isNotNull>
+            <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+            <isNotNull property="orderItemId" prepend="and">
+                id = #orderItemId:BIGINT#
+            </isNotNull>
+            <isNotNull property="itemSkuId" prepend="and">
+                item_sku_id = #itemSkuId:BIGINT#
+            </isNotNull>
+            <isNotNull property="deliveryMark" prepend="and">
+                delivery_mark = #deliveryMark#
+            </isNotNull>
+            <isNotNull property="originalSkuId" prepend="and">
+                original_sku_id = #originalSkuId#
+            </isNotNull>
+            <isNotNull property="deleteMark" prepend="and">
+                delete_mark = #deleteMark#
+            </isNotNull>
+        </dynamic>
+        order by id asc
+    </select>
+    
+     <select id="queryOrderItemByItemId" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item
+        where 1=1
+        <dynamic>
+            <isNotNull property="itemSkuId" prepend="and">
+                item_sku_id = #itemSkuId:BIGINT#
+            </isNotNull>
+            <isNotNull property="itemId" prepend="and">
+                item_id = #itemId#
+            </isNotNull>
+            <isNotNull property="userId" prepend="and">
+                user_id = #userId#
+            </isNotNull>
+            <isNotNull property="deleteMark" prepend="and">
+                delete_mark = #deleteMark#
+            </isNotNull>
+        </dynamic>
+        order by id asc
+    </select>
+    
+    <select id="queryOrderItemNoRefund" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item
+        where user_id = #userId:BIGINT#
+        and (refund_status is null or refund_status=3 or refund_status=5)
+        and original_sku_id is null
+        and unit_price>0
+        <dynamic>
+            <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+            <isNotNull property="orderItemId" prepend="and">
+                id = #orderItemId:BIGINT#
+            </isNotNull>
+        </dynamic>
+        order by id asc
+    </select>
+    
+    
+      <select id="getOrderItem" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item where 1=1
+          <isNotNull property="userId" prepend=" and">
+                user_id = #userId#
+            </isNotNull>
+        <isNotNull property="orderId" prepend=" and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+            <isNotNull property="itemId" prepend=" and">
+                item_id = #itemId#
+            </isNotNull>
+             <isNotNull property="itemSkuId" prepend=" and">
+                item_sku_id = #itemSkuId#
+            </isNotNull>
+            <isNotNull property="refundBatchNo" prepend=" and">
+                refund_batch_no = #refundBatchNo#
+            </isNotNull>
+            <isNotNull property="orderItemId" prepend=" and">
+                id = #orderItemId#
+            </isNotNull>
+    </select>
+    
+    <select id="queryOrderItemByOutTradeNo" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select order_item.* from order_item,order_payment
+			where order_item.order_id=order_payment.order_id
+			and order_payment.out_trade_no=#outTradeNo#
+			and order_item.refund_amount=#paymentAmount#
+    </select>
+    
+    <select id="getProcessingRefundOrderItemCount" resultClass="Integer" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select count(*)
+        from order_item
+        where 1=1
+        and (refund_status = 1 or refund_status = 2 )
+        and original_sku_id is null
+        <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+      
+    </select>
+    
+    <!-- 退货中 -->
+     <select id="queryProcessingReturnOrderItemDOList" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select *
+        from order_item
+        where 1=1
+        <isNotNull property="refundStatus" prepend="and">
+			order_item.refund_status=#refundStatus#
+		</isNotNull>
+			<isNull property="refundStatus" prepend="and">
+				(order_item.refund_status=1 or order_item.refund_status=2 or order_item.refund_status=3)
+			</isNull>
+        <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+    </select>
+    
+    <!-- 退款中 -->
+     <select id="queryWxPayProcessingRefundItemList" resultMap="result_Wx_Refund" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+      select 		
+	        order_item.id,
+	        order_item.biz_code,
+	        order_item.user_id,
+	        order_item.order_id,
+	        order_item.seller_id
+        from order_item,user_order
+        where order_item.order_id=user_order.id
+        and order_item.refund_status = 2
+        and (user_order.payment_id=2 or user_order.payment_id=5)
+        <!-- and TO_DAYS(NOW()) - TO_DAYS(order_item.gmt_modified)>=1 -->
+        	and TIMESTAMPDIFF(MINUTE, order_item.gmt_modified, now()) > 30
+        	order by id desc
+         limit 0,200
+    </select>
+    
+    <update id="updateOrderItemDeliveryMark" parameterClass="com.mockuai.tradecenter.core.domain.OrderItemDO">
+		update order_item 
+		set  gmt_modified = now()
+			<isNotNull prepend="," property="deliveryMark">
+				delivery_mark=#deliveryMark#
+			</isNotNull>
+			<isNotNull prepend="," property="deliveryInfoId">
+				delivery_info_id=#deliveryInfoId#
+			</isNotNull>
+			where order_id=#orderId#
+			and delete_mark=0
+			<isNotNull property="orderItemIds" prepend="and">
+			 id in
+			 <iterate open="(" close=")" conjunction="," property="orderItemIds" >   
+                     #orderItemIds[]#   
+                </iterate>  
+			</isNotNull>
+			
+	</update>
+    
+     <select id="getUnDeliveryOrderItemCount" resultClass="Integer" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select count(*)
+        from order_item
+        where 1=1
+        and (delivery_mark =0 or delivery_mark is null )
+        and order_item.item_type!=11
+        <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+    </select>
+
+
+	<select id="queryTimeoutUntreatedOrderItemList" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+      select order_item.*
+        from order_item
+        where 1=1
+        and order_item.refund_status=1
+        and TO_DAYS(NOW()) - TO_DAYS(order_item.refund_time)>=#timeoutAutoRefundDay#
+<!--        and TO_DAYS(NOW()) - TO_DAYS(order_item.refund_time)>=(select trade_config.attr_value from trade_config where  attr_key='rights_timeout_days' and  trade_config.biz_code=order_item.biz_code) -->
+       limit 0,200
+    </select>
+    
+     <select id="getUnRefundOrderItemTotalPayamount" resultClass="Long" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+       select IFNULL(sum(order_item.payment_amount),0) 
+        from order_item
+        where 1=1
+        and ( refund_status is null or refund_status=3 or refund_status=5)
+        and delete_mark=0
+        <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+    </select>
+    
+     <select id="getItemSalesVolumes" resultClass="Integer" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select ifnull(sum(order_item.number),0) from user_order,
+		  order_item
+		 where 1=1   
+		 and user_order.id=order_item.order_id   
+		 and user_order.delete_mark = 0  
+		 and ( user_order.order_status=30 or user_order.order_status=40 or user_order.order_status=50 or user_order.order_status=60)
+		 and order_item.item_id= #itemId#             
+		 <isNotNull property="userId" prepend="and">
+                order_item.user_id = #userId#
+            </isNotNull>
+    </select>
+    
+     <update id="update" parameterClass="com.mockuai.tradecenter.core.domain.OrderItemDO">
+		update order_item 
+		set  gmt_modified = now()
+			<isNotNull prepend="," property="paymentAmount">
+				payment_amount=#paymentAmount#
+			</isNotNull>
+			<isNotNull prepend="," property="discountAmount">
+				discount_amount=#discountAmount#
+			</isNotNull>
+         <isNotNull prepend="," property="virtualWealthAmount">
+             virtual_wealth_amount=#virtualWealthAmount#
+         </isNotNull>
+
+         <isNotNull prepend="," property="point">
+				point=#point#
+			</isNotNull>
+			<isNotNull prepend="," property="pointAmount">
+				point_amount=#pointAmount#
+			</isNotNull>
+			<isNotNull prepend="," property="unitPrice">
+				unit_price=#unitPrice#
+			</isNotNull>
+			<isNotNull prepend="," property="userName">
+				user_name=#userName#
+			</isNotNull>
+			where id=#id#
+			and delete_mark=0
+	</update>
+	
+	<delete id="deleteOrderItem" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO" >
+	  delete from order_item	   
+	  where delete_mark = 0 
+	  and order_item.order_id=#orderId#
+	</delete>
+	
+	<delete id="falseDeleteOrderItem" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO" >
+	  update order_item 
+		set  gmt_modified = now(),delete_mark=1
+	  where delete_mark = 0 
+	  and order_id=#orderId#
+	</delete>
+	
+	 <select id="queryCategoryTopSaleItems" resultMap="result_ext" parameterClass="com.mockuai.tradecenter.common.domain.dataCenter.CategoryDateQTO">
+       select  trade_db.order_item.*,sum(trade_db.order_item.number) as sale_number
+		from trade_db.user_order,trade_db.order_item  where trade_db.order_item.order_id=trade_db.user_order.id  
+		and trade_db.order_item.category_id is not null
+		and (order_status>20 and user_order.order_status!=21 and  order_status!=70 and order_status!=80 )
+		and trade_db.order_item.category_id=#categoryId#
+		group by trade_db.order_item.item_sku_id
+		order by sale_number desc
+		limit #topItemNumber#
+    </select>
+    
+    
+     <select id="getOrderItemById" resultMap="result" parameterClass="Long">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item
+        where id = #id#
+       
+    </select>
+
+    <select id="queryOrderItemBg" resultMap="result" parameterClass="com.mockuai.tradecenter.common.domain.OrderItemQTO">
+        select
+        <include refid="order_item.column_set"/>
+        from order_item
+        where 1=1
+        <dynamic>
+            <isNotNull property="orderIdList">
+                <isNotEmpty property="orderIdList" prepend="and">
+                    order_id in
+                    <iterate  property="orderIdList" conjunction="," open="(" close=")"  >
+                        #orderIdList[]#
+                    </iterate>
+                </isNotEmpty>
+            </isNotNull>
+            <isNotNull property="orderId" prepend="and">
+                order_id = #orderId:BIGINT#
+            </isNotNull>
+            <isNotNull property="orderItemId" prepend="and">
+                id = #orderItemId:BIGINT#
+            </isNotNull>
+            <isNotNull property="itemSkuId" prepend="and">
+                item_sku_id = #itemSkuId:BIGINT#
+            </isNotNull>
+            <isNotNull property="deliveryMark" prepend="and">
+                delivery_mark = #deliveryMark#
+            </isNotNull>
+            <isNotNull property="originalSkuId" prepend="and">
+                original_sku_id = #originalSkuId#
+            </isNotNull>
+        </dynamic>
+        order by id asc
+    </select>
+
+
+</sqlMap>

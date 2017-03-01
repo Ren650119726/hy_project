@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="grant_coupon_record">
+
+    <resultMap id="result" class="com.mockuai.giftscenter.core.domain.GrantCouponRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="couponId" column="coupon_id" jdbcType="BIGINT"/>
+        <result property="couponName" column="coupon_name" jdbcType="VARCHAR"/>
+        <result property="amount" column="amount" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="mobile" column="mobile" jdbcType="TIMESTAMP"/>
+        <result property="appType" column="app_type" jdbcType="TINYINT"/>
+        <result property="actionType" column="action_type" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+    id,
+    coupon_id,
+    coupon_name,
+    action_type,
+    amount,
+    user_id,
+    mobile,
+    app_type,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+    </sql>
+
+
+
+    <insert id="insert" parameterClass="java.util.List">
+        insert into grant_coupon_record (
+        coupon_id,
+        coupon_name,
+        action_type,
+        amount,
+        user_id,
+        mobile,
+        app_type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values
+        <iterate  conjunction="," >
+            (
+            #list[].couponId#,
+            #list[].couponName#,
+            #list[].actionType#,
+            #list[].amount#,
+            #list[].userId#,
+            #list[].mobile#,
+            #list[].appType#,
+            0,
+            now(),
+            now()
+            )
+
+        </iterate>
+
+    </insert>
+
+    <select id="queryTotalCount" resultClass="int"  parameterClass="com.mockuai.giftscenter.common.domain.qto.GrantCouponRecordQTO">
+        select
+        count(0)
+        from grant_coupon_record WHERE delete_mark=0
+        <isNotNull prepend="and" property="actionType">
+            action_type = #actionType#
+        </isNotNull>
+        <isNotNull prepend="and" property="appType">
+            app_type = #appType#
+        </isNotNull>
+        <isNotNull prepend="and" property="startDate">
+            gmt_created &gt;= #startDate#
+        </isNotNull>
+        <isNotNull prepend="and" property="endDate">
+            gmt_created &lt;= #endDate#
+        </isNotNull>
+    </select>
+
+	<select id="queryAll" resultMap="result" parameterClass="com.mockuai.giftscenter.common.domain.qto.GrantCouponRecordQTO">
+        select
+        <include refid="columnList"/>
+        from grant_coupon_record WHERE delete_mark=0
+        <isNotNull prepend="and" property="actionType">
+            action_type = #actionType#
+        </isNotNull>
+        <isNotNull prepend="and" property="appType">
+            app_type = #appType#
+        </isNotNull>
+        <isNotNull prepend="and" property="startDate">
+            gmt_created &gt;= #startDate#
+        </isNotNull>
+        <isNotNull prepend="and" property="endDate">
+            gmt_created &lt;= #endDate#
+        </isNotNull>
+        order by gmt_created desc
+        limit #offset#,#count#
+    </select>
+
+    
+    
+
+</sqlMap>

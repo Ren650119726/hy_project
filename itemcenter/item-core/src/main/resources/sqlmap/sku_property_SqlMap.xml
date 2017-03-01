@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sku_property">
+    <typeAlias alias="SkuPropertyDO" type="com.mockuai.itemcenter.core.domain.SkuPropertyDO"/>
+    <typeAlias alias="SkuPropertyQTO" type="com.mockuai.itemcenter.common.domain.qto.SkuPropertyQTO"/>
+
+    <resultMap class="SkuPropertyDO" id="SkuPropertyDOResult">
+        <result property="id" column="id"/>
+        <result property="skuId" column="sku_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="itemId" column="item_id"/>
+        <result property="skuPropertyTmplId" column="sku_property_tmpl_id"/>
+        <result property="propertyValueId" column="property_value_id"/>
+        <result property="value" column="value"/>
+        <result property="valueType" column="value_type"/>
+        <result property="sort" column="sort"/>
+        <result property="bizMark" column="biz_mark"/>
+        <result property="bizCode" column="biz_code"/>
+        <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+
+    <insert id="SkuPropertyDAO.addSkuProperty" parameterClass="SkuPropertyDO">
+        insert into sku_property
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="skuPropertyTmplId">
+                sku_property_tmpl_id
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                property_value_id
+            </isNotNull>
+            <isNotNull prepend="," property="skuId">
+                sku_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                name
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                code
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                biz_mark
+            </isNotNull>
+            <isNotNull prepend="," property="imgUrl">
+                img_url
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="skuPropertyTmplId">
+                #skuPropertyTmplId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                #propertyValueId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="skuId">
+                #skuId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                #name:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                #code:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                #value:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                #valueType:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                #sort:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                #bizMark:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="imgUrl">
+                #imgUrl:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="sku_property_base_column_list">
+        id,
+        item_id,
+        property_value_id,
+        sku_property_tmpl_id,
+        sku_id,
+        seller_id,
+        name,
+        code,
+        value,
+        value_type,
+        sort,
+        biz_mark,
+        img_url,
+        biz_code,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!-- 只用于复合条件查询   -->
+    <sql id="SkuPropertyDAO.queryWhere">
+        where
+        <!-- <dynamic prepend="where"> -->
+        <isNull property="deleteMark">
+            delete_mark = 0
+        </isNull>
+        <isNotNull property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="skuId">
+            sku_id = #skuId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="name">
+            name = #name#
+        </isNotNull>
+        <isNotNull prepend="AND" property="propertyValueId">
+            property_value_id = #propertyValueId#
+        </isNotNull>
+        <isNotNull property="skuIdList">
+            <isNotEmpty property="skuIdList" prepend="AND">
+                sku_id in
+                <iterate property="skuIdList" conjunction="," open="(" close=")">
+                    #skuIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <!-- </dynamic> -->
+    </sql>
+
+    <update id="SkuPropertyDAO.updateSkuProperty" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="name">
+                name = #name#
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                code = #code#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value = #value#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type = #valueType#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort = #sort#
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                biz_mark = #bizMark#
+            </isNotNull>
+            <isNotNull prepend="," property="imgUrl">
+                img_url = #imgUrl#
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                property_value_id = #propertyValueId#
+            </isNotNull>
+        </dynamic>
+        where delete_mark in (0,2) and seller_id = #sellerId# and id = #id# and biz_code = #bizCode#
+    </update>
+
+
+    <update id="SkuPropertyDAO.batchUpdateSkuProperty" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="name">
+                name = #name#
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                code = #code#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value = #value#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type = #valueType#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort = #sort#
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                biz_mark = #bizMark#
+            </isNotNull>
+            <isNotNull prepend="," property="imgUrl">
+                img_url = #imgUrl#
+            </isNotNull>
+        </dynamic>
+        where delete_mark in (0,2) and id > 0 and biz_code = #bizCode# and sku_property_tmpl_id = #skuPropertyTmplId#
+    </update>
+
+
+    <update id="SkuPropertyDAO.deleteSkuProperty" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now(),delete_mark = 1
+        where delete_mark = 0 and seller_id = #sellerId# and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <select id="SkuPropertyDAO.getSkuProperty" resultMap="SkuPropertyDOResult" parameterClass="SkuPropertyDO">
+        select
+        <include refid="sku_property_base_column_list"/>
+        from sku_property
+        where delete_mark = 0 and seller_id = #sellerId# and id = #id# and biz_code = #bizCode#
+    </select>
+
+    <select id="SkuPropertyDAO.countSkuProperty" resultClass="Integer" parameterClass="SkuPropertyQTO">
+        select count(1) from sku_property
+        <include refid="SkuPropertyDAO.queryWhere"/>
+    </select>
+
+    <select id="SkuPropertyDAO.querySkuProperty" resultMap="SkuPropertyDOResult"
+            parameterClass="SkuPropertyQTO">
+        select
+        <include refid="sku_property_base_column_list"/>
+        from sku_property
+        <include refid="SkuPropertyDAO.queryWhere"/>
+        order by id
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <!--  根据itemId删除 -->
+    <update id="SkuPropertyDAO.deleteByItemId" parameterClass="SkuPropertyQTO">
+        update sku_property
+        set gmt_modified=now(),delete_mark = 1 where delete_mark in (0,2) and seller_id=#sellerId# and item_id =
+        #itemId#
+    </update>
+
+    <update id="SkuPropertyDAO.trashByItemId" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now(),delete_mark = 2 where delete_mark = 0 and seller_id=#sellerId# and item_id = #itemId#
+    </update>
+
+    <update id="SkuPropertyDAO.recoveryByItemId" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now(),delete_mark = 0 where delete_mark = 2 and seller_id=#sellerId# and item_id = #itemId#
+    </update>
+
+    <update id="SkuPropertyDAO.emptyRecycleBin" parameterClass="SkuPropertyDO">
+        update sku_property
+        set gmt_modified=now(),delete_mark = 0 where delete_mark = 2 and seller_id=#sellerId# and biz_code = #bizCode#
+    </update>
+
+
+</sqlMap>

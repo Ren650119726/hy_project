@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="activity_item">
+
+    <typeAlias alias="activityItemDO" type="com.mockuai.marketingcenter.core.domain.ActivityItemDO"/>
+    <typeAlias alias="activityItemQTO" type="com.mockuai.marketingcenter.common.domain.qto.ActivityItemQTO"/>
+
+    <resultMap id="result" class="com.mockuai.marketingcenter.core.domain.ActivityItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="activityId" column="activity_id" jdbcType="BIGINT"/>
+        <result property="activityCreatorId" column="activity_creator_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="brandId" column="brand_id" jdbcType="BIGINT"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+		id,
+		biz_code,
+		activity_id,
+		activity_creator_id,
+		item_id,
+		brand_id,
+		category_id,
+		seller_id,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityId">
+            activity_id = #activityId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityCreatorId">
+            activity_creator_id = #activityCreatorId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemIdList">
+            item_id in
+            <iterate property="itemIdList" conjunction="," open="(" close=")">
+                #itemIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityIdList">
+            activity_id in
+            <iterate property="activityIdList" conjunction="," open="(" close=")">
+                #activityIdList[]#
+            </iterate>
+        </isNotNull>
+    </sql>
+
+    <!--批量插入activity_item纪录-->
+    <insert id="addActivityItems" parameterClass="java.util.List">
+        insert into activity_item(
+        biz_code,
+        activity_id,
+        activity_creator_id,
+        item_id,
+        brand_id,
+        category_id,
+        seller_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values
+        <iterate conjunction=",">
+            <![CDATA[
+            	(
+            	#activityItemDOs[].bizCode#,
+            	#activityItemDOs[].activityId#,
+            	#activityItemDOs[].activityCreatorId#,
+            	#activityItemDOs[].itemId#,
+            	#activityItemDOs[].brandId#,
+            	#activityItemDOs[].categoryId#,
+            	#activityItemDOs[].sellerId#,
+            	0,
+            	now(),
+            	now()
+            	)
+            ]]>
+        </iterate>
+    </insert>
+
+    <select id="queryActivityItem" parameterClass="activityItemQTO" resultMap="result">
+        select
+        <include refid="activity_item.columnList"/>
+        from activity_item
+        <include refid="activity_item.queryWhere"/>
+        ORDER BY id DESC
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryActivityItem" parameterClass="activityItemQTO" resultClass="java.lang.Integer">
+        select count(1) from activity_item
+        <include refid="activity_item.queryWhere"/>
+    </select>
+
+    <select id="queryActivityItemForActivity" parameterClass="activityItemQTO" resultMap="result">
+        select
+        <include refid="activity_item.columnList"/>
+        from activity_item
+        WHERE activity_id in
+        <iterate property="activityIds" conjunction="," open="(" close=")">
+            #activityIds[]#
+        </iterate>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+</sqlMap>

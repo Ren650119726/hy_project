@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="bank_info">
+
+    <typeAlias alias="bankInfoAppDO" type="com.mockuai.virtualwealthcenter.core.domain.BankInfoAppDO"/>
+    <typeAlias alias="mopBankInfoAppDTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.MopBankInfoAppDTO"/>
+    <typeAlias alias="bankInfoQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.BankInfoQTO"/>
+    
+    <resultMap id="result" class="bankInfoAppDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
+        <result property="bankLastno" column="bank_lastno" jdbcType="VARCHAR"/>
+        <result property="bankNo" column="bank_no" jdbcType="VARCHAR"/>
+        <result property="bankType" column="bank_type" jdbcType="TINYINT"/>
+        <result property="bankRemark" column="bank_remark" jdbcType="VARCHAR"/>
+        <result property="bankIsdefault" column="bank_isdefault" jdbcType="TINYINT"/>
+         <result property="bankRealname" column="bank_realname" jdbcType="VARCHAR"/>
+          <result property="bankOnedayQuota" column="bank_oneday_quota" jdbcType="BIGINT"/>
+           <result property="bankSingleQuota" column="bank_single_quota" jdbcType="BIGINT"/>
+            <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+             <result property="bankBindtime" column="bank_bindtime" jdbcType="TIMESTAMP"/>
+             <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <resultMap id="customerResult" class="bankInfoAppDO">
+        <result property="bankName" column="bank_name" jdbcType="VARCHAR"/>
+        <result property="bankLastno" column="bank_lastno" jdbcType="VARCHAR"/>
+        <result property="bankType" column="bank_type" jdbcType="TINYINT"/>
+            <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+             <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+             <result property="totalSum" column="total_sum" jdbcType="BIGINT"/>
+              <result property="totalCount" column="total_count" jdbcType="BIGINT"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        user_id,
+        biz_code,
+        bank_name,
+        bank_lastno,
+        bank_no,
+        bank_type,
+        bank_remark,
+        bank_isdefault,
+        bank_realname,
+        bank_oneday_quota,
+        bank_single_quota,
+        delete_mark,
+        bank_bindtime,
+        gmt_created,
+        gmt_modified
+    </sql>
+    
+    
+    <!-- 添加银行卡 -->
+    <insert id ="addBankInfo" parameterClass = "bankInfoAppDO">
+    	insert into bank_info (user_id,biz_code,bank_name,bank_lastno,bank_no,bank_type,bank_remark,bank_isdefault,bank_realname,bank_oneday_quota,bank_single_quota,delete_mark,bank_bindtime,gmt_created,gmt_modified) values (#userId#,#bizCode#,#bankName#,#bankLastno#,#bankNo#,1,#bankRemark#,#bankIsdefault#,#bankRealname#,#bankOnedayQuota#,#bankSingleQuota#,0,now(),now(),now())
+    	<selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <!--准备选择某张银行卡提现  -->
+    <select id="getBankInfodetails" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="bank_info.columnList"/>
+        from bank_info where user_id = #userId# and bank_no = #bankNo# 
+        and delete_mark=0
+    </select>
+    
+    
+     <!--判断银行卡是否存在  -->
+    <select id="getBankInfoExists" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="bank_info.columnList"/>
+        from bank_info where bank_no = #bankNo# 
+    </select>
+    
+    <!-- 选择提现按钮，获取该用户下所绑定的银行卡 -->
+    <select id="getWithdrawalsItem" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="bank_info.columnList"/>
+        from bank_info where user_id = #userId# 
+        and delete_mark=0
+    </select>
+    
+    <!-- 根据用户ID和银行卡ID删除某张卡 -->
+    <update id = "deleteBankInfo"   parameterClass="java.util.Map">
+	update bank_info set delete_mark=1,bank_isdefault=1 where id=#id# and user_id = #userId#
+	</update>
+	
+	 <!-- 只剩最后一张卡的时候更新为默认 -->
+    <update id = "updateBankInfoIsDefalut"   parameterClass="java.util.Map">
+	update bank_info set delete_mark=0,bank_isdefault=0 where id=#id# and user_id = #userId#
+	</update>
+	
+	<!-- 查看银行卡详情  -->
+	<select id="selectDetailsBankInfo" resultMap="result" parameterClass="java.util.Map">
+		select 
+		<include refid="bank_info.columnList"/>
+		from bank_info where id=#id# and user_id = #userId#
+	</select>
+	
+	<!-- 获取该银行卡是否删除-->
+	<select id="selectBankInfoDelStatus" resultMap="result" parameterClass="java.util.Map">
+		select 
+		<include refid="bank_info.columnList"/>
+		from bank_info where bank_no = #bankNo# and user_id = #userId#
+	</select> 
+	
+	<!-- 旧卡删除更新新卡 -->
+	<update id="updateBankInfoDelStatus" parameterClass="java.util.Map">
+		 update bank_info set delete_mark=0,user_id = #userId# where id=#id#
+	</update>
+	
+	
+	<!-- 客户管理 银行卡管理-->
+	<select id="findCustomerBankInfoPageList" resultMap="customerResult" parameterClass="bankInfoQTO">
+	SELECT  b.bank_type,
+	b.bank_name,
+	b.bank_lastno,
+	b.gmt_created,
+    (SELECT COUNT(id) FROM withdrawals_item WHERE withdrawals_no = b.bank_no) AS total_count,
+    (SELECT SUM(withdrawals_amount) FROM withdrawals_item WHERE withdrawals_no = b.bank_no and withdrawals_status =3) AS total_sum,
+    b.delete_mark,
+    b.gmt_modified 
+    FROM bank_info b 
+    WHERE b.user_id = #userId# 
+    order by b.delete_mark ASC,b.gmt_created DESC 
+    <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+    </isNotNull>
+    </select> 
+    
+    <!-- 客户管理 银行卡管理 总条数 -->
+    <select id="findCustomerBankInfoCount" resultClass="java.lang.Integer" parameterClass="bankInfoQTO">
+	SELECT  count(1) 
+    FROM bank_info b 
+    WHERE b.user_id = #userId# 
+    </select>
+    
+    
+<!-- 
+    <insert id="addWealthAccount" parameterClass="wealthAccountDO">
+        insert into wealth_account(
+        user_id,
+        biz_code,
+        wealth_type,
+        amount,
+        frozen_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #userId#,
+        #bizCode#,
+        #wealthType#,
+        0,
+        0,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="userIdList" prepend="AND">
+            user_id in
+            <iterate property="userIdList" conjunction="," open="(" close=")">
+                #userIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type = #wealthType#
+        </isNotNull>
+        <isNotNull property="startTime" prepend="AND">
+            gmt_modified >= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            #endTime# > gmt_modified
+        </isNotNull>
+    </sql>
+
+    <select id="getWealthAccount" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account where user_id = #userId#
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type=#wealthType#
+        </isNotNull>
+        and delete_mark=0
+    </select>
+
+    <select id="queryUserWealthAccount" resultMap="result" parameterClass="wealthAccountQTO">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryUserWealthAccount" resultClass="java.lang.Integer" parameterClass="wealthAccountQTO">
+        select count(1) from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+    </select>
+
+    <update id="increaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount+#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+
+    <update id="increaseAccountBalanceBatch" parameterClass="java.util.Map">
+        UPDATE wealth_account SET gmt_modified = now(),
+          amount = amount + CASE id
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs">
+                WHEN #wealthAccountDOs[].id# THEN #wealthAccountDOs[].amount#
+            </iterate>
+        </isNotNull>
+        END WHERE id in (
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs" conjunction=",">
+                #wealthAccountDOs[].id#
+            </iterate>
+        </isNotNull>
+        )
+    </update>
+
+    <update id="decreaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount-#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+ -->
+ 
+</sqlMap>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean name="freightClient" class="com.mockuai.itemcenter.client.impl.FreightClientImpl"/>
+    <bean name="itemSkuClient" class="com.mockuai.itemcenter.client.impl.ItemSkuClientImpl"></bean>
+    <bean name="itemSuitClient" class="com.mockuai.itemcenter.client.impl.ItemSuitClientImpl"></bean>
+    <bean name="itemPriceClient" class="com.mockuai.itemcenter.client.impl.ItemPriceClientImpl"></bean>
+    <bean name="groupBuyClient" class="com.mockuai.groupbuycenter.client.impl.GroupBuyClientImpl"></bean>
+    <bean name="seckillClient" class="com.mockuai.seckillcenter.client.impl.SeckillClientImpl"></bean>
+    <bean name="tradeDataReportClient" class="com.mockuai.tradecenter.client.impl.TradeDataReportClientImpl"></bean>
+    <bean name="itemClient" class="com.mockuai.itemcenter.client.impl.ItemClientImpl"></bean>
+    <bean name="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"></bean>
+    <bean name="userClient" class="com.mockuai.usercenter.client.impl.UserClientImpl"/>
+    <bean name="higoClient" class="com.mockuai.higocenter.client.impl.HigoClientImpl"/>
+    <bean name="shopPropertyClient" class="com.mockuai.shopcenter.impl.ShopPropertyClientImpl"/>
+    <bean name="shopClient" class="com.mockuai.shopcenter.impl.ShopClientImpl"/>
+    <bean name="storeClient" class="com.mockuai.shopcenter.impl.StoreClientImpl"/>
+    <bean name="customerClient" class="com.mockuai.customer.client.impl.CustomerClientImpl"/>
+    <bean name="virtualWealthClient" class="com.mockuai.virtualwealthcenter.client.impl.VirtualWealthClientImpl"/>
+    <bean name="grantRuleClient" class="com.mockuai.virtualwealthcenter.client.impl.GrantRuleClientImpl"/>
+    <bean name="distributionClient" class="com.mockuai.distributioncenter.client.impl.DistributionClientImpl"/>
+    <!--<bean name="timelimitClient" class="com.mockuai.timelimitcenter.client.impl.TimelimitClientImpl"/>-->
+    <bean name="headSingleUserClient" class="com.mockuai.headsinglecenter.client.impl.HeadSingleUserClientImpl"/>
+    <bean name="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl"/>
+    <bean name="employeeClient" class="com.hanshu.employee.client.impl.EmployeeClientImpl"/>
+    <bean name="limitedPurchaseClient" class="com.mockuai.marketingcenter.client.impl.LimitedPurchaseClientImpl"/>
+    <bean name="storeItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StoreItemSkuClientImpl"/>
+    <bean name="gainsSetClient" class="com.mockuai.distributioncenter.client.impl.GainsSetClientImpl"/>
+    
+</beans>

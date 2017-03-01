@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="employee">
+    <resultMap id="BaseResultMap" class="com.hanshu.employee.core.domain.EmployeeDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="roleId" column="role_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="isSuper" column="is_super" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="lastLogin" column="last_login" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        user_name,
+        password,
+        name,
+        seller_id,
+        parent_id,
+        role_id,
+        status,
+        is_super,
+        gmt_created,
+        last_login,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addEmployee" parameterClass="com.hanshu.employee.core.domain.EmployeeDO">
+        insert into employee(
+        user_name,
+        password,
+        name,
+        seller_id,
+        parent_id,
+        role_id,
+        status,
+        is_super,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+        )
+        values(
+        #userName#,
+        #password#,
+        #name#,
+        #sellerId#,
+        #parentId#,
+        #roleId#,
+        #status#,
+        0,
+        now(),
+        now(),
+        0
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getEmployeeByUserName" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from employee
+        where user_name = #userName# and delete_mark = 0
+    </select>
+
+    <select id="getEmployeeById" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from employee
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <update id="updateEmployee" parameterClass="com.hanshu.employee.core.domain.EmployeeDO">
+        update employee
+        set gmt_modified = now()
+        <isNotNull prepend="," property="userName">
+            user_name = #userName#
+        </isNotNull>
+        <isNotNull prepend="," property="password">
+            password = #password#
+        </isNotNull>
+        <isNotNull prepend="," property="name">
+            name = #name#
+        </isNotNull>
+        <isNotNull prepend="," property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="," property="roleId">
+            role_id = #roleId#
+        </isNotNull>
+        <isNotNull prepend="," property="status">
+            status = #status#
+        </isNotNull>
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="deleteEmployee" parameterClass="java.lang.Long">
+        update employee
+        set gmt_modified = now(),
+        delete_mark = 1
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <select id="queryEmployee" parameterClass="com.hanshu.employee.common.qto.EmployeeQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from employee
+        where delete_mark = 0
+        <isNotNull prepend="and" property="userName">
+            user_name like concat('%', #userName#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name like concat('%', #name#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="roleId">
+            role_id = #roleId#
+        </isNotNull>
+        order by gmt_created desc
+        <isNotNull prepend=" " property="offset">
+            limit #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <select id="getTotalCount" parameterClass="com.hanshu.employee.common.qto.EmployeeQTO"
+            resultClass="java.lang.Long">
+        select count(*)
+        from employee
+        where delete_mark = 0
+        <isNotNull prepend="and" property="userName">
+            user_name like concat('%', #userName#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name like concat('%', #name#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="roleId">
+            role_id = #roleId#
+        </isNotNull>
+    </select>
+
+    <select id="employeeLogin" parameterClass="com.hanshu.employee.common.qto.EmployeeQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from employee
+        where user_name = #userName# and password = #password# and delete_mark = 0
+    </select>
+
+    <update id="updateLastLogin" parameterClass="java.lang.Long">
+        update employee
+        set last_login = now()
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <resultMap id="roleCountMap" class="java.util.LinkedHashMap">
+        <result property="roleId" column="role_id" javaType="java.lang.Long"/>
+        <result property="roleCount" column="role_count" javaType="java.lang.Long"/>
+    </resultMap>
+    <select id="totalRoleGroupCount" parameterClass="com.hanshu.employee.common.qto.EmployeeQTO"
+            resultMap="roleCountMap">
+        select role_id, count(role_id) as role_count
+        from employee
+        where delete_mark = 0
+        group by role_id
+        order by role_id asc
+        <isNotNull property="offset" prepend="">
+            limit #offset#,#count#
+        </isNotNull>
+    </select>
+
+    <select id="getRoleGroupCount" parameterClass="com.hanshu.employee.common.qto.EmployeeQTO"
+            resultClass="java.lang.Long">
+        select count(role_id) as role_count
+        from employee
+        where delete_mark = 0
+    </select>
+
+    <update id="updatePassword" parameterClass="java.util.Map">
+        update employee set gmt_modified = now(),password = #password# where id = #employeeId# and delete_mark = 0
+    </update>
+
+</sqlMap>

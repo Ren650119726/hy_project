@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="image">
+
+
+    <typeAlias alias="imageDTO" type="com.mockuai.imagecenter.common.domain.dto.ImageDTO"/>
+    <typeAlias alias="imageDO" type="com.mockuai.imagecenter.core.domain.ImageDO"/>
+
+    <resultMap id="BaseResultMap" class="imageDTO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="imageUrl" column="image_url"  jdbcType="VARCHAR"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="pKey" column="p_key" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <insert id="add" parameterClass="imageDO">
+        INSERT INTO image
+        (
+        user_id,
+        item_id,
+        biz_code,
+        image_url,
+        content,
+        p_key,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        version
+        ) VALUE (
+        #userId#,
+        #itemId#,
+        #bizCode#,
+        #imageUrl#,
+        #content#,
+        #pKey#,
+        0,
+        now(),
+        now(),
+        #version#
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="queryByKey" resultMap="BaseResultMap"  parameterClass="string">
+         select id,user_id,p_key, biz_code,content, image_url,version from image where delete_mark = 0 and  p_key  = #key#
+    </select>
+    <update id="deleteByKey" parameterClass="string">
+         update image set delete_mark = 1  where p_key  = #key#
+    </update>
+    <update id="deleteItemCodeByUserId" parameterClass="long">
+        update image set delete_mark = 1  where user_id = #userId# and p_key like 'ITEM%'
+    </update>
+
+    <update id="deleteItemCodeByItemId" parameterClass="long">
+        update image set delete_mark = 1  where item_id = #itemId#
+    </update>
+
+
+    <update id="updateByKey" parameterClass="imageDO">
+         update image
+         SET image_url = #imageUrl#,
+            content = #content#,
+            version = #version#,
+            gmt_modified = now()
+         where p_key = #pKey#
+    </update>
+
+
+</sqlMap>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+            http://www.springframework.org/schema/context    
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName">
+
+    <bean class="com.mockuai.marketingcenter.core.message.consumer.ListenerHolder">
+        <property name="topicMap">
+            <map>
+                <entry key="trade" value="${marketingcenter.rocketmq.topic.trade}"/>
+            </map>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="com.mockuai.marketingcenter.core.message"/>
+
+    <bean class="com.mockuai.marketingcenter.core.message.consumer.BaseConsumer">
+        <property name="consumerId" value="${marketingcenter.rocketmq.consumer.id}"/>
+    </bean>
+    <!--<bean class="com.mockuai.marketingcenter.core.message.producer.BaseProducer">-->
+        <!--<property name="address" value="${marketingcenter.rocketmq.address}"/>-->
+        <!--<property name="port" value="${marketingcenter.rocketmq.port}"/>-->
+    <!--</bean>-->
+
+    <context:component-scan base-package="com.mockuai.marketingcenter.core.engine"/>
+    <context:component-scan base-package="com.mockuai.marketingcenter.core.service.action"/>
+    <context:component-scan base-package="com.mockuai.marketingcenter.core.manager" />
+    <context:component-scan base-package="com.mockuai.marketingcenter.core.dao" />
+
+    <bean id="actionHolder" class="com.mockuai.marketingcenter.core.service.action.ActionHolder"/>
+    <bean id="appContext" class="com.mockuai.marketingcenter.core.service.AppContext"/>
+    <bean id="requestDispatcher" class="com.mockuai.marketingcenter.core.service.RequestDispatcher">
+        <property name="actionHolder" ref="actionHolder"/>
+        <property name="appContext" ref="appContext"/>
+    </bean>
+</beans>

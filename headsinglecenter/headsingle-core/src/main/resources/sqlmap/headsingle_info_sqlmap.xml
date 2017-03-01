@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="headsingle_info">
+    <resultMap id="result" class="com.mockuai.headsinglecenter.core.domain.HeadSingleInfoDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="orderType" column="order_type" jdbcType="TINYINT"/>
+        <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+        <result property="terminalType" column="terminal_type" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="res1" column="res1" jdbcType="VARCHAR"/>
+        <result property="res2" column="res2" jdbcType="VARCHAR"/>
+        <result property="res3" column="res3" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        order_id,
+        user_id,                
+        order_type,                
+        pay_time,                
+        terminal_type,        
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        res1,
+        res2,
+        res3
+    </sql>  
+    
+    <select id="queryHeadSingleInfos" resultMap="result" parameterClass="com.mockuai.headsinglecenter.common.domain.qto.HeadSingleInfoQTO" >
+        select 
+    <include refid="headsingle_info.column_set" />
+    	from headsingle_info where delete_mark != 1     
+    <isGreaterThan prepend="and" property="terminalType" compareValue="0">
+  		terminal_type = #terminalType:TINYINT#
+  	</isGreaterThan>  	
+  	<isNotNull prepend="and" property="payTimeStart">
+  		pay_time >= #payTimeStart:TIMESTAMP#
+  	</isNotNull>
+  	<isNotNull prepend="and" property="payTimeEnd">
+  		pay_time <![CDATA[<=]]> #payTimeEnd:TIMESTAMP#
+  	</isNotNull>
+  </select>
+    
+  <select id="queryInfoDtoByOrderId" resultMap="result" parameterClass="java.util.Map" >
+     select 
+    <include refid="headsingle_info.column_set" />
+     from headsingle_info
+     where delete_mark != 1 and order_id = #orderId:BIGINT#
+  </select>
+  
+  <insert id="addHeadSingleInfo" parameterClass="com.mockuai.headsinglecenter.core.domain.HeadSingleInfoDO">
+      	insert into headsingle_info
+      	<dynamic prepend="(" >
+        <isNotNull prepend="," property="orderId" >
+       		order_id
+      	</isNotNull>
+      	<isNotNull prepend="," property="userId" >
+       		user_id
+      	</isNotNull>
+      	<isNotNull prepend="," property="orderType" >
+       		order_type
+      	</isNotNull> 
+      	<isNotNull prepend="," property="payTime" >
+       		pay_time
+      	</isNotNull>
+      	<isNotNull prepend="," property="terminalType" >
+       		terminal_type
+      	</isNotNull>       	    	     	
+      	<isNotNull prepend="," property="res1" >
+       		res1
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2" >
+       		res2
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3" >
+       		res3
+      	</isNotNull>
+        ,delete_mark, gmt_created, gmt_modified        
+        )
+        </dynamic>
+        values
+        <dynamic prepend="(" >
+        <isNotNull prepend="," property="orderId">
+        #orderId:BIGINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="userId">
+        #userId:BIGINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="orderType">
+        #orderType:TINYINT#
+      	</isNotNull> 
+      	<isNotNull prepend="," property="payTime">
+        #payTime:TIMESTAMP#
+      	</isNotNull> 
+      	<isNotNull prepend="," property="terminalType">
+        #terminalType:TINYINT#
+      	</isNotNull>       	
+      	<isNotNull prepend="," property="res1">
+        #res1:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2">
+        #res2:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3">
+        #res3:VARCHAR#
+      	</isNotNull>       
+        ,0, now(), now()
+        )
+        </dynamic>        
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</sqlMap>

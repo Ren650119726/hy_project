@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="headsingle_user">
+    <resultMap id="result" class="com.mockuai.headsinglecenter.core.domain.HeadSingleUserDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="orderCount" column="order_count" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="res1" column="res1" jdbcType="VARCHAR"/>
+        <result property="res2" column="res2" jdbcType="VARCHAR"/>
+        <result property="res3" column="res3" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        user_id,
+        order_count,                 
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        res1,
+        res2,
+        res3
+    </sql>
+
+    <select id="queryJudgeHeadSingleUser" resultMap="result" parameterClass="java.util.Map" >
+     select 
+    <include refid="headsingle_user.column_set" />
+     from headsingle_user
+     where delete_mark != 1 and order_count > 0 and user_id = #userId:BIGINT#  
+  </select>
+  
+  <select id="queryJudgeHeadSingle" resultMap="result" parameterClass="java.util.Map" >
+     select 
+    <include refid="headsingle_user.column_set" />
+     from headsingle_user
+     where delete_mark != 1 and user_id = #userId:BIGINT#  
+  </select>
+  
+  <insert id="addHeadSingleUser" parameterClass="com.mockuai.headsinglecenter.core.domain.HeadSingleUserDO">
+      	insert into headsingle_user
+      	<dynamic prepend="(" >
+        <isNotNull prepend="," property="userId" >
+       		user_id
+      	</isNotNull>
+      	<isNotNull prepend="," property="orderCount" >
+       		order_count
+      	</isNotNull>     	    	     	
+      	<isNotNull prepend="," property="res1" >
+       		res1
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2" >
+       		res2
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3" >
+       		res3
+      	</isNotNull>
+        ,delete_mark, gmt_created, gmt_modified        
+        )
+        </dynamic>
+        values
+        <dynamic prepend="(" >
+        <isNotNull prepend="," property="userId">
+        #userId:BIGINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="orderCount">
+        #orderCount:BIGINT#
+      	</isNotNull>      	
+      	<isNotNull prepend="," property="res1">
+        #res1:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2">
+        #res2:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3">
+        #res3:VARCHAR#
+      	</isNotNull>       
+        ,0, now(), now()
+        )
+        </dynamic>        
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <update id="updateHeadSingleOrderCount" parameterClass="java.util.Map">
+    	update headsingle_user set gmt_modified = now(), order_count = #orderCount:BIGINT# 
+    	where delete_mark != 1 and id=#id:BIGINT#
+  	</update>
+</sqlMap>

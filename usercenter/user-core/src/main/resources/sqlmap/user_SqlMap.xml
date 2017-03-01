@@ -1,0 +1,745 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserDO" >
+    <result property="id" column="id"  jdbcType="BIGINT" />
+    <result property="bizCode" column="biz_code"  jdbcType="VARCHAR" />
+    <result property="type" column="type"  jdbcType="TINYINT" />
+    <result property="name" column="name"  jdbcType="VARCHAR" />
+    <result property="password" column="password"  jdbcType="VARCHAR" />
+    <result property="imgUrl" column="img_url"  jdbcType="VARCHAR" />
+    <result column="experience" property="experience" jdbcType="BIGINT" />
+    <result property="phone" column="phone"  jdbcType="VARCHAR" />
+    <result property="mobile" column="mobile"  jdbcType="VARCHAR" />
+    <result property="email" column="email"  jdbcType="VARCHAR" />
+    <result property="status" column="status" jdbcType="TINYINT" />
+    <result property="roleMark" column="role_mark"  jdbcType="BIGINT" />
+    <result property="inviterId" column="inviter_id"  jdbcType="BIGINT" />
+    <result property="invitationCode" column="invitation_code"  jdbcType="VARCHAR" />
+    <result property="deleteMark" column="delete_mark"  jdbcType="TINYINT" />
+    <result property="gmtCreated" column="gmt_created"  jdbcType="TIMESTAMP" />
+    <result property="gmtModified" column="gmt_modified"  jdbcType="TIMESTAMP" />
+    <result property="sourceType" column="source_type" jdbcType="TINYINT"/>
+    <result property="payPassword" column="pay_password" jdbcType="VARCHAR"/>
+    <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+    <result property="sex" column="sex" jdbcType="TINYINT"/>
+    <result property="birthday" column="birthday" jdbcType="TIMESTAMP"/>
+    <result property="lastDistributorId" column="last_distributor_id" jdbcType="BIGINT"/>
+    <result property="wechat" column="wechat" jdbcType="VARCHAR"/>
+    <result property="qqCode" column="qq_code" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    biz_code,
+    type,
+    name,
+    password,
+    img_url,
+    experience,
+    phone,
+    mobile,
+    email,
+    status,
+    role_mark,
+    inviter_id,
+    invitation_code,
+    delete_mark,
+    gmt_created,
+    gmt_modified,
+    source_type,
+    pay_password,
+    nick_name,
+    sex,
+    birthday,
+    last_distributor_id,
+    wechat,
+    qq_code
+  </sql>
+  
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+    insert into user
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        type
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name
+      </isNotNull>
+      <isNotNull prepend="," property="password" >
+        password
+      </isNotNull>
+      <isNotNull prepend="," property="imgUrl" >
+        img_url
+      </isNotNull>
+      <isNotNull prepend="," property="experience" >
+        experience
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        phone
+      </isNotNull>
+      <isNotNull prepend="," property="mobile" >
+        mobile
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        email
+      </isNotNull>
+      <isNotNull prepend="," property="roleMark" >
+        role_mark
+      </isNotNull>
+      <isNotNull prepend="," property="inviterId" >
+        inviter_id
+      </isNotNull>
+      <isNotNull prepend="," property="invitationCode" >
+        invitation_code
+      </isNotNull>
+      <isNotNull prepend="," property="sourceType">
+        source_type
+      </isNotNull>
+      <isNotNull prepend="," property="status">
+        status
+      </isNotNull>
+      <isNotNull prepend="," property="payPassword">
+        pay_password
+      </isNotNull>
+      <isNotNull prepend="," property="nickName">
+        nick_name
+      </isNotNull>
+      <isNotNull prepend="," property="sex">
+        sex
+      </isNotNull>
+      <isNotNull prepend="," property="birthday">
+        birthday
+      </isNotNull>
+      <isNotNull prepend="," property="lastDistributorId">
+        last_distributor_id
+      </isNotNull>
+        ,delete_mark,gmt_created, gmt_modified,delete_version
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        #type#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="password" >
+        #password:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="imgUrl" >
+        #imgUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="experience" >
+        #experience:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="mobile" >
+        #mobile:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="email" >
+        #email:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleMark" >
+        #roleMark#
+      </isNotNull>
+      <isNotNull prepend="," property="inviterId" >
+        #inviterId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="invitationCode" >
+        #invitationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sourceType">
+        #sourceType#
+      </isNotNull>
+      <isNotNull prepend="," property="status">
+        #status#
+      </isNotNull>
+      <isNotNull prepend="," property="payPassword">
+        #payPassword:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="nickName">
+        #nickName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sex">
+        #sex:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="birthday">
+        #birthday:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="lastDistributorId">
+        #lastDistributorId:BIGINT#
+      </isNotNull>
+      ,0,now(),now(),0
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert> 
+  
+   <select id="selectByName" resultMap="BaseResultMap" parameterClass="java.util.Map" >
+    select 
+    <include refid="user.Base_Column_List" />
+    from user
+    where name = #name:VARCHAR# and delete_mark != 1
+  </select>
+  <select id="selectByEmail" resultMap="BaseResultMap" parameterClass="java.util.Map" >
+    select 
+    <include refid="user.Base_Column_List" />
+    from user
+    where email = #email:VARCHAR# and biz_code = #bizCode:VARCHAR# and delete_mark != 1
+  </select>
+  <select id="selectByMobile" resultMap="BaseResultMap" parameterClass="java.util.Map" >
+    select 
+    <include refid="user.Base_Column_List" />
+    from user
+    where mobile = #mobile:VARCHAR# and delete_mark != 1
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterClass="java.lang.Long" >
+    select 
+    <include refid="user.Base_Column_List" />
+    from user
+    where Id = #id:BIGINT# and delete_mark != 1
+  </select>
+  
+  <select id="recycle" resultMap="BaseResultMap" parameterClass="java.lang.Long" >
+    select 
+    <include refid="user.Base_Column_List" />
+    from user
+    where Id = #id:BIGINT# and delete_mark = 2
+  </select>
+
+  <select id="selectByInvitationCode" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    select
+    <include refid="user.Base_Column_List" />
+    from user
+    where invitation_code = #invitationCode:VARCHAR# and delete_mark = 0
+  </select>
+  
+  <select id="queryInviterListByUserId" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+  	select 
+  	<include refid="user.Base_Column_List"/>
+  	from user
+  	where delete_mark = 0 and inviter_id = #id:BIGINT#  	
+  	<isNotNull property="sourceType" >
+  	order by gmt_created asc 
+  	</isNotNull>
+  	<isNull property="sourceType" >	
+  	order by gmt_created desc
+  	</isNull> 
+  	<isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+    </isNotNull>
+  </select>
+
+  <select id="queryUser" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+  	select 
+  	<include refid="user.Base_Column_List"/>
+  	from user
+  	where 
+  	delete_mark = 0 and name not like concat('open_', '%')
+  	<isNotNull prepend="and" property="name">
+  		name like concat('%',#name:VARCHAR#,'%')
+  	</isNotNull>
+  	<isNotNull prepend="and" property="email">
+  		email = #email:VARCHAR#
+  	</isNotNull>
+  	<isNotNull prepend="and" property="mobile">
+  		mobile = #mobile:VARCHAR#
+  	</isNotNull>
+  	<isNotNull prepend="and" property="inviterId">
+  		inviter_id = #inviterId:BIGINT#
+  	</isNotNull>
+  	<isNotNull prepend="and" property="id">
+  		id = #id:BIGINT#
+  	</isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+  		role_mark = #roleMark#
+  	</isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<]]> #endTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="nickName">
+      nick_name like concat('%',#nickName:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull property="idList">
+      <isNotEmpty property="idList" prepend="AND">
+        id in
+        <iterate property="idList" conjunction="," open="(" close=")">
+          #idList[]#
+        </iterate>
+      </isNotEmpty>
+    </isNotNull>
+  	order by id desc limit #offset#,#count#
+  </select>
+
+  <select id="queryNormalAndOldUser" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+    select
+    <include refid="user.Base_Column_List"/>
+    from user
+    where
+    delete_mark = 0 and name not like concat('open_', '%')
+    <isNotNull prepend="and" property="name">
+      name like concat('%',#name:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull prepend="and" property="email">
+      email = #email:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="mobile">
+      mobile = #mobile:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="inviterId">
+      inviter_id = #inviterId:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+      role_mark = #roleMark#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<=]]> #endTime:TIMESTAMP#
+    </isNotNull>
+    order by id desc limit #offset#,#count#
+  </select>
+
+  <select id="normalAndOldTotalCount" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+    select count(*) from user where delete_mark = 0 and name not like concat('open_', '%')
+    <isNotNull prepend="and" property="name">
+      name like concat('%',#name:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull prepend="and" property="email">
+      email = #email:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="mobile">
+      mobile = #mobile:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="inviterId">
+      inviter_id = #inviterId:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+      role_mark = #roleMark#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+  </select>
+
+  <select id="queryUserByDevice" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+    select
+    <include refid="user.Base_Column_List"/>
+    from user
+    where
+    delete_mark = 0
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<=]]> #endTime:TIMESTAMP#
+    </isNotNull>
+  </select>
+  
+  <select id="totalCount" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+  	select count(*) from user where delete_mark = 0 AND name not like concat('open_', '%')
+    <isNotNull prepend="and" property="name">
+      name like concat('%',#name:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull prepend="and" property="email">
+      email = #email:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="mobile">
+      mobile = #mobile:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="inviterId">
+      inviter_id = #inviterId:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+      role_mark = #roleMark#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<]]> #endTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="nickName">
+      nick_name like concat('%',#nickName:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull property="idList">
+      <isNotEmpty property="idList" prepend="AND">
+        id in
+        <iterate property="idList" conjunction="," open="(" close=")">
+          #idList[]#
+        </iterate>
+      </isNotEmpty>
+    </isNotNull>
+  </select> 
+
+  <select id="queryFromIdList" resultMap="BaseResultMap" parameterClass="java.util.List">
+    select <include refid="user.Base_Column_List"/> from user where id in
+    <iterate conjunction="," open="(" close=")">
+      #idList[]#
+    </iterate>
+
+  </select>
+
+  <select id="queryByMobiles" parameterClass="java.util.Map" resultMap="BaseResultMap">
+    select <include refid="user.Base_Column_List" /> from user where mobile in
+    <iterate conjunction="," open="(" close=")" property="mobiles">
+      #mobiles[]#
+    </iterate>
+    AND biz_code = #bizCode# AND delete_mark = 0
+  </select>  
+  
+  <update id="updateEmail" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set email = #email:VARCHAR#,gmt_modified = now() 
+    where id = #id:BIGINT# and delete_mark = 0
+  </update> 
+  
+  <update id="updateMobile" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set mobile = #mobile:VARCHAR#,name = #mobile:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateName" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set name = #name:VARCHAR#,gmt_modified = now()  
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <!-- 注意修改 ********************************************************************-->
+  <select id="login" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+  	select <include refid="user.Base_Column_List"/> from user where name = #name:VARCHAR# and password = #password# and delete_mark = 0
+  </select>
+  
+  <select id="selectByLoginName" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+  	select <include refid="user.Base_Column_List"/> from user where name =#name:VARCHAR# and delete_mark = 0
+  </select>
+  
+  <update id="resetUserPayPwd" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set pay_password = #payPassword:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateInviterId" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set inviter_id = #inviterId:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+  <update id="addFansToInviterId" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set inviter_id = #inviterId:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+
+  
+  <update id="updateUserInvitationId" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user                        
+    set inviter_id = #inviterId:BIGINT#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateLastDistributorId" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user                        
+    set last_distributor_id = #lastDistributorId:BIGINT#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateNickName" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set nick_name = #nickName:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateSexAndBirthday" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user set gmt_modified = now()
+    <isNotNull prepend="," property="sex" >
+       sex = #sex:TINYINT#
+    </isNotNull>
+    <isNotNull prepend="," property="birthday" >
+       birthday = #birthday:TIMESTAMP#
+    </isNotNull>    
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateWxAndQq" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user set gmt_modified = now()
+    <isNotNull prepend="," property="wechat" >
+       wechat = #wechat:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="qqCode" >
+       qq_code = #qqCode:VARCHAR#
+    </isNotNull>    
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <select id="getUserByNickName" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+  	select <include refid="user.Base_Column_List"/> from user where nick_name = #nickName:VARCHAR# and delete_mark = 0
+  </select>
+  
+  <select id="selectByInvitationId" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    select
+    <include refid="user.Base_Column_List" />
+    from user
+    where id = #inviterId:BIGINT# and delete_mark = 0
+  </select>  
+  <!-- 注意 ********************************************************************-->
+  
+   <update id="updateHeadImg" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set img_url = #imgUrl:VARCHAR#,gmt_modified = now() 
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+  <update id="updateInvitationCode" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set invitation_code = #invitationCode:VARCHAR#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>  
+  
+  <update id="updatePwd" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set password = #password:VARCHAR#,gmt_modified = now()  
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="activeUser" parameterClass="java.lang.Long">
+  	update user
+    set status = 0,gmt_modified = now()  
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="freezeUser" parameterClass="java.lang.Long">
+  	update user
+    set status = 1,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+  <update id="tharUser" parameterClass="java.lang.Long">
+  	update user
+    set status = 0,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  
+  <update id="setRole" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+  	update user
+  	set role_mark = #roleMark#,gmt_modified = now()
+  	where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="restore" parameterClass="java.lang.Long">
+  	update user
+  	set delete_mark = 0,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 2
+  </update>
+  
+  <update id="moveToRecycle" parameterClass="java.lang.Long">
+  	update user
+  	set delete_mark = 2,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="delete" parameterClass="java.lang.Long">
+  	update user
+  	set delete_mark = 1,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateUser" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+  	 update user set gmt_modified = now()
+     <isNotNull prepend="," property="name" >
+       name = #name:VARCHAR#
+     </isNotNull>
+     <isNotNull prepend="," property="password" >
+        password = #password:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="imgUrl" >
+        img_url = #imgUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="phone" >
+        phone = #phone:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="mobile" >
+        mobile = #mobile:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="status" >
+        status = #status:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="inviterId" >
+        inviter_id = #inviterId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="invitationCode" >
+        invitation_code = #invitationCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="roleMark">
+        role_mark = #roleMark:BIGINT#
+      </isNotNull>
+    <isNotNull prepend="," property="type">
+        type = #type:INTEGER#
+    </isNotNull>
+    where id = #id:BIGINT#
+  </update>
+
+  <update id="updateRoleType" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set role_mark = #roleMark:BIGINT#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+  <update id="updateUserType" parameterClass="com.mockuai.usercenter.core.domain.UserDO" >
+    update user
+    set type = #type:INTEGER#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+
+  <select id="totalValidUsers" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+    select
+    <include refid="user.Base_Column_List"/>
+    from user
+    where
+    delete_mark = 0 and name not like concat('open_', '%')
+    <isNotNull prepend="and" property="name">
+      name like concat('%',#name:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull prepend="and" property="email">
+      email = #email:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="mobile">
+      mobile = #mobile:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="inviterId">
+      inviter_id = #inviterId:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+      role_mark = #roleMark#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<]]> #endTime:TIMESTAMP#
+    </isNotNull>
+    order by id desc limit #offset#,#count#
+  </select>
+  <select id="getTotalValidCount" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.common.qto.UserQTO">
+    select count(*) from user where delete_mark = 0 AND name not like concat('open_', '%')
+    <isNotNull prepend="and" property="name">
+      name like concat('%',#name:VARCHAR#,'%')
+    </isNotNull>
+    <isNotNull prepend="and" property="email">
+      email = #email:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="mobile">
+      mobile = #mobile:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="inviterId">
+      inviter_id = #inviterId:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="and" property="invitationCode">
+      invitation_code = #invitationCode:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="and" property="roleMark">
+      role_mark = #roleMark#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="sourceType">
+      source_type = #sourceType#
+    </isNotNull>
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<]]> #endTime:TIMESTAMP#
+    </isNotNull>
+  </select>
+
+</sqlMap>

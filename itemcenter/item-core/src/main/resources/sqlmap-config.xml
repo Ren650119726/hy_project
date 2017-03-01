@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+<settings 
+	  cacheModelsEnabled="false" 
+	  enhancementEnabled="false"
+	  lazyLoadingEnabled="false" 
+	  maxRequests="3000" 
+	  maxSessions="3000"
+	  maxTransactions="3000"
+	  useStatementNamespaces="true"
+	  />
+	<!-- 商品 -->
+    <sqlMap resource="sqlmap/item_SqlMap.xml"/>
+    <!-- 商品扩展信息 -->
+    <sqlMap resource="sqlmap/item_extra_info_SqlMap.xml"/>
+    <!-- 商品图片 -->
+    <sqlMap resource="sqlmap/item_image_SqlMap.xml"/>
+	<!-- 商品品牌 -->
+    <sqlMap resource="sqlmap/item_brand_SqlMap.xml"/>
+    <!-- 商品类目 -->
+    <sqlMap resource="sqlmap/item_category_SqlMap.xml"/>
+
+    <sqlMap resource="sqlmap/item_category_tmpl_SqlMap.xml"/>
+    <!-- 商品评论 -->
+    <sqlMap resource="sqlmap/item_comment_SqlMap.xml"/>
+    <!-- 商品属性模板 -->
+    <sqlMap resource="sqlmap/item_property_tmpl_SqlMap.xml"/>
+    <!-- 商品属性 -->
+    <sqlMap resource="sqlmap/item_property_SqlMap.xml"/>
+    
+    <!-- 专场表 -->
+    <sqlMap resource="sqlmap/sales_field_SqlMap.xml"/>
+    
+    <!-- 全局属性 -->
+    <sqlMap resource="sqlmap/global_property_SqlMap.xml"/>
+    <!-- 全局属性值域 -->
+    <sqlMap resource="sqlmap/global_property_value_SqlMap.xml"/>
+    
+    <!-- SKU属性模板 -->
+    <sqlMap resource="sqlmap/sku_property_tmpl_SqlMap.xml"/>
+    <!-- SKU属性 -->
+    <sqlMap resource="sqlmap/sku_property_SqlMap.xml"/>
+    <!-- Item_SKU -->
+    <sqlMap resource="sqlmap/item_sku_SqlMap.xml"/>
+    <!-- SPU属性模板 -->
+    <sqlMap resource="sqlmap/spu_property_tmpl_SqlMap.xml"/>
+    <!-- SPU属性 -->
+    <sqlMap resource="sqlmap/spu_property_SqlMap.xml"/>
+    <!-- SPU_INFO属性 -->
+    <sqlMap resource="sqlmap/spu_info_SqlMap.xml"/>
+    <!-- 新增商品时候的模版 -->
+    <sqlMap resource="sqlmap/item_template_SqlMap.xml"/>
+    <!-- 商品模版的属性值 -->
+    <sqlMap resource="sqlmap/item_template_property_SqlMap.xml"/>
+    <!-- 卖家关联的品牌 -->
+    <sqlMap resource="sqlmap/seller_brand_SqlMap.xml"/>
+    
+    <!--角标 -->
+    <sqlMap resource="sqlmap/corner_icon_SqlMap.xml"/>
+    <!-- 组合商品 -->
+    <sqlMap resource="sqlmap/composite_item_SqlMap.xml"/>
+
+    <!-- 商品收藏表 -->
+    <sqlMap resource="sqlmap/item_collection_SqlMap.xml"/>
+    <!-- 商品评论图片-->
+    <sqlMap resource="sqlmap/comment_image_SqlMap.xml"/>
+    <!-- 商品限购 -->
+    <sqlMap resource="sqlmap/item_buy_limit_SqlMap.xml" />
+    <sqlMap resource="sqlmap/item_detail_template_SqlMap.xml" />
+    <sqlMap resource="sqlmap/item_desc_tmpl_SqlMap.xml"/>
+
+    <!--运费模板 -->
+    <sqlMap resource="sqlmap/freight_template_SqlMap.xml" />
+    <sqlMap resource="sqlmap/freight_area_template_SqlMap.xml" />
+    <sqlMap resource="sqlmap/freight_template_area_info_SqlMap.xml" />
+
+    <!-- 基本属性的默认值表 -->
+    <sqlMap resource="sqlmap/item_property_value_SqlMap.xml" />
+    <sqlMap resource="sqlmap/sku_property_value_SqlMap.xml" />
+
+    <!-- 增值服务-->
+    <sqlMap resource="sqlmap/value_added_service_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/value_added_service_type_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/r_item_service_type_SqlMap.xml"/>
+
+    <!-- 商品套装-->
+    <sqlMap resource="sqlmap/r_item_suit_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/item_suit_SqlMap.xml"/>
+
+     <!--商品标签-->
+    <sqlMap resource="sqlmap/item_label_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/r_item_label_SqlMap.xml"/>
+
+    <!-- 管理后台sku 推荐-->
+    <sqlMap resource="sqlmap/item_sku_recommendation_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/item_sku_property_recommendation_SqlMap.xml"/>
+
+    <sqlMap resource="sqlmap/item_settlement_config_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/item_settlement_condition_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/r_shop_settlement_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/r_category_settlement_SqlMap.xml"/>
+
+    <!-- 商品销量扩展表 -->
+    <sqlMap resource="sqlmap/item_sales_volume_SqlMap.xml"/>
+
+    <sqlMap resource="sqlmap/supplier_SqlMap.xml"/>
+
+    <sqlMap resource="sqlmap/r_brand_category_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/stock_frozen_record_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/spec_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/sku_hotname_SqlMap.xml"/>
+
+    <!-- 商品销量统计 -->
+    <sqlMap resource="sqlmap/item_sales_sku_count_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/item_sales_spu_count_SqlMap.xml"/>
+</sqlMapConfig>

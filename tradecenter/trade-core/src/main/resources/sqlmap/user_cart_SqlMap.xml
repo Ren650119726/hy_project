@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_cart">
+
+	<!--CREATE TABLE `user_cart` (-->
+	<!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+	<!--`biz_code` varchar(64) NOT NULL COMMENT '应用唯一标志符',-->
+	<!--`user_id` bigint(20) NOT NULL COMMENT '用户ID',-->
+	<!--`item_id` bigint(20) NOT NULL COMMENT '商品ID',-->
+	<!--`item_sku_id` bigint(20) NOT NULL COMMENT '商品SKU ID',-->
+	<!--`item_sku_desc` varchar(256) NOT NULL COMMENT '商品规格描述，例如：颜色:红色 尺码:10码',-->
+	<!--`item_name` varchar(256) NOT NULL COMMENT '商品名称',-->
+	<!--`item_image_url` varchar(256) NOT NULL COMMENT '商品图片URL',-->
+	<!--`delivery_type` tinyint(4) NOT NULL COMMENT '商品发货方式',-->
+	<!--`market_price` bigint(20) NOT NULL COMMENT '原价',-->
+	<!--`promotion_price` bigint(20) NOT NULL COMMENT '现价',-->
+	<!--`wireless_price` bigint(20) NOT NULL COMMENT '无线价',-->
+	<!--`number` int(11) NOT NULL COMMENT '数量',-->
+	<!--`seller_id` bigint(20) NOT NULL COMMENT '商品所属卖家ID',-->
+	<!--`distributor_id` bigint(20) NOT NULL COMMENT '分销商ID',-->
+	<!--`distributor_shop_name` varchar(256) NOT NULL COMMENT '分销商店铺名称',-->
+	<!--`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',-->
+	<!--`gmt_created` datetime NOT NULL COMMENT '记录创建时间',-->
+	<!--`gmt_modified` datetime NOT NULL COMMENT '记录最后一次修改时间',-->
+	<!--PRIMARY KEY (`id`)-->
+	<!--) ENGINE=InnoDB AUTO_INCREMENT=350 DEFAULT CHARSET=utf8-->
+
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.CartItemDO">
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="userId" column="user_id" jdbcType="BIGINT"/>
+		<result property="itemId" column="item_id" jdbcType="BIGINT"/>
+		<result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+		<result property="itemSkuDesc" column="item_sku_desc" jdbcType="VARCHAR"/>
+		<result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+		<result property="itemImageUrl" column="item_image_url" jdbcType="VARCHAR"/>
+		<result property="deliveryType" column="delivery_type" jdbcType="TINYINT"/>
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+		<result property="marketPrice" column="market_price" jdbcType="BIGINT"/>
+		<result property="promotionPrice" column="promotion_price" jdbcType="BIGINT"/>
+		<result property="wirelessPrice" column="wireless_price" jdbcType="BIGINT"/>
+		<result property="number" column="number" jdbcType="INTEGER"/>
+		<result property="itemType" column="item_type"/>
+        <result property="originalId" column="original_id"/>
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+		<result property="supplierId" column="supplier_id"/>
+		<result property="distributorId" column="distributor_id"/>
+		<result property="shareUserId" column="share_user_id"/>
+		<result property="distributorName" column="distributor_shop_name"/>
+	</resultMap>
+
+	<sql id="column_set">
+		id,
+		biz_code,
+		user_id,
+		item_id,
+		item_sku_id,
+		item_sku_desc,
+		item_name,
+		item_image_url,
+		delivery_type,
+		seller_id,
+		market_price,
+		promotion_price,
+		wireless_price,
+		number,
+		item_type,
+		original_id,
+		supplier_id,
+		distributor_id,
+		distributor_shop_name,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		share_user_id
+	</sql>
+
+
+	<insert id="addUserCartItem" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		insert into user_cart(
+		biz_code,
+		user_id,
+		item_id,
+		item_sku_id,
+		item_sku_desc,
+		item_name,
+		item_image_url,
+		delivery_type,
+		seller_id,
+		market_price,
+		promotion_price,
+		wireless_price,
+		number,
+		item_type,
+		original_id,
+		supplier_id,
+		distributor_id,
+		distributor_shop_name,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+        share_user_id
+		)
+		values(
+		#bizCode#,
+		#userId#,
+		#itemId#,
+		#itemSkuId#,
+		#itemSkuDesc#,
+		#itemName#,
+		#itemImageUrl#,
+		#deliveryType#,
+		#sellerId#,
+		#marketPrice#,
+		#promotionPrice#,
+		#wirelessPrice#,
+		#number#,
+		#itemType#,
+		#originalId#,
+		#supplierId#,
+		#distributorId#,
+		#distributorName#,
+		0,
+		now(),
+		now(),
+        #shareUserId#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+
+
+	<delete id="deleteUserCartItem"  parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		delete from user_cart
+		where id = #id# and 
+		user_id =#userId#
+	</delete>
+	
+	<delete id="deleteUserCartItemByOriginalId"  parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		delete from user_cart
+		where original_id = #originalId#
+	</delete>
+	
+
+	<delete id="removeCartItem"  parameterClass="java.util.Map">
+		delete from user_cart
+		where user_id =#userId#
+		<isNotNull property="itemSkuIdList" prepend="and">
+			item_sku_id in
+			<iterate  property="itemSkuIdList" conjunction="," open="(" close=")"  >
+				#itemSkuIdList[]#
+			</iterate>
+		</isNotNull>
+
+	</delete>
+	
+	
+
+	<delete id="cleanUserCart" parameterClass="long">
+		delete from user_cart
+		where user_id = #userId#
+	</delete>
+	
+	<!--  更新购物车项商品数目、总金额  -->
+	<update id="updateUserCartItemNumber" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		update user_cart
+  		set number = #number#, gmt_modified = now()
+  		<isNotNull prepend="," property="shareUserId">
+            share_user_id = #shareUserId#
+        </isNotNull>
+
+		where id = #id# and user_id = #userId#
+  	</update>
+
+	<update id="updateCartItem" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		update user_cart set gmt_modified=now()
+		<dynamic>
+			<isNotNull prepend="," property="promotionPrice">
+				promotion_price = #promotionPrice#
+			</isNotNull>
+			<isNotNull prepend="," property="marketPrice">
+				market_price = #marketPrice#
+			</isNotNull>
+			<isNotNull prepend="," property="wirelessPrice">
+				wireless_price = #wirelessPrice#
+			</isNotNull>
+            <isNotNull prepend="," property="shareUserId">
+                share_user_id = #shareUserId#
+            </isNotNull>
+		</dynamic>
+		where id = #id# and user_id = #userId#
+	</update>
+
+
+	<select id="queryUserCartItems" parameterClass="Long" resultMap="result">
+		select 		
+		<include refid="user_cart.column_set" />
+		from user_cart where user_id = #userId# order by gmt_created desc ;
+	</select>
+
+
+	
+	<select id="queryUserCartItemId" resultClass="Long" parameterClass="Long">      
+    	 select distinct(item_sku_id) from user_cart where user_id = #userId#
+	</select>
+	
+  	
+  	<!-- 新加入购物车时候判断是不是已经存在该商品 -->
+	<select id="getCartItemBySkuId" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultMap="result">
+		select
+		<include refid="user_cart.column_set" />
+		from user_cart where item_sku_id = #itemSkuId# and user_id = #userId#
+        <isNotNull prepend="and" property="distributorId">
+             distributor_id=#distributorId#
+        </isNotNull>
+		and original_id is null
+	</select>
+  	
+  	<!-- 新加入购物车时候判断是不是已经存在该商品 -->
+	<select id="getCartItemByShareSkuId" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultMap="result">
+		select
+		<include refid="user_cart.column_set" />
+		from user_cart where item_sku_id = #itemSkuId# and user_id = #userId# 			
+            <isNotNull prepend="and" property="shareUserId">
+                share_user_id = #shareUserId#
+            </isNotNull>
+		and original_id is null
+	</select>
+	
+	<select id="getCartItemsCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+		select count(*) from user_cart where user_id = #userId#
+	</select>
+	
+	<select id="getCartItemCountByUserAndSellerId" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultClass="java.lang.Integer">
+		select IFNULL(sum(number),0) from user_cart where user_id = #userId# and item_id=#itemId# and seller_id=#sellerId#
+	</select>
+	
+	<select id="getCartItemCountBySkuIdAndUserId" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultClass="java.lang.Integer">
+		select IFNULL(sum(number),0) from user_cart where user_id = #userId# and item_sku_id=#itemSkuId# and seller_id=#sellerId#
+	</select>
+	
+  	<select id="getCartItem" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultMap="result">
+		select
+		<include refid="user_cart.column_set" />
+		from user_cart where id = #id# and user_id = #userId#
+	</select>
+	
+	<select id="queryCartItemsByOriSkuIdList" parameterClass="java.util.Map" resultMap="result">
+		select 		
+		<include refid="user_cart.column_set" />
+		where user_id =#userId#
+		and original_id is not null
+		and original_id in(
+			select id from user_cart where item_sku_id in
+			<iterate  property="itemSkuIdList" conjunction="," open="(" close=")"  >
+				#itemSkuIdList[]#
+			</iterate>
+		)
+	</select>
+	
+	<select id="querySupplierCartItems" resultMap="result" parameterClass="Long">      
+    	 select 		
+		<include refid="user_cart.column_set" />
+		from user_cart where supplier_id is not null  and 
+		user_id = #userId# order by gmt_created desc ;
+	</select>
+  	
+</sqlMap>

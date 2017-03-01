@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="seller_trans_log">
+
+
+	
+	
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.SellerTransLogDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="TINYINT" />  <!-- INCOME REFUND WITHDRAW -->
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="fundInAmount" column="fund_in_amount" jdbcType="BIGINT" />
+		<result property="fundOutAmount" column="fund_out_amount" jdbcType="BIGINT"  />
+		<result property="lastAmount" column="last_amount" jdbcType="BIGINT"  />
+		<result property="orderSn" column="order_sn"/>
+		<result property="userId" column="user_id" jdbcType="BIGINT"  />
+		<result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"  />
+		<result property="settlementMark" column="settlement_mark" jdbcType="VARCHAR"  /><!-- y/n 是否结算-->
+		<result property="paymentId" column="payment_id" jdbcType="TINYINT"  /><!-- ALIPAY WECHANPAY UNIPAY-->
+		<result property="memo" column="memo" jdbcType="VARCHAR"  />
+		<result property="withdrawId" column="withdraw_id" jdbcType="BIGINT"  />
+		<result property="cancelMark" column="cancel_mark" jdbcType="VARCHAR"  /> <!-- y/n  代表退款或取消-->
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"  />
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"  />
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"  />
+		
+		<result property="shopType" column="shop_type"  />
+		
+	</resultMap>
+	
+	
+	
+	
+	
+	
+	<sql id="column_set">
+		id,
+		biz_code,
+		type,
+		seller_id,
+		fund_In_Amount,
+		fund_Out_Amount,
+		last_Amount,
+		order_sn,
+		user_id,
+		payment_id,
+		settlement_mark,
+		memo,
+		withdraw_id,
+		cancel_mark,
+		item_sku_id,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		shop_type
+	</sql>
+	
+	
+
+
+	<insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.SellerTransLogDO">
+		insert into seller_trans_log(
+		biz_code,
+		type,
+		seller_id,
+		fund_In_Amount,
+		fund_Out_Amount,
+		last_Amount,
+		order_sn,
+		user_id,
+		payment_id,
+		settlement_mark,
+		memo,
+		withdraw_id,
+		cancel_mark,
+		item_sku_id,
+		shop_type,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#type#,
+		#sellerId#,
+		#fundInAmount#,
+		#fundOutAmount#,
+		#lastAmount#,
+		#orderSn#,
+		#userId#,
+		#paymentId#,
+		#settlementMark#,
+		#memo#,
+		#withdrawId#,
+		#cancelMark#,
+		#itemSkuId#,
+		#shopType#,
+		0,
+		now(),
+		now()
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<select id="query" parameterClass="com.mockuai.tradecenter.common.domain.settlement.SellerTransLogQTO" resultMap="result">
+		select
+		<include refid="seller_trans_log.column_set" />
+		from seller_trans_log
+		where delete_mark = 0
+		and (cancel_mark is null or cancel_mark ='N')
+		<isNotNull property="shopType" prepend=" and">
+			shop_type = #shopType#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend=" and">
+			seller_id = #sellerId#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend=" and">
+			biz_code = #bizCode#
+		</isNotNull>
+		<isNotNull property="type" prepend=" and">
+			type = #type#
+		</isNotNull>
+		<isNotNull property="orderSn" prepend=" and">
+			order_sn = #orderSn#
+		</isNotNull>
+		<isNotNull property="settlementMark" prepend=" and">
+			settlement_mark = #settlementMark#
+		</isNotNull>
+		<isNotNull property="withdrawId" prepend=" and">
+			withdraw_id = #withdrawId#
+		</isNotNull>
+		<isNotNull property="timeStart" prepend="and">
+			<![CDATA[gmt_created >= #timeStart# ]]>
+		</isNotNull>
+		<isNotNull property="timeEnd" prepend="and">
+			<![CDATA[ gmt_created <= #timeEnd# ]]>
+		</isNotNull>
+		<isNotNull property="itemSkuId" prepend=" and">
+			item_sku_id = #itemSkuId#
+		</isNotNull>
+		<isNotNull property="typeIds" prepend="and">
+			 type in
+			 <iterate open="(" close=")" conjunction="," property="typeIds" >   
+                     #typeIds[]#   
+                </iterate>  
+		</isNotNull>
+		<isNotNull property="sellerIds" prepend="and">
+			 seller_id in
+			 <iterate open="(" close=")" conjunction="," property="sellerIds" >   
+                     #sellerIds[]#   
+                </iterate>  
+			</isNotNull>
+			<isNotNull property="shopType" prepend=" and">
+			shop_type = #shopType#
+		</isNotNull>
+		order by id desc 
+		limit #offset#,#count#
+	</select>
+	
+	 <select id="getQueryCount" resultClass="Long"
+		parameterClass="com.mockuai.tradecenter.common.domain.settlement.SellerTransLogQTO">
+		select count(*) from seller_trans_log
+		where delete_mark = 0
+		and (cancel_mark is null or cancel_mark ='N')
+		<isNotNull property="sellerId" prepend=" and">
+			seller_id = #sellerId#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend=" and">
+			biz_code = #bizCode#
+		</isNotNull>
+		<isNotNull property="type" prepend=" and">
+			type = #type#
+		</isNotNull>
+		<isNotNull property="orderSn" prepend=" and">
+			order_sn = #orderSn#
+		</isNotNull>
+		<isNotNull property="settlementMark" prepend=" and">
+			settlement_mark = #settlementMark#
+		</isNotNull>
+		<isNotNull property="timeStart" prepend="and">
+			<![CDATA[gmt_created >= #timeStart# ]]>
+		</isNotNull>
+		<isNotNull property="timeEnd" prepend="and">
+			<![CDATA[ gmt_created <= #timeEnd# ]]>
+		</isNotNull>
+		<isNotNull property="typeIds" prepend="and">
+			 type in
+			 <iterate open="(" close=")" conjunction="," property="typeIds" >   
+                     #typeIds[]#   
+                </iterate>  
+		</isNotNull>
+		<!-- <isNotNull property="mallMark" prepend=" and">
+			mall_mark = #mallMark#
+		</isNotNull> -->
+			<isNotNull property="shopType" prepend=" and">
+			shop_type = #shopType#
+		</isNotNull>
+	</select>
+	
+	<update id="updateById" parameterClass="com.mockuai.tradecenter.core.domain.SellerTransLogDO">
+		update seller_trans_log 
+		set 
+		gmt_modified = now()
+		<isNotNull property="settlementMark" prepend=" ,">
+			settlement_mark = #settlementMark#
+		</isNotNull>
+		<isNotNull property="cancelMark" prepend=" ,">
+			cancel_mark = #cancelMark#
+		</isNotNull>
+		where id = #id#
+	</update>
+	
+	
+	
+</sqlMap>

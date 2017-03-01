@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionConfig>
+	<filters>
+		<chain name="required">
+			<!--暂时注释-->
+			<!--<filter name="paramCheckFilter" implClass="com.mockuai.rainbowcenter.core.filter.impl.ParamCheckFilter" />-->
+			<!-- <filter name="xxx" implClass="xxx" />
+			<filter name="xxx" implClass="xxx" /> -->
+		</chain>
+	</filters>
+</ActionConfig>

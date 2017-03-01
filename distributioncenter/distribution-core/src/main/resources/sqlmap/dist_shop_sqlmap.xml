@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="dist_shop">
+    <!--
+    CREATE TABLE `dist_shop` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `seller_id` bigint(20) NOT NULL COMMENT '卖家ID',
+    `shop_name` varchar(32) NOT NULL COMMENT '店铺名称',
+    `shop_desc` varchar(255) NOT NULL COMMENT '店铺描述',
+    `qrcode_url` varchar(255) NOT NULL COMMENT '店铺二维码URL',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卖家店铺表';
+    -->
+
+    <typeAlias alias="distShopQTO" type="com.mockuai.distributioncenter.common.domain.qto.DistShopQTO"/>
+    <typeAlias alias="distShopDO" type="com.mockuai.distributioncenter.core.domain.DistShopDO"/>
+
+    <resultMap id="BaseResultMap" class="distShopDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="shopName" column="shop_name" jdbcType="VARCHAR"/>
+        <result property="shopDesc" column="shop_desc" jdbcType="VARCHAR"/>
+        <result property="qrcodeUrl" column="qrcode_url" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="distShopDO">
+        INSERT INTO dist_shop
+        (
+        seller_id,
+        shop_name,
+        shop_desc,
+        qrcode_url,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #sellerId#,
+        #shopName#,
+        #shopDesc#,
+        #qrcodeUrl#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotEmpty prepend="ANd" property="sellerIds">
+            seller_id IN
+            <iterate open="(" close=")" conjunction="," property="sellerIds">
+                #sellerIds[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty prepend="AND" property="ids">
+            id IN
+            <iterate open="(" close=")" conjunction="," property="ids">
+                #ids[]#
+            </iterate>
+        </isNotEmpty>
+    </sql>
+
+    <select id="query" parameterClass="distShopQTO" resultMap="BaseResultMap">
+        SELECT * FROM dist_shop
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="totalCount" parameterClass="distShopQTO" resultClass="java.lang.Long">
+        SELECT COUNT(*) FROM dist_shop
+        <include refid="queryCondition"/>
+    </select>
+
+    <select id="get" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_shop WHERE id = #id# AND delete_mark = 0
+    </select>
+    
+    <select id="getBySellerId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_shop WHERE seller_id = #sellerId# AND delete_mark = 0
+    </select>
+
+    <update id="updateQrcodeUrl" parameterClass="distShopDO">
+        update dist_shop set qrcode_url = #qrcodeUrl# where id = #id#
+    </update>
+
+    <update id="update" parameterClass="distShopDO">
+        UPDATE dist_shop SET gmt_modified = now()
+        <isNotNull property="shopName" prepend=",">
+            shop_name = #shopName#
+        </isNotNull>
+        <isNotNull property="shopDesc" prepend=",">
+            shop_desc = #shopDesc#
+        </isNotNull>
+        WHERE id = #id#
+    </update>
+</sqlMap>

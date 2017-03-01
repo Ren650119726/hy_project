@@ -1,0 +1,136 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.hanshu</groupId>
+  <artifactId>haiyn</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>haiyn</name>
+  <url>http://maven.apache.org</url>
+
+	<modules>
+	
+        <module>virtualwealthcenter</module>
+		<module>usercenter</module>
+		<module>tradecenter</module>
+		<module>suppliercenter</module>
+		<module>shopcenter</module>
+		<module>seckillcenter</module>
+		<module>rainbowcenter</module>
+		<module>messagecenter</module>
+		<module>marketingcenter</module>
+		<module>mainweb</module>
+		<module>itemcenter</module>
+		<module>imagecenter</module>
+		<module>headsinglecenter</module>
+		<module>gifts</module>
+		<module>employeecenter</module>
+		<module>distributioncenter</module>
+		<module>deliverycenter</module>
+		<module>dtask</module>
+		<module>appcenter</module>
+        <module>common-utils</module>
+        <module>toolscenter</module>
+    </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>nexus-snapshots</id>
+      <name>snapshots</name>
+      <url>http://nexus.haiyn.com/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+          <id>nexus-releases</id>
+          <name>nexus releases</name>
+          <url>http://nexus.haiyn.com/nexus/content/repositories/releases</url>
+          <releases><enabled>true</enabled></releases>
+          <snapshots><enabled>false</enabled></snapshots>
+        </repository>
+  </distributionManagement>
+  <!-- 
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1</version>
+                <configuration>
+                    <attach>true</attach>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build> -->
+    <profiles>
+        <!-- 本地环境-->
+        <profile>
+            <id>local</id>
+            <properties>
+                <env>local</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>env</name>
+                    <value>local</value>
+                </property>
+            </activation>
+        </profile>
+       <!-- 开发环境，默认激活-->
+       <profile>
+           <id>dev</id>
+           <properties>
+              <env>dev</env>
+           </properties>
+
+       </profile>
+       <!-- 测试环境 -->
+       <profile>
+           <id>daily</id>
+           <properties>
+              <env>daily</env>
+           </properties>
+       </profile>
+       <!-- 预发环境 -->
+        <profile>
+            <id>pre</id>
+            <properties>
+                <env>pre</env>
+            </properties>
+
+        </profile>
+        <!-- 生产环境 -->
+        <profile>
+            <id>online</id>
+            <properties>
+                <env>online</env>
+            </properties>
+        </profile>
+    </profiles> 
+
+	 <dependencies>
+      <!--  <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>-->
+    </dependencies>
+</project>

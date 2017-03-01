@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_sku">
+    <typeAlias alias="ItemSkuDO" type="com.mockuai.itemcenter.core.domain.ItemSkuDO"/>
+    <typeAlias alias="ItemSkuQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemSkuQTO"/>
+    <typeAlias alias="SkuCountDO" type="com.mockuai.itemcenter.core.domain.SkuCountDO"/>
+
+    <resultMap class="ItemSkuDO" id="ItemSkuDOResult">
+        <result property="id" column="id"/>
+        <result property="skuCode" column="sku_code"/>
+        <result property="itemId" column="item_id"/>
+        <result property="barCode" column="bar_code"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="costPrice" column="cost_price"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="promotionPrice" column="promotion_price"/>
+        <result property="wirelessPrice" column="wireless_price"/>
+        <result property="stockNum" column="stock_num"/>
+        <result property="frozenStockNum" column="frozen_stock_num"/>
+        <result property="soldNum" column="sold_num"/>
+        <result property="bizCode" column="biz_code"/>
+        <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <resultMap id="itemStockMap" class="ItemSkuDO">
+        <result property="itemId" column="item_id"/>
+        <result property="stockNum" column="stock_num"/>
+    </resultMap>
+
+    <resultMap id="itemSkuCountMap" class="SkuCountDO">
+        <result property="itemId" column="item_id"/>
+        <result property="count" column="sku_count"/>
+    </resultMap>
+    <resultMap id="itemSkuDynamicMap" class="ItemSkuDO">
+        <result property="id" column="id"/>
+        <result property="itemId" column="item_id"/>
+        <result property="sellerId" column="seller_id"/>
+        <result property="marketPrice" column="market_price"/>
+        <result property="promotionPrice" column="promotion_price"/>
+        <result property="wirelessPrice" column="wireless_price"/>
+    </resultMap>
+
+
+    <insert id="ItemSkuDAO.addItemSku" parameterClass="ItemSkuDO">
+        insert into item_sku
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="skuCode">
+                sku_code
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="barCode">
+                bar_code
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="costPrice">
+                cost_price
+            </isNotNull>
+            <isNotNull prepend="," property="marketPrice">
+                market_price
+            </isNotNull>
+            <isNotNull prepend="," property="promotionPrice">
+                promotion_price
+            </isNotNull>
+            <isNotNull prepend="," property="wirelessPrice">
+                wireless_price
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                frozen_stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                sold_num
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="skuCode">
+                #skuCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="barCode">
+                #barCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="costPrice">
+                #costPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="marketPrice">
+                #marketPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="promotionPrice">
+                #promotionPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="wirelessPrice">
+                #wirelessPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                #stockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                #frozenStockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                #soldNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="item_sku_base_column_list">
+        id,
+        sku_code,
+        item_id,
+        bar_code,
+        seller_id,
+        cost_price,
+        market_price,
+        promotion_price,
+        wireless_price,
+        stock_num,
+        frozen_stock_num,
+        sold_num,
+        biz_code,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="ItemSkuDAO.queryWhere">
+        <dynamic prepend="where">
+        <isNotNull  prepend="AND" property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNotNull prepend="AND" property="isNeedQueryRemoveSku">
+            delete_mark  in (0,2)
+        </isNotNull>
+        <isNull prepend="AND"    property="isNeedQueryRemoveSku">
+            <isNull  property="deleteMark">
+                delete_mark = 0
+            </isNull>
+        </isNull>
+
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty prepend="AND" property="idList">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="itemIdList">
+            <isNotEmpty prepend="AND" property="itemIdList">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="barCode">
+            bar_code = #barCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code=#bizCode#
+        </isNotNull>
+        </dynamic>
+    </sql>
+
+    <update id="ItemSkuDAO.updateItemSku">
+        update item_sku
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="stockNum">
+                stock_num = #stockNum#
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                frozen_stock_num = #frozenStockNum#
+            </isNotNull>
+            <isNotNull prepend="," property="barCode">
+                bar_code = #barCode#
+            </isNotNull>
+            <isNotNull prepend="," property="costPrice">
+                cost_price = #costPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="marketPrice">
+                market_price = #marketPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="promotionPrice">
+                promotion_price = #promotionPrice#
+            </isNotNull>
+            <isNotNull prepend="," property="wirelessPrice">
+                wireless_price = #wirelessPrice#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+
+        <!-- 		<include refid="ItemSkuDAO.queryWhere" /> -->
+    </update>
+
+    <update id="ItemSkuDAO.updateItemSkuCodeValue" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="skuCode">
+                sku_code = #skuCode#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.deleteItemSku" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now(), delete_mark=1
+        where delete_mark in (0,2) and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.trashByItemId" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now(), delete_mark=2
+        where delete_mark = 0 and item_id = #itemId# and seller_id = #sellerId# and id > 0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.recoveryByItemId" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now(), delete_mark=0
+        where delete_mark = 2 and item_id = #itemId# and seller_id = #sellerId# and id > 0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.emptyRecycleBin" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now(), delete_mark=1
+        where delete_mark = 2 and seller_id = #sellerId# and biz_code = #bizCode# and id > 0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.increaseItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now(),stock_num=stock_num + #stockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+
+    <update id="ItemSkuDAO.decreaseItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),stock_num=stock_num - #stockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and stock_num>0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.freezeItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),frozen_stock_num = frozen_stock_num + #frozenStockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and stock_num > frozen_stock_num and biz_code =
+        #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.thawItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),frozen_stock_num = frozen_stock_num - #frozenStockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and stock_num>0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.crushItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),stock_num = stock_num - #stockNum# ,frozen_stock_num = frozen_stock_num -
+        #frozenStockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and stock_num>0 and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.resumeCrushedItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),stock_num = stock_num + #stockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <update id="ItemSkuDAO.updateItemSkuStock" parameterClass="ItemSkuDO">
+        update item_sku
+        set gmt_modified=now( ),stock_num = #stockNum#
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+
+    <select id="ItemSkuDAO.getItemSku" resultMap="ItemSkuDOResult" parameterClass="ItemSkuDO">
+        select
+        <include refid="item_sku_base_column_list"/>
+        from item_sku
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+        <!-- <include refid="ItemSkuDAO.queryWhere" /> -->
+    </select>
+
+    <select id="ItemSkuDAO.queryItemSku" resultMap="ItemSkuDOResult" parameterClass="ItemSkuQTO">
+        select
+        <include refid="item_sku_base_column_list"/>
+        from item_sku
+        <include refid="ItemSkuDAO.queryWhere"/>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="ItemSkuDAO.countItemSku" resultClass="Long" parameterClass="ItemSkuQTO">
+        select count(1) from item_sku
+        <include refid="ItemSkuDAO.queryWhere"/>
+    </select>
+
+    <select id="ItemSkuDAO.countItemStock" resultClass="Long" parameterClass="ItemSkuDO">
+        select sum(stock_num) from item_sku
+        where item_id = #itemId# and seller_id = #sellerId# and biz_code = #bizCode# and delete_mark = 0
+    </select>
+
+
+    <!--  根据itemId删除 updated by cwr -->
+    <update id="ItemSkuDAO.deleteByItemId">
+        update item_sku
+        set gmt_modified=now( ),delete_mark = 1 where item_id = #itemId# and seller_id = #sellerId# and delete_mark in
+        (0,2)
+    </update>
+
+    <!-- 批量查询商品的库存 -->
+    <select id="ItemSkuDAO.queryStock" resultMap="itemStockMap" parameterClass="ItemSkuQTO">
+        select item_id, sum(stock_num) as stock_num from item_sku where delete_mark in (0,2)
+        <isNotNull property="itemIdList">
+            <isEmpty prepend="AND" property="itemIdList">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isEmpty>
+        </isNotNull>
+        group by item_id
+    </select>
+
+    <!-- 批量查询商品的sku数量 -->
+    <select id="ItemSkuDAO.querySkuCount" resultMap="itemSkuCountMap" parameterClass="ItemSkuQTO">
+        select item_id, count(item_id) as sku_count from item_sku where delete_mark = 0
+        <isNotNull property="itemIdList">
+            <isEmpty prepend="AND" property="itemIdList">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isEmpty>
+        </isNotNull>
+        group by item_id
+    </select>
+    <select id="ItemSkuDAO.queryItemDynamic" resultMap="itemSkuDynamicMap" parameterClass="ItemSkuQTO">
+        select item_id,id,seller_id,  market_price,
+        promotion_price,
+        wireless_price  from item_sku
+        <include refid="ItemSkuDAO.queryWhere"/>
+
+    </select>
+</sqlMap>

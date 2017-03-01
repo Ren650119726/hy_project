@@ -1,0 +1,91 @@
+<span>应用信息</span>
+<form class="form-horizontal" method='post' action=#if($!{appInfo}) "/appcenter/app/update.do" #else "/appcenter/app/add.do" #end>
+<input type="hidden" name="id" value="$!{appInfo.id}"/>
+<input type="hidden" name="app_key" value="$!{appInfo.appKey}"/>
+<div class="form-group">
+    <label class="col-sm-2 control-label">企业标志码：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="biz_code" class="form-control" value="$!{appInfo.bizCode}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">应用类型：</label>
+
+    <div class="col-sm-4">
+        <select class="form-control" name="app_type">
+            <option value="1" #if($!{appInfo.appType}==1) selected="true" #end>IOS客户端</option>
+            <option value="2" #if($!{appInfo.appType}==2) selected="true" #end>Android客户端</option>
+            <option value="3" #if($!{appInfo.appType}==3) selected="true" #end>微商城</option>
+            <option value="4" #if($!{appInfo.appType}==4) selected="true" #end>PC商城</option>
+            <option value="11" #if($!{appInfo.appType}==11) selected="true" #end>seller管理后台</option>
+            <option value="12" #if($!{appInfo.appType}==12) selected="true" #end>boss管理后台</option>
+            <option value="13" #if($!{appInfo.appType}==13) selected="true" #end>mall管理后台</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">应用名称：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="app_name" class="form-control" value="$!{appInfo.appName}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">应用版本：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="app_version" class="form-control" value="$!{appInfo.appVersion}">
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-sm-2 control-label">应用域名：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="domain_name" class="form-control" value="$!{appInfo.domainName}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">管理员：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="admin" class="form-control" value="$!{appInfo.administrator}">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">联系电话：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="mobile" value="$!{appInfo.mobile}" class="form-control">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">邮箱：</label>
+
+    <div class="col-sm-4">
+        <input type="text" name="email" value="$!{appInfo.email}" class="form-control">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="col-sm-2 control-label">应用描述信息：</label>
+
+    <div class="col-sm-4">
+        <textarea type="text" class="form-control" rows="3" value="$!{appInfo.appDesc}"></textarea>
+    </div>
+</div>
+<div class="col-sm-6 text-right">
+    #if($!{userDO.level} <3)
+    <button type="submit" class="btn btn-default">保存</button>
+    #end
+    <a href="/appcenter/app/manager.html" class="btn btn-default">返回</a>
+</div>
+</form>
+<script src="/appcenter/js/jquery-2.1.4.min.js"></script>
+<script src="/appcenter/js/bootstrap.min.js"></script>

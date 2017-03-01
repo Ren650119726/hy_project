@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_store">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderStoreDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="storeId" column="store_id" jdbcType="BIGINT"/>
+        <result property="storeName" column="store_name" jdbcType="INT"/>
+        <result property="storeMobile" column="store_mobile" jdbcType="BIGINT"/>
+        <result property="storeAddress" column="store_address" jdbcType="BIGINT"/>
+        <result property="pickupCode" column="pickup_code" jdbcType="VARCHAR"/>
+        <result property="pickupTime" column="pickup_time" jdbcType="DATE"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+        
+         <result property="storeNumber" column="store_number" ></result>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        order_id,
+        store_id,
+        store_name,
+        store_mobile,
+        store_address,
+        pickup_code,
+        pickup_time,
+        store_number,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="dynamic_set_clause">
+        <isNotNull property="id" prepend=",">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend=",">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="paymentSn" prepend=",">
+            payment_sn=#paymentSn#
+        </isNotNull>
+        <isNotNull property="orderId" prepend=",">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend=",">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="paymentId" prepend=",">
+            payment_id=#paymentId#
+        </isNotNull>
+        <isNotNull property="totalAmount" prepend=",">
+            total_amount=#totalAmount#
+        </isNotNull>
+        <isNotNull property="payAmount" prepend=",">
+            pay_amount=#payAmount#
+        </isNotNull>
+        <isNotNull property="outTradeNo" prepend=",">
+            out_trade_no=#outTradeNo#
+        </isNotNull>
+        <isNotNull property="payTime" prepend=",">
+            pay_time=#payTime#
+        </isNotNull>
+        <isNotNull property="payStatus" prepend=",">
+            pay_status=#payStatus#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend=",">
+            delete_mark=#deleteMark#
+        </isNotNull>
+        <isNotNull property="gmtCreated" prepend=",">
+            gmt_created=#gmtCreated#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend=",">
+            gmt_modified=#gmtModified#
+        </isNotNull>
+    </sql>
+
+   <select id="getOrderStore" parameterClass="com.mockuai.tradecenter.core.domain.OrderStoreDO"
+            resultMap="result">
+        select
+        <include refid="order_store.column_set"/>
+        from order_store where order_id = #orderId# and delete_mark = 0
+    </select>
+
+
+    <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.OrderStoreDO">
+        insert into order_store(
+        biz_code,
+        order_id,
+        store_id,
+        store_name,
+        store_mobile,
+        store_address,
+        pickup_code,
+        pickup_time,
+        store_number,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #orderId#,
+        #storeId#,
+        #storeName#,
+        #storeMobile#,
+        #storeAddress#,
+        #pickupCode#,
+        #pickupTime#,
+        #storeNumber#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+
+  <update id="update" parameterClass="com.mockuai.tradecenter.core.domain.OrderStoreDO">
+		update order_store 
+		set  gmt_modified = now()
+			<isNotNull prepend="," property="pickupCode">
+				pickup_code=#pickupCode#
+			</isNotNull>
+			where order_id=#orderId#
+			and delete_mark=0
+	</update>
+   
+</sqlMap>

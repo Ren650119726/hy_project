@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="page_seckill">
+
+
+    <typeAlias alias="PageSeckillDO" type="com.mockuai.mainweb.core.domain.PageSeckillDO"/>
+
+    <resultMap id="PageSeckillMap" class="PageSeckillDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="seckillId" column="seckill_id" jdbcType="BIGINT"/>
+        <result property="seckillTitle" column="seckill_title" jdbcType="VARCHAR"/>
+        <result property="subSeckillId" column="sub_seckill_id" jdbcType="BIGINT"/>
+        <result property="startTime" column="start_time" jdbcType="DATETIME"/>
+        <result property="endTime" column="end_time" jdbcType="DATETIME"/>
+        <result property="blockId" column="block_id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="imageUrl" column="image_url" jdbcType="VARCHAR"/>
+        <result property="targetUrl" column="target_url" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id="item">
+        id,
+        seckill_id,
+        seckill_title,
+        sub_seckill_id,
+        start_time,
+        end_time,
+        image_url,
+        target_url,
+        block_id,
+        page_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!--pageGallery-->
+    <insert id="addPageSeckill" parameterClass="PageSeckillDO">
+        INSERT INTO page_seckill
+        (
+       <include refid="item"/>
+        ) VALUE (
+        #id#,
+        #seckillId#,
+        #seckillTitle#,
+        #subSeckillId#,
+        #startTime#,
+        #endTime#,
+        #imageUrl#,
+        #targetUrl#,
+        #blockId#,
+        #pageId#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <update id="deletePageSeckill" parameterClass="java.lang.Long" >
+        update  page_seckill set delete_mark = 1
+        where delete_mark = 0
+        and page_id = #pageId#
+    </update>
+
+    <select id="getPageSeckill" resultMap="PageSeckillMap"  parameterClass="java.lang.Long">
+        select
+        <include refid="item"/>
+        FROM page_seckill
+        where
+        delete_mark = 0
+        and
+        page_id = #pageId#
+    </select>
+
+    <select id="querySeckillTitles" resultClass="string" >
+        select seckill_title
+        FROM  page_seckill
+        where delete_mark = 0
+        and page_id = #pageId#
+    </select>
+
+</sqlMap>

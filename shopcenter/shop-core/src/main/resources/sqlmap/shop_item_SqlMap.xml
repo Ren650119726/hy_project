@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ShopItem">
+
+    <typeAlias alias="ShopItemDO" type="com.mockuai.shopcenter.core.domain.ShopItemDO"/>
+    <typeAlias alias="ShopItemQTO" type="com.mockuai.shopcenter.domain.qto.ShopItemQTO"/>
+
+    <resultMap class="ShopItemDO" id="BaseResultMap">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="shop_id" jdbcType="BIGINT" property="shopId"/>
+        <result column="seller_id" jdbcType="BIGINT" property="sellerId"/>
+        <result column="item_id" jdbcType="BIGINT" property="itemId"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, shop_id, seller_id, item_id, delete_mark, gmt_created, gmt_modified, biz_code
+    </sql>
+
+    <select id="getShopItem" parameterClass="ShopItemDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from shop_item
+        where id = #id# and shop_id = #shopId# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteShopItem" parameterClass="ShopItemDO">
+        update shop_item
+        set delete_mark = 1,gmt_modified= now()
+        where id = #id# and shop_id = #shopId# and biz_code = #bizCode#
+    </update>
+
+    <update id="batchDeleteShopItem" parameterClass="ShopItemQTO">
+        update shop_item
+        set delete_mark = 1,gmt_modified= now()
+        where
+        shop_id = #shopId# and biz_code = #bizCode#
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="AND">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+    </update>
+
+    <insert id="addShopItem" parameterClass="ShopItemDO">
+        insert into shop_item
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                #shopId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            select LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark = 0
+        <isNotNull property="id" prepend="AND">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="AND">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="AND">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull property="shopId" prepend="AND">
+            shop_id = #shopId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="itemId" prepend="AND">
+            item_id = #itemId#
+        </isNotNull>
+    </sql>
+
+    <select id="countShopItem" parameterClass="ShopItemQTO"
+            resultClass="java.lang.Integer">
+        select count(1) from shop_item
+        <include refid="queryWhere"/>
+    </select>
+
+    <select id="queryShopItem" parameterClass="ShopItemQTO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from shop_item
+        <include refid="queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            <isEqual property="needPaging" compareValue="true">
+                limit #offset#,#page_size#
+            </isEqual>
+        </isNotNull>
+    </select>
+
+
+    <!--<update id="updateByExampleSelective">-->
+        <!--&lt;!&ndash;-->
+          <!--WARNING - @mbggenerated-->
+          <!--This element is automatically generated by MyBatis Generator, do not modify.-->
+          <!--This element was generated on Tue Jan 12 18:05:22 CST 2016.-->
+        <!--&ndash;&gt;-->
+        <!--update shop_item-->
+        <!--<dynamic prepend="set">-->
+            <!--<isNotNull prepend="," property="record.id">-->
+                <!--id = #record.id:INTEGER#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.shopId">-->
+                <!--shop_id = #record.shopId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.sellerId">-->
+                <!--seller_id = #record.sellerId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.itemId">-->
+                <!--item_id = #record.itemId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.deleteMark">-->
+                <!--delete_mark = #record.deleteMark:TINYINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.gmtCreated">-->
+                <!--gmt_created = #record.gmtCreated:TIMESTAMP#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.gmtModified">-->
+                <!--gmt_modified = #record.gmtModified:TIMESTAMP#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="record.bizCode">-->
+                <!--biz_code = #record.bizCode:VARCHAR#-->
+            <!--</isNotNull>-->
+        <!--</dynamic>-->
+        <!--<isParameterPresent>-->
+            <!--<include refid="shop_item.Example_Where_Clause"/>-->
+        <!--</isParameterPresent>-->
+    <!--</update>-->
+    <!--<update id="updateByExample">-->
+        <!--&lt;!&ndash;-->
+          <!--WARNING - @mbggenerated-->
+          <!--This element is automatically generated by MyBatis Generator, do not modify.-->
+          <!--This element was generated on Tue Jan 12 18:05:22 CST 2016.-->
+        <!--&ndash;&gt;-->
+        <!--update shop_item-->
+        <!--set id = #record.id:INTEGER#,-->
+        <!--shop_id = #record.shopId:BIGINT#,-->
+        <!--seller_id = #record.sellerId:BIGINT#,-->
+        <!--item_id = #record.itemId:BIGINT#,-->
+        <!--delete_mark = #record.deleteMark:TINYINT#,-->
+        <!--gmt_created = #record.gmtCreated:TIMESTAMP#,-->
+        <!--gmt_modified = #record.gmtModified:TIMESTAMP#,-->
+        <!--biz_code = #record.bizCode:VARCHAR#-->
+        <!--<isParameterPresent>-->
+            <!--<include refid="shop_item.Example_Where_Clause"/>-->
+        <!--</isParameterPresent>-->
+    <!--</update>-->
+    <!--<update id="updateByPrimaryKeySelective" parameterClass="com.mockuai.shopcenter.core.domain.ShopItemDO">-->
+        <!--&lt;!&ndash;-->
+          <!--WARNING - @mbggenerated-->
+          <!--This element is automatically generated by MyBatis Generator, do not modify.-->
+          <!--This element was generated on Tue Jan 12 18:05:22 CST 2016.-->
+        <!--&ndash;&gt;-->
+        <!--update shop_item-->
+        <!--<dynamic prepend="set">-->
+            <!--<isNotNull prepend="," property="shopId">-->
+                <!--shop_id = #shopId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="sellerId">-->
+                <!--seller_id = #sellerId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="itemId">-->
+                <!--item_id = #itemId:BIGINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="deleteMark">-->
+                <!--delete_mark = #deleteMark:TINYINT#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="gmtCreated">-->
+                <!--gmt_created = #gmtCreated:TIMESTAMP#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="gmtModified">-->
+                <!--gmt_modified = #gmtModified:TIMESTAMP#-->
+            <!--</isNotNull>-->
+            <!--<isNotNull prepend="," property="bizCode">-->
+                <!--biz_code = #bizCode:VARCHAR#-->
+            <!--</isNotNull>-->
+        <!--</dynamic>-->
+        <!--where id = #id:INTEGER#-->
+    <!--</update>-->
+    <!--<update id="updateByPrimaryKey" parameterClass="com.mockuai.shopcenter.core.domain.ShopItemDO">-->
+        <!--&lt;!&ndash;-->
+          <!--WARNING - @mbggenerated-->
+          <!--This element is automatically generated by MyBatis Generator, do not modify.-->
+          <!--This element was generated on Tue Jan 12 18:05:22 CST 2016.-->
+        <!--&ndash;&gt;-->
+        <!--update shop_item-->
+        <!--set shop_id = #shopId:BIGINT#,-->
+        <!--seller_id = #sellerId:BIGINT#,-->
+        <!--item_id = #itemId:BIGINT#,-->
+        <!--delete_mark = #deleteMark:TINYINT#,-->
+        <!--gmt_created = #gmtCreated:TIMESTAMP#,-->
+        <!--gmt_modified = #gmtModified:TIMESTAMP#,-->
+        <!--biz_code = #bizCode:VARCHAR#-->
+        <!--where id = #id:INTEGER#-->
+    <!--</update>-->
+</sqlMap>

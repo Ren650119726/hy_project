@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	   default-autowire="byName">
+	   
+	    <bean id="addActivityOrder" class="com.mockuai.tradecenter.core.service.action.order.add.AddActivityOrder">
+		   	<property name="ruleChain" ref="addActivityOrder-2"></property>
+			<property name="serviceName" value="活动商品下单"></property>
+	   </bean>                            									                                               
+	   
+	 <!--  <bean id="addActivityOrder-1" class="com.mockuai.tradecenter.core.service.impl.OrderActionService" parent="abstractRuleChian">
+		<property name="ruleActionName" value="040700"/>
+		<property name="buinessName" value="查询商品信息"/>
+        <property name="analysisParams">
+			<map>
+			    <entry key="source.request.getParam('orderDTO').orderItems" value="itemRequest.orderItemList" />
+				<entry key="source.request.getParam('appKey')" value="appKey" />
+				<entry key="source.request.getParam('orderDTO').userId" value="userId" />
+			</map>
+		</property>
+			<property name="nextTradeService" ref="addActivityOrder-2"></property>
+	</bean> -->
+	
+	 <bean id="addActivityOrder-2" class="com.mockuai.tradecenter.core.service.impl.OrderActionService" parent="abstractRuleChian">
+		<property name="ruleActionName" value="020500"/>
+		<property name="buinessName" value="获取结算信息"/>
+        <property name="analysisParams">
+			<map>
+			    <entry key="source.request.getParam('orderDTO').orderItems" value="settlementRequest.orderItems" />
+			    <entry key="source.request.getParam('orderDTO').usedWealthDTOs" value="settlementRequest.usedWealthDTOs" />
+			  <!--   <entry key="source.request.getParam('orderDTO').usedCouponDTOs" value="settlementRequest.usedCouponDTOs" /> -->
+				<entry key="source.request.getParam('appKey')" value="appKey" />
+				<entry key="source.get('bizCode')" value="bizCode" />
+				<entry key="source.request.getParam('orderDTO').userId" value="userId" />
+				<entry key="source.request.getParam('orderDTO').orderConsigneeDTO.consigneeId" value="settlementRequest.consigneeId" />
+			</map>
+		</property>
+		<property name="nextTradeService" ref="addActivityOrder-3"></property>
+	</bean>
+	
+	 <bean id="addActivityOrder-3" class="com.mockuai.tradecenter.core.service.impl.OrderActionService" parent="abstractRuleChian">
+		<property name="ruleActionName" value="010003"/>
+		<property name="buinessName" value="活动商品下单"/>
+        <property name="analysisParams">
+			<map>
+			    <entry key="source.request.getParam('orderDTO')" value="orderRequest.orderDTO" />
+				<entry key="source.request.getParam('appKey')" value="appKey" />
+			<!-- 	<entry key="source.tradeInnerResult.itemResponse.itemSkuMap" value="orderRequest.itemSkuMap" />
+				<entry key="source.tradeInnerResult.itemResponse.itemMap" value="orderRequest.itemMap" /> -->
+				<entry key="source.get('bizCode')" value="bizCode" />
+				<entry key="source.request.getParam('orderDTO').userId" value="userId" />
+				<entry key="source.tradeInnerResult.settlementResponse.deliveryFee" value="orderRequest.deliveryFee" />
+				<entry key="source.tradeInnerResult.settlementResponse.orderDiscountInfoDOList" value="orderRequest.orderDiscountInfoDOList" />
+				<entry key="source.request.getParam('orderViewDTO')" value="orderRequest.orderViewDTO" />
+			</map>
+		</property>
+	</bean>
+	   
+</beans>

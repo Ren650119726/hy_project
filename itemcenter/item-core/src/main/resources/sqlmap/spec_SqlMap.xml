@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="spec">
+
+    <typeAlias alias="specDO" type="com.mockuai.itemcenter.core.domain.SpecDO"/>
+    <typeAlias alias="specQTO" type="com.mockuai.itemcenter.common.domain.qto.SpecQTO"/>
+
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.SpecDO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="sort_order" property="sortOrder" jdbcType="TINYINT"/>
+        <result column="spec_name" property="specName" jdbcType="VARCHAR"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="INTEGER"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, spec_name,sort_order,biz_code, delete_mark, gmt_created,
+        gmt_modified
+    </sql>
+
+    <select id="getSpec" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.itemcenter.core.domain.SpecDO">
+        select
+        <include refid="seller_brand.Base_Column_List"/>
+        from item_spec
+        where id = #id:INTEGER# and delete_mark = 0
+    </select>
+
+
+    <insert id="addSpec" parameterClass="specDO">
+        insert into item_spec
+        <dynamic prepend="(">
+
+            <isNotNull prepend="," property="specName">
+                spec_name
+            </isNotNull>
+            <isNotNull prepend="," property="sortOrder">
+                sort_order
+            </isNotNull>
+
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+
+            <isNotNull prepend="," property="specName">
+                #specName#
+            </isNotNull>
+            <isNotNull prepend="," property="sortOrder">
+                #sortOrder#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <update id="updateSpec" parameterClass="specDO">
+        update item_spec set gmt_modified = now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="specName">
+                spec_name = #specName#
+            </isNotNull>
+            <isNotNull prepend="," property="sortOrder">
+                sort_order = #sortOrder#
+            </isNotNull>
+
+        </dynamic>
+        where id = #id:BIGINT# and delete_mark = 0
+    </update>
+
+    <update id="deleteSpec" parameterClass="long">
+        update item_spec set delete_mark = 1,gmt_modified = now() where
+        delete_mark = 0 and id=#id#
+    </update>
+
+    <!-- 复合条件 -->
+    <sql id="queryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="specName">
+            spec_name = #specName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="excludeSpecName">
+            spec_name &lt;&gt; #excludeSpecName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sortOrder">
+            sort_order = #sortOrder#
+        </isNotNull>
+
+    </sql>
+
+    <select id="querySpec" resultMap="BaseResultMap"
+            parameterClass="specQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from item_spec
+        <include refid="queryWhere"/>
+        order by sort_order asc ,  gmt_modified desc
+            limit #offset#,#pageSize#
+    </select>
+
+    <select id="countSpec" resultClass="java.lang.Long">
+        select count(1) from item_spec
+        <include refid="queryWhere"/>
+    </select>
+
+
+</sqlMap>

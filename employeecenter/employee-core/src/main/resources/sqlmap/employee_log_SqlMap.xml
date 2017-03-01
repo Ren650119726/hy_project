@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="employee_log">
+    <resultMap id="BaseResultMap" class="com.hanshu.employee.core.domain.EmployeeLogDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="operatorId" column="operator_id" jdbcType="BIGINT"/>
+        <result property="operator" column="operator" jdbcType="VARCHAR"/>
+        <result property="opAction" column="op_action" jdbcType="TINYINT"/>
+        <result property="objType" column="obj_type" jdbcType="TINYINT"/>
+        <result property="objId" column="obj_id" jdbcType="BIGINT"/>
+        <result property="objName" column="obj_name" jdbcType="VARCHAR"/>
+        <result property="opResult" column="op_result" jdbcType="TINYINT"/>
+        <result property="operateJson" column="operate_json" jdbcType="VARCHAR"/>
+        <result property="operateJson" column="operate_json" jdbcType="VARCHAR"/>
+        <result property="ipAddr" column="ip_addr" jdbcType="VARCHAR"/>
+        <result property="comments" column="comments" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <insert id="gen_employee_log" parameterClass="com.hanshu.employee.core.domain.EmployeeLogDO">
+        INSERT INTO `employee_operate_log`
+        (
+        `operator_id`,
+        `operator`,
+        `op_action`,
+        `obj_type`,
+        `obj_id`,
+        `obj_name`,
+        `op_result`,
+        `operate_json`,
+        `ip_addr`,
+        `comments`,
+        `gmt_created`,
+        `gmt_modified`,
+        `delete_mark`)
+        VALUES
+        (
+        #operatorId#,
+        #operator#,
+        #opAction#,
+        #objType#,
+        #objId#,
+        #objName#,
+        #opResult#,
+        #operateJson#,
+        #ipAddr#,
+        #comments#,
+        now(),
+        now(),
+        0)
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="query_employee_log" parameterClass="com.hanshu.employee.common.qto.EmployeeLogQTO"
+            resultMap="BaseResultMap">
+        select * from employee_operate_log
+        where delete_mark = 0
+        <isNotNull prepend="and" property="operatorId">
+            operator_id = #operatorId#
+        </isNotNull>
+        <isNotNull prepend="and" property="operator">
+            operator = #operator#
+        </isNotNull>
+        <isNotNull prepend="and" property="objType">
+            obj_type = #objType#
+        </isNotNull>
+        <isNotNull prepend="and" property="objId">
+            obj_id = #objId#
+        </isNotNull>
+        <isNotNull prepend="and" property="objName">
+            obj_name = #objName#
+        </isNotNull>
+        <isNotNull prepend="and" property="dateStart">
+            gmt_created >= #dateStart#
+        </isNotNull>
+        <isNotNull prepend="and" property="dateEnd">
+            gmt_created <![CDATA[<]]> #dateEnd#
+        </isNotNull>
+        order by gmt_created desc
+        limit #offset#, #count#
+    </select>
+
+    <select id="get_total_count" parameterClass="com.hanshu.employee.common.qto.EmployeeLogQTO" resultClass="java.lang.Long">
+        select count(*)
+        from employee_operate_log
+        where delete_mark = 0
+        <isNotNull prepend="and" property="operatorId">
+            operator_id = #operatorId#
+        </isNotNull>
+        <isNotNull prepend="and" property="operator">
+            operator = #operator#
+        </isNotNull>
+        <isNotNull prepend="and" property="objType">
+            obj_type = #objType#
+        </isNotNull>
+        <isNotNull prepend="and" property="objId">
+            obj_id = #objId#
+        </isNotNull>
+        <isNotNull prepend="and" property="objName">
+            obj_name = #objName#
+        </isNotNull>
+        <isNotNull prepend="and" property="dateStart">
+            gmt_created>=#dateStart#
+        </isNotNull>
+        <isNotNull prepend="and" property="dateEnd">
+            gmt_created <![CDATA[<]]> #dateEnd#
+        </isNotNull>
+    </select>
+
+</sqlMap>

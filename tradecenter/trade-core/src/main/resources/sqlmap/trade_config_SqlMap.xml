@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="trade_config">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.TradeConfigDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" />
+         <result property="attrKey" column="attr_key"/>
+         <result property="attrValue" column="attr_value"/>
+          <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        attr_key,
+        attr_value,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+   <select id="query" parameterClass="com.mockuai.tradecenter.common.domain.TradeConfigQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from trade_config where 1=1 
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+         <isNotNull property="attrKey" prepend="and">
+            attr_key=#attrKey#
+        </isNotNull>
+       
+    </select>
+
+
+    <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.TradeConfigDO">
+        insert into trade_config(
+        biz_code,
+        attr_key,
+        attr_value,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #attrKey#,
+        #attrValue#,
+      	0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+    
+      <update id="updateById" parameterClass="com.mockuai.tradecenter.core.domain.TradeConfigDO">
+		update trade_config 
+		set  gmt_modified = now()
+			<isNotNull prepend="," property="attrValue">
+				attr_value=#attrValue#
+			</isNotNull>
+			where 1=1
+			 <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+         <isNotNull property="attrKey" prepend="and">
+            attr_key=#attrKey#
+        </isNotNull>
+			and delete_mark=0
+			
+	</update>
+    
+  
+   
+</sqlMap>

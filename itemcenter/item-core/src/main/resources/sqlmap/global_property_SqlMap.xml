@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="global_property">
+	<typeAlias alias="GlobalPropertyDO" type="com.mockuai.itemcenter.core.domain.GlobalPropertyDO" />
+	<typeAlias alias="GlobalPropertyQTO"	type="com.mockuai.itemcenter.common.domain.qto.GlobalPropertyQTO" />
+
+	<resultMap class="GlobalPropertyDO" id="GlobalPropertyDOResult">
+		<result column="id" property="id"  />
+	    <result column="property_name" property="propertyName"  />
+	    <result column="property_type" property="propertyType"  />
+	    <result column="is_deleted" property="isDeleted"  />
+	    <result column="gmt_created" property="gmtCreated"  />
+	    <result column="gmt_modified" property="gmtModified"  />
+	</resultMap>
+
+
+	<insert id="GlobalPropertyDAO.addGlobalProperty" parameterClass="GlobalPropertyDO">
+		insert into global_property
+		<dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="propertyName" >
+        property_name
+      </isNotNull>
+      <isNotNull prepend="," property="propertyType" >
+        property_type
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        is_deleted
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="propertyName" >
+        #propertyName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="propertyType" >
+        #propertyType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        #isDeleted:INTEGER#
+      </isNotNull>
+      )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="global_property_base_column_list">
+		id, property_name, property_type, is_deleted, gmt_created, gmt_modified
+	</sql>
+	
+	<sql id="GlobalPropertyDAO.queryWhere">
+		<dynamic prepend="where">
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="isDeleted"> 
+				is_deleted = #isDeleted#
+			</isNotNull>
+		</dynamic>
+	</sql>
+	
+	
+	<update id="GlobalPropertyDAO.updateGlobalProperty">
+		update global_property
+		set gmt_modified=now()
+		<dynamic prepend="" >
+	      <isNotNull prepend="," property="record.propertyName" >
+	        property_name = #record.propertyName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.propertyType" >
+	        property_type = #record.propertyType#
+	      </isNotNull>
+	    </dynamic>
+		<include refid="GlobalPropertyDAO.queryWhere" />
+	</update>
+	
+	<select id="GlobalPropertyDAO.getGlobalProperty" resultMap="GlobalPropertyDOResult"	parameterClass="GlobalPropertyQTO">
+		select	<include refid="global_property_base_column_list" /> from global_property
+				<include refid="GlobalPropertyDAO.queryWhere" />
+	</select>
+	
+	<update id="GlobalPropertyDAO.deleteGlobalProperty" >
+		update global_property
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.isDeleted">
+				is_deleted = #record.isDeleted#
+			</isNotNull>
+		</dynamic>
+		<include refid="GlobalPropertyDAO.queryWhere" />
+	</update>
+	
+	<select id="GlobalPropertyDAO.countGlobalProperty" resultClass="Integer" parameterClass="GlobalPropertyQTO">
+		select count(1) from global_property
+		<include refid="GlobalPropertyDAO.queryWhere" />
+	</select>
+	
+	<select id="GlobalPropertyDAO.queryGlobalProperty" resultMap="GlobalPropertyDOResult" parameterClass="GlobalPropertyQTO">
+		select	<include refid="global_property_base_column_list" /> from global_property
+				<include refid="GlobalPropertyDAO.queryWhere" />
+				 <isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+				</isNotNull>
+	</select>
+</sqlMap>

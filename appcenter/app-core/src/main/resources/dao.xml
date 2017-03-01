@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<bean id="appInfoDAO" class="com.mockuai.appcenter.core.dao.impl.AppInfoDAOImpl"/>
+	<bean id="appPropertyDAO" class="com.mockuai.appcenter.core.dao.impl.AppPropertyDAOImpl"/>
+	<bean id="bizInfoDAO" class="com.mockuai.appcenter.core.dao.impl.BizInfoDAOImpl"/>
+	<bean id="bizPropertyDAO" class="com.mockuai.appcenter.core.dao.impl.BizPropertyDAOImpl"/>
+</beans>

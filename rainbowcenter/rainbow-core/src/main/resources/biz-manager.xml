@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire="byName">
+    <bean id="sysFieldMapManager" class="com.mockuai.rainbowcenter.core.manager.impl.SysFieldMapManagerImpl"/>
+    <bean id="messageRecordManager" class="com.mockuai.rainbowcenter.core.manager.impl.MessageRecordManagerImpl"/>
+    <bean id="appManager" class="com.mockuai.rainbowcenter.core.manager.impl.AppManagerImpl"/>
+    <bean id="sysConfigManager" class="com.mockuai.rainbowcenter.core.manager.impl.SysConfigManagerImpl"/>
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="3"/>
+        <property name="maxPoolSize" value="10"/>
+        <property name="threadNamePrefix" value="rainbowcenter-workthread-"/>
+    </bean>
+    <bean id="hsThreadPoolManager" class="com.mockuai.rainbowcenter.core.manager.impl.HsThreadPoolManagerImpl"/>
+    <bean id="hsOrderManager" class="com.mockuai.rainbowcenter.core.manager.impl.HsOrderManagerImpl"/>
+    <bean id="gyErpManage" class="com.mockuai.rainbowcenter.core.manager.impl.GyErpManageImpl"/>
+    <bean id ="erpOrderManager" class="com.mockuai.rainbowcenter.core.manager.impl.ErpOrderManagerImpl"/>
+    <bean id="commonManage" class="com.mockuai.rainbowcenter.core.manager.impl.CommonManageImpl"/>
+    <bean id="duiBaManager" class="com.mockuai.rainbowcenter.core.manager.impl.DuiBaManagerImpl"/>
+    <bean id="recordOrderManager" class="com.mockuai.rainbowcenter.core.manager.impl.RecordOrderManagerImpl"/>
+    <bean id="itemSkuSnManager" class="com.mockuai.rainbowcenter.core.manager.impl.ItemSkuSnManagerImpl"/>
+    <bean id="versionDeployManager" class="com.mockuai.rainbowcenter.core.manager.impl.VersionDeployManagerImpl"/>
+</beans>

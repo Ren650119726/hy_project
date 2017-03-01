@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--库存轮询-->
+    <bean id="itemCodeStockSpringQtzJobMethod" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.mockuai.rainbowcenter.core.service.job.ItemCodeStockQuartzJob"/>
+        <property name="durability" value="true"/>
+        <property name="requestsRecovery" value="true"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="startTime" value="${erp.poll.itemCodestock.starttime}"/>
+                <entry key="pageSize" value="${erp.poll.itemCodestock.pagesize}"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ======================== 调度触发器 ======================== -->
+    <bean id="itemCodeStockCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="itemCodeStockSpringQtzJobMethod"></property>
+        <!--触发周期-->
+        <property name="cronExpression" value="${erp.poll.itemCodestock.cronexpress}"></property>
+    </bean>
+
+
+    <!--erp 订单轮询-->
+    <bean id="itemDeliverysOrderSpringQtzJobMethod" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.mockuai.rainbowcenter.core.service.job.ItemDeliverysQuartzJob"/>
+        <property name="durability" value="true"/>
+        <property name="requestsRecovery" value="true"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="day" value="${erp.poll.itemorder.day}"/>
+                <entry key="pageSize" value="${erp.poll.itemorder.pagesize}"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ======================== 调度触发器 ======================== -->
+    <bean id="itemDeliverysOrderCronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="itemDeliverysOrderSpringQtzJobMethod"></property>
+        <!--触发周期-->
+        <property name="cronExpression" value="${erp.poll.itemorder.cronexpression}"></property>
+    </bean>
+
+    <!-- ======================== 活动状态修改调度触发器 ======================== -->
+
+    <!--活动状修改接口轮询-->
+    <bean id="limitedPurchaseUpdateStatusMethod" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.mockuai.rainbowcenter.core.service.job.LimitedPurchaseJob"/>
+        <property name="durability" value="true"/>
+        <property name="requestsRecovery" value="true"/>
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="startTime" value="${limitedPurchase.starttime}"/>
+            </map>
+        </property>
+    </bean>
+
+    <!-- ======================== 调度触发器 ======================== -->
+    <bean id="limitedPurchaseUpdateStatusBean" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="limitedPurchaseUpdateStatusMethod"></property>
+        <!--触发周期-->
+        <property name="cronExpression" value="${limitedPurchase.cronexpress}"></property>
+    </bean>
+
+    <!-- ======================== 调度工厂 ======================== -->
+    <bean id="edbSpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="overwriteExistingJobs" value="true"/>
+        <property name="dataSource" ref="dataSource"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+        <property name="configLocation" value="classpath:quartz.properties"/>
+        <property name="triggers">
+            <list>
+                <ref bean="itemDeliverysOrderCronTriggerBean"/>
+                <ref bean="itemCodeStockCronTriggerBean"/>
+                <ref bean="limitedPurchaseUpdateStatusBean"/>
+            </list>
+        </property>
+    </bean>
+
+
+</beans>

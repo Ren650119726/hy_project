@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="StoreProperty" >
+
+    <typeAlias alias="StorePropertyDO" type="com.mockuai.shopcenter.core.domain.StorePropertyDO"/>
+  <resultMap id="StorePropertyDOMap" class="StorePropertyDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+      <result column="store_id" property="storeId" jdbcType="BIGINT" />
+    <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="p_key" property="pKey" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="value_type" property="valueType" jdbcType="TINYINT" />
+    <result column="delete_mark" property="deleteMark" jdbcType="TINYINT" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="base_column_list" >
+    id, seller_id, store_id,biz_code, p_key, value, value_type, delete_mark, gmt_created, gmt_modified
+  </sql>
+
+  <insert id="insertStoreProperty" parameterClass="StorePropertyDO" >
+    insert into store_property (id, seller_id,store_id, biz_code,
+    p_key, value, value_type,
+    delete_mark, gmt_created, gmt_modified
+    )
+    values (#id#, #sellerId#, #storeId#,#bizCode#,
+    #pKey#, #value#, #valueType#,
+    0, now(), now()
+    )
+      <selectKey keyProperty="id" resultClass="Long">
+          SELECT
+          LAST_INSERT_ID();
+      </selectKey>
+  </insert>
+
+    <update id="updateStoreProperty" parameterClass="StorePropertyDO">
+        update store_property
+        set value = #value#,delete_mark = 0,gmt_modified = now()
+        where biz_code = #bizCode#
+            and seller_id = #sellerId#
+            and store_id = #storeId#
+            and p_key = #pKey#
+    </update>
+
+    <select id="getStoreProperty"
+            parameterClass="StorePropertyDO"
+            resultMap="StorePropertyDOMap">
+        select <include refid="base_column_list"/>
+        from store_property
+        where biz_code = #bizCode#
+            and seller_id = #sellerId#
+            and store_id = #storeId#
+            and p_key = #pKey#
+    </select>
+
+    <delete id="deleteStorePropertyPhysically" parameterClass="StorePropertyDO">
+        delete from store_property
+        where
+        biz_code = #bizCode#
+        and seller_id = #sellerId#
+        <isNotNull prepend="AND" property="pKey">
+            p_key = #pKey#
+        </isNotNull>
+        <isNotNull prepend="AND" property="value">
+            value = #value#
+        </isNotNull>
+    </delete>
+
+    <insert id="batchInsertProperty" parameterClass="java.util.ArrayList">
+        insert into store_property
+        (seller_id, store_id,biz_code, p_key, value, value_type,
+        delete_mark, gmt_created, gmt_modified)
+        values
+        <iterate  conjunction=",">
+            (#list[].sellerId#, #list[].storeId#, #list[].bizCode#, #list[].pKey#, #list[].value# ,#list[].valueType#
+            ,0,now(),now())
+        </iterate>
+    </insert>
+
+    <select id="queryStoreProperties" resultMap="StorePropertyDOMap" parameterClass="StorePropertyDO">
+        select <include refid="base_column_list"/>
+        from store_property
+        where biz_code = #bizCode#
+        and seller_id = #sellerId#
+        and p_key = #pKey#
+        and value = #value#
+    </select>
+
+</sqlMap>

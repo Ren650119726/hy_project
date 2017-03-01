@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="activity_goods">
+
+    <typeAlias alias="activityGoodsDO" type="com.mockuai.marketingcenter.core.domain.LimitedPurchaseGoodsDO"/>
+    <resultMap id="result" class="activityGoodsDo">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="activityId" column="activity_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+        <result property="goodsQuantity" column="goods_quantity" jdbcType="BIGINT"/>
+        <result property="goodsPrice" column="goods_price" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        activity_id,
+        item_id,
+        sku_id,
+        goods_quantity,
+        goods_price,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    <sql id="queryActivityGoodsDO">
+        where
+            activity_id=#activityId#
+            and item_id=#itemId#
+            and sku_id=#skuId#
+    </sql>
+    <!--查询结果-->
+    <select id="activityGoodsList" resultMap="result" parameterClass="activityGoodsDO">
+        select
+        <include refid="activity_goods.columnList"/>
+        from activity_goods
+        where activity_id = #activityId#
+
+    </select>
+    <!--查询单个-->
+    <select id="selectactivityGoods" resultMap="result" parameterClass="activityGoodsDO">
+        select
+        <include refid="activity_goods.columnList"/>
+        from activity_goods
+
+        <include refid="activity_goods.queryActivityGoodsDO"/>
+    </select>
+
+    <!--添加活动商品-->
+    <insert id="addActivityGoods" parameterClass = "activityGoodsDO">
+        insert into activity_goods
+        ( activity_id,
+        item_id,
+        sku_id,
+        goods_quantity,
+        goods_price,
+        delete_mark,
+        gmt_created,
+        gmt_modified) values
+        (#activityId#,#itemId#,#skuId#,#goodsQuantity#,#goodsPrice#,0,now(),now())
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!--更改产品限购数量-->
+    <update id="updateActivityGoodsNum" parameterClass = "activityGoodsDO">
+        update activity_goods set
+        gmt_modified = now()
+        <isNotNull property="goodsQuantity" >
+            , goods_quantity = #goodsQuantity#
+        </isNotNull>
+        where
+        delete_mark= 0
+        and activity_id = #activityId#
+        <isNotNull property="itemId" >
+            and item_id = #itemId#
+        </isNotNull>
+
+    </update>
+    <!--更改活动产品价格-->
+    <update id="updateActivityGoodsPrice" parameterClass = "activityGoodsDO">
+        update activity_goods set
+        gmt_modified = now()
+
+        <isNotNull property="goodsPrice" >
+            , goods_price = #goodsPrice#
+        </isNotNull>
+        where
+        delete_mark= 0
+        and activity_id = #activityId#
+        <isNotNull property="itemId" >
+            and item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="skuId" >
+            and sku_id = #skuId#
+        </isNotNull>
+    </update>
+    <!--删除产品信息-->
+    <update id="deleteActivityGoods" parameterClass = "activityGoodsDO">
+        update activity_goods set
+        delete_mark=1, gmt_modified = now()
+        where item_id = #itemId# AND activity_id = #activityId#
+    </update>
+    <!--活动失效修改删除状态-->
+    <update id="invalidateActivityGoods" parameterClass = "activityGoodsDO">
+        update activity_goods set
+        delete_mark=1, gmt_modified = now()
+        where activity_id = #activityId#
+    </update>
+    <!--根据活动id查item_id-->
+    <select id="selectActionItemById" resultClass="Long" parameterClass="map">
+        select DISTINCT item_id from activity_goods where  activity_id = #activityId#
+    </select>
+    <!--根据活动ID商品ID查限购数量-->
+    <select id="selectGoodsQuantityById" parameterClass = "activityGoodsDO" resultClass="long">
+         select goods_quantity from activity_goods where delete_mark=0 and activity_id = #activityId# and item_id=#itemId# LIMIT 1
+    </select>
+    <!--取出所有的活动id-->
+    <select id="selectAllActivityId" resultClass="Long" >
+         select DISTINCT activity_id from activity_goods where delete_mark=0
+    </select>
+    <!--根据item_id取出所有的活动id-->
+    <select id="selectActivityIdByItemId" resultClass="long" parameterClass = "map" >
+         select DISTINCT activity_id from activity_goods where delete_mark=0 and item_id = #itemId#
+    </select>
+    <!--根据活动ID删除商品-->
+    <delete id="deleteGoods"  parameterClass="map">
+        delete from activity_goods where activity_id = #activityId#
+    </delete>
+    <!--取出同一个活动中同一itemid，sku商品价格最低的那个-->
+    <select id="selectMinGoodsPrice"  resultMap="result" parameterClass="activityGoodsDO">
+        select
+        <include refid="activity_goods.columnList"/>
+        from activity_goods WHERE activity_id = #activityId#
+        and item_id = #itemId# ORDER BY goods_price asc limit 1
+    </select>
+    <!--根据活动ID取出所有skuId-->
+    <select id="selectAllSkuId" resultClass="long" parameterClass = "map">
+        select sku_id from activity_goods where activity_id = #activityId#
+    </select>
+</sqlMap>

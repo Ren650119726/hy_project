@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- ===================================================================== -->
+	<!--  以下是appender的定义                                                 -->
+	<!-- ===================================================================== -->
+	<!-- A time/date based rolling appender -->
+	<appender name="app" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="file" value="/data/log/itemcenter/root.log" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="itemcenter-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/itemcenter.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="manager-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/manager.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="dao-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/dao.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="ibatis-appender" class="org.apache.log4j.DailyRollingFileAppender">
+			<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+			<param name="File" value="/data/log/itemcenter/itemcenter-ibatis.log"/>
+			<param name="Append" value="true"/>
+			<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+			<layout class="org.apache.log4j.PatternLayout">
+				<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+			</layout>
+	</appender>
+
+	<appender name="spring-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/itemcenter/itemcenter-mvc.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+    <appender name="s2m-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/itemcenter/s2m.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="mq-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/itemcenter/mq.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+	<appender name="notify-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/notify.log"/>
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="access-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/access.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="perfLog-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/itemcenter/perf-monitor.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+
+	<logger name="com.mockuai.itemcenter.core.service.action.migrate.Single2MultiShopMigrateAction">
+        <level value="INFO"/>
+        <appender-ref ref="s2m-appender"/>
+    </logger>
+
+    <logger name="com.mockuai.itemcenter.core.message.listener.TradeMsgListener">
+        <level value="INFO"/>
+        <appender-ref ref="mq-appender"/>
+    </logger>
+
+    <logger name="org.springframework" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="spring-appender"/>
+    </logger>
+
+	<logger name="com.mockuai.itemcenter">
+		<level value="INFO" />
+		<appender-ref ref="itemcenter-appender" />
+	</logger>
+
+	<logger name="com.mockuai.itemcenter.core.manager">
+		<level value="INFO" />
+		<appender-ref ref="manager-appender" />
+	</logger>
+	<logger name="com.mockuai.itemcenter.core.dao">
+		<level value="OFF"/>
+		<appender-ref ref="dao-appender" />
+	</logger>
+	<logger name="com.ibatis">
+		<level value="OFF"/>
+		<!--<level value="INFO"/>-->
+		<appender-ref ref="ibatis-appender"/>
+	</logger>
+
+	<logger name="notifyLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="notify-appender"/>
+	</logger>
+
+	<logger name="accessLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="access-appender"/>
+	</logger>
+	<logger name="perfLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="perfLog-appender"/>
+	</logger>
+
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="app" />
+		<appender-ref ref="console" />
+	</root>	
+</log4j:configuration>

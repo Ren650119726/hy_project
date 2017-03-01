@@ -1,0 +1,109 @@
+<!--<?xml version="1.0" encoding="UTF-8" ?>-->
+<!--<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >-->
+<!--<sqlMap namespace="market_scope">-->
+	<!--<typeAlias alias="marketScope" type="com.mockuai.marketingcenter.core.domain.ScopeDO" />-->
+	<!--<typeAlias alias="marketScopeQto"-->
+		<!--type="com.mockuai.marketingcenter.common.domain.qto.MarketingScopeQTO" />-->
+	<!--<typeAlias alias="marketActivityDo"-->
+		<!--type="com.mockuai.marketingcenter.core.domain.MarketActivityDO" />-->
+
+	<!--<resultMap id="BaseResultMap" class="marketScope">-->
+		<!--<result column="id" property="id" jdbcType="BIGINT" />-->
+		<!--<result column="act_id" property="actId" jdbcType="BIGINT" />-->
+		<!--<result column="clude_type" property="cludeType" jdbcType="TINYINT" />-->
+		<!--<result column="market_type" property="marketType" jdbcType="TINYINT" />-->
+		<!--<result column="clude_id" property="cludeId" jdbcType="BIGINT" />-->
+		<!--<result column="act_id" property="activity" select="market_scope.getActivityById" />-->
+	<!--</resultMap>-->
+
+	<!--<resultMap id="ActivityBaseResultMap" class="marketActivityDo">-->
+		<!--<result column="id" property="id" jdbcType="BIGINT" />-->
+		<!--<result column="act_code" property="activityCode" jdbcType="VARCHAR" />-->
+		<!--<result column="act_name" property="activityName" jdbcType="VARCHAR" />-->
+		<!--<result column="start_time" property="startTime" jdbcType="TIMESTAMP" />-->
+		<!--<result column="end_time" property="endTime" jdbcType="TIMESTAMP" />-->
+		<!--<result column="coupon_flag" property="couponMark" jdbcType="TINYINT" />-->
+		<!--<result column="coupon_type" property="couponType" jdbcType="TINYINT" />-->
+		<!--<result column="repellent_flag" property="exclusiveMark"-->
+			<!--jdbcType="TINYINT" />-->
+		<!--<result column="tool_id" property="toolId" jdbcType="VARCHAR" />-->
+		<!--<result column="creator_type" property="creatorType" jdbcType="TINYINT" />-->
+		<!--<result column="creator_user_id" property="creatorId"-->
+			<!--jdbcType="BIGINT" />-->
+		<!--<result column="status" property="status" jdbcType="TINYINT" />-->
+		<!--<result column="delete_flag" property="deleteMark" jdbcType="TINYINT" />-->
+		<!--<result column="platform" property="platform" jdbcType="INTEGER" />-->
+		<!--<result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />-->
+		<!--<result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />-->
+	<!--</resultMap>-->
+
+	<!--<sql id="Base_Column_List">-->
+		<!--id, act_id, clude_type, market_type, clude_id-->
+	<!--</sql>-->
+
+	<!--<sql id="Activiy_Base_Column_List">-->
+		<!--id, act_code, act_name, start_time, end_time, coupon_flag, coupon_type,-->
+		<!--repellent_flag,-->
+		<!--tool_id, creator_type, creator_user_id, status, delete_flag, platform,-->
+		<!--gmt_created,-->
+		<!--gmt_modified-->
+	<!--</sql>-->
+
+	<!--<select id="getActivityById" resultMap="ActivityBaseResultMap"-->
+		<!--parameterClass="Long">-->
+		<!--select-->
+		<!--<include refid="Activiy_Base_Column_List" />-->
+		<!--from market_activity where id = #value#-->
+	<!--</select>-->
+
+	<!--<insert id="addBatchScope" parameterClass="java.util.List">-->
+		<!--insert into market_scope(act_id, clude_type, market_type, clude_id)-->
+		<!--values-->
+		<!--<iterate conjunction=",">  -->
+        <!--<![CDATA[ -->
+            <!--(#[].actId#, #[].cludeType#, #[].marketType#,#[].cludeId#)-->
+        <!--]]>-->
+		<!--</iterate>-->
+	<!--</insert>-->
+
+	<!--<select id="queryActivityScope" resultMap="BaseResultMap"-->
+		<!--parameterClass="marketScopeQto">-->
+		<!--select t1.id, t1.act_id, t1.clude_type, t1.market_type, t1.clude_id-->
+		<!--from market_scope t1,market_activity t2 where t1.act_id = t2.id-->
+		<!--<isNotNull prepend="and" property="id">-->
+			<!--t1.id = #id:BIGINT#-->
+		<!--</isNotNull>-->
+		<!--<isNotNull prepend="and" property="actId">-->
+			<!--t1.act_id = #actId:BIGINT#-->
+		<!--</isNotNull>-->
+		<!--<isNotNull prepend="and" property="cludeType">-->
+			<!--t1.clude_type = #cludeType:TINYINT#-->
+		<!--</isNotNull>-->
+		<!--<isNotNull prepend="and" property="marketType">-->
+			<!--t1.market_type = #marketType:TINYINT#-->
+		<!--</isNotNull>-->
+		<!--<isNotNull prepend="and" property="cludeId">-->
+			<!--t1.clude_id = #cludeId:BIGINT#-->
+		<!--</isNotNull>-->
+		<!--<isNotNull prepend="and" property="couponMark">-->
+			<!--t2.coupon_flag = #couponMark:TINYINT#-->
+		<!--</isNotNull>-->
+		<!--and t2.status = 2-->
+		<!--and t2.delete_flag = 1-->
+		<!--and t2.start_time <![CDATA[<=]]>-->
+		<!--now()-->
+		<!--and t2.end_time <![CDATA[>=]]>-->
+		<!--now()-->
+		<!--order by t2.gmt_created-->
+	<!--</select>-->
+
+
+	<!--&lt;!&ndash; <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterClass="marketScope" -->
+		<!--> select <include refid="market_scope.Base_Column_List" /> from market_scope -->
+		<!--where id = #id:BIGINT# </select> <delete id="deleteByPrimaryKey" parameterClass="marketScope" -->
+		<!--> delete from market_scope where id = #id:BIGINT# </delete> <delete id="deleteByExample" -->
+		<!--parameterClass="marketScope" > delete from market_scope <include refid="market_scope.Example_Where_Clause" -->
+		<!--/> </delete> &ndash;&gt;-->
+
+
+<!--</sqlMap>-->

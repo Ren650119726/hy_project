@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="REGIONFEE">
+	<typeAlias alias="RegionFee" type="com.mockuai.deliverycenter.core.domain.fee.RegionFee" />
+	
+	<sql id="columList">
+		   id as id,
+		   region_id as regionId,
+		   fee_id as feeId,
+		   first_weight as firstWeight,
+		   continue_weight as continueWeight,
+		   first_fee as firstFee,
+		   continue_fee as continueFee,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addRegionFee" parameterClass="RegionFee">
+		insert into delivery_region_fee
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="regionId">region_id </isNotNull>
+			<isNotNull prepend="," property="feeId">fee_id </isNotNull>
+			<isNotNull prepend="," property="firstWeight">first_weight </isNotNull>
+			<isNotNull prepend="," property="continueWeight">continue_weight </isNotNull>
+			<isNotNull prepend="," property="firstFee">first_fee </isNotNull>
+			<isNotNull prepend="," property="continueFee">continue_fee </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="regionId">#regionId:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="feeId">#feeId:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="firstWeight">#firstWeight:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="continueWeight">#continueWeight:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="firstFee">#firstFee:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="continueFee">#continueFee:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateRegionFee" parameterClass="RegionFee">
+		update delivery_region_fee
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="regionId"> 
+			region_id = #regionId:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="feeId"> 
+			fee_id = #feeId:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="firstWeight"> 
+			first_weight = #firstWeight:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="continueWeight"> 
+			continue_weight = #continueWeight:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="firstFee"> 
+			first_fee = #firstFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="continueFee"> 
+			continue_fee = #continueFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	
+	<select id="getRegionFee"  parameterClass="RegionFee" resultClass="RegionFee">
+		select
+		<include refid="REGIONFEE.columList" />
+		from delivery_region_fee
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	<select id="queryByFeeId"  parameterClass="java.lang.Integer" resultClass="RegionFee">
+		select
+		<include refid="REGIONFEE.columList" />
+		from delivery_region_fee
+		where fee_id = #feeId:VARCHAR# and deleted=0
+	</select>
+</sqlMap>

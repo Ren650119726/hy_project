@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <!-- <bean id="userManager" class="com.mockuaickuai.usercenter.core.manager.impl.UserManagerImpl"/>
+    <bean id="userExtraInfoManage" class="com.mockuaickuai.usercenter.core.manager.impl.UserExtraInfoManageImpl"/>
+    <bean id="supplierExtraManager" class="com.mockuaickuai.usercenter.core.manager.impl.SupplierExtraInfoManagerImpl"/>
+    <bean id="userBabyInfoManager" class="com.mockuaickuai.usercenter.core.manager.impl.UserBabyInfoManagerImpl"/> -->
+    <bean id="supplierOrderStockManager" class="com.mockuai.suppliercenter.core.manager.impl.SupplierOrderStockManagerImpl"/>
+    <bean id="cacheManager" class="com.mockuai.suppliercenter.core.manager.impl.CacheManagerImpl">
+        <property name="isLocal" value="${suppliercenter.cache.isLocal}"/>
+    </bean>
+</beans>

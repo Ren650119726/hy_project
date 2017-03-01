@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+    <settings useStatementNamespaces="true"/>
+    <sqlMap resource="sqlmap/market_tool_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/market_activity_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/activity_coupon_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/granted_coupon_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/property_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/property_tmpl_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/activity_item_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/activity_history_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/transmit_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/coupon_code_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/rmq_message.xml"/>
+    <sqlMap resource="sqlmap/order_record.xml"/>
+    <sqlMap resource="sqlmap/activity_goods_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/limited_purchase_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/limited_goods_correlation_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/limited_user_correlation_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/limit_order_info_sqlmap.xml"/>
+</sqlMapConfig>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="page">
+
+    <typeAlias alias="PageDO" type="com.mockuai.mainweb.core.domain.IndexPageDO"/>
+    <typeAlias alias="PageQTO" type="com.mockuai.mainweb.common.domain.qto.PageQTO"/>
+
+    <resultMap id="PageMap" class="PageDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="publishStatus" column="publish_status" jdbcType="TINYINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="pageOrder" column="page_order" jdbcType="BIGINT"/>
+        <result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+        <result property="subCategoryId" column="sub_category_id" jdbcType="BIGINT"/>
+        <result property="blockCount" column="block_count" jdbcType="BIGINT"/>
+        <result property="blockPadding" column="block_padding" jdbcType="BIGINT"/>
+        <!--<result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"  />-->
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"  />
+        <!--<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"  />-->
+    </resultMap>
+
+    <resultMap id="PageNames" class="PageDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="publishStatus" column="publish_status" jdbcType="TINYINT"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"  />
+    </resultMap>
+
+    <sql id="item">
+        id,
+        name,
+        type,
+        publish_status,
+        page_order,
+        category_id,
+        sub_category_id,
+        block_count,
+        block_padding,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    <insert id="addPage" parameterClass="com.mockuai.mainweb.core.domain.IndexPageDO">
+        INSERT INTO page
+        (
+        <include refid="item"/>
+        ) VALUES (
+        #id#,
+        #name#,
+        #type#,
+        #publishStatus#,
+        #pageOrder#,
+        #categoryId#,
+        #subCategoryId#,
+        #blockCount#,
+        #blockPadding#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+
+    <!--<delete id="deletePage" parameterClass="java.lang.Long" >-->
+    <!--delete from page-->
+    <!--where delete_mark = 0-->
+    <!--and id=#id#-->
+    <!--</delete>-->
+
+
+    <update id="deletePage" parameterClass="java.lang.Long">
+        update page set delete_mark=1 WHERE  id=#id#
+    </update>
+
+
+    <!--parameterClass="java.lang.Long"-->
+    <select id="getPage" resultMap="PageMap" parameterClass="java.lang.Long" >
+        select <include refid="item"/>
+        FROM page
+        where delete_mark=0 AND id=#id#
+    </select>
+
+    <select id="existPageOrder" parameterClass="java.lang.Long" resultClass="long">
+        select count(0) from page
+        where delete_mark = 0 and page_order = #pageOrder#
+    </select>
+
+
+
+
+
+    <update id="updatePage" parameterClass="PageDO">
+        update page
+        set gmt_modified = now()
+        <dynamic prepend=",">
+            <isNotNull property="name" prepend=",">
+                name = #name#
+            </isNotNull>
+            <isNotNull property="publishStatus" prepend=",">
+                publish_status = #publishStatus#
+            </isNotNull>
+            <isNotNull property="pageOrder" prepend=",">
+                page_order = #pageOrder#
+            </isNotNull>
+            <isNotNull property="categoryId" prepend=",">
+                category_id = #categoryId#
+            </isNotNull>
+            <isNotNull property="subCategoryId" prepend=",">
+                sub_category_id = #subCategoryId#
+            </isNotNull>
+            <isNotNull property="blockCount" prepend=",">
+                block_count = #blockCount#
+            </isNotNull>
+            <isNotNull property="blockPadding" prepend=",">
+                block_padding = #blockPadding#
+            </isNotNull>
+        </dynamic>
+        where id=#id# and delete_mark=0
+    </update>
+
+    <select id="queryPageNameList" resultMap="PageNames" >
+        SELECT id,name ,type,publish_status,gmt_modified
+        FROM page where delete_mark = 0
+        order by page_order asc , gmt_created desc
+    </select>
+
+
+
+    <select id="queryPublishPageNames" resultMap="PageNames">
+        SELECT  <include refid="item"/>
+        FROM  page
+        WHERE publish_status = 1   and delete_mark = 0
+        order by page_order asc ,gmt_modified desc
+    </select>
+
+    <!--页面列表展示-->
+    <select id="showPageList" resultMap="PageMap" parameterClass="PageQTO">
+        select <include refid="item"/>
+        FROM page
+        where delete_mark=0
+        <dynamic>
+            <isNotNull property="type" prepend="and">
+                type=#type#
+            </isNotNull>
+            <isNotNull property="publishStatus" prepend="and">
+                publish_status=#publishStatus#
+            </isNotNull>
+            <isNotNull property="name" prepend="and">
+                name like concat('%', #name#,'%')
+            </isNotNull>
+        </dynamic>
+        order by gmt_modified desc
+        limit #offset#,#count#
+
+    </select>
+
+    <!--统计页面总数-->
+    <select id="pageCount" resultClass="long" parameterClass="PageQTO">
+
+        select count(*)
+        from page
+        where delete_mark = 0
+        <dynamic>
+            <isNotNull property="type" prepend="and" >
+                type=#type#
+            </isNotNull>
+            <isNotNull property="publishStatus" prepend="and">
+                publish_status=#publishStatus#
+            </isNotNull>
+            <isNotNull property="name" prepend="and">
+                name like concat('%', #name#,'%')
+            </isNotNull>
+        </dynamic>
+    </select>
+    <!--撤销发布-->
+    <update id="cancelPage" parameterClass="map">
+        UPDATE page set publish_status = 0 where id = #id# and delete_mark = 0
+    </update>
+</sqlMap>

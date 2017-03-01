@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rule_module">
+
+    <typeAlias alias="ruleModuleDO" type="com.mockuai.virtualwealthcenter.core.domain.RuleModuleDO"/>
+
+    <resultMap id="result" class="RuleModuleDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="creatorId" column="creator_id" jdbcType="BIGINT"/>
+        <result property="grantRuleId" column="grant_rule_id" jdbcType="BIGINT"/>
+        <result property="paramA" column="param_a" jdbcType="BIGINT"/>
+        <result property="paramB" column="param_b" jdbcType="BIGINT"/>
+        <result property="amount" column="amount" jdbcType="BIGINT"/>
+        <result property="ratio" column="ratio" jdbcType="INTEGER"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        biz_code,
+        creator_id,
+        grant_rule_id,
+        param_a,
+        param_b,
+        amount,
+        ratio,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="creatorId" prepend="and">
+            creator_id=#creatorId#
+        </isNotNull>
+        <!--<isNotNull property="type" prepend="and">-->
+        <!--type=#type#-->
+        <!--</isNotNull>-->
+    </sql>
+
+    <insert id="addGrantRule" parameterClass="ruleModuleDO">
+        insert into rule_module(
+        biz_code,
+        creator_id,
+        grant_rule_id,
+        param_a,
+        param_b,
+        amount,
+        ratio,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #creatorId#,
+        #grantRuleId#,
+        #paramA#,
+        #paramB#,
+        #amount#,
+        #ratio#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchInsert" parameterClass="java.util.Map">
+        <isNotNull property="ruleModules">
+            insert into rule_module(
+            biz_code,
+            creator_id,
+            grant_rule_id,
+            param_a,
+            param_b,
+            amount,
+            ratio,
+            delete_mark,
+            gmt_created,
+            gmt_modified
+            )
+            values
+            <iterate property="ruleModules" conjunction=",">
+                (
+                #ruleModules[].bizCode#,
+                #ruleModules[].creatorId#,
+                #ruleModules[].grantRuleId#,
+                #ruleModules[].paramA#,
+                #ruleModules[].paramB#,
+                #ruleModules[].amount#,
+                #ruleModules[].ratio#,
+                0,
+                now(),
+                now()
+                )
+            </iterate>
+        </isNotNull>
+    </insert>
+
+    <select id="getRuleModule" resultMap="result" parameterClass="ruleModuleDO">
+        select
+        <include refid="rule_module.columnList"/>
+        from rule_module where grant_rule_id=#grantRuleId#
+        <isNotNull property="creatorId" prepend="AND">
+            creator_id = #creatorId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        AND delete_mark=0
+    </select>
+
+    <delete id="deleteRuleModuleByGrantRuleId" parameterClass="ruleModuleDO">
+        DELETE FROM rule_module
+        WHERE grant_rule_id = #grantRuleId#
+        <isNotNull property="creatorId" prepend="AND">
+            creator_id = #creatorId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+    </delete>
+</sqlMap>

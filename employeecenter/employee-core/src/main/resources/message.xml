@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <!-- producer define -->
+    <!--<bean id="migrateIntegralProducer" class="com.mockuai.usercenter.core.message.producer.CreateNewUserProducer"-->
+          <!--init-method="init">-->
+        <!--<property name="producerGroupName" value="migrateIntegralProducer"/>-->
+        <!--<property name="address" value="${usercenter.rocketmq.address}"/>-->
+        <!--<property name="port" value="${usercenter.rocketmq.port}"/>-->
+        <!--<property name="topic" value="user"/>-->
+        <!--<property name="tag" value="createUser"/>-->
+    <!--</bean>-->
+
+    <!-- consumer define -->
+    <!--<bean id="migrateIntegralPushConsumer" class="com.mockuai.usercenter.core.message.consumer.MessagePushConsumer"-->
+    <!--init-method="consume">-->
+    <!--<property name="address" value="${usercenter.rocketmq.address}" />-->
+    <!--<property name="port" value="${usercenter.rocketmq.port}" />-->
+    <!--<property name="consumerGroupName" value="migrate-integral-consumer" />-->
+    <!--<property name="topic" value="user" />-->
+    <!--<property name="tag" value="createUser" />-->
+    <!--<property name="messageListener" ref="migrateIntegralListener" />-->
+    <!--</bean>-->
+
+    <!-- listener define -->
+    <!--<bean id="migrateIntegralListener" class="com.mockuai.usercenter.core.message.listener.MigrateIntegralListener" />-->
+</beans>

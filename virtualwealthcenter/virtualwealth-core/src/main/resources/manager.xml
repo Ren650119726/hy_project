@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="grantBoxManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.GrantRuleManagerImpl"/>
+    <bean id="grantRuleManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.RuleModuleManagerImpl"/>
+    <bean id="virtualWealthManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.VirtualWealthManagerImpl"/>
+    <bean id="grantedWealthManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.GrantedWealthManagerImpl"/>
+    <bean id="wealthAccountManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.WealthAccountManagerImpl"/>
+    <bean id="usedWealthManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.UsedWealthManagerImpl"/>
+    <bean id="appManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.AppManagerImpl"/>
+    <bean id="userManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.UserManagerImpl"/>
+    
+    <bean id="distributeManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.DistributeManagerImpl"/>
+    
+    <bean id="rmqMessageManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.RMQMessageManagerImpl"/>
+    <bean id="virtualWealthItemManager"
+          class="com.mockuai.virtualwealthcenter.core.manager.impl.VirtualWealthItemManagerImpl"/>
+    <bean id="rechargeRecordManager"
+          class="com.mockuai.virtualwealthcenter.core.manager.impl.RechargeRecordManagerImpl"/>
+    <bean id="itemManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.ItemManagerImpl"/>
+    <bean id="tradeManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.TradeManagerImpl"/>
+    <bean id="usedLogManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.UsedLogManagerImpl"/>
+    <bean id="withdrawalsItemManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.WithdrawalsItemManagerImpl"/>
+    <bean id="withdrawalsItemConfig" class="com.mockuai.virtualwealthcenter.core.manager.impl.WithdrawalsItemConfigImpl"/>
+    <bean id="userAuthonAppManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.UserAuthonAppManagerImpl"/>
+    <bean id="bankInfoAppManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.BankInfoAppManagerImpl"/>
+    <bean id="withdrawalsItemAppManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.WithdrawalsItemAppManagerImpl"/>
+    <bean id="withdrawalsItemLogManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.WithdrawalsItemLogManagerImpl"/>
+    
+    <bean name="cacheManager" class="com.mockuai.virtualwealthcenter.core.manager.impl.CacheManagerImpl" init-method="init"></bean>
+</beans>

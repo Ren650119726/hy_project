@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="dist_record">
+    <!--
+    CREATE TABLE `dist_record` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `order_id` bigint(20) NOT NULL COMMENT '订单ID',
+    `order_sn` varchar(32) NOT NULL COMMENT '订单号',
+    `seller_id` bigint(20) NOT NULL COMMENT '卖家ID',
+    `item_id` bigint(20) NOT NULL COMMENT '商品ID',
+    `item_sku_id` bigint(20) NOT NULL COMMENT '商品SKU ID',
+    `buyer_id` bigint(20) NOT NULL COMMENT '卖家ID',
+    `status` tinyint(4) NOT NULL COMMENT '状态',
+    `source` tinyint(4) NOT NULL COMMENT '分拥来源',
+    `type` tinyint(4) NOT NULL COMMENT '分拥类型',
+    `dist_ratio` decimal(10,4) NOT NULL COMMENT '分拥比率',
+    `unit_price` bigint(20) NOT NULL COMMENT '商品单价',
+    `number` int(10) NOT NULL COMMENT '商品数量',
+    `dist_amount` bigint(20) NOT NULL COMMENT '分拥金额',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    `shop_id` bigint(20) NOT NULL COMMENT '店铺ID',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=4602 DEFAULT CHARSET=utf8 COMMENT='分拥记录表';
+    -->
+
+    <typeAlias alias="distRecordQTO" type="com.mockuai.distributioncenter.common.domain.qto.DistRecordQTO"/>
+    <typeAlias alias="distRecordDO" type="com.mockuai.distributioncenter.core.domain.DistRecordDO"/>
+
+    <resultMap id="BaseResultMap" class="distRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="unitPrice" column="unit_price" jdbcType="BIGINT"/>
+        <result property="number" column="number" jdbcType="INTEGER"/>
+        <result property="source" column="source" jdbcType="TINYINT"/>
+        <result property="buyerId" column="buyer_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+        <result property="distAmount" column="dist_amount" jdbcType="BIGINT"/>
+        <result property="distRatio" column="dist_ratio" jdbcType="NUMERIC"/>
+        <result property="gainsRatio" column="gains_ratio" jdbcType="NUMERIC"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="orderId" prepend="AND">
+            order_id = #orderId#
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="AND">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull property="itemSkuId" prepend="AND">
+            item_sku_id = #itemSkuId#
+        </isNotNull>
+        <isNotNull property="source" prepend="AND">
+            source = #source#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="type" prepend="AND">
+            type = #type#
+        </isNotNull>
+        <isNotNull property="startTime" prepend="AND">
+            gmt_created >= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            gmt_created <![CDATA[<]]> #endTime#
+        </isNotNull>
+        <isNotEmpty property="orderIds" prepend="AND">
+            order_id IN
+            <iterate property="orderIds" open="(" close=")" conjunction=",">
+                #orderIds[]#
+            </iterate>
+        </isNotEmpty>
+    </sql>
+
+    <insert id="add" parameterClass="distRecordDO">
+        INSERT INTO dist_record
+        (
+        status,
+        type,
+        order_id,
+        order_sn,
+        item_id,
+        item_sku_id,
+        unit_price,
+        number,
+        source,
+        buyer_id,
+        seller_id,
+        shop_id,
+        dist_amount,
+        dist_ratio,
+        gains_ratio,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        VALUE
+        (
+        #status#,
+        #type#,
+        #orderId#,
+        #orderSn#,
+        #itemId#,
+        #itemSkuId#,
+        #unitPrice#,
+        #number#,
+        #source#,
+        #buyerId#,
+        #sellerId#,
+        #shopId#,
+        #distAmount#,
+        #distRatio#,
+        #gainsRatio#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="query" parameterClass="distRecordQTO" resultMap="BaseResultMap">
+        SELECT * FROM dist_record
+        <include refid="queryCondition"/>
+        ORDER BY order_id DESC
+        <isNotNull property="count">
+            LIMIT #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <select id="queryValuableOrderIds" parameterClass="distRecordQTO" resultClass="java.lang.Long">
+        SELECT order_id FROM dist_record
+        <include refid="queryCondition" />
+        AND dist_amount > 0
+        <isNull property="status" prepend="AND">
+            status != 5 <!-- 剔除取消的订单 -->
+        </isNull>
+        GROUP BY order_id
+        ORDER BY order_id DESC
+        <isNotNull property="count">
+            LIMIT #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <update id="update" parameterClass="distRecordDO">
+        UPDATE dist_record SET gmt_modified = now()
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+    
+	<select id="queryStatistics" parameterClass="distRecordQTO" resultMap="BaseResultMap">
+        SELECT * FROM dist_record
+        WHERE delete_mark = 0 and status in (1,3,4) and source = 1
+        <isNotNull property="startTime" prepend="AND">
+            gmt_created >= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            gmt_created <![CDATA[<]]> #endTime#
+        </isNotNull>
+        ORDER BY order_id DESC
+    </select>
+
+    <!--获取粉丝分佣金额-->
+    <select id="getAmountBySellerId" parameterClass="distRecordDO" resultClass="java.lang.Long">
+        select sum(dist_amount) as distAmount from dist_record where delete_mark = 0 and status in (1,3,4) and type = 0 and seller_id =#sellerId# and buyer_id =#buyerId#
+    </select>
+</sqlMap>

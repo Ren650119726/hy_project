@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="message_record">
+    <!--
+     CREATE TABLE `message_record` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `msg_id` varchar(64) NOT NULL COMMENT '消息ID',
+    `identify` varchar(64) NOT NULL COMMENT '消息的唯一标识符',
+    `biz_type` tinyint(4) NOT NULL COMMENT '业务类型',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    UNIQUE KEY `identify_biz_type` (`identify`,`biz_type`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    -->
+    <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.MessageRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="msgId" column="msg_id" jdbcType="VARCHAR" />
+        <result property="identify" column="identify" jdbcType="VARCHAR" />
+        <result property="bizType" column="biz_type" jdbcType="TINYINT" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="addRecord" parameterClass="com.mockuai.usercenter.core.domain.MessageRecordDO">
+        INSERT INTO message_record
+        (msg_id,
+         identify,
+         biz_type,
+         delete_mark,
+         gmt_created,
+         gmt_modified)
+         VALUE
+         (#msgId#,
+         #identify#,
+         #bizType#,
+         0,
+         now(),
+         now())
+         <selectKey keyProperty="id" resultClass="java.lang.Long">
+             SELECT LAST_INSERT_ID()
+         </selectKey>
+    </insert>
+
+    <select id="getByIdentify" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM message_record WHERE identify = #identify# AND biz_type = #bizType:TINYINT#
+    </select>
+</sqlMap>

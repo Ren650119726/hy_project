@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="biz_property">
+	<!--CREATE TABLE `property` (-->
+	<!--`id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增主键',-->
+	<!--`biz_code` varchar(64) NOT NULL COMMENT '业务CODE',-->
+	<!--`p_key` varchar(32) NOT NULL COMMENT '属性KEY',-->
+	<!--`value` varchar(32) NOT NULL COMMENT '属性VALUE',-->
+	<!--`value_type` tinyint(2) NOT NULL COMMENT '值类型1.数值型2字符串型',-->
+	<!--`property_desc` varchar(256) DEFAULT NULL COMMENT '属性描述',-->
+	<!--`delete_mark` tinyint(1) NOT NULL COMMENT '0正常/1已删除',-->
+	<!--`gmt_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',-->
+	<!--`gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',-->
+	<!--PRIMARY KEY (`id`)-->
+	<!--) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='应用属性表'-->
+
+	<resultMap id="result" class="com.mockuai.appcenter.core.domain.BizPropertyDO">
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="pKey" column="p_key" jdbcType="VARCHAR"/>
+		<result property="value" column="value" jdbcType="VARCHAR"/>
+		<result property="valueType" column="value_type" jdbcType="TINYINT"/>
+		<result property="propertyDesc" column="property_desc" jdbcType="VARCHAR"/>
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+	</resultMap>
+
+	<sql id="column_set">
+		id,
+		biz_code,
+		p_key,
+		value,
+		value_type,
+		property_desc,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+
+	<insert id="addBizProperty" parameterClass="com.mockuai.appcenter.core.domain.BizPropertyDO">
+		insert into biz_property(
+		biz_code,
+		p_key,
+		value,
+		value_type,
+		property_desc,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		delete_version
+		)
+		values(
+		#bizCode#,
+		#pKey#,
+		#value#,
+		#valueType#,
+		#propertyDesc#,
+		0,
+		now(),
+		now(),
+		0
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+	
+  	
+	<select id="getBizPropertyList" parameterClass="java.lang.String" resultMap="result">
+		select
+		<include refid="biz_property.column_set" />
+		from biz_property where biz_code = #bizCode# and delete_mark=0
+	</select>
+
+	<select id="getBizProperty" parameterClass="com.mockuai.appcenter.core.domain.BizPropertyDO" resultMap="result">
+		select
+		<include refid="biz_property.column_set" />
+		from biz_property where biz_code = #bizCode# and p_key=#pKey# and delete_mark=0
+	</select>
+
+	<update id="deleteBizProperty" parameterClass="com.mockuai.appcenter.core.domain.BizPropertyDO">
+		update biz_property
+		set gmt_modified=now(), delete_mark=1, delete_version=#deleteVersion#
+		where biz_code = #bizCode# and p_key=#pKey# and delete_mark=0
+	</update>
+
+	<update id="updateBizProperty" parameterClass="com.mockuai.appcenter.core.domain.BizPropertyDO">
+		update biz_property
+		set gmt_modified=now(), value=#value#, value_type=#valueType#, property_desc=#propertyDesc#
+		where biz_code = #bizCode# and p_key=#pKey# and delete_mark=0
+	</update>
+
+	<update id="deleteBizProperties" parameterClass="com.mockuai.appcenter.core.domain.BizPropertyDO">
+		update biz_property
+		set gmt_modified=now(), delete_mark=1, delete_version=#deleteVersion#
+		where biz_code = #bizCode# and delete_mark=0
+	</update>
+</sqlMap>

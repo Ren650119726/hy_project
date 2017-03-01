@@ -1,0 +1,14 @@
+com.mockuai.marketingcenter.mop.api.action.GetSettlement
+com.mockuai.marketingcenter.mop.api.action.UserGatherCouponList
+com.mockuai.marketingcenter.mop.api.action.UserCouponList
+com.mockuai.marketingcenter.mop.api.action.ReceiveActivityCoupon
+com.mockuai.marketingcenter.mop.api.action.GetActivityCoupon
+com.mockuai.marketingcenter.mop.api.action.GrantActivityCoupon
+com.mockuai.marketingcenter.mop.api.action.AddActivity
+com.mockuai.marketingcenter.mop.api.action.GenerateActivityCoupon
+com.mockuai.marketingcenter.mop.api.action.TransferUserCoupon
+com.mockuai.marketingcenter.mop.api.action.ExchangeCouponCode
+com.mockuai.marketingcenter.mop.api.action.ActivityCouponAvailable
+com.mockuai.marketingcenter.mop.api.action.ActivityItemList
+com.mockuai.marketingcenter.mop.api.action.GetActivityCouponByActivity
+com.mockuai.marketingcenter.mop.api.action.GetActivityCouponListByIds

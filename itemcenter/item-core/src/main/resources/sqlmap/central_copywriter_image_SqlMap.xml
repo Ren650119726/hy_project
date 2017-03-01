@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="central">
+    <typeAlias alias="centralCopywriterImageDO" type="com.mockuai.itemcenter.core.domain.CentralCopywriterImageDO"/>
+    <typeAlias alias="centralCopywriterImageQTO" type="com.mockuai.itemcenter.common.domain.qto.CentralCopywriterImageQTO"/>
+
+    <resultMap class="centralCopywriterImageDO" id="centralCopywriterImageDOResult">
+        <result column="id" property="id"/>
+        <result column="copy_id" property="copyId"/>
+        <result column="copy_image" property="copyImage"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <insert id="addCenCopywriterImage" parameterClass="centralCopywriterImageDO">
+        insert into central_copywriter_image(
+        copy_id,
+        copy_image,
+        gmt_created,
+        gmt_modified,
+        delete_mark) values
+        (#copyId#,
+        #copyImage#,
+        now(),
+        now(),
+        0)
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <select id="getCopyImage" resultMap="centralCopywriterImageDOResult" parameterClass="centralCopywriterImageQTO">
+        SELECT a.id,a.copy_id,a.copy_image
+        FROM central_copywriter_image a WHERE
+        a.copy_id =#copyId#
+        and a.delete_mark = 0
+    </select>
+
+</sqlMap>

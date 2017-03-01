@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="item_property_value">
+
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.ItemPropertyValueDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="VARCHAR" />
+        <result property="itemPropertyTmplId" column="item_property_tmpl_id" jdbcType="BIGINT" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        biz_code,
+        name,
+        value,
+        item_property_tmpl_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!--批量插入activity_item纪录-->
+    <insert id="addItemPropertyValues" parameterClass="java.util.List">
+        insert into item_property_value(
+        biz_code,
+        name,
+        value,
+        item_property_tmpl_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values
+        <iterate conjunction=",">
+            <![CDATA[
+            	(
+            	#itemPropertyValueDOs[].bizCode#,
+            	#itemPropertyValueDOs[].name#,
+            	#itemPropertyValueDOs[].value#,
+            	#itemPropertyValueDOs[].itemPropertyTmplId#,
+            	0,
+            	now(),
+            	now()
+            	)
+            ]]>
+        </iterate>
+    </insert>
+
+    <update id="updateItemPropertyValue" parameterClass="com.mockuai.itemcenter.core.domain.ItemPropertyValueDO">
+        update item_property_value
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="name">
+                name = #name#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value = #value#
+            </isNotNull>
+        </dynamic>
+        where id=#id#
+    </update>
+
+    <update id="deleteItemPropertyValues" parameterClass="com.mockuai.itemcenter.core.domain.ItemPropertyValueDO">
+        update item_property_value
+        set gmt_modified=now(), delete_mark=1
+        where item_property_tmpl_id = #itemPropertyTmplId# and delete_mark = 0
+    </update>
+
+    <!--  根据sku属性id查询具体的属性的基本值 -->
+    <select id="queryItemPropertyValue"
+            parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from item_property_value
+        where item_property_tmpl_id = #itemPropertyTmplId# and delete_mark = 0
+    </select>
+
+</sqlMap>

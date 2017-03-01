@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans    
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+            http://www.springframework.org/schema/context    
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-autowire="byName">
+	<context:component-scan base-package="com.mockuai.itemcenter.core.service.action" />
+	<context:component-scan base-package="com.mockuai.itemcenter.core.manager" />
+	<context:component-scan base-package="com.mockuai.itemcenter.core.dao" />
+
+	<bean id="actionHoloder" class="com.mockuai.itemcenter.core.service.action.ActionHolder" />
+	<bean id="appContext" class="com.mockuai.itemcenter.core.service.AppContext" />
+	<bean id="requestDispatcher" class="com.mockuai.itemcenter.core.service.RequestDispatcher">
+		<property name="actionHoloder" ref="actionHoloder" />
+		<property name="appContext" ref="appContext" />
+	</bean>
+
+    <bean id="itemService" class="com.mockuai.itemcenter.core.api.impl.ItemServiceImpl"/>
+
+
+    <bean id="itemAutoUpAction" class="com.mockuai.itemcenter.core.service.action.auto.ItemAutoUpAction">
+	</bean>
+	<bean id="itemAutoUpCronTaskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject"><ref bean="itemAutoUpAction"/></property>
+		<property name="targetMethod"><value>execute</value></property>
+	</bean>
+	<bean id="itemAutoUpCronTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail">
+			<ref bean="itemAutoUpCronTaskJob" />
+		</property>
+		<property name="cronExpression">
+			<value>0/1 * * * * ?</value>
+		</property>
+	</bean>
+
+    <bean id="itemAutoDownAction" class="com.mockuai.itemcenter.core.service.action.auto.ItemAutoDownAction">
+    </bean>
+    <bean id="itemAutoDownCronTaskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject"><ref bean="itemAutoDownAction"/></property>
+        <property name="targetMethod"><value>execute</value></property>
+    </bean>
+    <bean id="itemAutoDownCronTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail">
+            <ref bean="itemAutoDownCronTaskJob" />
+        </property>
+        <property name="cronExpression">
+            <value>0/1 * * * * ?</value>
+        </property>
+    </bean>
+
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref local="itemAutoUpCronTaskTrigger"/>
+				<ref local="itemAutoDownCronTaskTrigger"/>
+			</list>
+		</property>
+	</bean>
+    <bean id="staticPage" class="com.mockuai.common.uils.staticpage.StaticPage">
+        <property name="environment" value="online"/>
+            </bean>
+
+</beans>

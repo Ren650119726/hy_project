@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_comment">
+	<typeAlias alias="itemCommentDO" type="com.mockuai.itemcenter.core.domain.ItemCommentDO" />
+	<typeAlias alias="countCommentDTO" type="com.mockuai.itemcenter.common.domain.dto.CountCommentDTO" />
+	<typeAlias alias="itemCommentQTO"	type="com.mockuai.itemcenter.common.domain.qto.ItemCommentQTO" />
+
+	<resultMap class="itemCommentDO" id="itemCommentDOResult">
+		<result property="id" column="id" />
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="skuId" column="sku_id" />
+		<result property="itemId" column="item_id" />
+		<result property="skuCode" column="sku_code" />
+		<result property="sellerId" column="seller_id" />
+		<result property="orderId" column="order_id" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="score" column="score" />
+		<result property="commentTime" column="comment_time" />
+		<result property="replyTime" column="reply_time" />
+		<result property="replyUserId" column="reply_user_id" />
+		<result property="replyContent" column="reply_content" />
+		<result property="bizCode" column="biz_code" />
+		<result property="deleteMark" column="delete_mark" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+
+	<resultMap class="countCommentDTO" id="countCommentDTOResult">
+		<result property="good" column="good" />
+		<result property="mid" column="mid" />
+		<result property="bad" column="bad" />
+	</resultMap>
+
+	<insert id="ItemCommentDAO.addItemComment" parameterClass="itemCommentDO">
+		insert into item_comment
+		<dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="userName" >
+        user_name
+      </isNotNull>
+      <isNotNull prepend="," property="itemId" >
+        item_id
+      </isNotNull>
+      <isNotNull prepend="," property="skuId" >
+        sku_id
+      </isNotNull>
+	  <isNotNull prepend="," property="skuCode" >
+		sku_code
+	  </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        title
+      </isNotNull>
+      <isNotNull prepend="," property="score" >
+        score
+      </isNotNull>
+      <isNotNull prepend="," property="replyUserId" >
+        reply_user_id
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+      	biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="content" >
+        content
+      </isNotNull>
+      <isNotNull prepend="," property="replyContent" >
+        reply_content
+      </isNotNull>
+      , comment_time
+      ,delete_mark
+      ,gmt_created
+      ,gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userName" >
+        #userName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="itemId" >
+        #itemId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="skuId" >
+        #skuId:BIGINT#
+      </isNotNull>
+	  <isNotNull prepend="," property="skuCode" >
+		#skuCode:VARCHAR#
+	  </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        #orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        #sellerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        #title:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="score" >
+        #score:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="replyUserId" >
+        #replyUserId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="content" >
+        #content:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="replyContent" >
+        #replyContent:VARCHAR#
+      </isNotNull>
+        , now()
+        ,0
+        ,now()
+        ,now()
+        )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="item_comment_base_column_list">
+		id,
+		user_id,
+		user_name,
+		item_id,
+		sku_id,
+		sku_code,
+		seller_id,
+		order_id,
+		title,
+		content,
+		score,
+		comment_time,
+		reply_time,
+		reply_user_id,
+		reply_content,
+		biz_code,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	<sql id="ItemCommentDAO.queryWhere">
+		<!-- <dynamic prepend="where"> -->
+		where delete_mark = 0
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+            <isNotNull property="ids">
+                    id in
+                    <iterate property="ids" conjunction="," open="(" close=")">
+                        #idList[]#
+                    </iterate>
+            </isNotNull>
+			<isNotNull prepend="AND" property="skuId">
+				sku_id = #skuId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="itemId">
+				item_id = #itemId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="orderId">
+				order_id = #orderId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="sellerId">
+				seller_id = #sellerId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="score">
+				score = #score#
+			</isNotNull>
+			<isNotNull prepend="AND" property="bizCode">
+				biz_code = #bizCode#
+			</isNotNull>
+
+		<!-- </dynamic> -->
+	</sql>
+
+	
+	<update id="ItemCommentDAO.deleteItemComment">
+		update item_comment
+		set gmt_modified=now(),delete_mark = 1
+		where id = #id# and seller_id = #sellerId#
+	</update>
+
+	<delete id="ItemCommentDAO.deleteItemCommentPhysically">
+		delete from item_comment
+		where id = #id# and seller_id = #sellerId#
+	</delete>
+	
+	<select id="ItemCommentDAO.getItemComment" resultMap="itemCommentDOResult"	parameterClass="itemCommentQTO">
+		select <include refid="item_comment_base_column_list" />
+		from item_comment
+		<include refid="ItemCommentDAO.queryWhere" />  
+	</select>
+
+	<!-- 返回商品评分：好评,中评，差评 -->
+	<select id="ItemCommentDAO.queryItemCommentGrade" resultMap="itemCommentDOResult" parameterClass="itemCommentQTO">
+		select <include refid="item_comment_base_column_list" /> from item_comment
+		<include refid="ItemCommentDAO.queryWhere" /> order by gmt_created desc
+		<isNotNull property="needPaging">
+			limit #offset#,#pageSize#
+		</isNotNull>
+	</select>
+
+	<select id="ItemCommentDAO.countItemCommentGrade" resultMap="countCommentDTOResult" parameterClass="itemCommentQTO">
+		SELECT
+			count(case when score between 4 and 5 then score end) as good,
+			count(case when score between 2 and 3 then score end) as mid,
+			count(case when score=1 then score end) as bad
+		FROM item_comment
+		<include refid="ItemCommentDAO.queryWhere" />
+	</select>
+
+	
+	<select id="ItemCommentDAO.countItemComment" resultClass="java.lang.Integer" parameterClass="itemCommentQTO">
+		select count(1) count from item_comment
+		<include refid="ItemCommentDAO.queryWhere" />
+	</select>
+	
+	<select id="ItemCommentDAO.queryItemComment" resultMap="itemCommentDOResult"
+		parameterClass="itemCommentQTO">
+		select <include refid="item_comment_base_column_list" /> from item_comment
+		       <include refid="ItemCommentDAO.queryWhere" />
+			order by gmt_created desc
+			<isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+			</isNotNull>
+	</select>
+
+	<update id="ItemCommentDAO.updateItemComment" parameterClass="itemCommentDO">
+		update item_comment
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="userName">
+				user_name = #userName#
+			</isNotNull>
+			<isNotNull prepend="," property="skuCode">
+				sku_code = #skuCode#
+			</isNotNull>
+			<isNotNull prepend="," property="title">
+				title = #title#
+			</isNotNull>
+			<isNotNull prepend="," property="content">
+				content = #content#
+			</isNotNull>
+			<isNotNull prepend="," property="score">
+				score = #score#
+			</isNotNull>
+			<isNotNull prepend="," property="replyContent">
+				reply_content = #replyContent#
+			</isNotNull>
+			<isNotNull prepend="," property="replyUserId">
+				reply_user_id = #replyUserId#
+			</isNotNull>
+			<isNotNull prepend="," property="replyTime">
+				reply_time = #replyTime#
+			</isNotNull>
+			<isNotNull prepend="," property="commentTime">
+				comment_time = #commentTime#
+			</isNotNull>
+		</dynamic>
+		where delete_mark = 0 and id = #id#  and seller_id= #sellerId#
+	</update>
+</sqlMap>

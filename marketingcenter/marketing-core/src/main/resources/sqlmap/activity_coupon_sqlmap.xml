@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="activity_coupon">
+
+    <typeAlias alias="activityCouponDO" type="com.mockuai.marketingcenter.core.domain.ActivityCouponDO"/>
+
+    <resultMap id="result" class="com.mockuai.marketingcenter.core.domain.ActivityCouponDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="activity_id" property="activityId" jdbcType="BIGINT"/>
+        <result column="activity_creator_id" property="activityCreatorId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="coupon_type" property="couponType" jdbcType="TINYINT"/>
+        <result column="total_count" property="totalCount" jdbcType="BIGINT"/>
+        <result column="granted_count" property="grantedCount" jdbcType="BIGINT"/>
+        <result column="activate_count" property="activateCount" jdbcType="BIGINT"/>
+        <result column="used_count" property="usedCount" jdbcType="BIGINT"/>
+        <result column="user_count" property="userCount" jdbcType="BIGINT"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="valid_duration" property="validDuration" jdbcType="INT"/>
+        <result column="user_receive_limit" property="userReceiveLimit" jdbcType="INT"/>
+        <result column="open" property="open" jdbcType="TINYINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+		id,
+		biz_code,
+		activity_id,
+		activity_creator_id,
+		`name`,
+		code,
+		coupon_type,
+		total_count,
+		granted_count,
+		activate_count,
+		used_count,
+		user_count,
+		start_time,
+		end_time,
+		valid_duration,
+		user_receive_limit,
+		status,
+		`open`,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="idList" prepend="AND">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="activityIdList" prepend="AND">
+            activity_id in
+            <iterate property="activityIdList" conjunction="," open="(" close=")">
+                #activityIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityId">
+            activity_id = #activityId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityCreatorId">
+            activity_creator_id = #activityCreatorId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="code">
+            code = #code#
+        </isNotNull>
+        <isNotNull prepend="AND" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="AND" property="hasCode">
+            <isEqual property="hasCode" compareValue="true">
+                coupon_type in (2, 3)
+            </isEqual>
+            <isEqual property="hasCode" compareValue="false">
+                coupon_type = 1
+            </isEqual>
+        </isNotNull>
+        <isNotNull prepend="AND" property="name">
+            `name` like concat('%', #name#, '%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="startTimeLt">
+            <![CDATA[ #startTimeLt# < start_time ]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="startTimeGe">
+            <![CDATA[ #startTimeGe# >= start_time ]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="endTimeLe">
+            <![CDATA[ #endTimeLe# <= end_time ]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="endTimeGt">
+            <![CDATA[ #endTimeGt# > end_time ]]>
+        </isNotNull>
+    </sql>
+
+    <insert id="addActivityCoupon" parameterClass="activityCouponDO">
+        insert into activity_coupon(
+        biz_code,
+        activity_id,
+        activity_creator_id,
+        `name`,
+        code,
+        coupon_type,
+        total_count,
+        granted_count,
+        activate_count,
+        used_count,
+        user_count,
+        user_receive_limit,
+        start_time,
+        end_time,
+        valid_duration,
+        status,
+        `open`,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #activityId#,
+        #activityCreatorId#,
+        #name#,
+        #code#,
+        #couponType#,
+        #totalCount#,
+        #grantedCount#,
+        #activateCount#,
+        #usedCount#,
+        #userCount#,
+        #userReceiveLimit#,
+        #startTime#,
+        #endTime#,
+        #validDuration#,
+        #status#,
+        #open#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="increaseGrantedCount" parameterClass="java.util.Map">
+		update activity_coupon
+		set
+        gmt_modified = now(),granted_count = granted_count+#increaseNum#
+        where
+		id = #id# and delete_mark=0
+    </update>
+
+    <update id="increaseUsedCount" parameterClass="java.util.Map">
+		update activity_coupon
+		set
+		gmt_modified = now(),used_count = used_count+#increaseNum#
+		where
+		id = #id# and activity_creator_id=#creatorId#
+		and delete_mark=0
+    </update>
+
+    <update id="deleteActivityCoupon" parameterClass="java.util.Map">
+		update activity_coupon
+		set delete_mark=1,gmt_modified = now()
+		where
+		id = #id# and activity_creator_id=#userId# and delete_mark=0
+	</update>
+
+    <update id="updateActivityCoupon" parameterClass="activityCouponDO">
+        update activity_coupon
+        set gmt_modified = now()
+        <isNotNull prepend="," property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="," property="totalCount">
+            total_count = #totalCount#
+        </isNotNull>
+        <isNotNull prepend="," property="code">
+            code = #code#
+        </isNotNull>
+        <isNotNull prepend="," property="name">
+            `name` = #name#
+        </isNotNull>
+        <isNotNull prepend="," property="activateCount">
+            activate_count = #activateCount#
+        </isNotNull>
+        <isNotNull prepend="," property="userCount">
+            user_count = #userCount#
+        </isNotNull>
+        <isNotNull prepend="," property="open">
+            `open` = #open#
+        </isNotNull>
+        where id=#id# AND biz_code=#bizCode#
+    </update>
+
+    <select id="getActivityCoupon" parameterClass="activityCouponDO" resultMap="result">
+        select
+        <include refid="activity_coupon.columnList"/>
+        from activity_coupon
+        where delete_mark=0 AND biz_code=#bizCode#
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityId">
+            activity_id=#activityId#
+        </isNotNull>
+    </select>
+
+    <select id="queryActivityCoupon"
+            parameterClass="com.mockuai.marketingcenter.common.domain.qto.ActivityCouponQTO" resultMap="result">
+        select
+        <include refid="activity_coupon.columnList"/>
+        from activity_coupon
+        <include refid="activity_coupon.queryWhere"/>
+        ORDER BY id DESC
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="queryActivityCouponCount"
+            parameterClass="com.mockuai.marketingcenter.common.domain.qto.ActivityCouponQTO"
+            resultClass="java.lang.Integer">
+        select count(1) from activity_coupon
+        <include refid="activity_coupon.queryWhere"/>
+    </select>
+
+    <select id="queryByCode" parameterClass="string" resultMap="result">
+        select
+        <include refid="activity_coupon.columnList"/>
+        from activity_coupon
+        WHERE delete_mark=0 and code = #code#
+    </select>
+
+</sqlMap>

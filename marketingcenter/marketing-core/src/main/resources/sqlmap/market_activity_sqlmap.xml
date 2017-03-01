@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="market_activity">
+
+    <typeAlias alias="marketActivityDO"
+               type="com.mockuai.marketingcenter.core.domain.MarketActivityDO"/>
+    <typeAlias alias="marketActivityQTO"
+               type="com.mockuai.marketingcenter.common.domain.qto.MarketActivityQTO"/>
+
+    <resultMap id="result" class="marketActivityDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="scope" property="scope" jdbcType="TINYINT"/>
+        <result column="level" property="level" jdbcType="TINYINT"/>
+        <result column="activity_code" property="activityCode" jdbcType="VARCHAR"/>
+        <result column="activity_name" property="activityName" jdbcType="VARCHAR"/>
+        <result column="activity_content" property="activityContent" jdbcType="VARCHAR"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="coupon_mark" property="couponMark" jdbcType="TINYINT"/>
+        <result column="coupon_type" property="couponType" jdbcType="TINYINT"/>
+        <result column="exclusive_mark" property="exclusiveMark" jdbcType="TINYINT"/>
+        <result column="tool_id" property="toolId" jdbcType="BIGINT"/>
+        <result column="tool_type" property="toolType" jdbcType="TINYINT"/>
+        <result column="tool_code" property="toolCode" jdbcType="varchar"/>
+        <result column="creator_type" property="creatorType" jdbcType="TINYINT"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="item_invalid_time" property="itemInvalidTime" jdbcType="TIMESTAMP"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="common_item" property="commonItem" jdbcType="TINYINT"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="publish_status" property="publishStatus" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="columnList">
+		id,
+		biz_code,
+		scope,
+		`level`,
+		activity_code,
+		activity_name,
+		activity_content,
+		start_time,
+		end_time,
+		coupon_mark,
+		coupon_type,
+		exclusive_mark,
+		tool_id,
+		tool_type,
+		tool_code,
+		creator_type,
+		creator_id,
+		item_invalid_time,
+		status,
+		common_item,
+		parent_id,
+		icon,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		publish_status
+	</sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull property="idList" prepend="and">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="and" property="creatorId">
+            creator_id = #creatorId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="commonItem">
+            common_item = #commonItem:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="scope">
+            scope = #scope:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="level">
+            `level` = #level:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="toolType">
+            tool_type = #toolType:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityName">
+            `activity_name` like concat('%', #activityName#, '%')
+        </isNotNull>
+        <isNotNull property="parentIdList" prepend="and">
+            parent_id in
+            <iterate property="parentIdList" conjunction="," open="(" close=")">
+                #parentIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="AND" property="startTimeLt">
+            <![CDATA[( #startTimeLt# < start_time AND item_invalid_time IS NULL)]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="startTimeGe">
+            <![CDATA[( #startTimeGe# >= start_time AND item_invalid_time IS NULL)]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="endTimeLe">
+            <![CDATA[ #endTimeLe# <= end_time ]]>
+        </isNotNull>
+        <isNotNull prepend="AND" property="endTimeGt">
+            <![CDATA[( #endTimeGt# > end_time OR item_invalid_time IS NOT NULL)]]>
+        </isNotNull>
+    </sql>
+
+    <select id="overlappingByTimeActivity" parameterClass="marketActivityDO" resultMap="result">
+        select
+        <include refid="market_activity.columnList"/>
+        from market_activity
+        where delete_mark=0 AND status=1 AND tool_code='ReachMultipleReduceTool'
+        and (
+        <![CDATA[ start_time <= #startTime# ]]> and <![CDATA[ #startTime# < end_time ]]>
+        or
+        <![CDATA[ #startTime# <= start_time ]]> and <![CDATA[ start_time < #endTime# ]]>
+        )
+    </select>
+
+    <insert id="addActivity" parameterClass="marketActivityDO">
+        insert into market_activity(
+        biz_code,
+        scope,
+        `level`,
+        activity_code,
+        activity_name,
+        activity_content,
+        start_time,
+        end_time,
+        coupon_mark,
+        coupon_type,
+        exclusive_mark,
+        tool_id,
+        tool_type,
+        tool_code,
+        creator_type,
+        creator_id,
+        status,
+        common_item,
+        parent_id,
+        icon,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )values(
+        #bizCode#,
+        #scope#,
+        #level#,
+        #activityCode#,
+        #activityName#,
+        #activityContent#,
+        #startTime#,
+        #endTime#,
+        #couponMark#,
+        #couponType#,
+        #exclusiveMark#,
+        #toolId#,
+        #toolType#,
+        #toolCode#,
+        #creatorType#,
+        #creatorId#,
+        #status#,
+        #commonItem#,
+        #parentId#,
+        #icon#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateActivity" parameterClass="marketActivityDO">
+        update market_activity
+        set gmt_modified=now()
+        <isNotNull prepend="," property="activityName">
+            activity_name = #activityName:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="activityContent">
+            activity_content = #activityContent:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="startTime">
+            start_time = #startTime:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="," property="endTime">
+            end_time = #endTime:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="," property="exclusiveMark">
+            exclusive_mark = #exclusiveMark:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="," property="status">
+            status = #status:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="," property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNotNull prepend="," property="itemInvalidTime">
+            item_invalid_time = #itemInvalidTime#
+        </isNotNull>
+        <isNotNull prepend="," property="icon">
+            icon=#icon#
+        </isNotNull>
+        <isNotNull prepend="," property="publishStatus">
+            publish_status=#publishStatus#
+        </isNotNull>
+        where id = #id# AND parent_id=0
+    </update>
+
+    <update id="deleteActivity" parameterClass="marketActivityQTO">
+        UPDATE market_activity
+        SET gmt_modified=now(), delete_mark = 1
+        WHERE creator_id=#creatorId# AND biz_code = #bizCode#
+        <isNotNull property="idList" prepend="and">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotNull>
+    </update>
+
+    <select id="queryActivityCount" resultClass="java.lang.Integer"
+            parameterClass="marketActivityQTO">
+        select count(1) from market_activity
+        <include refid="market_activity.queryWhere"/>
+    </select>
+
+    <select id="queryActivity" resultMap="result" parameterClass="marketActivityQTO">
+        select
+        <include refid="market_activity.columnList"/>
+        from market_activity
+        <include refid="market_activity.queryWhere"/>
+        order by id DESC
+        <isNotNull prepend="limit" property="count">
+            #offset:INTEGER#,#count:INTEGER#
+        </isNotNull>
+    </select>
+
+    <select id="queryActivityForSettlement" resultMap="result" parameterClass="marketActivityQTO">
+        select
+        <include refid="market_activity.columnList"/>
+        from market_activity
+        WHERE scope IN
+        <iterate property="scopeList" conjunction="," open="(" close=")">
+            #scopeList[]#
+        </iterate>
+        <isNotNull property="commonItem" prepend="AND">
+            common_item=#commonItem#
+        </isNotNull>
+        AND status=#status# AND biz_code=#bizCode# AND parent_id=0 AND delete_mark=0
+        <isNotNull prepend="limit" property="count">
+            #offset:INTEGER#,#count:INTEGER#
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryActivityForSettlement" resultMap="result" parameterClass="marketActivityQTO">
+        select count(1) from market_activity
+        WHERE scope IN
+        <iterate property="scopeList" conjunction="," open="(" close=")">
+            #scopeList[]#
+        </iterate>
+        AND status=#status# AND biz_code=#bizCode# AND parent_id=0 AND delete_mark=0
+    </select>
+
+    <select id="getActivity" resultMap="result" parameterClass="marketActivityDO">
+        select
+        <include refid="market_activity.columnList"/>
+        from market_activity
+        where id = #id#
+    </select>
+</sqlMap>

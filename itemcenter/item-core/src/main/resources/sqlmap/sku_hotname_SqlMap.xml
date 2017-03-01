@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sku_hotname">
+
+	<typeAlias alias="hotNameDO" type="com.mockuai.itemcenter.core.domain.HotNameDO" />
+	<typeAlias alias="hotNameDTO"	type="com.mockuai.itemcenter.common.domain.dto.HotNameDTO" />
+
+	<resultMap id="BaseResultMap" class="hotNameDO">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="hot_name" property="hotName" jdbcType="VARCHAR" />
+		<result column="hot_type" property="hotType" jdbcType="TINYINT" />
+		<result column="index_sort" property="indexSort" jdbcType="TINYINT" />
+		<result column="click_volume" property="clickVolume" jdbcType="BIGINT" />
+		<result column="delete_mark" property="deleteMark" jdbcType="INTEGER" />
+		<result column="gmt_created" property="gmtCreated" jdbcType="DATETIME" />
+		<result column="gmt_modified" property="gmtModified" jdbcType="DATETIME" />
+
+
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,
+		hot_name,
+		hot_type,
+		index_sort,
+		click_volume,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+
+	</sql>
+	<!-- 根据id查询热搜词 -->
+	<select id="hotNameById" resultMap="BaseResultMap" parameterClass = "java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from hotname_sku
+		where delete_mark = 0 and id=#id#
+	</select>
+
+	<!-- 根据热搜词查询-->
+	<select id="hotNameByName" resultMap="BaseResultMap" parameterClass = "java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from hotname_sku
+		where delete_mark = 0 and hot_name=#hotName#
+	</select>
+	
+	<!-- 查询所有待热搜词 -->
+	<select id="hotNameList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from hotname_sku
+		where delete_mark = 0 order by index_sort asc
+	</select>
+	
+	<!-- 添加热搜词 -->
+	<insert id="addHotName" parameterClass="hotNameDO">
+		insert into
+		hotname_sku(
+
+		<include refid="Base_Column_List"/>
+
+		)
+		values
+		(#id#,#hotName#,#hotType#,
+		ifnull((select max(index_sort) from
+		hotname_sku hotname),0)+1,#clickVolume#,0,now(),now())
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+	
+	<!-- 修改热搜词 -->
+	<update id="updateHotName" parameterClass="hotNameDO">
+		update hotname_sku set gmt_modified=now()
+		<isNotNull property="hotName">
+			,hot_name = #hotName#
+		</isNotNull>
+		<isNotNull property="indexSort">
+			,index_sort = #indexSort#
+		</isNotNull>
+		<isNotNull property="deleteMark">
+			,delete_mark = #deleteMark#
+		</isNotNull>
+		where id = #id#
+	</update>
+	
+	<!-- 序列号加1 -->
+	<update id="clickRateHotName">
+		update hotname_sku set
+			 click_volume = click_volume+1 ,
+		gmt_modified=now() where id=#id#
+	</update>
+
+	<select id="queryClimbObj" parameterClass="hashmap" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from hotname_sku
+
+		where
+		<isEqual  property="climb" compareValue="up">
+			index_sort &lt; #indexSort#
+		</isEqual>
+		<isEqual property="climb" compareValue="down">
+			index_sort &gt; #indexSort#
+		</isEqual>
+
+		order by index_sort
+		<isEqual  property="climb" compareValue="up">
+			desc
+		</isEqual>
+		<isEqual property="climb" compareValue="down">
+			asc
+		</isEqual>
+
+
+		limit 1
+
+	</select>
+	
+	<!-- 统计热搜词总量-->
+	<select id="hotNameCount" resultClass="long">
+		select count(1) from hotname_sku
+		where delete_mark=0
+	</select>
+
+</sqlMap>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="marketActivityManager" class="com.mockuai.marketingcenter.core.manager.impl.MarketActivityManagerImpl"/>
+    <bean id="marketToolManager" class="com.mockuai.marketingcenter.core.manager.impl.MarketToolManagerImpl"/>
+    <bean id="activityCouponManager" class="com.mockuai.marketingcenter.core.manager.impl.ActivityCouponManagerImpl"/>
+    <bean id="couponCodeManager" class="com.mockuai.marketingcenter.core.manager.impl.CouponCodeManagerImpl"/>
+    <bean id="grantedCouponManager" class="com.mockuai.marketingcenter.core.manager.impl.GrantedCouponManagerImpl"/>
+    <bean id="propertyManager" class="com.mockuai.marketingcenter.core.manager.impl.PropertyManagerImpl"/>
+    <bean id="propertyTmplManager" class="com.mockuai.marketingcenter.core.manager.impl.PropertyTmplManagerImpl"/>
+    <bean id="itemManager" class="com.mockuai.marketingcenter.core.manager.impl.ItemManagerImpl"/>
+    <bean id="itemSuitManager" class="com.mockuai.marketingcenter.core.manager.impl.ItemSuitManagerImpl"/>
+    <bean id="itemPriceManger" class="com.mockuai.marketingcenter.core.manager.impl.ItemPriceMangerImpl"/>
+    <bean id="virtualWealthManager" class="com.mockuai.marketingcenter.core.manager.impl.VirtualWealthManagerImpl"/>
+    <!--<bean id="grantedWealthManager" class="com.mockuai.marketingcenter.core.manager.impl.GrantedWealthManagerImpl"/>-->
+    <bean id="wealthAccountManager" class="com.mockuai.marketingcenter.core.manager.impl.WealthAccountManagerImpl"/>
+    <!--<bean id="usedWealthManager" class="com.mockuai.marketingcenter.core.manager.impl.UsedWealthManagerImpl"/>-->
+    <bean id="appManager" class="com.mockuai.marketingcenter.core.manager.impl.AppManagerImpl"/>
+    <bean id="activityItemManager" class="com.mockuai.marketingcenter.core.manager.impl.ActivityItemManagerImpl"/>
+    <bean id="activityHistoryManager" class="com.mockuai.marketingcenter.core.manager.impl.ActivityHistoryManagerImpl"/>
+    <bean id="transmitManager" class="com.mockuai.marketingcenter.core.manager.impl.TransmitManagerImpl"/>
+    <bean id="userManager" class="com.mockuai.marketingcenter.core.manager.impl.UserManagerImpl"/>
+    <bean id="groupBuyManager" class="com.mockuai.marketingcenter.core.manager.impl.GroupBuyManagerImpl"/>
+    <bean id="seckillManager" class="com.mockuai.marketingcenter.core.manager.impl.SeckillManagerImpl"/>
+    <bean id="tradeManager" class="com.mockuai.marketingcenter.core.manager.impl.TradeManagerImpl"/>
+    <bean id="rmqMessageManager" class="com.mockuai.marketingcenter.core.manager.impl.RMQMessageManagerImpl"/>
+    <bean id="higoManager" class="com.mockuai.marketingcenter.core.manager.impl.HigoManagerImpl"/>
+    <bean id="shopPropertyManager" class="com.mockuai.marketingcenter.core.manager.impl.ShopPropertyManagerImpl"/>
+    <bean id="shopManager" class="com.mockuai.marketingcenter.core.manager.impl.ShopManagerImpl"/>
+    <bean id="storeManager" class="com.mockuai.marketingcenter.core.manager.impl.StoreManagerImpl"/>
+    <bean id="customerManager" class="com.mockuai.marketingcenter.core.manager.impl.CustomerManagerImpl"/>
+    <bean id="distributorManager" class="com.mockuai.marketingcenter.core.manager.impl.DistributorManagerImpl"/>
+    <bean id="timeLimitManager" class="com.mockuai.marketingcenter.core.manager.impl.TimeLimitManagerImpl"/>
+    <bean id="firstOrderManager" class="com.mockuai.marketingcenter.core.manager.impl.FirstOrderManagerImpl"/>
+    <bean id="orderRecordManger" class="com.mockuai.marketingcenter.core.manager.impl.OrderRecordMangerImpl"/>
+    <bean id="orderGeneralManger" class="com.mockuai.marketingcenter.core.manager.impl.OrderGeneralMangerImpl"/>
+    <bean id="employeeManager" class="com.mockuai.marketingcenter.core.manager.impl.EmployeeManagerImpl"/>
+    <bean id="limitedPurchaseManager" class="com.mockuai.marketingcenter.core.manager.impl.LimitedPurchaseManagerImpl"/>
+    <bean id="limitedPurchaseGoodsManager" class="com.mockuai.marketingcenter.core.manager.impl.LimitedPurchaseGoodsManagerImpl"/>
+    <bean id="limitedGoodsCorrelationManager" class="com.mockuai.marketingcenter.core.manager.impl.LimitedGoodsCorrelationManagerImpl"/>
+    <bean id="limitedUserCorrelationManager" class="com.mockuai.marketingcenter.core.manager.impl.LimitedUserCorrelationManagerImpl"/>
+    <bean id="limitOderInfoManager" class="com.mockuai.marketingcenter.core.manager.impl.LimitOderInfoManagerImpl"/>
+
+</beans>

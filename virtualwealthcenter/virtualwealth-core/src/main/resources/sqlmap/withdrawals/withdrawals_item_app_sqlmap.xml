@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="withdrawals_item">
+
+    <typeAlias alias="withdrawalsItemAppDO" type="com.mockuai.virtualwealthcenter.core.domain.WithdrawalsItemAppDO"/>
+    <typeAlias alias="mopWithdrawalsItemAppDTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.MopWithdrawalsItemAppDTO"/>
+	<typeAlias alias="withdrawalsItemQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.WithdrawalsItemQTO"/>
+    <resultMap id="result" class="withdrawalsItemAppDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="withdrawalsNumber" column="withdrawals_number" jdbcType="VARCHAR"/>
+        <result property="withdrawalsStatus" column="withdrawals_status" jdbcType="TINYINT"/>
+        <result property="withdrawalsNo" column="withdrawals_no" jdbcType="VARCHAR"/>
+        <result property="withdrawalsAmount" column="withdrawals_amount" jdbcType="BIGINT"/>
+        <result property="withdrawalsType" column="withdrawals_type" jdbcType="TINYINT"/>
+        <result property="withdrawalsTime" column="withdrawals_time" jdbcType="TIMESTAMP"/>
+        <result property="withdrawalsBanklog" column="withdrawals_banklog" jdbcType="VARCHAR"/>
+        <result property="withdrawalsDotype" column="withdrawals_dotype" jdbcType="TINYINT"/>
+        <result property="withdrawalsRefuse" column="withdrawals_refuse" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        user_id,
+        biz_code,
+        withdrawals_status,
+        withdrawals_number,
+        withdrawals_no,
+        withdrawals_amount,
+        withdrawals_time,
+        withdrawals_banklog,
+        withdrawals_type,
+        withdrawals_dotype,
+        withdrawals_refuse,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!-- 提现申请 -->
+    <insert id ="addWithdrawalsItem" parameterClass = "withdrawalsItemAppDO">
+    	insert into withdrawals_item (user_id,
+        biz_code,
+        withdrawals_status,
+        withdrawals_no,
+        withdrawals_number,
+        withdrawals_amount,
+        withdrawals_time,
+        withdrawals_type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    	)values(
+    	#userId#,
+    	#bizCode#,
+    	1,
+    	#withdrawalsNo#,
+    	#withdrawalsNumber#,
+    	#withdrawalsAmount#,
+    	now(),
+    	1,
+    	0,
+    	now(),
+    	now()
+    	)
+    	<selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+      <!-- 客户管理 余额 提现流水 -->
+    <select id="findCustomerWithdrawalsPageList" parameterClass="withdrawalsItemQTO" resultMap="result">
+    	select 
+ 		<include refid="withdrawals_item.columnList"/>
+ 		from withdrawals_item 
+ 		where user_id = #userId# 
+ 		order by withdrawals_time desc 
+ 		<isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+        </isNotNull>
+    </select>
+    
+      <!-- 客户管理 余额 提现流水 总条数 -->
+    <select id="findCustomerWithdrawalsCount" parameterClass="withdrawalsItemQTO" resultClass="java.lang.Integer">
+    	select count(1) 
+ 		from withdrawals_item 
+ 		where user_id = #userId# 
+ 		order by withdrawals_time desc 
+    </select>
+    
+<!-- 
+    <insert id="addWealthAccount" parameterClass="wealthAccountDO">
+        insert into wealth_account(
+        user_id,
+        biz_code,
+        wealth_type,
+        amount,
+        frozen_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #userId#,
+        #bizCode#,
+        #wealthType#,
+        0,
+        0,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="userIdList" prepend="AND">
+            user_id in
+            <iterate property="userIdList" conjunction="," open="(" close=")">
+                #userIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type = #wealthType#
+        </isNotNull>
+        <isNotNull property="startTime" prepend="AND">
+            gmt_modified >= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            #endTime# > gmt_modified
+        </isNotNull>
+    </sql>
+
+    <select id="getWealthAccount" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account where user_id = #userId#
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type=#wealthType#
+        </isNotNull>
+        and delete_mark=0
+    </select>
+
+    <select id="queryUserWealthAccount" resultMap="result" parameterClass="wealthAccountQTO">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryUserWealthAccount" resultClass="java.lang.Integer" parameterClass="wealthAccountQTO">
+        select count(1) from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+    </select>
+
+    <update id="increaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount+#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+
+    <update id="increaseAccountBalanceBatch" parameterClass="java.util.Map">
+        UPDATE wealth_account SET gmt_modified = now(),
+          amount = amount + CASE id
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs">
+                WHEN #wealthAccountDOs[].id# THEN #wealthAccountDOs[].amount#
+            </iterate>
+        </isNotNull>
+        END WHERE id in (
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs" conjunction=",">
+                #wealthAccountDOs[].id#
+            </iterate>
+        </isNotNull>
+        )
+    </update>
+
+    <update id="decreaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount-#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+ -->
+ 
+</sqlMap>

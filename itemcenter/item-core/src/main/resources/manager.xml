@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!--&lt;!&ndash; 商品管理器 &ndash;&gt;-->
+	<!--<bean id="itemManager"	class="com.mockuai.itemcenter.core.manager.impl.ItemManagerImpl" />-->
+	<!--&lt;!&ndash; 商品图片管理器 &ndash;&gt;-->
+	<!--<bean id="itemImageManager"	class="com.mockuai.itemcenter.core.manager.impl.ItemImageManagerImpl" />-->
+	<!--&lt;!&ndash; 商品品牌管理器 &ndash;&gt;-->
+	<!--<bean id="itemBrandManager"	class="com.mockuai.itemcenter.core.manager.impl.ItemBrandManagerImpl" />-->
+	<!--&lt;!&ndash; 商品评论管理器 &ndash;&gt;-->
+	<!--<bean id="itemCommentManager" class="com.mockuai.itemcenter.core.manager.impl.ItemCommentManagerImpl" />-->
+	<!--&lt;!&ndash; 商品销售属性(ItemSku)管理器 &ndash;&gt;-->
+	<!--<bean id="itemSkuManager" class="com.mockuai.itemcenter.core.manager.impl.ItemSkuManagerImpl" />-->
+	<!--&lt;!&ndash; 商品类目管理器 &ndash;&gt;-->
+	<!--<bean id="itemCategoryManager" class="com.mockuai.itemcenter.core.manager.impl.ItemCategoryManagerImpl" />-->
+	<!--&lt;!&ndash; 商品属性模板管理器 &ndash;&gt;-->
+	<!--<bean id="itemPropertyTmplManager" class="com.mockuai.itemcenter.core.manager.impl.ItemPropertyTmplManagerImpl" />-->
+	<!--&lt;!&ndash; 商品属性管理器 &ndash;&gt;-->
+	<!--<bean id="itemPropertyManager" class="com.mockuai.itemcenter.core.manager.impl.ItemPropertyManagerImpl" />-->
+	<!--&lt;!&ndash; SKU属性模板管理器 &ndash;&gt;-->
+	<!--<bean id="skuPropertyTmplManager" class="com.mockuai.itemcenter.core.manager.impl.SkuPropertyTmplManagerImpl" />-->
+	<!---->
+	<!--&lt;!&ndash; 全局属性管理器 &ndash;&gt;-->
+	<!--<bean id="globalPropertyManager" class="com.mockuai.itemcenter.core.manager.impl.GlobalPropertyManagerImpl" />-->
+	<!--&lt;!&ndash; 全局属性值域管理器 &ndash;&gt;-->
+	<!--<bean id="globalPropertyValueManager" class="com.mockuai.itemcenter.core.manager.impl.GlobalPropertyValueManagerImpl" />-->
+	<!---->
+	<!--&lt;!&ndash; SKU属性管理器 &ndash;&gt;-->
+	<!--<bean id="skuPropertyManager" class="com.mockuai.itemcenter.core.manager.impl.SkuPropertyManagerImpl" />-->
+	<!--&lt;!&ndash; SPU属性模板管理器 &ndash;&gt;-->
+	<!--<bean id="spuPropertyTmplManager" class="com.mockuai.itemcenter.core.manager.impl.SpuPropertyTmplManagerImpl" />-->
+	<!--&lt;!&ndash; SPU属性管理器 &ndash;&gt;-->
+	<!--<bean id="spuPropertyManager" class="com.mockuai.itemcenter.core.manager.impl.SpuPropertyManagerImpl" />-->
+	<!--&lt;!&ndash; SPU_INFO属性管理器 &ndash;&gt;-->
+	<!--<bean id="spuInfoManager" class="com.mockuai.itemcenter.core.manager.impl.SpuInfoManagerImpl" />-->
+	<!--&lt;!&ndash;商品搜索管理器&ndash;&gt;-->
+	<!--<bean id="itemSearchManager" class="com.mockuai.itemcenter.core.manager.impl.ItemSearchManagerImpl" init-method="init">-->
+		<!--<property name="searchServerUrl" value="http://${itemcenter.search.server.address}/solr/item_search"/>-->
+	<!--</bean>-->
+
+    <bean id="itemSearchManager" class="com.mockuai.itemcenter.core.manager.impl.ItemSearchManagerImpl" init-method="init">
+		<property name="searchServerUrl" value="http://${itemcenter.search.server.address}/solr/item_search"/>
+	</bean>
+
+	<!-- <bean id="tradeMsgListener" class="com.mockuai.itemcenter.core.message.listener.TradeMsgListener"/>
+	<bean id="crushOrderSkuListener" class="com.mockuai.itemcenter.core.message.listener.CrushOrderSkuListener"/>	 -->
+
+    <bean id="topicAdapter" class="com.mockuai.itemcenter.core.message.adapter.EnvPrefixTopicAdapter">
+        <property name="prefix" value="${itemcenter.ons.env.prefix}"/>
+    </bean>
+
+	<!-- <bean id="transmitMsgConsumer" class="com.mockuai.itemcenter.core.message.consumer.TransmitMsgConsumer">
+		<property name="accessKey" value="${itemcenter.ons.key.access}" />
+        <property name="secretKey" value="${itemcenter.ons.key.secret}"/>
+		<property name="consumerId" value="${itemcenter.ons.consumer.id}" />
+		<property name="consumeThreadNums" value="${itemcenter.ons.consumer.thread.nums}" />
+		<property name="tradeMsgListener" ref="tradeMsgListener" />
+		<property name="crushOrderSkuListener" ref="crushOrderSkuListener"/>
+	</bean> -->
+
+    <bean id="transmitMsgProducer" class="com.mockuai.itemcenter.core.message.producer.TransmitMsgProducer">
+        <property name="accessKey" value="${itemcenter.ons.key.access}" />
+        <property name="secretKey" value="${itemcenter.ons.key.secret}"/>
+        <property name="producerId" value="${itemcenter.ons.producer.id}" />
+    </bean>
+
+
+</beans>

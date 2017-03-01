@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_collection">
+    <typeAlias alias="itemCollectionDO" type="com.mockuai.itemcenter.core.domain.ItemCollectionDO"/>
+    <typeAlias alias="itemCollectionQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemCollectionQTO"/>
+
+    <resultMap class="itemCollectionDO" id="itemCollectionDOResult">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="distributor_id" property="distributorId"/>
+        <result column="share_user_id" property="shareUserId"/>
+        <result column="item_id" property="itemId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME"/>
+    </resultMap>
+
+    <sql id="item_collection_base_column_list">
+        id, user_id, seller_id, item_id,distributor_id, share_user_id, biz_code,delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="ItemCollectionDAO.queryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="userId">
+            user_id = #userId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="distributorId">
+            distributor_id = #distributorId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="shareUserId">
+            share_user_id = #shareUserId#
+        </isNotNull>
+    </sql>
+
+    <select id="ItemCollectionDAO.getItemCollection" resultMap="itemCollectionDOResult" parameterClass="java.util.Map">
+        select
+        <include refid="item_collection_base_column_list"/>
+        from item_collection
+        <include refid="ItemCollectionDAO.queryWhere"/>
+    </select>
+
+    <update id="ItemCollectionDAO.updateItemCollection">
+        update item_collection
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="record.userId">
+                user_id = #record.userId#
+            </isNotNull>
+            <isNotNull prepend="," property="record.sellerId">
+                seller_id = #record.sellerId#
+            </isNotNull>
+            <isNotNull prepend="," property="record.itemId">
+                item_id = #record.itemId#
+            </isNotNull>
+            <isNotNull prepend="," property="record.deleteMark">
+                delete_mark = #record.deleteMark#
+            </isNotNull>
+
+        </dynamic>
+        <include refid="ItemCollectionDAO.queryWhere"/>
+    </update>
+
+    <insert id="ItemCollectionDAO.addItemCollection" parameterClass="itemCollectionDO">
+        insert into item_collection
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                user_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="distributorId">
+                distributor_id
+            </isNotNull>
+            <isNotNull prepend="," property="shareUserId">
+                share_user_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark,gmt_created,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                #userId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="distributorId">
+                #distributorId#
+            </isNotNull>
+            <isNotNull prepend="," property="shareUserId">
+                #shareUserId#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0,now(),now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <delete id="ItemCollectionDAO.deleteItemCollectionByItemId" parameterClass="java.util.Map">
+        delete from item_collection
+        where item_id =#itemId#
+        <isNotNull property="shareUserId" prepend="and">
+            and share_user_id = #shareUserId#
+        </isNotNull>
+        and user_id = #userId# and delete_mark = 0
+        <!--<dynamic prepend="">-->
+        <!--<isNotNull prepend="," property="record.deleteMark">-->
+        <!--delete_mark = #record.deleteMark#-->
+        <!--</isNotNull>-->
+        <!--</dynamic>-->
+        <!--<include refid="ItemCollectionDAO.queryWhere" />-->
+    </delete>
+
+    <select id="ItemCollectionDAO.countCollection" resultClass="Integer" parameterClass="itemCollectionQTO">
+        select count(1) from item_collection
+        <include refid="ItemCollectionDAO.queryWhere"/>
+    </select>
+
+    <select id="ItemCollectionDAO.queryItemCollectionList" resultMap="itemCollectionDOResult"
+            parameterClass="itemCollectionQTO">
+        select
+        <include refid="item_collection_base_column_list"/>
+        from item_collection
+        <include refid="ItemCollectionDAO.queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+</sqlMap>

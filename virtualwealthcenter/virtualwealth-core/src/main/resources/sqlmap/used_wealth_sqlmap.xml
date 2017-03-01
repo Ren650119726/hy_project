@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="used_wealth">
+
+    <typeAlias alias="usedWealthDO" type="com.mockuai.virtualwealthcenter.core.domain.UsedWealthDO"/>
+    <typeAlias alias="usedWealthQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.UsedWealthQTO"/>
+
+    <resultMap id="result" class="usedWealthDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="wealthAccountId" column="wealth_account_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="orderSN" column="order_sn" jdbcType="VARCHAR"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="amount" column="amount" jdbcType="BIGINT"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        biz_code,
+        wealth_account_id,
+        user_id,
+        order_id,
+        order_sn,
+        seller_id,
+        item_id,
+        amount,
+        parent_id,
+        status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    
+    <sql id="realNamecolumnList">
+        a.id,
+        a.biz_code,
+        a.wealth_account_id,
+        a.user_id,
+        a.order_id,
+        a.order_sn,
+        a.seller_id,
+        a.item_id,
+        a.amount,
+        a.parent_id,
+        a.status,
+        a.delete_mark,
+        a.gmt_created,
+        a.gmt_modified
+    </sql>
+
+    <insert id="addUsedWealth" parameterClass="usedWealthDO">
+        insert into used_wealth(
+        biz_code,
+        wealth_account_id,
+        user_id,
+        order_id,
+        order_sn,
+        seller_id,
+        item_id,
+        amount,
+        parent_id,
+        status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #wealthAccountId#,
+        #userId#,
+        #orderId#,
+        #orderSN#,
+        #sellerId#,
+        #itemId#,
+        #amount#,
+        #parentId#,
+        #status#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <sql id="queryWhere">
+        <isNotNull property="id" prepend="AND">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="orderId" prepend="AND">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status=#status#
+        </isNotNull>
+        <isNotNull property="wealthAccountId" prepend="AND">
+            wealth_account_id=#wealthAccountId#
+        </isNotNull>
+        <isNotNull property="parentId" prepend="AND">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNull property="parentId" prepend="AND">
+            parent_id IS NULL
+        </isNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+    </sql>
+
+    <update id="updateWealthStatus" parameterClass="java.util.Map">
+        update used_wealth set status = #toStatus#, gmt_modified=now()
+        where user_id=#userId# and status=#fromStatus#
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="and">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+    </update>
+
+    <select id="queryUsedWealth" resultMap="result" parameterClass="usedWealthQTO">
+        select
+        <include refid="used_wealth.columnList"/>
+        from used_wealth where delete_mark=0
+        <include refid="used_wealth.queryWhere"/>
+        ORDER BY id DESC
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryUsedWealth" resultClass="java.lang.Integer" parameterClass="usedWealthQTO">
+        select count(1)
+        from used_wealth where delete_mark=0
+        <include refid="used_wealth.queryWhere"/>
+    </select>
+
+    <select id="queryUsedWealthByParentId" resultMap="result" parameterClass="long">
+        select
+        <include refid="used_wealth.columnList"/>
+        from used_wealth where parent_id = #parentId#
+    </select>
+
+    <select id="getUsedWealthByWealthAccount" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="used_wealth.columnList"/>
+        from used_wealth where order_id = #orderId# and wealth_account_id=#wealthAccountId# and parent_id is null
+    </select>
+    
+    
+    <!-- 客户管理 余额和嗨币的支出（2接口）-->
+    <select id="findCustomerUsedPageList" resultMap="result" parameterClass="usedWealthQTO">
+        select 
+        <include refid="used_wealth.realNamecolumnList"/>
+        FROM used_wealth a,wealth_account w 
+        WHERE 
+        a.wealth_account_id = w.id 
+        and w.wealth_type = #wealthType# 
+        <isNotNull property="userId" prepend="AND">
+            a.user_id=#userId#
+        </isNotNull>
+        order by a.gmt_created desc
+        <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+        </isNotNull>
+    </select>
+    
+    <!-- 客户管理 余额和嗨币的支出 总条数（2接口）-->
+    <select id="findCustomerUsedCount" resultClass="java.lang.Integer" parameterClass="usedWealthQTO">
+        select 
+        count(1) 
+        FROM used_wealth a,wealth_account w 
+        WHERE 
+        a.wealth_account_id = w.id 
+        and w.wealth_type = #wealthType# 
+        <isNotNull property="userId" prepend="AND">
+            a.user_id=#userId#
+        </isNotNull>
+    </select>
+</sqlMap>

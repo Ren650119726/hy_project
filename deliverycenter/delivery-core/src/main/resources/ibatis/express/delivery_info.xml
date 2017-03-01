@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="delivery_info" >
+  <resultMap id="BaseResultMap" class="com.mockuai.deliverycenter.core.domain.express.DeliveryInfo" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="express_no" property="expressNo" jdbcType="VARCHAR" />
+    <result column="delivery_time" property="deliveryTime" jdbcType="TIMESTAMP" />
+    <result column="is_arrival" property="isArrival" jdbcType="TINYINT" />
+    <result column="arrival_time" property="arrivalTime" jdbcType="TIMESTAMP" />
+    <result column="order_item_id" property="orderItemId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="delivery_id" property="deliveryId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="express" property="express" jdbcType="VARCHAR" />
+    <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME" />
+    
+     <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="express_code" property="expressCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, express_no, delivery_time, is_arrival, arrival_time, order_item_id, user_id, order_id,
+    memo, delivery_id, user_name, express,biz_code,express_code,is_deleted,gmt_created,gmt_modified
+  </sql>
+  
+  <insert id="DeliveryInfoDAO.addDeliveryInfo" parameterClass="com.mockuai.deliverycenter.core.domain.express.DeliveryInfo" >
+    insert into delivery_info
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="expressNo" >
+        express_no
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryTime" >
+        delivery_time
+      </isNotNull>
+      <isNotNull prepend="," property="isArrival" >
+        is_arrival
+      </isNotNull>
+      <isNotNull prepend="," property="arrivalTime" >
+        arrival_time
+      </isNotNull>
+      <isNotNull prepend="," property="orderItemId" >
+        order_item_id
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryId" >
+        delivery_id
+      </isNotNull>
+      <isNotNull prepend="," property="userName" >
+        user_name
+      </isNotNull>
+      <isNotNull prepend="," property="express" >
+        express
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="expressCode" >
+        express_code
+      </isNotNull>
+       ,is_deleted
+      ,gmt_created
+      ,gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="expressNo" >
+        #expressNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryTime" >
+        #deliveryTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="isArrival" >
+        #isArrival:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="arrivalTime" >
+        #arrivalTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="orderItemId" >
+        #orderItemId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        #orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryId" >
+        #deliveryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="userName" >
+        #userName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="express" >
+        #express:VARCHAR#
+      </isNotNull>
+       <isNotNull prepend="," property="bizCode" >
+        #bizCode#
+      </isNotNull>
+      <isNotNull prepend="," property="expressCode" >
+        #expressCode#
+      </isNotNull>
+      	,0
+		,now()
+		,now()
+      )
+    </dynamic>
+    <selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+	</selectKey>
+  </insert>
+  
+ <!--  <update id="updateDeliveryNotice" parameterClass="com.mockuaickuai.deliverycenter.core.domain.DeliveryInfo" >
+    update delivery_info
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="expressNo" >
+        express_no = #expressNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryTime" >
+        delivery_time = #deliveryTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="isArrival" >
+        is_arrival = #isArrival:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="arrivalTime" >
+        arrival_time = #arrivalTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="orderItemId" >
+        order_item_id = #orderItemId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id = #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="memo" >
+        memo = #memo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="expressId" >
+        express_id = #expressId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="userName" >
+        user_name = #userName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="express" >
+        express = #express:VARCHAR#
+      </isNotNull>
+    </dynamic>
+    where id = #id:BIGINT#
+  </update> -->
+  
+  <update id="confirmReceival" parameterClass="com.mockuai.deliverycenter.core.domain.express.DeliveryInfo">
+	update delivery_info
+	set is_arrival = #isArrival:TINYINT#,
+	arrival_time = now()
+	where user_id = #userId:BIGINT# and order_id = #orderId:BIGINT#
+</update>
+
+  <update id="DeliveryInfoDAO.deleteByOrderId" parameterClass="com.mockuai.deliverycenter.core.domain.express.DeliveryInfo">
+	update delivery_info
+	set is_deleted = 1 where order_id =#orderId# and user_id = #userId# and is_deleted = 0
+</update>
+
+
+ <select id="DeliveryInfoDAO.queryByOrderId" resultMap="BaseResultMap"
+	parameterClass="com.mockuai.deliverycenter.common.qto.express.DeliveryInfoQTO">
+	select
+	<include refid="Base_Column_List" />
+	from delivery_info where is_deleted = 0
+	<dynamic prepend="">
+		<isNotNull prepend="AND" property="id">
+			id = #id#
+		</isNotNull>
+		<isNotNull prepend="AND" property="orderId">
+			order_id = #orderId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="userId">
+			user_id = #userId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="expressNo">
+			express_no = #expressNo#
+		</isNotNull>
+	</dynamic>
+	<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+	</isNotNull>
+</select>
+
+ <update id="DeliveryInfoDAO.update" parameterClass="com.mockuai.deliverycenter.core.domain.express.DeliveryInfo">
+		update delivery_info 
+		set  gmt_modified = now()
+			<isNotNull prepend="," property="expressNo">
+				express_no=#expressNo#
+			</isNotNull>
+			<isNotNull prepend="," property="expressCode">
+				express_code=#expressCode#
+			</isNotNull>
+			<isNotNull prepend="," property="express">
+				express=#express#
+			</isNotNull>
+			where id=#id#
+			
+	</update>
+
+</sqlMap>

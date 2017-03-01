@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_order_relate" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserOrderRelateDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="TIMESTAMP" />
+    <result column="relate_status" property="relateStatus" jdbcType="VARCHAR" />
+    <result column="order_amount" property="orderAmount" jdbcType="BIGINT" />
+    <result column="is_paid" property="isPaid" jdbcType="VARCHAR" />
+    <result column="is_refund" property="isRefund" jdbcType="VARCHAR" />
+    <result column="delete_mark" property="deleteMark" jdbcType="TINYINT" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, biz_code, user_id, seller_id, order_id, relate_status, order_amount,is_paid,is_refund,
+    delete_mark, gmt_created, gmt_modified
+  </sql>
+ 
+  
+  <insert id="add" parameterClass="com.mockuai.usercenter.core.domain.UserOrderRelateDO" >
+    insert into user_order_relate
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id
+      </isNotNull>
+     <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      <isNotNull prepend="," property="relateStatus" >
+        relate_status
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        order_amount
+      </isNotNull>
+       <isNotNull prepend="," property="isPaid" >
+        is_paid
+      </isNotNull>
+      <isNotNull prepend="," property="isRefund" >
+        is_refund
+      </isNotNull>
+      ,delete_mark, gmt_created, gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+       <isNotNull prepend="," property="bizCode" >
+        #bizCode#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        #sellerId#
+      </isNotNull>
+       <isNotNull prepend="," property="orderId" >
+        #orderId#
+      </isNotNull>
+      <isNotNull prepend="," property="relateStatus" >
+        #relateStatus#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        #orderAmount#
+      </isNotNull>
+       <isNotNull prepend="," property="isPaid" >
+        #isPaid#
+      </isNotNull>
+      <isNotNull prepend="," property="isRefund" >
+        #isRefund#
+      </isNotNull>
+      ,0,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+  
+  
+	<sql id="dynamic">
+      
+      <isNotNull prepend="," property="relateStatus" >
+        relate_status=#relateStatus#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        order_amount=#orderAmount#
+      </isNotNull>
+       <isNotNull prepend="," property="isPaid" >
+        is_paid=#isPaid#
+      </isNotNull>
+      <isNotNull prepend="," property="isRefund" >
+        is_refund=#isRefund#
+      </isNotNull>
+      
+	</sql>
+  
+  <select id="select" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserOrderRelateQTO">
+  	select * from user_order_relate where user_id=#userId# and seller_id=#sellerId# and order_id=#orderId# and delete_mark=0
+  </select>
+  
+  <update id="update" parameterClass="com.mockuai.usercenter.core.domain.UserOrderRelateDO">
+		update user_order_relate 
+		set gmt_modified = now()
+		<include refid="dynamic" />
+		where user_id = #userId# and seller_id= #sellerId# and order_id=#orderId# and delete_mark = 0
+	</update>
+  
+   <select id="selectCount" resultClass="Integer" parameterClass="com.mockuai.usercenter.common.qto.UserOrderRelateQTO">
+  	select count(*) from user_order_relate where  delete_mark=0
+  		<isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend="and">
+			seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderId" prepend="and">
+			order_id=#orderId#
+		</isNotNull>
+		 <isNotNull prepend="and" property="isPaid" >
+        	is_paid=#isPaid#
+      </isNotNull>
+      <isNotNull prepend="and" property="isRefund" >
+        	is_refund=#isRefund#
+      </isNotNull>
+      <isNotNull prepend="," property="relateStatus" >
+        	relate_status=#relateStatus#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        	order_amount=#orderAmount#
+      </isNotNull>
+  </select>
+  
+  
+ <select id="getAmountByQuery" resultClass="long"  parameterClass="com.mockuai.usercenter.common.qto.UserOrderRelateQTO">
+	  select IFNULL(sum(order_amount),0)
+		  from user_order_relate where  delete_mark=0
+  		<isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend="and">
+			seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderId" prepend="and">
+			order_id=#orderId#
+		</isNotNull>
+		 <isNotNull prepend="and" property="isPaid" >
+        	is_paid=#isPaid#
+      </isNotNull>
+      <isNotNull prepend="and" property="isRefund" >
+        	is_refund=#isRefund#
+      </isNotNull>
+      <isNotNull prepend="," property="relateStatus" >
+        	relate_status=#relateStatus#
+      </isNotNull>
+      <isNotNull prepend="," property="orderAmount" >
+        	order_amount=#orderAmount#
+      </isNotNull>
+   </select>
+  
+  
+</sqlMap>

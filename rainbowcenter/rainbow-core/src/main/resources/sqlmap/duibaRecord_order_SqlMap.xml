@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="duibaRecordOrder">
+    <!--
+ CREATE TABLE `duiba_record_order` (
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+`uid` varchar(32) NOT NULL COMMENT '用户id',
+`biz_num` varchar(255) NOT NULL COMMENT '订单流水号',
+`order_num` varchar(255) NOT NULL COMMENT '兑吧订单号',
+`credits` bigint(20) NOT NULL COMMENT '本次兑换扣除的积分',
+`description` varchar(256) NOT NULL COMMENT '本次积分消耗的描述',
+`type` varchar(256) NOT NULL COMMENT '兑换类型：alipay(支付宝), qb(Q币), coupon(优惠券), object(实物), phonebill(话费), phoneflow(流量), virtual(虚拟商品), turntable(大转盘),    singleLottery(单品抽奖)，hdtoolLottery(活动抽奖),manualLottery(手动开奖),gameLottery(游戏)',
+`face_price` int(11) NOT NULL COMMENT '兑换商品的市场价值，单位是分',
+`actual_price`  int(11) NOT NULL COMMENT '此次兑换实际扣除开发者账户费用，单位为分',
+`ip` varchar(256) COMMENT '用户ip',
+`wait_audit` tinyint(11) DEFAULT NULL COMMENT '是否需要审核 0不需要 1 需要',
+`status` tinyint(11)  COMMENT '兑换状态 0成功 1 失败 2 兑换中',
+`params` varchar(256) COMMENT '详情参数',
+`exchange_time` datetime NOT NULL COMMENT '兑换时间',
+`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',
+`gmt_created` datetime NOT NULL COMMENT '记录创建时间',
+`gmt_modified` datetime NOT NULL COMMENT '记录最后一次修改时间',
+`error_message` varchar(256) COMMENT '出错原因',
+PRIMARY KEY (`id`),
+KEY `duiba_record_order_index` (`order_num`,`uid`),
+KEY `order_num` (`order_num`),
+KEY `uid` (`uid`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='兑吧订单记录表';
+
+-->
+    <typeAlias alias="duibaRecordOrderDO" type="com.mockuai.rainbowcenter.core.domain.DuibaRecordOrderDO"/>
+    <typeAlias alias="duibaRecordOrderQTO" type="com.mockuai.rainbowcenter.common.qto.DuibaRecordOrderQTO"/>
+
+    <resultMap id="BaseResultMap" class="duibaRecordOrderDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="uid" column="uid" jdbcType="VARCHAR"/>
+        <result property="bizNum" column="biz_num" jdbcType="VARCHAR"/>
+        <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+        <result property="credits" column="credits" jdbcType="BIGINT"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="facePrice" column="face_price" jdbcType="INT"/>
+        <result property="actualPrice" column="actual_price" jdbcType="INT"/>
+        <result property="ip" column="ip" jdbcType="VARCHAR"/>
+        <result property="waitAudit" column="wait_audit" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="params" column="params" jdbcType="VARCHAR"/>
+        <result property="exchangeTime" column="exchange_time" jdbcType="TIMESTAMP"/>
+        <result property="errorMessage" column="error_message" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_list">
+        id,
+        uid,
+        biz_num,
+        order_num,
+        credits,
+        description,
+        type,
+        face_price,
+        actual_price,
+        ip,
+        wait_audit,
+        status,
+        params,
+        exchange_time,
+        error_message,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addRecordOrder" parameterClass="duibaRecordOrderDO">
+        insert into duiba_record_order(
+        uid,
+        biz_num,
+        order_num,
+        credits,
+        description,
+        type,
+        face_price,
+        actual_price,
+        ip,
+        wait_audit,
+        status,
+        params,
+        exchange_time,
+        error_message,
+        gmt_created,
+        gmt_modified,
+        delete_mark) values
+        (#uid#,
+        #bizNum#,
+        #orderNum#,
+        #credits#,
+        #description#,
+        #type#,
+        #facePrice#,
+        #actualPrice#,
+        #ip#,
+        #waitAudit#,
+        #status#,
+        #params#,
+        #exchangeTime#,
+        #errorMessage#,
+        now(),
+        now(),
+        0)
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+    <select id="getRecordByOrderNum" parameterClass="duibaRecordOrderDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from duiba_record_order where biz_num = #bizNum# and delete_mark=0
+    </select>
+
+
+    <update id="updateStatusByorderNum" parameterClass="duibaRecordOrderDO">
+        update duiba_record_order
+        set status =#status#,gmt_modified = now()
+        <isNotNull prepend="," property="errorMessage">
+            error_message = #errorMessage#
+        </isNotNull>
+        where
+        biz_num = #bizNum#
+        and delete_mark = 0
+    </update>
+
+
+    <update id="updateRemoveById" parameterClass="duibaRecordOrderDO">
+        update duiba_record_order
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id#
+    </update>
+
+</sqlMap>

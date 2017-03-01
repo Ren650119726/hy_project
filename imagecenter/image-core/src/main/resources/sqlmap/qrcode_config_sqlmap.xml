@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="qrcode_config">
+
+
+    <typeAlias alias="qrCodeConfigDO" type="com.mockuai.imagecenter.core.domain.QrcodeConfigDO"/>
+
+    <resultMap id="BaseResultMap" class="qrCodeConfigDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="configInfo" column="config_info" jdbcType="VARCHAR"/>
+        <result property="bgImage" column="bg_image"  jdbcType="VARCHAR"/>
+        <result property="bizType" column="biz_type" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <insert id="add" parameterClass="qrCodeConfigDO">
+        INSERT INTO qrcode_config
+        (
+        biz_type,
+        bg_image,
+        config_info,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #bizType#,
+        #bgImage#,
+        #configInfo#,
+        0,
+        now(),
+        now()
+        )
+
+    </insert>
+
+    <select id="queryByBizType" resultMap="BaseResultMap"  parameterClass="string">
+         select id,biz_type,config_info,bg_image from qrcode_config where delete_mark = 0 and  biz_type  = #bizType#
+    </select>
+
+</sqlMap>

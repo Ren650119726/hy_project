@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<!--
+CREATE TABLE `supplier_store_item` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `item_id` bigint(20) NOT NULL,
+  `biz_code` varchar(32) DEFAULT NULL,
+  `item_name` varchar(256) NOT NULL COMMENT '商品名称',
+  `seller_id` bigint(20) NOT NULL,
+  `supplier_id` bigint(11) DEFAULT NULL COMMENT '供应商id',
+   `stock_num` bigint(11) NOT NULL DEFAULT '0' COMMENT '商品总库存量',
+   `sales_num` bigint(20) NOT NULL DEFAULT '0' COMMENT '可销售量',
+  `frozen_stock_num` bigint(20) NOT NULL DEFAULT '0' COMMENT '锁定量',
+  `sold_num` bigint(20) NOT NULL DEFAULT '0' COMMENT '预扣量',
+   version bigint(20) NOT NULL DEFAULT '0' COMMENT '数据版本',
+  `delete_mark` tinyint(4) NOT NULL COMMENT '删除标志',
+  `gmt_created` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`,`item_id`),
+  KEY `seller_id_index` (`seller_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2798 DEFAULT CHARSET=utf8 COMMENT='商品spu库存表';
+
+-->
+<sqlMap namespace="store_item">
+    <resultMap id="BaseResultMap" class="com.mockuai.suppliercenter.core.domain.SupplierStoreItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="supplierId" column="supplier_id" jdbcType="BIGINT"/>
+        <result property="stockNum" column="stock_num" jdbcType="BIGINT"/>
+        <result property="salesNum" column="sales_num" jdbcType="BIGINT"/>
+        <result property="frozenStockNum" column="frozen_stock_num" jdbcType="BIGINT"/>
+        <result property="soldNum" column="sold_num" jdbcType="BIGINT"/>
+        <result property="version" column="version" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterClass="com.mockuai.suppliercenter.core.domain.SupplierStoreItemDO">
+        insert into supplier_store_item
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="itemName">
+                item_name
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                supplier_id
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="salesNum">
+                sales_num
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                frozen_stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                sold_num
+            </isNotNull>
+            ,version,delete_mark,gmt_created, gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemName">
+                #itemName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                #supplierId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                #stockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="salesNum">
+                #salesNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                #frozenStockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                #soldNum:BIGINT#
+            </isNotNull>
+            ,0,0,now(),now()
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getStoreItem" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+      select * from supplier_store_item where item_id=#itemId# and delete_mark=0
+    </select>
+</sqlMap>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RShopSettlement">
+
+    <typeAlias alias="RShopSettlementDO" type="com.mockuai.itemcenter.core.domain.RShopSettlementDO"/>
+    <typeAlias alias="RShopSettlementQTO" type="com.mockuai.itemcenter.common.domain.qto.RShopSettlementQTO"/>
+    <resultMap id="BaseResultMap" class="RShopSettlementDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="shop_id" property="shopId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="settlement_id" property="settlementId" jdbcType="BIGINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, seller_id, shop_id, biz_code, settlement_id, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="getRShopSettlement" resultMap="BaseResultMap" parameterClass="RShopSettlementDO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_shop_settlement
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteRShopSettlement" parameterClass="RShopSettlementDO">
+        update r_shop_settlement
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <update id="deleteRShopSettlementByConfig" parameterClass="RShopSettlementDO">
+        update r_shop_settlement
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and settlement_id = #settlementId# and biz_code = #bizCode# and id > 0
+    </update>
+
+
+    <insert id="addRShopSettlement" parameterClass="RShopSettlementDO">
+        insert into r_shop_settlement
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                settlement_id
+            </isNotNull>
+            ,
+            delete_mark
+            ,
+            gmt_created
+            ,
+            gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                #shopId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                #settlementId:BIGINT#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="shopId">
+            shop_id = #shopId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerIdList">
+            id in
+            <iterate property="sellerIdList" conjunction="," open="(" close=")">
+                #sellerIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="AND" property="settlementId">
+            settlement_id = #settlementId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryRShopSettlement" resultMap="BaseResultMap" parameterClass="RShopSettlementQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_shop_settlement
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <select id="countRShopSettlement" resultClass="Integer" parameterClass="RShopSettlementQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_shop_settlement
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterClass="com.mockuai.itemcenter.core.domain.RShopSettlementDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Tue Jan 19 10:06:45 CST 2016.
+        -->
+        update r_shop_settlement
+        <dynamic prepend="set">
+            <isNotNull prepend="," property="sellerId">
+                seller_id = #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id = #shopId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code = #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                settlement_id = #settlementId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark = #deleteMark:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtCreated">
+                gmt_created = #gmtCreated:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtModified">
+                gmt_modified = #gmtModified:TIMESTAMP#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT#
+    </update>
+    <update id="updateByPrimaryKey" parameterClass="com.mockuai.itemcenter.core.domain.RShopSettlementDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Tue Jan 19 10:06:45 CST 2016.
+        -->
+        update r_shop_settlement
+        set seller_id = #sellerId:BIGINT#,
+        shop_id = #shopId:BIGINT#,
+        biz_code = #bizCode:VARCHAR#,
+        settlement_id = #settlementId:BIGINT#,
+        delete_mark = #deleteMark:TINYINT#,
+        gmt_created = #gmtCreated:TIMESTAMP#,
+        gmt_modified = #gmtModified:TIMESTAMP#
+        where id = #id:BIGINT#
+    </update>
+</sqlMap>

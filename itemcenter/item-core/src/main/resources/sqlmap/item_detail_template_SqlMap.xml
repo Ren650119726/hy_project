@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ItemDetailTemplate">
+    <typeAlias alias="itemDetailTemplateDO" type="com.mockuai.itemcenter.core.domain.ItemDetailTemplateDO" />
+    <typeAlias alias="itemDetailTemplateQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemDetailTemplateQTO" />
+
+    <resultMap id="itemDetailTemplateDOResult" class="itemDetailTemplateDO">
+        <result column="id" property="id"  />
+        <result column="seller_id" property="sellerId" />
+        <result column="biz_code" property="bizCode"  />
+        <result column="template_name" property="templateName" />
+        <result column="header_html" property="headerHtml" />
+        <result column="header_tms_id" property="headerTmsId" />
+        <result column="footer_html" property="footerHtml" />
+        <result column="footer_tms_id" property="footerTmsId" />
+        <result column="delete_mark" property="deleteMark"  />
+        <result column="gmt_created" property="gmtCreated"  />
+        <result column="gmt_modified" property="gmtModified"  />
+    </resultMap>
+
+
+    <insert id="addItemDetailTemplate" parameterClass="itemDetailTemplateDO">
+        insert into item_detail_template
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="templateName">
+                template_name
+            </isNotNull>
+            <isNotNull prepend="," property="headerHtml">
+                header_html
+            </isNotNull>
+            <isNotNull prepend="," property="headerTmsId">
+                header_tms_id
+            </isNotNull>
+            <isNotNull prepend="," property="footerHtml">
+                footer_html
+            </isNotNull>
+            <isNotNull prepend="," property="footerTmsId">
+                footer_tms_id
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark
+            </isNotNull>
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="templateName">
+                #templateName:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="headerHtml">
+                #headerHtml:TEXT#
+            </isNotNull>
+            <isNotNull prepend="," property="headerTmsId">
+                #headerTmsId:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="footerHtml">
+                #footerHtml:TEXT#
+            </isNotNull>
+            <isNotNull prepend="," property="footerTmsId">
+                #footerTmsId:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="item_detail_template_list">
+        id, seller_id, biz_code, template_name, header_html, header_tms_id, footer_html, footer_tms_id, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="getItemDetailTemplate" resultMap="itemDetailTemplateDOResult" parameterClass="itemDetailTemplateDO">
+        select <include refid="item_detail_template_list" /> from item_detail_template
+        where delete_mark=0 and id=#id# and seller_id=#sellerId#
+    </select>
+
+    <select id="queryItemDetailTemplate" resultMap="itemDetailTemplateDOResult" parameterClass="itemDetailTemplateQTO">
+        select <include refid="item_detail_template_list" /> from item_detail_template
+        where delete_mark=0 and seller_id=#sellerId#
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <update id="updateItemDetailTemplate" parameterClass="itemDetailTemplateDO" >
+        update item_detail_template
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="headerHtml">
+                header_html = #headerHtml#
+            </isNotNull>
+            <isNotNull prepend="," property="footerHtml">
+                footer_html = #footerHtml#
+            </isNotNull>
+        </dynamic>
+        where id = #id#  and seller_id=#sellerId#
+    </update>
+
+    <update id="deleteItemDetailTemplate" parameterClass="itemDetailTemplateDO" >
+        update item_detail_template
+        set gmt_modified=now(),delete_mark = 1  where delete_mark = 0 and id = #id#  and seller_id=#sellerId#
+    </update>
+
+</sqlMap>

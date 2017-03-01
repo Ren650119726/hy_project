@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sales_field" >
+	<typeAlias alias="SalesFieldDO" type="com.mockuai.itemcenter.core.domain.SalesFieldDO" />
+	<typeAlias alias="SalesFieldQTO"	type="com.mockuai.itemcenter.common.domain.qto.SalesFieldQTO" />
+	
+	<resultMap class="SalesFieldDO" id="SalesFieldDOResult">
+		<result column="id" property="id"/>
+	    <result column="field_name" property="fieldName"/>
+	    <result column="field_en_name" property="fieldEnName"/>
+	    <result column="logo" property="logo"/>
+	    <result column="sale_info" property="saleInfo"/>
+	    <result column="sort" property="sort"/>
+	    <result column="begin_time" property="beginTime"/>
+	    <result column="end_time" property="endTime"/>
+	    <result column="field_status" property="fieldStatus"/>
+	    <result column="is_deleted" property="isDeleted"/>
+	    <result column="gmt_created" property="gmtCreated"/>
+	    <result column="gmt_modified" property="gmtModified"/>
+	</resultMap>
+
+ <insert id="SalesFieldDAO.addSalesField" parameterClass="SalesFieldDO">
+		insert into sales_field
+		 <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="fieldName" >
+        field_name
+      </isNotNull>
+      <isNotNull prepend="," property="fieldEnName" >
+        field_en_name
+      </isNotNull>
+      <isNotNull prepend="," property="logo" >
+        logo
+      </isNotNull>
+      <isNotNull prepend="," property="saleInfo" >
+        sale_info
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        sort
+      </isNotNull>
+      <isNotNull prepend="," property="beginTime" >
+        begin_time
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        end_time
+      </isNotNull>
+      <isNotNull prepend="," property="fieldStatus" >
+        field_status
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        is_deleted
+      </isNotNull>
+      <isNotNull prepend="," property="brief" >
+        brief
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="fieldName" >
+        #fieldName#
+      </isNotNull>
+      <isNotNull prepend="," property="fieldEnName" >
+        #fieldEnName#
+      </isNotNull>
+      <isNotNull prepend="," property="logo" >
+        #logo#
+      </isNotNull>
+      <isNotNull prepend="," property="saleInfo" >
+        #saleInfo#
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        #sort:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="beginTime" >
+        #beginTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="endTime" >
+        #endTime:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="fieldStatus" >
+        #fieldStatus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        #isDeleted:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="brief" >
+        #brief:LONGVARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Integer">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="sales_field_base_column_list">
+		 id, field_name, field_en_name, logo, sale_info, sort, begin_time, end_time, field_status, 
+    		is_deleted, gmt_created, gmt_modified
+	</sql>
+	
+	<sql id="SalesFieldDAO.queryWhere">
+		<dynamic prepend="where">
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="isDeleted"> 
+				is_deleted = #isDeleted#
+			</isNotNull>
+		</dynamic>
+	</sql>
+	
+	
+	<update id="SalesFieldDAO.updateSalesField">
+		update sales_field
+		set gmt_modified=now()
+		<dynamic prepend="" >
+      <isNotNull prepend="," property="record.fieldName" >
+        field_name = #record.fieldName#
+      </isNotNull>
+      <isNotNull prepend="," property="record.fieldEnName" >
+        field_en_name = #record.fieldEnName#
+      </isNotNull>
+      <isNotNull prepend="," property="record.logo" >
+        logo = #record.logo#
+      </isNotNull>
+      <isNotNull prepend="," property="record.saleInfo" >
+        sale_info = #record.saleInfo#
+      </isNotNull>
+      <isNotNull prepend="," property="record.sort" >
+        sort = #record.sort#
+      </isNotNull>
+      <isNotNull prepend="," property="record.brief" >
+        brief = #record.brief#
+      </isNotNull>
+    </dynamic>
+		<include refid="SalesFieldDAO.queryWhere" />
+	</update>
+	
+	<select id="SalesFieldDAO.getSalesField" resultMap="SalesFieldDOResult"	parameterClass="SalesFieldQTO">
+		select	<include refid="sales_field_base_column_list" /> from sales_field
+				<include refid="SalesFieldDAO.queryWhere" />
+	</select>
+	
+	<update id="SalesFieldDAO.deleteSalesField" >
+		update sales_field
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.isDeleted">
+				is_deleted = #record.isDeleted#
+			</isNotNull>
+		</dynamic>
+		<include refid="SalesFieldDAO.queryWhere" />
+	</update>
+	
+	<select id="SalesFieldDAO.countSalesField" resultClass="Integer" parameterClass="SalesFieldQTO">
+		select count(1) from sales_field
+		<include refid="SalesFieldDAO.queryWhere" />
+	</select>
+	
+	<select id="SalesFieldDAO.querySalesField" resultMap="SalesFieldDOResult" parameterClass="SalesFieldQTO">
+		select	<include refid="sales_field_base_column_list" /> from sales_field
+				<include refid="SalesFieldDAO.queryWhere" />
+				 <isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+				</isNotNull>
+	</select>
+</sqlMap>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="dist_seller_relationship">
+    <!--
+    CREATE TABLE `dist_seller_relationship` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `parent_id` bigint(20) NOT NULL COMMENT '父卖家用户ID',
+    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+    `status` tinyint(4) NOT NULL COMMENT '关系状态',
+    `type` tinyint(4) NOT NULL COMMENT '关系类型',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卖家关系表';
+    -->
+
+    <typeAlias alias="sellerRelationshipDO" type="com.mockuai.distributioncenter.core.domain.SellerRelationshipDO"/>
+    <typeAlias alias="sellerRelationshipQTO" type="com.mockuai.distributioncenter.common.domain.qto.SellerRelationshipQTO"/>
+
+    <resultMap id="BaseResultMap" class="sellerRelationshipDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="parentId" column="parent_id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="type" column="type" jdbcType="TINYINT" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="status" prepend="AND">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="startTime" prepend="AND">
+            gmt_created > #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            gmt_created <![CDATA[<]]> #endTime#
+        </isNotNull>
+        <isNotEmpty property="parentIds" prepend="AND">
+            parent_id IN
+            <iterate property="parentIds" open="(" close=")" conjunction=",">
+                #parentIds[]#
+            </iterate>
+        </isNotEmpty>
+    </sql>
+
+    <insert id="add" parameterClass="sellerRelationshipDO">
+        INSERT INTO dist_seller_relationship
+        (
+        parent_id,
+        user_id,
+        status,
+        type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE
+        (
+        #parentId#,
+        #userId#,
+        #status#,
+        #type#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="query" parameterClass="sellerRelationshipQTO" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller_relationship
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="getByUserId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller_relationship WHERE user_id = #userId# AND delete_mark = 0
+    </select>
+
+    <select id="get" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller_relationship WHERE id = #id# AND delete_mark = 0
+    </select>
+
+    <select id="totalCount" parameterClass="sellerRelationshipQTO" resultClass="java.lang.Long">
+        SELECT COUNT(*) FROM dist_seller_relationship
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="queryByUserIds" parameterClass="java.util.List" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller_relationship WHERE delete_mark = 0 AND user_id IN
+        <iterate open="(" close=")" conjunction=",">
+            #[]#
+        </iterate>
+    </select>
+
+    <select id="queryPosterityUserIds" parameterClass="sellerRelationshipQTO" resultClass="java.lang.Long">
+        SELECT user_id FROM dist_seller_relationship
+        <include refid="queryCondition" />
+    </select>
+
+    <update id="update" parameterClass="sellerRelationshipDO">
+        UPDATE dist_seller_relationship SET gmt_modified = now()
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+
+    <update id="delete" parameterClass="java.lang.Long">
+        UPDATE dist_seller_relationship SET delete_mark = 1, gmt_modified = now() WHERE id = #id# AND delete_mark = 0
+    </update>
+
+    <resultMap id="totalCountMap" class="java.util.HashMap">
+        <result property="userId" column="parent_id" jdbcType="BIGINT" />
+        <result property="count" column="total_count" jdbcType="BIGINT" />
+    </resultMap>
+    <select id="queryTotalCountByUserIds" parameterClass="java.util.List" resultMap="totalCountMap">
+        SELECT parent_id, count(*) as total_count FROM dist_seller_relationship WHERE  status = 1 and parent_id IN
+        <iterate open="(" close=")" conjunction=",">
+            #[]#
+        </iterate>
+        GROUP BY parent_id
+    </select>
+</sqlMap>

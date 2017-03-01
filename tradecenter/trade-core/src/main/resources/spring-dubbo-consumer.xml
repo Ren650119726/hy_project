@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://code.alibabatech.com/schema/dubbo  
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="trade_consumer"/>
+    <!-- 使用multicast广播注册中心暴露服务地址-->
+    <!-- <dubbo:registry address="multicast://localhost:1234" /> -->
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://${tradecenter.dubbo.registry.address}"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <!-- <dubbo:service interface="com.mockuaickuai.deliverycenter.client.ExpressClient" ref="expressClient" protocol="dubbo"/>
+    <dubbo:service interface="com.mockuaickuai.deliverycenter.client.FeeClient" ref="feeClient" protocol="dubbo"/>
+    <dubbo:service interface="com.mockuaickuai.deliverycenter.client.StorageClient" ref="storageClient" protocol="dubbo"/>
+   -->
+
+    <dubbo:reference id="itemService" interface="com.mockuai.itemcenter.common.api.ItemService" check="false" timeout="5000" retries="0"/>
+    <dubbo:reference id="userDispatchService"
+                     interface="com.mockuai.usercenter.common.api.UserDispatchService" check="false" timeout="3000"/>
+   
+    <dubbo:reference id="marketingService" interface="com.mockuai.marketingcenter.common.api.MarketingService" check="false" timeout="8000" retries="0"/>
+    <dubbo:reference id="virtualService" interface="com.mockuai.virtualwealthcenter.common.api.VirtualWealthService" check="false" retries="0"/>
+    <dubbo:reference id="appService" interface="com.mockuai.appcenter.common.api.AppService" check="false"  timeout="3000" />
+    
+    <dubbo:reference id="shopService" interface="com.mockuai.shopcenter.api.ShopService" check="false" timeout="3000" retries="0"/>
+     
+    <dubbo:reference id="deliveryService" interface="com.mockuai.deliverycenter.common.api.DeliveryService" timeout="5000" check="false" retries="0"/>
+
+    <dubbo:reference id="dataService" interface="com.mockuai.datacenter.common.api.DataService" check="false" retries="0"/>
+    
+    <dubbo:reference id="higoService" interface="com.mockuai.higocenter.common.api.HigoService" check="false" retries="0"/>
+    <dubbo:reference id="customerService" interface="com.mockuai.customer.common.api.CustomerService" check="false" retries="0"/>
+    <dubbo:reference id="distributionService" interface="com.mockuai.distributioncenter.common.api.DistributionService" check="false" retries="0"/>
+    <dubbo:reference id="tradeservice" interface="com.mockuai.tradecenter.common.api.TradeService" check="false" retries="0"/>
+    <dubbo:reference id="supplierService" interface="com.mockuai.suppliercenter.common.api.SupplierDispatchService" check="false" timeout="3000" retries="0"/>
+
+</beans>

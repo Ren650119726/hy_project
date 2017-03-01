@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="order_history">
+    <resultMap class="com.mockuai.seckillcenter.core.domain.OrderHistoryDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="seckill_id" jdbcType="BIGINT" property="seckillId"/>
+        <result column="order_id" jdbcType="BIGINT" property="orderId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, seckill_id, order_id, user_id, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="selectOrderHistory" parameterClass="com.mockuai.seckillcenter.common.domain.qto.OrderHistoryQTO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="order_history.Base_Column_List"/>
+        from order_history
+        where delete_mark=0 AND seckill_id=#seckillId#
+        ORDER BY id desc
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+    <select id="countOfSelectOrderHistory" parameterClass="com.mockuai.seckillcenter.common.domain.qto.OrderHistoryQTO"
+            resultClass="java.lang.Integer">
+        select count(1) from order_history
+        where delete_mark=0 AND seckill_id=#seckillId#
+    </select>
+
+    <insert id="insert" parameterClass="com.mockuai.seckillcenter.core.domain.OrderHistoryDO">
+        insert into order_history ( seckill_id, order_id, user_id, delete_mark, gmt_created, gmt_modified)
+        values (#seckillId:BIGINT#, #orderId:BIGINT#,#userId#, 0, now(), now())
+
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+</sqlMap>

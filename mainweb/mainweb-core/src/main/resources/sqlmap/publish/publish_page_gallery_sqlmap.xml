@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="publish_page_gallery">
+
+
+    <typeAlias alias="PublishPageGalleryDO" type="com.mockuai.mainweb.core.domain.PageGalleryDO"/>
+
+    <resultMap id="PageGalleryMap" class="PublishPageGalleryDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="blockId" column="block_id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="sortIndex" column="sort_index" jdbcType="BIGINT"/>
+        <result property="imageUri" column="image_uri" jdbcType="VARCHAR"/>
+        <result property="target" column="target" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id="item">
+        id,
+        block_id,
+        page_id,
+        image_uri,
+        sort_index,
+        target,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!--pageGallery-->
+    <insert id="addPageGallery" parameterClass="PublishPageGalleryDO">
+        INSERT INTO publish_page_gallery
+        (
+       <include refid="item"/>
+        ) VALUE (
+        #id#,
+        #blockId#,
+        #pageId#,
+        #imageUri#,
+        #sortIndex#,
+        #target#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <update id="deletePageGallery" parameterClass="java.lang.Long" >
+        update  publish_page_gallery set delete_mark = 1
+        where delete_mark = 0
+        and page_id = #pageId#
+    </update>
+
+    <select id="queryPageGallery" resultMap="PageGalleryMap"  parameterClass="java.lang.Long">
+        select
+        <include refid="item"/>
+        FROM publish_page_gallery
+        where
+        block_id= #blockId#
+        order by  sort_index asc
+    </select>
+
+
+
+
+</sqlMap>

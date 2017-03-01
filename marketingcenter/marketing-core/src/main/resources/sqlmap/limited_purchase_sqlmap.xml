@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="limited_purchase">
+
+    <typeAlias alias="activityDO" type="com.mockuai.marketingcenter.core.domain.LimitedPurchaseDO"/>
+    <typeAlias alias="timePurchaseQTO" type="com.mockuai.marketingcenter.common.domain.qto.TimePurchaseQTO"/>
+    <resultMap id="result" class="activityDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="activityName" column="activity_name" jdbcType="VARCHAR"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="dateIssuedTime" column="date_issued_time" jdbcType="TIMESTAMP"/>
+        <result property="activityTag" column="activity_tag" jdbcType="VARCHAR"/>
+        <result property="voucherType" column="voucher_type" jdbcType="TINYINT"/>
+        <result property="issueStatus" column="issue_status" jdbcType="TINYINT"/>
+        <result property="runStatus" column="run_status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        activity_name,
+        start_time,
+        end_time,
+        date_issued_time,
+        activity_tag,
+        voucher_type,
+        issue_status,
+        run_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    <sql id="queryActivityDO">
+        where  delete_mark=0
+
+        <isNotNull property="issueStatus" >
+            and issue_status=#issueStatus#
+        </isNotNull>
+        <isNotNull property="runStatus" >
+            and run_status=#runStatus#
+        </isNotNull>
+        <isNotNull property="activityName" >
+            and activity_name like concat('%',#activityName#,'%')
+        </isNotNull>
+
+
+    </sql>
+    <!--查询所有结果-->
+    <select id="activityList" resultMap="result" parameterClass="timePurchaseQTO">
+        select
+        <include refid="limited_purchase.columnList"/>
+        from limited_purchase
+        <include refid="limited_purchase.queryActivityDO"/>
+
+        order by  gmt_modified desc
+        <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+        </isNotNull>
+    </select>
+
+    <!--查询单个活动-->
+    <select id="activityById" resultMap="result" parameterClass="map">
+        select
+        <include refid="limited_purchase.columnList"/>
+        from limited_purchase
+       where  delete_mark = 0
+        <isNotNull property="id" >
+            and id = #id#
+        </isNotNull>
+
+    </select>
+
+    <!--统计查询总数-->
+    <select id = "activityCount" resultClass="long" parameterClass = "timePurchaseQTO">
+    select   count(1)
+    from limited_purchase
+        <include refid="limited_purchase.queryActivityDO"/>
+
+    </select>
+    <!--添加活动-->
+    <insert id="addActivity" parameterClass = "activityDO">
+        insert into limited_purchase
+        (
+        activity_name,
+        start_time,
+        end_time,
+        activity_tag,
+        voucher_type,
+        issue_status,
+        run_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified) values
+        (#activityName#,#startTime#,#endTime#,#activityTag#,#voucherType#,0,0,
+        0,now(),now())
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!--更改活动状态状态-->
+    <update id="updateActivity" parameterClass = "activityDO">
+        update limited_purchase set
+
+        run_status = #runStatus#
+
+        where id = #id#
+    </update>
+
+    <!--更改活动名称和内容-->
+    <update id="modifyActivity" parameterClass = "activityDO">
+        update limited_purchase set
+        gmt_modified = now()
+        <isNotNull property="activityName" >
+            , activity_name=#activityName#
+        </isNotNull>
+        <isNotNull property="startTime" >
+            , start_time= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" >
+            , end_time= #endTime#
+        </isNotNull>
+        <isNotNull property="activityTag" >
+            ,  activity_tag= #activityTag#
+        </isNotNull>
+        <isNotNull property="voucherType" >
+            ,  voucher_type= #voucherType#
+        </isNotNull>
+
+        where id = #id# and delete_mark = 0
+    </update>
+    <!--发布活动-->
+    <update id="startLimtedPurchase"  parameterClass="java.util.Map">
+        UPDATE  limited_purchase set issue_status = 1,date_issued_time = now()
+        where delete_mark=0
+        <isNotNull property="id" >
+        and id = #id#
+        </isNotNull>
+    </update>
+    <!--更新活动前删除活动-->
+    <delete id="deletelLimtedPurchase" parameterClass="java.util.Map">
+        delete from limited_purchase where id = #id#
+    </delete>
+    <!--添加时候判断是否有重复-->
+    <select id="selectActivities" resultMap="result" parameterClass = "activityDO">
+
+        select
+        <include refid="limited_purchase.columnList"/>
+        from limited_purchase
+        where  delete_mark = 0
+        <isNotNull prepend="and" property="activityName">
+            activity_name = #activityName#
+        </isNotNull>
+        <isNotNull prepend="and" property="startTime">
+            start_time = #startTime#
+        </isNotNull>
+        <isNotNull prepend="and" property="endTime">
+            end_time = #endTime#
+        </isNotNull>
+        <isNotNull prepend="and" property="activityTag">
+            activity_tag = #activityTag#
+        </isNotNull>
+        <isNotNull prepend="and" property="voucherType">
+            voucher_type = #voucherType#
+        </isNotNull>
+
+    </select>
+    <!--判断当前时间，修改活动状态-->
+    <update  id="updateLimitedPurchaseStatus"  parameterClass="map">
+        update limited_purchase set
+
+        <isEqual  property="status" compareValue="begin">
+            run_status = 1
+        </isEqual>
+        <isEqual property="status" compareValue="finish">
+            run_status = 2
+        </isEqual>
+        where id = #id# and delete_mark = 0
+    </update>
+</sqlMap>

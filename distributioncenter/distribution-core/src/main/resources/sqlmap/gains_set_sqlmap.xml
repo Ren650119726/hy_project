@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="gainsSet">
+    <!--
+    CREATE TABLE `gains_set` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `self_gains` int(3) NOT NULL COMMENT '自购收益比例',
+  `one_gains` int(3) NOT NULL COMMENT '一级收益比例',
+  `two_gains` int(3)  NOT NULL COMMENT '二级收益比例',
+  `self_hib` int(3) NOT NULL COMMENT '自购嗨币比例',
+   `one_hib` int(3) NOT NULL COMMENT '一级嗨币比例',
+   `two_hib` int(3) NOT NULL COMMENT '二级嗨币比例',
+    `on_off` tinyint(2) NOT NULL COMMENT '开关 0-开启 1-关闭',
+   `consumer_enjoy` tinyint(2) NOT NULL COMMENT '普通用户分享享收益 0-否 1-是',
+       up_onelevel tinyint(2)  COMMENT '上一级享收益 0-否 1-是 2-仅高阶用户'
+   `delete_mark` tinyint(2) NOT NULL COMMENT '逻辑删除标志',
+   `gmt_created` datetime NOT NULL COMMENT '记录创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '记录最后一次修改时间',
+  PRIMARY KEY (`id`),
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收益设置表';
+    -->
+
+    <typeAlias alias="gainsSetQTO" type="com.mockuai.distributioncenter.common.domain.qto.GainsSetQTO"/>
+    <typeAlias alias="gainsSetDO" type="com.mockuai.distributioncenter.core.domain.GainsSetDO"/>
+
+    <resultMap id="BaseResultMap" class="gainsSetDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="selfGains" column="self_gains" jdbcType="INT"/>
+        <result property="oneGains" column="one_gains" jdbcType="INT"/>
+        <result property="twoGains" column="two_gains" jdbcType="INT"/>
+        <result property="selfHib" column="self_hib" jdbcType="INT"/>
+        <result property="oneHib" column="one_hib" jdbcType="INT"/>
+        <result property="twoHib" column="two_hib" jdbcType="INT"/>
+        <result property="onOff" column="on_off" jdbcType="TINYINT"/>
+        <result property="consumerEnjoy" column="consumer_enjoy" jdbcType="TINYINT"/>
+        <result property="upOnelevel" column="up_onelevel" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="gainsSetDO">
+        INSERT INTO gains_set
+        (
+        self_gains,
+        one_gains,
+        two_gains,
+        self_hib,
+        one_hib,
+        two_hib,
+        on_off,
+        consumer_enjoy,
+        up_onelevel,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #selfGains#,
+        #oneGains#,
+        #twoGains#,
+        #selfHib#,
+        #oneHib#,
+        #twoHib#,
+        #onOff#,
+        0,
+        0,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="get" resultMap="BaseResultMap">
+        SELECT * FROM gains_set WHERE delete_mark = 0 
+    </select>
+
+    <update id="update" parameterClass="gainsSetDO">
+        UPDATE gains_set SET gmt_modified = now()
+        <isNotNull property="selfGains" prepend=",">
+            self_gains = #selfGains#
+        </isNotNull>
+        <isNotNull property="oneGains" prepend=",">
+            one_gains = #oneGains#
+        </isNotNull>
+        <isNotNull property="twoGains" prepend=",">
+            two_gains = #twoGains#
+        </isNotNull>
+        <isNotNull property="selfHib" prepend=",">
+            self_hib = #selfHib#
+        </isNotNull>
+        <isNotNull property="oneHib" prepend=",">
+            one_hib = #oneHib#
+        </isNotNull>
+        <isNotNull property="twoHib" prepend=",">
+            two_hib = #twoHib#
+        </isNotNull>
+        <isNotNull property="onOff" prepend=",">
+            on_off = #onOff#
+        </isNotNull>
+        <isNotNull property="consumerEnjoy" prepend=",">
+            consumer_enjoy = #consumerEnjoy#
+        </isNotNull>
+        <isNotNull property="upOnelevel" prepend=",">
+            up_onelevel = #upOnelevel#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+
+</sqlMap>

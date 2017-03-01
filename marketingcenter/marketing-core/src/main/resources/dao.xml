@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="marketActivityDAO" class="com.mockuai.marketingcenter.core.dao.impl.MarketActivityDAOImpl"/>
+    <bean id="marketToolDAO" class="com.mockuai.marketingcenter.core.dao.impl.MarketToolDAOImpl"/>
+    <bean id="activityCouponDAO" class="com.mockuai.marketingcenter.core.dao.impl.ActivityCouponDAOImpl"/>
+    <bean id="couponCodeDAO" class="com.mockuai.marketingcenter.core.dao.impl.CouponCodeDAOImpl"/>
+    <bean id="grantedCouponDAO" class="com.mockuai.marketingcenter.core.dao.impl.GrantedCouponDAOImpl"/>
+    <bean id="propertyDAO" class="com.mockuai.marketingcenter.core.dao.impl.PropertyDAOImpl"/>
+    <bean id="propertyTmplDAO" class="com.mockuai.marketingcenter.core.dao.impl.PropertyTmplDAOImpl"/>
+    <bean id="activityItemDAO" class="com.mockuai.marketingcenter.core.dao.impl.ActivityItemDAOImpl"/>
+    <bean id="activityHistoryIDAO" class="com.mockuai.marketingcenter.core.dao.impl.ActivityHistoryIDAOImpl"/>
+    <bean id="transmitDAO" class="com.mockuai.marketingcenter.core.dao.impl.TransmitDAOImpl"/>
+    <bean id="rmqMessageDAO" class="com.mockuai.marketingcenter.core.dao.impl.RMQMessageDAOImpl"/>
+    <bean id="orderRecordDAO" class="com.mockuai.marketingcenter.core.dao.impl.OrderRecordDAOImpl"/>
+    <bean id="orderGeneralDAO" class="com.mockuai.marketingcenter.core.dao.impl.OrderGeneralDAOImpl"/>
+    <bean id="limitedPurchaseDAO" class="com.mockuai.marketingcenter.core.dao.impl.LimitedPurchaseDAOImpl"/>
+    <bean id="limitedPurchaseGoodsDAO" class="com.mockuai.marketingcenter.core.dao.impl.LimitedPurchaseGoodsDAOImpl"/>
+    <bean id="limitedUserCorrelationDAO" class="com.mockuai.marketingcenter.core.dao.impl.LimitedUserCorrelationDAOImpl"/>
+    <bean id="limitedGoodsCorrelationDAO" class="com.mockuai.marketingcenter.core.dao.impl.LimitedGoodsCorrelationDAOImpl"/>
+    <bean id="limitOderInfoDAO" class="com.mockuai.marketingcenter.core.dao.impl.LimitOderInfoDAOImpl"/>
+</beans>

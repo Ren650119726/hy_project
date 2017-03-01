@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="itemExportManager" class="com.mockuai.dts.core.manager.impl.ItemExportManagerImpl">
+    </bean>
+    <bean id="exportTaskManager" class="com.mockuai.dts.core.manager.impl.ExportTaskManagerImpl">
+    </bean>
+
+    <bean id="ossClientAPI" class="com.mockuai.dts.core.api.impl.OSSClientAPI" init-method="init">
+        <constructor-arg>
+            <value>${dtaskcenter.oss.accesskey.id}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${dtaskcenter.oss.accesskey.secret}</value>
+        </constructor-arg>
+    </bean>
+
+
+    <bean id="exportServiceManager" class="com.mockuai.dts.core.service.ExportServiceManager"></bean>
+
+    <bean id="itemClient" class="com.mockuai.itemcenter.client.impl.ItemClientImpl"></bean>
+    <bean id="itemSkuClient" class="com.mockuai.itemcenter.client.impl.ItemSkuClientImpl"></bean>
+    <bean id="itemCategoryClient" class="com.mockuai.itemcenter.client.impl.ItemCategoryClientImpl"></bean>
+    <bean id="itemBrandClient" class="com.mockuai.itemcenter.client.impl.ItemBrandClientImpl"></bean>
+    <bean id="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl"></bean>
+    <bean id="supplierClient" class="com.mockuai.suppliercenter.client.impl.SupplierClientImpl"></bean>
+    <bean id="supplierStoreClient" class="com.mockuai.suppliercenter.client.impl.SupplierStoreClientImpl"></bean>
+    <bean id="storeItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StoreItemSkuClientImpl"></bean>
+    <bean id="sellerUserRelateClient" class="com.mockuai.usercenter.client.impl.SellerUserRelateClientImpl"></bean>
+
+    <bean id="tradeSettlementClient" class="com.mockuai.tradecenter.client.impl.TradeSettlementClientImpl"/>
+
+    <bean id="userAuthClient" class="com.mockuai.usercenter.client.impl.UserAuthClientImpl"></bean>
+
+
+    <bean id="customerClient" class="com.mockuai.customer.client.impl.CustomerClientImpl"/>
+
+    <bean id="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"/>
+
+    <!--<bean id="labelExportManager" class="com.mockuai.dts.core.manager.impl.LabelExportManagerImpl"/>-->
+
+    <!--<bean id="memberExportManager" class="com.mockuai.dts.core.manager.impl.MemberExportManagerImpl"/>-->
+
+    <bean id="distributionClient" class="com.mockuai.distributioncenter.client.impl.DistributionClientImpl"/>
+
+    <!--<bean id="distributionStatisticsExportManager"-->
+          <!--class="com.mockuai.dts.core.manager.impl.DistributionStatisticsExportManagerImpl"/>-->
+
+    <!--<bean id="distributionWithdrawRecordExportManager" class="com.mockuai.dts.core.manager.impl.DistributionWithdrawRecordExportManagerImpl" />-->
+
+    <bean id="userClient" class="com.mockuai.usercenter.client.impl.UserClientImpl"/>
+
+
+    <bean id="regionClient" class="com.mockuai.deliverycenter.client.impl.RegionClientImpl"/>
+
+    <bean id="regionManager" class="com.mockuai.dts.core.manager.impl.RegionManagerImpl" />
+
+    <!--<bean id="importServiceManager" class="com.mockuai.dts.core.service.ImportServiceManager" />-->
+
+	<bean id="deliveryInfoClient" class="com.mockuai.deliverycenter.client.impl.DeliveryInfoClientImpl"/>
+
+    <!--<bean id="miniShopClient" class="com.mockuai.distributioncenter.client.impl.MiniShopClientImpl" />-->
+
+</beans>

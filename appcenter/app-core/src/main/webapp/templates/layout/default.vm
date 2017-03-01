@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>魔筷应用中心</title>
+    <link rel="stylesheet" href="/appcenter/css/bootstrap.min.css" >
+    <script src="/appcenter/js/appcenter.js" ></script>
+</head>
+<body>
+#parse("/common/navbar.vm")
+<div class="container">
+    $screen_content
+</div>
+</body>
+</html>

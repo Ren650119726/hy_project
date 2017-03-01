@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean name="regionClient" class="com.mockuai.deliverycenter.client.impl.RegionClientImpl"></bean>
+    <bean name="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"></bean>
+    <!-- <bean name="dataClient" class="com.mockuai.datacenter.client.impl.DataClientImpl"></bean> -->
+    <bean id="customerClient" class="com.mockuai.customer.client.impl.CustomerClientImpl"/>
+    <bean id="userAuthonClient" class="com.mockuai.virtualwealthcenter.client.impl.UserAuthonClientImpl"/>
+    <bean id="virtualWealthClient" class="com.mockuai.virtualwealthcenter.client.impl.VirtualWealthClientImpl" />
+    <bean name="distributionClient" class="com.mockuai.distributioncenter.client.impl.DistributionClientImpl" />
+    <bean name="imageClient" class="com.hanshu.imagecenter.client.impl.ImageClientImpl" />
+    <bean name="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl" />
+</beans>

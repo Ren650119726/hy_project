@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="STORAGE">
+	<typeAlias alias="Storage" type="com.mockuai.deliverycenter.core.domain.storage.Storage" />
+	
+	<sql id="columList">
+		   id as id,
+		   name as name,
+		   short_name as shortName,
+		   address as address,
+		   status as status,
+		   is_default as isDefault,
+		   admin as admin,
+		   admin_tel as adminTel,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addStorage" parameterClass="Storage">
+		insert into delivery_storage
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="name">name </isNotNull>
+			<isNotNull prepend="," property="shortName">short_name </isNotNull>
+			<isNotNull prepend="," property="address">address </isNotNull>
+			<isNotNull prepend="," property="status">status </isNotNull>
+			<isNotNull prepend="," property="isDefault">is_default </isNotNull>
+			<isNotNull prepend="," property="admin">admin </isNotNull>
+			<isNotNull prepend="," property="adminTel">admin_tel </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="name">#name:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="shortName">#shortName:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="address">#address:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="status">#status:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="isDefault">#isDefault:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="admin">#admin:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="adminTel">#adminTel:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateStorage" parameterClass="Storage">
+		update delivery_storage
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="shortName"> 
+			short_name = #shortName:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="address"> 
+			address = #address:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="status"> 
+			status = #status:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="isDefault"> 
+			is_default = #isDefault:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="admin"> 
+			admin = #admin:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="adminTel"> 
+			admin_tel = #adminTel:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<delete id="deleteStorage" parameterClass="Storage">
+		delete from delivery_storage 
+		where id = #id:BIGINT# and deleted=0
+	</delete>
+
+	<select id="getStorage"  parameterClass="Storage" resultClass="Storage">
+		select
+		<include refid="STORAGE.columList" />
+		from delivery_storage
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	
+	<sql id="queryWhere">
+		where deleted=0
+		<isNotNull prepend="AND" property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="status"> 
+			status = #status:VARCHAR#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryStorage" parameterClass="com.mockuai.deliverycenter.common.qto.storage.StorageQTO" resultClass="Storage">
+		select
+		<include refid="STORAGE.columList" />
+		from delivery_storage
+		<include refid="STORAGE.queryWhere" />
+			order by id desc 
+		<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+		</isNotNull>
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.storage.StorageQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_storage
+		<include refid="STORAGE.queryWhere" />
+	</select>
+</sqlMap>

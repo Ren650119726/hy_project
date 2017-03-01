@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="corner_icon">
+    <resultMap class="com.mockuai.itemcenter.core.domain.CornerIconDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="icon_name" jdbcType="VARCHAR" property="iconName"/>
+        <result column="icon_url" jdbcType="VARCHAR" property="iconUrl"/>
+        <result column="seller_id" jdbcType="BIGINT" property="sellerId"/>
+        <result column="icon_desc" jdbcType="VARCHAR" property="iconDesc"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="DATETIME" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="DATETIME" property="gmtModified"/>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id, icon_name, icon_url, seller_id, icon_desc, biz_code,delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="and">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="iconName">
+            icon_name like concat('%', #iconName#,'%')
+        </isNotNull>
+    </sql>
+
+    <select id="CornerIconDAO.getCornerIcon" parameterClass="com.mockuai.itemcenter.core.domain.CornerIconDO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from corner_icon
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <insert id="CornerIconDAO.addCornerIcon" parameterClass="com.mockuai.itemcenter.core.domain.CornerIconDO">
+        insert into corner_icon
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="iconName">
+                icon_name
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                icon_url
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="iconDesc">
+                icon_desc
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="iconName">
+                #iconName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                #iconUrl:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="iconDesc">
+                #iconDesc:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <update id="CornerIconDAO.deleteCornerIcon" parameterClass="com.mockuai.itemcenter.core.domain.CornerIconDO">
+        update corner_icon set delete_mark = 1 ,gmt_modified = now() where id = #id# and seller_id = #sellerId# and
+        delete_mark = 0
+    </update>
+
+    <select id="CornerIconDAO.queryCornerIcon"
+            parameterClass="com.mockuai.itemcenter.common.domain.qto.CornerIconQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from corner_icon
+        <include refid="queryWhere"/>
+        <isNotNull property="needPaging">
+            <isEqual property="needPaging" compareValue="true">
+                limit #offset#,#pageSize#
+            </isEqual>
+        </isNotNull>
+    </select>
+
+    <select id="CornerIconDAO.countCornerIcon"
+            parameterClass="com.mockuai.itemcenter.common.domain.qto.CornerIconQTO" resultClass="Integer">
+        select
+        count(1)
+        from corner_icon
+        <include refid="queryWhere"/>
+    </select>
+
+</sqlMap>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+    <settings useStatementNamespaces="true"/>
+    <sqlMap resource="sqlmap/virtual_wealth_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/wealth_account_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/granted_wealth_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/grant_rule_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/rule_module_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/used_wealth_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/rmq_message.xml"/>
+    <sqlMap resource="sqlmap/recharge_record_sqlmap.xml" />
+    <sqlMap resource="sqlmap/virtual_wealth_item_sqlmap.xml" />
+    <sqlMap resource="sqlmap/used_log_sqlmap.xml" />
+    <sqlMap resource="sqlmap/withdrawals_item_sqlmap.xml" />
+    <sqlMap resource="sqlmap/withdrawals_config_sqlmap.xml" />
+    <sqlMap resource="sqlmap/authon/user_authon_app_sqlmap.xml" />
+    <sqlMap resource="sqlmap/bank/bank_info_app_sqlmap.xml" />
+    <sqlMap resource="sqlmap/withdrawals/withdrawals_item_app_sqlmap.xml" />
+    <sqlMap resource="sqlmap/withdrawals_item_log_SqlMap.xml" />
+</sqlMapConfig>

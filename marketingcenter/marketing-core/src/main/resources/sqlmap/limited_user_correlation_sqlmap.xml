@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="limited_user_correlation">
+
+    <typeAlias alias="limitedUserCorrelationDO"
+               type="com.mockuai.marketingcenter.core.domain.LimitedUserCorrelationDO"/>
+    <resultMap id="result" class="limitedUserCorrelationDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="activityId" column="activity_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+        <result property="purchaseQuantity" column="purchase_quantity" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        activity_id,
+        user_id,
+        item_id,
+        sku_id,
+        purchase_quantity,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    <!--添加商品数量-->
+    <update id="updatePurchaseQuantity" parameterClass="limitedUserCorrelationDO">
+        update limited_user_correlation set
+        gmt_modified = now() ,purchase_quantity = purchase_quantity + #purchaseQuantity#
+        where
+        delete_mark = 0
+        <isNotNull property="userId">
+            and user_id = #userId#
+        </isNotNull>
+        <isNotNull property="itemId">
+            and item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="skuId">
+            and sku_id = #skuId#
+        </isNotNull>
+        <isNotNull property="activityId">
+            and activity_id = #activityId#
+        </isNotNull>
+
+
+    </update>
+    <!--插入数据-->
+    <insert id="addUserMsg" parameterClass="limitedUserCorrelationDO">
+        insert into limited_user_correlation (
+        <include refid="limited_user_correlation.columnList"/>
+        ) VALUES
+        (null,#activityId#,#userId#,#itemId#,#skuId#,#purchaseQuantity#,0,now(),now())
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!--查找数据(查询条件为item_id,activity_id,user_id结果为单条数据)-->
+    <select id="selectUserMsg" resultMap="result" parameterClass="limitedUserCorrelationDO">
+        select
+        <include refid="limited_user_correlation.columnList"/>
+        from limited_user_correlation
+        WHERE
+        delete_mark = 0
+        <isNotNull property="userId">
+            and user_id = #userId#
+        </isNotNull>
+        <isNotNull property="itemId">
+            and item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="skuId">
+            and sku_id = #skuId#
+        </isNotNull>
+        <isNotNull property="activityId">
+            and activity_id = #activityId#
+        </isNotNull>
+    </select>
+    <!--订单取消-->
+    <update id="orderCancelledgoods" parameterClass="limitedUserCorrelationDO">
+        update limited_user_correlation set
+        gmt_modified = now() ,purchase_quantity = purchase_quantity - #purchaseQuantity#
+        where
+        delete_mark = 0
+        <isNotNull property="userId">
+            and user_id = #userId#
+        </isNotNull>
+        <isNotNull property="itemId">
+            and item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="skuId">
+            and sku_id = #skuId#
+        </isNotNull>
+        <isNotNull property="activityId">
+            and activity_id = #activityId#
+        </isNotNull>
+    </update>
+</sqlMap>

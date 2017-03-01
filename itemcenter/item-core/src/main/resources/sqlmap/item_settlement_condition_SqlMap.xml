@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ItemSettlementCondition">
+
+    <typeAlias alias="ItemSettlementConditionDO" type="com.mockuai.itemcenter.core.domain.ItemSettlementConditionDO"/>
+    <typeAlias alias="ItemSettlementConditionQTO"
+               type="com.mockuai.itemcenter.common.domain.qto.ItemSettlementConditionQTO"/>
+
+    <resultMap id="BaseResultMap" class="ItemSettlementConditionDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="min_price" property="minPrice" jdbcType="BIGINT"/>
+        <result column="max_price" property="maxPrice" jdbcType="BIGINT"/>
+        <result column="commission_ratio" property="commissionRatio" jdbcType="INTEGER"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,parent_id, biz_code, min_price, max_price, commission_ratio, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="getItemSettlementCondition" resultMap="BaseResultMap" parameterClass="ItemSettlementConditionDO">
+        select
+        <include refid="Base_Column_List"/>
+        from item_settlement_condition
+        where delete_mark=0 and id = #id# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteItemSettlementCondition" parameterClass="ItemSettlementConditionDO">
+        update item_settlement_condition
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id# and biz_code= #bizCode#
+    </update>
+
+    <update id="deleteItemSettlementConditionByConfig" parameterClass="ItemSettlementConditionDO">
+        update item_settlement_condition
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and parent_id = #parentId# and biz_code= #bizCode# and id>0
+    </update>
+
+
+    <insert id="addItemSettlementCondition" parameterClass="ItemSettlementConditionDO">
+        insert into item_settlement_condition
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                parent_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="minPrice">
+                min_price
+            </isNotNull>
+            <isNotNull prepend="," property="maxPrice">
+                max_price
+            </isNotNull>
+            <isNotNull prepend="," property="commissionRatio">
+                commission_ratio
+            </isNotNull>
+            ,
+            delete_mark
+            ,
+            gmt_created
+            ,
+            gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                #parentId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="minPrice">
+                #minPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="maxPrice">
+                #maxPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="commissionRatio">
+                #commissionRatio:INTEGER#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark = 0
+        <isNotNull property="id" prepend="AND">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="idList">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="parentId" prepend="AND">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code = #bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryItemSettlementCondition" resultMap="BaseResultMap" parameterClass="ItemSettlementConditionQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from item_settlement_condition
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <select id="countItemSettlementCondition" resultClass="Integer" parameterClass="ItemSettlementConditionQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from item_settlement_condition
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <update id="updateByPrimaryKeySelective"
+            parameterClass="com.mockuai.itemcenter.core.domain.ItemSettlementConditionDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Mon Jan 11 16:57:47 CST 2016.
+        -->
+        update item_settlement_condition
+        <dynamic prepend="set">
+            <isNotNull prepend="," property="bizCode">
+                biz_code = #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="minPrice">
+                min_price = #minPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="maxPrice">
+                max_price = #maxPrice:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="commissionRatio">
+                commission_ratio = #commissionRatio:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark = #deleteMark:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtCreated">
+                gmt_created = #gmtCreated:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtModified">
+                gmt_modified = #gmtModified:TIMESTAMP#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT#
+    </update>
+</sqlMap>

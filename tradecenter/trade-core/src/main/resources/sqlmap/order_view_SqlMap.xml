@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_view" >
+  <resultMap id="BaseResultMap" class="com.mockuai.tradecenter.core.domain.OrderViewDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="device_type" property="deviceType" jdbcType="VARCHAR" />
+    <result column="ip" property="ip" jdbcType="VARCHAR" />
+     <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, order_id, device_type,ip,biz_code
+  </sql>
+  
+  <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.OrderViewDO" >
+    insert into order_view
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+     
+      <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      
+      <isNotNull prepend="," property="deviceType" >
+        device_type
+      </isNotNull>
+      
+      <isNotNull prepend="," property="ip" >
+        ip
+      </isNotNull>
+      
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      
+      )
+      
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+     
+      <isNotNull prepend="," property="orderId" >
+        #orderId:BIGINT#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="deviceType" >
+        #deviceType#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="ip" >
+        #ip#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode#
+      </isNotNull>
+      
+      )
+    </dynamic>
+     <selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+  </insert>
+  
+  <select id="getOrderViewByOrderId" resultMap="BaseResultMap"
+		parameterClass="com.mockuai.tradecenter.core.domain.OrderViewDO">
+		select 
+		<include refid="Base_Column_List" />
+		from order_view
+		where 1=1
+		and order_id=#orderId#
+	</select>
+
+ 
+  
+</sqlMap>

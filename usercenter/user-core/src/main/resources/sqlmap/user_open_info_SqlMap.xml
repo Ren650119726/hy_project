@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_open_info">
+    <resultMap id="result" class="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="openType" column="open_type" jdbcType="TINYINT"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        <result property="openUid" column="open_uid" jdbcType="VARCHAR"/>
+        <result property="appId" column="app_id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        user_id,
+        open_type,
+        open_id,
+        open_uid,
+        app_id,
+        name,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <insert id="addUserOpenInfo" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        insert into user_open_info(
+        biz_code,
+        user_id,
+        open_type,
+        open_id,
+        open_uid,
+        app_id,
+        name,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #userId#,
+        #openType#,
+        #openId#,
+        #openUid#,
+        #appId#,
+        #name#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUserOpenInfo" resultMap="result" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        select
+        <include refid="user_open_info.column_set"/>
+        from user_open_info
+        where open_type = #openType# and open_uid = #openUid# and delete_mark=0
+    </select>
+
+    <select id="getOpenInfoByOpenId" resultMap="result" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        select
+        <include refid="user_open_info.column_set"/>
+        from user_open_info
+        where open_id = #openId# and app_id = #appId# and delete_mark=0
+    </select>
+
+    <select id="getUserOpenInfoById" resultMap="result" parameterClass="java.lang.Long">
+        select
+        <include refid="user_open_info.column_set"/>
+        from user_open_info
+        where id = #id# and delete_mark=0
+    </select>
+
+    <select id="getUserOpenInfoByUserId" resultMap="result" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        select
+        <include refid="user_open_info.column_set"/>
+        from user_open_info
+        where open_type = #openType# and user_id = #userId# and delete_mark=0
+    </select>
+
+    <update id="updateUserId" parameterClass="java.util.Map">
+        update user_open_info
+        set user_id = #newUserId#,gmt_modified = now()
+        where id = #id# and user_id=#oldUserId# and delete_mark = 0
+    </update>
+
+    <update id="deleteUserOpenInfo" parameterClass="java.util.Map">
+        update user_open_info
+        set gmt_modified = now(), delete_mark=1, delete_version=#deleteVersion#
+        where id=#id# and user_id=#userId# and delete_mark = 0
+    </update>
+
+    <select id="getOpenInfoByUserId" parameterClass="java.util.Map" resultMap="result">
+        SELECT * FROM user_open_info WHERE user_id = #userId# AND biz_code = #bizCode#
+    </select>
+
+    <select id="queryUserOpenInfo" parameterClass="com.mockuai.usercenter.common.qto.UserOpenInfoQTO" resultMap="result">
+        select <include refid="column_set" />
+        from user_open_info
+        where delete_mark = 0
+        and biz_code = #bizCode#
+        <isNotNull prepend="and" property="openUid">
+            open_uid = #openUid#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="AND">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="userIdList">
+            <isNotEmpty property="userIdList" prepend="AND">
+                user_id in
+                <iterate property="userIdList" conjunction="," open="(" close=")">
+                    #userIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+    </select>
+
+    <select id="getTotalCount" parameterClass="com.mockuai.usercenter.common.qto.UserOpenInfoQTO" resultClass="java.lang.Long">
+        select count(*)
+        from user_open_info
+        where delete_mark = 0
+        and biz_code = #bizCode#
+        <isNotNull prepend="and" property="openUid">
+            open_uid = #openUid#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="AND">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="userIdList">
+            <isNotEmpty property="userIdList" prepend="AND">
+                user_id in
+                <iterate property="userIdList" conjunction="," open="(" close=")">
+                    #userIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+    </select>
+</sqlMap>

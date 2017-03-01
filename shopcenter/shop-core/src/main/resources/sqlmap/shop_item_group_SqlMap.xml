@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ShopItemGroup">
+    <typeAlias alias="shopItemGroupDO" type="com.mockuai.shopcenter.core.domain.ShopItemGroupDO" />
+    <typeAlias alias="shopItemGroupDTO" type="com.mockuai.shopcenter.domain.dto.ShopItemGroupDTO" />
+    <typeAlias alias="shopItemGroupQTO" type="com.mockuai.shopcenter.domain.qto.ShopItemGroupQTO" />
+    <resultMap class="shopItemGroupDO" id="shopItemGroupDOResult">
+        <result column="id" property="id"  />
+        <result column="seller_id" property="sellerId"  />
+        <result column="biz_code" property="bizCode"  />
+        <result column="shop_id" property="shopId"  />
+        <result column="group_name" property="groupName"  />
+        <result column="delete_mark" property="deleteMark"  />
+        <result column="delete_version" property="deleteVersion" />
+        <result column="gmt_created" property="gmtCreated"  />
+        <result column="gmt_modified" property="gmtModified"  />
+    </resultMap>
+
+    <insert id="addShopItemGroup" parameterClass="shopItemGroupDO">
+        insert into shop_item_group
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id
+            </isNotNull>
+            <isNotNull prepend="," property="groupName">
+                group_name
+            </isNotNull>
+            ,delete_mark
+            ,delete_version
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                #shopId:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="groupName">
+                #groupName:VARCHAR#
+            </isNotNull>
+            ,0
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="shop_item_group_base_column_list">
+        id, seller_id, biz_code, shop_id, group_name, delete_mark, delete_version, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="ShopItemGroupQtoQueryWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId" >
+            seller_id=#sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="shopId" >
+            shop_id=#shopId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="groupName" >
+            group_name like concat('%', #groupName#,'%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code=#bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="getShopItemGroup" resultMap="shopItemGroupDOResult" parameterClass="shopItemGroupDO">
+        select <include refid="shop_item_group_base_column_list" /> from shop_item_group
+        where delete_mark = 0 and id = #id#  and seller_id=#sellerId#
+    </select>
+
+    <update id="updateShopItemGroup" parameterClass="shopItemGroupDO">
+        update shop_item_group
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="bizCode">
+                biz_code = #bizCode#
+            </isNotNull>
+            <isNotNull prepend="," property="groupName">
+                group_name = #groupName#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id#  and seller_id= #sellerId#
+    </update>
+
+    <update id="deleteShopItemGroup" parameterClass="shopItemGroupDO" >
+        update shop_item_group
+        set gmt_modified=now(),delete_mark = 1, delete_version=#deleteVersion#
+        where delete_mark = 0 and id = #id#  and seller_id=#sellerId#
+    </update>
+
+    <select id="queryShopItemGroupList" resultMap="shopItemGroupDOResult"	parameterClass="shopItemGroupQTO">
+        select	<include refid="shop_item_group_base_column_list" />	from shop_item_group
+        <include refid="ShopItemGroupQtoQueryWhere" />
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="countShopItemGroupList" resultClass="Integer"	parameterClass="shopItemGroupQTO">
+        select	count(1)	from shop_item_group
+        <include refid="ShopItemGroupQtoQueryWhere" />
+    </select>
+
+</sqlMap>

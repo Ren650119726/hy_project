@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="session_cart">
+
+
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.SessionCartDO">
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="deviceId" column="device_id" jdbcType="VARCHAR"/>
+		<result property="appType" column="app_type"/>
+		<result property="itemId" column="item_id" jdbcType="BIGINT"/>
+		<result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+		<result property="itemSkuDesc" column="item_sku_desc" jdbcType="VARCHAR"/>
+		<result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+		<result property="itemImageUrl" column="item_image_url" jdbcType="VARCHAR"/>
+		<result property="deliveryType" column="delivery_type" jdbcType="TINYINT"/>
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+		<result property="marketPrice" column="market_price" jdbcType="BIGINT"/>
+		<result property="promotionPrice" column="promotion_price" jdbcType="BIGINT"/>
+		<result property="wirelessPrice" column="wireless_price" jdbcType="BIGINT"/>
+		<result property="number" column="number" jdbcType="INTEGER"/>
+		<result property="itemType" column="item_type"/>
+              <result property="originalId" column="original_id"/>
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+	</resultMap>
+
+	<sql id="column_set">
+		id,
+		biz_code,
+		device_id,
+		app_type,
+		item_id,
+		item_sku_id,
+		item_sku_desc,
+		item_name,
+		item_image_url,
+		delivery_type,
+		seller_id,
+		market_price,
+		promotion_price,
+		wireless_price,
+		number,
+		item_type,
+		original_id,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+
+	<insert id="addCartItem" parameterClass="com.mockuai.tradecenter.core.domain.SessionCartDO">
+		insert into session_cart(
+		biz_code,
+		user_id,
+		item_id,
+		item_sku_id,
+		item_sku_desc,
+		item_name,
+		item_image_url,
+		delivery_type,
+		seller_id,
+		market_price,
+		promotion_price,
+		wireless_price,
+		number,
+		item_type,
+		original_id,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#deviceId#,
+		#appType#,
+		#itemId#,
+		#itemSkuId#,
+		#itemSkuDesc#,
+		#itemName#,
+		#itemImageUrl#,
+		#deliveryType#,
+		#sellerId#,
+		#marketPrice#,
+		#promotionPrice#,
+		#wirelessPrice#,
+		#number#,
+		#itemType#,
+		#originalId#,
+		0,
+		now(),
+		now()
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+
+
+	<delete id="deleteCartItem"  parameterClass="com.mockuai.tradecenter.core.domain.SessionCartDO">
+		delete from session_cart
+		where id = #id# and 
+		device_id =#deviceId#
+	</delete>
+	
+	<delete id="deleteCartItemByOriginalId"  parameterClass="com.mockuai.tradecenter.core.domain.SessionCartDO">
+		delete from session_cart
+		where original_id = #originalId#
+	</delete>
+	
+
+	<delete id="removeCartItem"  parameterClass="java.util.Map">
+		delete from session_cart
+		where user_id =#userId#
+		<isNotNull property="itemSkuIdList" prepend="and">
+			item_sku_id in
+			<iterate  property="itemSkuIdList" conjunction="," open="(" close=")"  >
+				#itemSkuIdList[]#
+			</iterate>
+		</isNotNull>
+
+	</delete>
+	
+	
+
+	<delete id="cleanUserCart" parameterClass="String">
+		delete from session_cart
+		where device_id = #deviceId#
+	</delete>
+	
+	
+	<select id="queryCartItems" parameterClass="Long" resultMap="result">
+		select 		
+		<include refid="column_set" />
+		from session_cart where device_id = #deviceId# order by gmt_created desc ;
+	</select>
+
+
+	
+	<select id="queryUserCartItemId" resultClass="Long" parameterClass="Long">      
+    	 select distinct(item_sku_id) from session_cart where user_id = #userId#
+	</select>
+	
+  	
+  	<!-- 新加入购物车时候判断是不是已经存在该商品 -->
+	<select id="getCartItemBySkuId" parameterClass="com.mockuai.tradecenter.core.domain.SessionCartDO" resultMap="result">
+		select
+		<include refid="user_cart.column_set" />
+		from session_cart where item_sku_id = #itemSkuId# and device_id = #deviceId#
+		and original_id is null
+	</select>
+	
+	<select id="getCartItemsCount" parameterClass="java.lang.Long" resultClass="java.lang.Integer">
+		select count(*) from session_cart where device_id = #deviceId#
+	</select>
+	
+  	<select id="getCartItem" parameterClass="com.mockuai.tradecenter.core.domain.SessionCartDO" resultMap="result">
+		select
+		<include refid="user_cart.column_set" />
+		from session_cart where id = #id# and device_id = #deviceId#
+	</select>
+	
+	<select id="queryCartItemsByOriSkuIdList" parameterClass="java.util.Map" resultMap="result">
+		select 		
+		<include refid="user_cart.column_set" />
+		where device_id =#deviceId#
+		and original_id is not null
+		and original_id in(
+			select id from session_cart where item_sku_id in
+			<iterate  property="itemSkuIdList" conjunction="," open="(" close=")"  >
+				#itemSkuIdList[]#
+			</iterate>
+		)
+	</select>
+  	
+</sqlMap>

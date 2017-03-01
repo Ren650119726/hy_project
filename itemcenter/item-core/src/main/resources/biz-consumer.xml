@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       				http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <bean name="marketingClient" class="com.mockuai.marketingcenter.client.impl.MarketingClientImpl" />
+    <bean name="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"></bean>
+    <bean name="dataClient" class="com.mockuai.datacenter.client.impl.DataClientImpl"></bean>
+    <bean name="regionClient" class="com.mockuai.deliverycenter.client.impl.RegionClientImpl"></bean>
+    <bean name="consigneeClient" class="com.mockuai.usercenter.client.impl.ConsigneeClientImpl"></bean>
+    <bean name="userClient" class="com.mockuai.usercenter.client.impl.UserClientImpl"/>
+    <bean name="shopClient" class="com.mockuai.shopcenter.impl.ShopClientImpl"/>
+    <bean name="shopPropertyClient" class="com.mockuai.shopcenter.impl.ShopPropertyClientImpl"></bean>
+    <bean name="tradeDataReportClient" class="com.mockuai.tradecenter.client.impl.TradeDataReportClientImpl"/>
+    <bean name="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl"/>
+    <!--<bean name="auctionClient" class="com.mockuai.auctioncenter.client.impl.AuctionClientImpl"/>-->
+    <bean name="seckillClient" class="com.mockuai.seckillcenter.client.impl.SeckillClientImpl"/>
+    <!--<bean name="groupBuyClient" class="com.mockuai.groupbuycenter.client.impl.GroupBuyClientImpl"/>-->
+    <bean name="higoClient" class="com.mockuai.higocenter.client.impl.HigoClientImpl"/>
+    <!--<bean name="miniShopClient" class="com.mockuai.distributioncenter.client.impl.MiniShopClientImpl"/>-->
+    <bean name="storeItemSkuClientImpl" class="com.mockuai.suppliercenter.client.impl.StoreItemSkuClientImpl"/>
+    <bean name="distributionClient" class="com.mockuai.distributioncenter.client.impl.DistributionClientImpl"/>
+    <bean name="gainsSetClient" class="com.mockuai.distributioncenter.client.impl.GainsSetClientImpl"/>
+    <bean name="storeOrderNumClient" class="com.mockuai.suppliercenter.client.impl.StoreOrderNumClientImpl"/>
+</beans>

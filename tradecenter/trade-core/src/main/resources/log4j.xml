@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+	<!-- A time/date based rolling appender -->
+	<appender name="app" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/root.log" />
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="console" class="org.apache.log4j.ConsoleAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	
+	<appender name="tradecenter-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/tradecenter.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="manager-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/manager.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="service-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/service.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="ibatis-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/tradecenter-ibatis.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="notify-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/notify.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="access-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/access.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+	<appender name="perfLog-appender" class="org.apache.log4j.DailyRollingFileAppender">
+		<errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+		<param name="File" value="/data/log/tradecenter/perf-monitor.log"/>
+		<param name="Encoding" value="UTF-8" />
+		<param name="Append" value="true"/>
+		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+		</layout>
+	</appender>
+
+
+	<logger name="com.mockuai.tradecenter">
+		<level value="INFO" />
+		<appender-ref ref="tradecenter-appender" />
+	</logger>
+
+	<logger name="com.mockuai.tradecenter.core.manager">
+		<level value="INFO" />
+		<appender-ref ref="manager-appender" />
+	</logger>
+	<logger name="com.mockuai.tradecenter.core.service">
+		<level value="INFO" />
+		<appender-ref ref="service-appender" />
+	</logger>
+	<logger name="com.ibatis" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="ibatis-appender"/>
+	</logger>
+
+	<logger name="notifyLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="notify-appender"/>
+	</logger>
+
+	<logger name="accessLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="access-appender"/>
+	</logger>
+
+	<logger name="perfLogger" additivity="false">
+		<level value="INFO"/>
+		<appender-ref ref="perfLog-appender"/>
+	</logger>
+
+	<root>
+		<priority value="INFO" />
+		<appender-ref ref="app" />
+		<appender-ref ref="console" />
+	</root>	
+</log4j:configuration>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_dist_plan">
+    <!--
+    CREATE TABLE `item_dist_plan` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `item_id` bigint(20) NOT NULL COMMENT '商品ID',
+    `level` tinyint(4) NOT NULL COMMENT '分拥级别',
+    `real_dist_ratio` decimal(10,4) NOT NULL COMMENT '分拥比率',
+    `virtual_dist_ratio` decimal(10,4) NOT NULL COMMENT '嗨币分拥比率',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=449 DEFAULT CHARSET=utf8 COMMENT='商品级别的分拥方案';
+    -->
+
+    <typeAlias alias="itemDistPlanDO" type="com.mockuai.distributioncenter.core.domain.ItemDistPlanDO"/>
+    <typeAlias alias="itemDistPlanQTO" type="com.mockuai.distributioncenter.common.domain.qto.ItemDistPlanQTO"/>
+
+    <resultMap id="BaseResultMap" class="itemDistPlanDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="realDistRatio" column="real_dist_ratio" jdbcType="NUMERIC"/>
+        <result property="virtualDistRatio" column="virtual_dist_ratio" jdbcType="NUMERIC"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="itemDistPlanDO">
+        INSERT INTO item_dist_plan
+        (
+        item_id,
+        level,
+        real_dist_ratio,
+        virtual_dist_ratio,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        VALUE
+        (
+        #itemId#,
+        #level#,
+        #realDistRatio#,
+        #virtualDistRatio#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="itemId" prepend="AND">
+            item_id = #itemId#
+        </isNotNull>
+    </sql>
+
+    <select id="query" parameterClass="itemDistPlanQTO" resultMap="BaseResultMap">
+        SELECT * FROM item_dist_plan
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="getByItemAndLevel" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        SELECT * FROM item_dist_plan WHERE item_id = #itemId# AND level = #level# AND delete_mark = 0
+    </select>
+
+    <select id="totalCount" parameterClass="itemDistPlanQTO" resultMap="BaseResultMap">
+        SELECT count(*) FROM item_dist_plan
+        <include refid="queryCondition" />
+    </select>
+
+    <update id="deleteByItemId" parameterClass="java.lang.Long">
+        UPDATE item_dist_plan SET gmt_modified = now() , delete_mark = 1 WHERE item_id = #itemId# AND delete_mark = 0
+    </update>
+
+    <update id="update" parameterClass="itemDistPlanDO">
+        UPDATE item_dist_plan SET gmt_modified = now()
+        <isNotNull property="realDistRatio" prepend=",">
+            real_dist_ratio = #realDistRatio#
+        </isNotNull>
+        <isNotNull property="virtualDistRatio" prepend=",">
+            virtual_dist_ratio = #virtualDistRatio#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+</sqlMap>

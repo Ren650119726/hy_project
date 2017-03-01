@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="supplier">
+    <resultMap id="BaseResultMap" class="com.mockuai.suppliercenter.core.domain.SupplierDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="contacts" column="contacts" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="provinceCode" column="province_code" jdbcType="VARCHAR"/>
+        <result property="cityCode" column="city_code" jdbcType="VARCHAR"/>
+        <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="mark" column="mark" jdbcType="VARCHAR"/>
+
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        biz_code,
+        name,
+        contacts,
+        phone,
+        province_code,
+        city_code,
+        area_code,
+        address,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        mark
+    </sql>
+    <insert id="insert" parameterClass="com.mockuai.suppliercenter.core.domain.SupplierDO">
+        insert into supplier
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                name
+            </isNotNull>
+            <isNotNull prepend="," property="contacts">
+                contacts
+            </isNotNull>
+            <isNotNull prepend="," property="phone">
+                phone
+            </isNotNull>
+            <isNotNull prepend="," property="provinceCode">
+                province_code
+            </isNotNull>
+            <isNotNull prepend="," property="cityCode">
+                city_code
+            </isNotNull>
+            <isNotNull prepend="," property="areaCode">
+                area_code
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                address
+            </isNotNull>
+
+            ,delete_mark,gmt_created, gmt_modified,mark
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                #name:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="contacts">
+                #contacts:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="phone">
+                #phone:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="provinceCode">
+                #provinceCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="cityCode">
+                #cityCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="areaCode">
+                #areaCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                #address:VARCHAR#
+            </isNotNull>
+
+            ,0,now(),now(),#mark:VARCHAR#
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="selectSupplierByName" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.core.domain.SupplierDO">
+        select
+        count(id)
+        from supplier
+        where delete_mark = 0
+        <isNotNull prepend="and" property="id">
+            id != #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+    </select>
+
+
+    <select id="selectById" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+        select
+        <include refid="supplier.Base_Column_List"/>
+        from supplier
+        where id = #id:BIGINT# and delete_mark =0
+    </select>
+
+    <select id="querySupplier" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.suppliercenter.common.qto.SupplierQTO">
+        select
+        <include refid="supplier.Base_Column_List"/>
+        from supplier
+        where delete_mark = 0
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name like concat('%',#name:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="contacts">
+            contacts like concat('%',#contacts:VARCHAR#,'%') or phone = #contacts:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="phone">
+            phone = #phone:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="provinceCode">
+            province_code = #provinceCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="cityCode">
+            city_code = #cityCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="areaCode">
+            area_code = #areaCode:VARCHAR#
+        </isNotNull>
+
+        order by id desc limit #offset#,#pageSize#
+    </select>
+
+
+    <select id="totalCount" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.SupplierQTO">
+        select count(1) from supplier where delete_mark = 0
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name like concat('%',#name:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="contacts">
+            contacts like concat('%',#contacts:VARCHAR#,'%') or phone = #contacts:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="phone">
+            phone = #phone:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="provinceCode">
+            province_code = #provinceCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="cityCode">
+            city_code = #cityCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="areaCode">
+            area_code = #areaCode:VARCHAR#
+        </isNotNull>
+    </select>
+
+    <update id="updateSupplier" parameterClass="com.mockuai.suppliercenter.core.domain.SupplierDO">
+        update supplier set gmt_modified = now()
+        <isNotNull prepend="," property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="contacts">
+            contacts = #contacts:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="phone">
+            phone = #phone:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="provinceCode">
+            province_code = #provinceCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="cityCode">
+            city_code = #cityCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="areaCode">
+            area_code = #areaCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="address">
+            address = #address:VARCHAR#
+        </isNotNull>
+
+        where id = #id:BIGINT#
+    </update>
+
+</sqlMap>

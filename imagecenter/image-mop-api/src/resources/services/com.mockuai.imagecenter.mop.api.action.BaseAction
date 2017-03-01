@@ -1,0 +1,17 @@
+com.mockuai.virtualwealthcenter.mop.api.action.ListWealthAccount
+com.mockuai.virtualwealthcenter.mop.api.action.GrantVirtualWealth
+com.mockuai.virtualwealthcenter.mop.api.action.GetVirtualWealthWithGrantRule
+com.mockuai.virtualwealthcenter.mop.api.action.DeductUserVirtualWealth
+com.mockuai.virtualwealthcenter.mop.api.action.GrantVirtualWealthBatch
+com.mockuai.virtualwealthcenter.mop.api.action.ListWealthAccountBatch
+com.mockuai.virtualwealthcenter.mop.api.action.WealthAccountOfHiCoin
+com.mockuai.virtualwealthcenter.mop.api.action.WealthAccountOfBalance
+com.mockuai.virtualwealthcenter.mop.api.action.ListRecordOfWealth
+com.mockuai.virtualwealthcenter.mop.api.action.DetailOfWithdrawals
+com.mockuai.virtualwealthcenter.mop.api.action.AddWithdrawalsMopAction
+com.mockuai.virtualwealthcenter.mop.api.action.BankInfoAddMopAction
+com.mockuai.virtualwealthcenter.mop.api.action.ChoiceBankWithdrawalsMopAction
+com.mockuai.virtualwealthcenter.mop.api.action.DeleteBankInfoMopAction
+com.mockuai.virtualwealthcenter.mop.api.action.ListBankInfoAppAction
+com.mockuai.virtualwealthcenter.mop.api.action.ListWithdrawalsMopAction
+com.mockuai.virtualwealthcenter.mop.api.action.selectDetailsBankInfoMopAction

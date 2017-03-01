@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="RCategorySettlement">
+
+    <typeAlias alias="RCategorySettlementDO" type="com.mockuai.itemcenter.core.domain.RCategorySettlementDO"/>
+    <typeAlias alias="RCategorySettlementQTO" type="com.mockuai.itemcenter.common.domain.qto.RCategorySettlementQTO"/>
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.RCategorySettlementDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="category_level" property="categoryLevel" jdbcType="TINYINT"/>
+        <result column="category_id" property="categoryId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="settlement_id" property="settlementId" jdbcType="BIGINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, category_level, category_id, biz_code, settlement_id, delete_mark, gmt_created,
+        gmt_modified
+    </sql>
+
+    <select id="getRCategorySettlement" resultMap="BaseResultMap" parameterClass="RCategorySettlementDO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_category_settlement
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteByPrimaryKey" parameterClass="RCategorySettlementDO">
+        update r_category_settlement
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <update id="deleteRCategorySettlementByConfig" parameterClass="RCategorySettlementDO">
+        update r_category_settlement
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and settlement_id = #settlementId# and biz_code = #bizCode# and id > 0
+    </update>
+
+
+    <insert id="addRCategorySettlement" parameterClass="RCategorySettlementDO">
+        insert into r_category_settlement
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="categoryLevel">
+                category_level
+            </isNotNull>
+            <isNotNull prepend="," property="categoryId">
+                category_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                settlement_id
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="categoryLevel">
+                #categoryLevel:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="categoryId">
+                #categoryId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                #settlementId:BIGINT#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+    <sql id="queryWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="categoryId">
+            category_id = #categoryId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="categoryIdList">
+            id in
+            <iterate property="categoryIdList" conjunction="," open="(" close=")">
+                #categoryIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull prepend="AND" property="categoryLevel">
+            category_level = #categoryLevel#
+        </isNotNull>
+        <isNotNull prepend="AND" property="settlementId">
+            settlement_id = #settlementId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryRCategorySettlement" resultMap="BaseResultMap" parameterClass="RCategorySettlementQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_category_settlement
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <select id="countRCategorySettlement" resultClass="Integer" parameterClass="RCategorySettlementQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from r_category_settlement
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <update id="updateByPrimaryKeySelective" parameterClass="com.mockuai.itemcenter.core.domain.RCategorySettlementDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Tue Jan 19 10:06:45 CST 2016.
+        -->
+        update r_category_settlement
+        <dynamic prepend="set">
+            <isNotNull prepend="," property="categoryLevel">
+                category_level = #categoryLevel:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="categoryId">
+                category_id = #categoryId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code = #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="settlementId">
+                settlement_id = #settlementId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark = #deleteMark:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtCreated">
+                gmt_created = #gmtCreated:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="gmtModified">
+                gmt_modified = #gmtModified:TIMESTAMP#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT#
+    </update>
+    <update id="updateByPrimaryKey" parameterClass="com.mockuai.itemcenter.core.domain.RCategorySettlementDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Tue Jan 19 10:06:45 CST 2016.
+        -->
+        update r_category_settlement
+        set category_level = #categoryLevel:TINYINT#,
+        category_id = #categoryId:BIGINT#,
+        biz_code = #bizCode:VARCHAR#,
+        settlement_id = #settlementId:BIGINT#,
+        delete_mark = #deleteMark:TINYINT#,
+        gmt_created = #gmtCreated:TIMESTAMP#,
+        gmt_modified = #gmtModified:TIMESTAMP#
+        where id = #id:BIGINT#
+    </update>
+</sqlMap>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="withdraw_batch">
+
+
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.WithdrawBatchDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="status" column="status" jdbcType="VARCHAR" />
+		<result property="batchNo" column="batch_no" jdbcType="VARCHAR" />
+		<result property="bankBillNo" column="bank_bill_no" jdbcType="VARCHAR"  />
+		<result property="channel" column="channel" jdbcType="VARCHAR"  />
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"  />
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"  />
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"  />
+		
+		
+	</resultMap>
+	
+	<sql id="column_set">
+		id,
+		biz_code,
+		status,
+		bank_bill_no,
+		batch_no,
+		channel,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	
+
+	<insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.WithdrawBatchDO">
+		insert into withdraw_batch(
+		biz_code,
+		batch_no,
+		status,
+		bank_bill_no,
+		channel,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#batchNo#,
+		#status#,
+		#bankBillNo#,
+		#channel#,
+		0,
+		now(),
+		now()
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<update id="update" parameterClass="com.mockuai.tradecenter.core.domain.WithdrawBatchDO">
+		update withdraw_batch 
+		set 
+		gmt_modified = now()
+		<isNotNull property="status" prepend=",">
+			status = #status#
+		</isNotNull>
+		<isNotNull property="channel" prepend=",">
+			channel = #channel#
+		</isNotNull>
+		where id = #id# and delete_mark=0
+	</update>
+	
+	<update id="updateByBatchNo" parameterClass="com.mockuai.tradecenter.core.domain.WithdrawBatchDO">
+		update withdraw_batch 
+		set 
+		gmt_modified = now()
+		<isNotNull property="status" prepend=",">
+			status = #status#
+		</isNotNull>
+		<isNotNull property="channel" prepend=",">
+			channel = #channel#
+		</isNotNull>
+		where batch_no = #batchNo# and delete_mark=0
+	</update>
+	
+	
+	<select id="query" parameterClass="com.mockuai.tradecenter.core.domain.WithdrawBatchDO" resultMap="result">
+		select
+		<include refid="withdraw_batch.column_set" />
+		from withdraw_batch
+		where delete_mark=0
+		
+		<isNotNull property="status" prepend=" and">
+			status = #status#
+		</isNotNull>
+		<isNotNull property="channel" prepend=" and">
+			channel = #channel#
+		</isNotNull>
+		<isNotNull property="batchNo" prepend=" and">
+			batch_no = #batchNo#
+		</isNotNull>
+		
+	</select>
+	
+	
+</sqlMap>

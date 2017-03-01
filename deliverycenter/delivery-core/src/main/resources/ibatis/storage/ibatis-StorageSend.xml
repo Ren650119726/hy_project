@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="STORAGESEND">
+	<typeAlias alias="StorageSend" type="com.mockuai.deliverycenter.core.domain.storage.StorageSend" />
+	
+	<sql id="columList">
+		   id as id,
+		   name as name,
+		   sort as sort,
+		   status as status,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addStorageSend" parameterClass="StorageSend">
+		insert into delivery_storage_send
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="name">name </isNotNull>
+			<isNotNull prepend="," property="sort">sort </isNotNull>
+			<isNotNull prepend="," property="status">status </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="name">#name:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="sort">#sort:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="status">#status:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateStorageSend" parameterClass="StorageSend">
+		update delivery_storage_send
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="sort"> 
+			sort = #sort:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="status"> 
+			status = #status:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<delete id="deleteStorageSend" parameterClass="StorageSend">
+		delete from delivery_storage_send 
+		where id = #id:BIGINT# and deleted=0
+	</delete>
+
+	<select id="getStorageSend"  parameterClass="StorageSend" resultClass="StorageSend">
+		select
+		<include refid="STORAGESEND.columList" />
+		from delivery_storage_send
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	
+	<sql id="queryWhere">
+		where deleted=0
+		<isNotNull prepend="AND" property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="status"> 
+			status = #status:VARCHAR#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryStorageSend" parameterClass="com.mockuai.deliverycenter.common.qto.storage.StorageSendQTO" resultClass="StorageSend">
+		select
+		<include refid="STORAGESEND.columList" />
+		from delivery_storage_send
+		<include refid="STORAGESEND.queryWhere" />
+			order by id desc 
+		<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+		</isNotNull>
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.storage.StorageSendQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_storage_send
+		<include refid="STORAGESEND.queryWhere" />
+	</select>
+</sqlMap>

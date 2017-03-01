@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+
+    <!-- 商品 -->
+	<bean id="itemDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemDAOImpl"/>
+	<!-- 商品扩展信息-->
+	<bean id="itemExtraInfoDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemExtraInfoDAOImpl"/>
+	<!-- 商品图片 -->
+	<bean id="itemImageDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemImageDAOImpl"/>
+	<!-- 商品品牌 -->
+	<bean id="itemBrandDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemBrandDAOImpl"/>
+	<!-- 商品评论 -->
+	<bean id="itemCommentDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemCommentDAOImpl"/>
+	<!-- 商品销售属性(ItemSku) -->
+	<bean id="itemSkuDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemSkuDAOImpl"/>
+	<!-- 商品类目 -->
+	<bean id="itemCategoryDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemCategoryDAOImpl"/>
+	<!-- 商品属性模板 -->
+	<bean id="itemPropertyTmplDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemPropertyTmplDAOImpl"/>
+	<!-- 商品属性 -->
+	<bean id="itemPropertyDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemPropertyDAOImpl"/>
+	
+	<!-- 全局属性 -->
+	<bean id="globalPropertyDAO" class="com.mockuai.itemcenter.core.dao.impl.GlobalPropertyDAOImpl"/>
+	<!-- 全局属性值域 -->
+	<bean id="globalPropertyValueDAO" class="com.mockuai.itemcenter.core.dao.impl.GlobalPropertyValueDAOImpl"/>
+	
+	<!-- SKU属性模板 -->
+	<bean id="skuPropertyTmplDAO" class="com.mockuai.itemcenter.core.dao.impl.SkuPropertyTmplDAOImpl"/>
+	<!-- SKU属性 -->
+	<bean id="skuPropertyDAO" class="com.mockuai.itemcenter.core.dao.impl.SkuPropertyDAOImpl"/>
+	<!-- SPU属性模板 -->
+	<bean id="spuPropertyTmplDAO" class="com.mockuai.itemcenter.core.dao.impl.SpuPropertyTmplDAOImpl"/>
+	<!-- SPU属性 -->
+	<bean id="spuPropertyDAO" class="com.mockuai.itemcenter.core.dao.impl.SpuPropertyDAOImpl"/>
+	<!-- SPU_INFO属性 -->
+	<bean id="spuInfoDAO" class="com.mockuai.itemcenter.core.dao.impl.SpuInfoDAOImpl"/>
+	<!-- Item限购-->
+	<bean id="itemBuyLimitDAO" class="com.mockuai.itemcenter.core.dao.impl.ItemBuyLimitDAOImpl" />
+
+	<bean id="valueAddedServiceDAO" class="com.mockuai.itemcenter.core.dao.impl.ValueAddedServiceDAOImpl"/>
+	<bean id="specDAO" class="com.mockuai.itemcenter.core.dao.impl.SpecDAOImpl"/>
+
+</beans>

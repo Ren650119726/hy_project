@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="publish_pageItem">
+
+
+
+    <resultMap id="BaseResultMap" class="PageItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="pageItemCategoryId" column="item_category_id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id"  jdbcType="BIGINT"/>
+        <result property="itemOrder" column="item_order"  jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+
+    <sql id="item">
+        id,page_id,item_category_id,item_id,seller_id,item_order,gmt_created,gmt_modified,delete_mark
+    </sql>
+
+
+    <insert id="addPageItem" parameterClass="java.util.List">
+        INSERT INTO publish_page_item
+        (
+        <include refid="item"/>
+        ) VALUE
+
+        <iterate  conjunction="," >
+            (#list[].id#,#list[].pageId#,#list[].pageItemCategoryId#,#list[].itemId#,
+            #list[].sellerId#,#list[].itemOrder#,
+             now(),now(),0)
+        </iterate>
+
+    </insert>
+
+
+
+    <update id="deleteByPageId" parameterClass="long">
+        update publish_page_item set delete_mark = 1  where
+          page_id  = #pageId#
+    </update>
+
+    <select id="queryPageItem" resultMap="BaseResultMap"  parameterClass="long">
+        select <include refid="item"/> from publish_page_item where
+        delete_mark = 0 AND  item_category_id = #pageItemCategoryId#
+        order by item_order asc
+    </select>
+
+    <update id="deleteByItemId" parameterClass="long">
+        update publish_page_item set delete_mark = 1 where item_id = #itemId#
+    </update>
+
+    <!--<select id="getPageIdByItemId" parameterClass="long">-->
+        <!--select page_id from page_item where delete_mark = 0 and item_id = #itemId#-->
+    <!--</select>-->
+    <select id="queryPageByItemId" resultMap="BaseResultMap"  parameterClass="long">
+        select <include refid="item"/> from publish_page_item where
+        delete_mark = 0 AND  item_id = #itemId#
+        order by item_order asc
+    </select>
+
+
+
+</sqlMap>

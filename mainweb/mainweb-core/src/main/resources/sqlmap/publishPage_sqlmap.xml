@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="publishPage">
+
+
+    <typeAlias alias="PublishPageDO" type="com.mockuai.mainweb.core.domain.PublishPageDO"/>
+
+    <resultMap id="BaseResultMap" class="PublishPageDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="content" column="content"  jdbcType="VACHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+
+    </resultMap>
+
+
+    <sql id="item">
+         id,page_id,content,gmt_created,gmt_modified,delete_mark
+    </sql>
+
+    <insert id="add" parameterClass="PublishPageDO">
+        INSERT INTO publish_page
+        (
+        <include refid="item"/>
+
+        ) VALUE (#id#,#pageId#,#content#,now(),now(),0)
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+
+    <update id="deletePublishPage" parameterClass="long">
+        update publish_page set delete_mark = 1  where page_id = #id#
+    </update>
+
+    <select id="getPublishPage" resultMap="BaseResultMap"  parameterClass="long">
+        select  <include refid="item"/>
+        from publish_page where
+        delete_mark = 0
+        AND page_id = #page_id#
+
+    </select>
+
+</sqlMap>

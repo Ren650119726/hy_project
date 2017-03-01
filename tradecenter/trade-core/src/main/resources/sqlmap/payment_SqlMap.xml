@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="payment">
+
+  <resultMap class="com.mockuai.tradecenter.core.domain.PaymentDO" id="BaseResultMap">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="class_name" jdbcType="VARCHAR" property="className" />
+    <result column="is_active" jdbcType="TINYINT" property="isActive" />
+    <result column="online_pay" jdbcType="TINYINT" property="onlinePay" />
+    <result column="fee_amount" jdbcType="BIGINT" property="feeAmount" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="total_amount" jdbcType="BIGINT" property="totalAmount" />
+    <result column="logo" jdbcType="VARCHAR" property="logo" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="fee_type" jdbcType="TINYINT" property="feeType" />
+    <result column="is_pc" jdbcType="TINYINT" property="isPc" />
+    <result column="is_wap" jdbcType="TINYINT" property="isWap" />
+    <result column="is_app" jdbcType="TINYINT" property="isApp" />
+  </resultMap>
+  
+ <!--  <resultMap class="com.mockuaickuai.tradecenter.core.domain.PaymentDO" extends="payment.BaseResultMap" id="ResultMapWithBLOBs">
+    <result column="config" jdbcType="LONGVARCHAR" property="config" />
+  </resultMap> -->
+  
+   <sql id="Base_Column_List">
+    id, class_name, is_active, online_pay, fee_amount, name, total_amount, logo, sort, 
+    fee_type, is_pc, is_wap, is_app
+  </sql>
+  
+ <!--  <sql id="Blob_Column_List">
+    config
+  </sql> -->
+  
+ 
+  <insert id="addPayment" parameterClass="com.mockuai.tradecenter.core.domain.PaymentDO">
+    insert into payment
+    <dynamic prepend="(">
+      <isNotNull prepend="," property="id">
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="className">
+        class_name
+      </isNotNull>
+      <isNotNull prepend="," property="isEffect">
+        is_effect
+      </isNotNull>
+      <isNotNull prepend="," property="onlinePay">
+        online_pay
+      </isNotNull>
+      <isNotNull prepend="," property="feeAmount">
+        fee_amount
+      </isNotNull>
+      <isNotNull prepend="," property="name">
+        name
+      </isNotNull>
+      <isNotNull prepend="," property="desc">
+        desc
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount">
+        total_amount
+      </isNotNull>
+      <isNotNull prepend="," property="logo">
+        logo
+      </isNotNull>
+      <isNotNull prepend="," property="sort">
+        sort
+      </isNotNull>
+      <isNotNull prepend="," property="feeType">
+        fee_type
+      </isNotNull>
+      <isNotNull prepend="," property="isPc">
+        is_pc
+      </isNotNull>
+      <isNotNull prepend="," property="isWap">
+        is_wap
+      </isNotNull>
+      <isNotNull prepend="," property="isApp">
+        is_app
+      </isNotNull>
+      <isNotNull prepend="," property="key">
+        key
+      </isNotNull>
+      <isNotNull prepend="," property="config">
+        config
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(">
+      <isNotNull prepend="," property="id">
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="className">
+        #className:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="isEffect">
+        #isEffect:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="onlinePay">
+        #onlinePay:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="feeAmount">
+        #feeAmount:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="name">
+        #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="desc">
+        #desc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="totalAmount">
+        #totalAmount:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="logo">
+        #logo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sort">
+        #sort:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="feeType">
+        #feeType:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="isPc">
+        #isPc:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="isWap">
+        #isWap:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="isApp">
+        #isApp:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="key">
+        #key:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="config">
+        #config:LONGVARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+	<update id="deletePayment" parameterClass="long">
+		update payment set is_delete = 1
+			where id = #value# and is_delete = 0
+	</update>
+	<!-- 
+	<select id="getPaymentByClass" parameterClass="java.lang.String" resultMap="BaseResultMap">
+		select 
+		<include refid="payment.Base_Column_List" />
+    	<include refid="payment.Blob_Column_List" /> 
+    	from payment where class_name = #value# and is_effect = 1 and is_delete = 0
+	</select> -->
+	
+	<!--  查询订单及其详情   -->
+	<select id="getPaymentByClass" parameterClass="com.mockuai.tradecenter.core.domain.PaymentDO" resultMap="BaseResultMap">
+		select
+		<include refid="payment.Base_Column_List" />
+		from payment  where class_name = #className#  and is_delete = 0 and is_active = 1
+	</select>
+	
+	<!--  where class_name = #className#  and is_delete = 0 -->
+  
+  	<select id="getPayment" parameterClass="java.lang.Integer" resultMap="BaseResultMap">
+		select
+		<include refid="payment.Base_Column_List" />
+		from payment  where id = #value#  and is_delete = 0 and is_active = 1
+	</select>
+  
+</sqlMap>

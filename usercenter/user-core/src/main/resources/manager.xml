@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- <bean id="userManager" class="com.mockuaickuai.usercenter.core.employee.impl.UserManagerImpl"/>
+	<bean id="userExtraInfoManage" class="com.mockuaickuai.usercenter.core.employee.impl.UserExtraInfoManageImpl"/>
+	<bean id="supplierExtraManager" class="com.mockuaickuai.usercenter.core.employee.impl.SupplierExtraInfoManagerImpl"/>
+	<bean id="userBabyInfoManager" class="com.mockuaickuai.usercenter.core.employee.impl.UserBabyInfoManagerImpl"/> -->
+	<!--<bean id="stub" class="com.mockuai.external.webservice.client.huaji.CRMInterfaceStub" />-->
+	<bean id="cacheManager" class="com.mockuai.usercenter.core.manager.impl.CacheManagerImpl">
+		<property name="isLocal" value="${usercenter.cache.isLocal}"/>
+	</bean>
+</beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+
+    <settings
+            cacheModelsEnabled="false"
+            enhancementEnabled="false"
+            lazyLoadingEnabled="false"
+            maxRequests="3000"
+            maxSessions="3000"
+            maxTransactions="3000"
+            useStatementNamespaces="true"
+    />
+
+    <sqlMap resource="sqlmap/sysFieldMap_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/sysConfig_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/erpOrder_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/message_record_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/default_express_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/duibaRecord_order_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/duiba_configuration_SqlMap.xml"/>
+    <sqlMap resource="sqlmap/version_deploy_SqlMap.xml"/>
+</sqlMapConfig>

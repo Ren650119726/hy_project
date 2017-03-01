@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="biz_lock">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.BizLockDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="lockSn" column="lock_sn" />
+        <result property="type" column="type" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        lock_sn,
+        type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+   <select id="query" parameterClass="com.mockuai.tradecenter.common.domain.BizLockQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from biz_lock where 1=1 
+        and delete_mark = 0
+        <isNotNull property="lockSn" prepend="and">
+            lock_sn=#lockSn#
+        </isNotNull>
+         <isNotNull property="type" prepend="and">
+            type=#type#
+        </isNotNull>
+    </select>
+
+
+    <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.BizLockDO">
+        insert into biz_lock(
+        biz_code,
+        lock_sn,
+        type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #lockSn#,
+        #type#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+    
+    <delete id="delete" parameterClass="com.mockuai.tradecenter.common.domain.BizLockQTO" >
+	  delete from biz_lock	   
+	  where 1=1
+        <isNotNull property="lockSn" prepend="and">
+            lock_sn=#lockSn#
+        </isNotNull>
+         <isNotNull property="type" prepend="and">
+            type=#type#
+        </isNotNull>
+	</delete>
+
+
+   
+</sqlMap>

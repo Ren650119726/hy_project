@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="action_gift_marketing">
+
+    <resultMap id="result" class="com.mockuai.giftscenter.core.domain.ActionGiftMarketingDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="actionId" column="action_id" jdbcType="TINYINT"/>
+        <result property="marketingId" column="marketing_id" jdbcType="TINYINT"/>
+        <result property="count" column="count" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+    id,
+    action_id,
+    marketing_id,
+    count,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+    </sql>
+
+    <insert id="insert" parameterClass="java.util.List">
+        insert into action_gift_marketing (
+        action_id,
+        marketing_id,
+        count,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values
+        <iterate  conjunction="," >
+            (#list[].actionId#,#list[].marketingId#,#list[].count#
+            ,0,now(),now())
+        </iterate>
+
+
+    </insert>
+
+  <select id="queryByActionId" resultMap="result" parameterClass="long" >
+      select <include refid="columnList"/>
+      from action_gift_marketing
+      where delete_mark = 0 and action_id = #actionId#
+  </select>
+
+ <delete id="deleteByActionId" parameterClass="long">
+    update  action_gift_marketing
+    set delete_mark = 1 , gmt_modified=now()
+    where action_id = #actionId#
+ </delete>
+
+    
+
+</sqlMap>

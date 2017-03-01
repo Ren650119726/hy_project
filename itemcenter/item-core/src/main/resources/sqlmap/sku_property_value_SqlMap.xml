@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="sku_property_value">
+
+    <typeAlias alias="SkuPropertyValueDO" type="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO"/>
+    <typeAlias alias="SkuPropertyValueQTO" type="com.mockuai.itemcenter.common.domain.qto.SkuPropertyValueQTO"/>
+
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+        <result property="skuPropertyTmplId" column="sku_property_tmpl_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        biz_code,
+        name,
+        value,
+        sku_property_tmpl_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <!--批量插入activity_item纪录-->
+    <insert id="addSkuPropertyValues" parameterClass="java.util.List">
+        insert into sku_property_value(
+        biz_code,
+        name,
+        value,
+        sku_property_tmpl_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values
+        <iterate conjunction=",">
+            <![CDATA[
+            	(
+            	#skuPropertyValueDOs[].bizCode#,
+            	#skuPropertyValueDOs[].name#,
+            	#skuPropertyValueDOs[].value#,
+            	#skuPropertyValueDOs[].skuPropertyTmplId#,
+            	0,
+            	now(),
+            	now()
+            	)
+            ]]>
+        </iterate>
+    </insert>
+
+    <update id="updateSkuPropertyValue" parameterClass="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO">
+        update sku_property_value
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="name">
+                name = #name#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value = #value#
+            </isNotNull>
+        </dynamic>
+        where id=#id#
+    </update>
+
+    <update id="deleteSkuPropertyValues" parameterClass="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO">
+        update sku_property_value
+        set gmt_modified=now(), delete_mark=1
+        where sku_property_tmpl_id = #skuPropertyTmplId# and delete_mark = 0
+    </update>
+
+    <update id="deleteSkuPropertyValue" parameterClass="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO">
+        update sku_property_value
+        set gmt_modified=now(), delete_mark=1
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <!--&lt;!&ndash;  根据sku属性id查询具体的属性的基本值 &ndash;&gt;-->
+    <!--<select id="querySkuPropertyValue"-->
+            <!--parameterClass="java.lang.Long" resultMap="BaseResultMap">-->
+        <!--select-->
+        <!--<include refid="Base_Column_List"/>-->
+        <!--from sku_property_value-->
+        <!--where sku_property_tmpl_id = #skuPropertyTmplId# and delete_mark = 0-->
+    <!--</select>-->
+
+    <select id="querySkuPropertyValue"
+            parameterClass="SkuPropertyValueQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sku_property_value
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="skuPropertyTmplId">
+            sku_property_tmpl_id = #skuPropertyTmplId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+    </select>
+</sqlMap>

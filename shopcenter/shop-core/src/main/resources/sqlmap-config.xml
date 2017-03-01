@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <settings
+	  cacheModelsEnabled="false" 
+	  enhancementEnabled="false"
+	  lazyLoadingEnabled="false" 
+	  maxRequests="3000" 
+	  maxSessions="3000"
+	  maxTransactions="3000"
+	  useStatementNamespaces="true"
+	  />
+
+    <sqlMap resource="sqlmap/shop_SqlMap.xml" />
+	<sqlMap resource="sqlmap/shop_item_group_SqlMap.xml" />
+	<sqlMap resource="sqlmap/shop_image_SqlMap.xml" />
+	<sqlMap resource="sqlmap/shop_collection_SqlMap.xml" />
+
+	<sqlMap resource="sqlmap/store_SqlMap.xml" />
+	<sqlMap resource="sqlmap/shop_property_SqlMap.xml" />
+    <sqlMap resource="sqlmap/store_property_SqlMap.xml"/>
+
+	<sqlMap resource="sqlmap/banner_SqlMap.xml" />
+	<sqlMap resource="sqlmap/shop_item_SqlMap.xml" />
+    <sqlMap resource="sqlmap/shop_coupon_SqlMap.xml"/>
+	<sqlMap resource="sqlmap/r_item_group_SqlMap.xml"/>
+
+</sqlMapConfig>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sku_property_tmpl">
+	<typeAlias alias="SkuPropertyTmplDO" type="com.mockuai.itemcenter.core.domain.SkuPropertyTmplDO" />
+	<typeAlias alias="SkuPropertyTmplQTO"	type="com.mockuai.itemcenter.common.domain.qto.SkuPropertyTmplQTO" />
+
+	<!-- sku属性的值  -->
+	<typeAlias alias="SkuPropertyValueDO" type="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO"/>
+	<resultMap class="com.mockuai.itemcenter.core.domain.SkuPropertyValueDO" id="SkuPropertyValueDO">
+	    <result column="id" jdbcType="BIGINT" property="id" />
+	    <result column="name" jdbcType="VARCHAR" property="name" />
+	    <result column="value" jdbcType="VARCHAR" property="value" />
+	    <result column="sku_property_tmpl_id" jdbcType="BIGINT" property="skuPropertyTmplId" />
+	    <result column="biz_code" jdbcType="VARCHAR" property="bizCode" />
+	    <result column="delete_mark" jdbcType="TINYINT" property="deleteMark" />
+	    <result column="gmt_created" jdbcType="DATETIME" property="gmtCreated" />
+	    <result column="gmt_modified" jdbcType="DATETIME" property="gmtModified" />
+  	</resultMap>
+	
+	<resultMap class="SkuPropertyTmplDO" id="SkuPropertyTmplDOResult">
+		<result property="id" column="id" />
+		<result property="sellerId" column="seller_id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="valueType" column="value_type" />
+		<result property="sort" column="sort" />
+		<result property="bizMark" column="biz_mark" />
+		<result property="categoryId" column="category_id" />
+		<result property="must" column="must" />
+		<result property="userDefined" column="user_defined" />
+		<result property="fieldType" column="field_type" />
+		<result property="bizCode" column="biz_code" />
+		<result property="deleteMark" column="delete_mark" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+	
+	<!--  含有具体属性值的映射  -->
+	<resultMap class="SkuPropertyTmplDO" id="SkuPropertyWithValue">
+		<result property="id" column="id" />
+		<result property="sellerId" column="seller_id" />
+		<result property="name" column="name" />
+		<result property="code" column="code" />
+		<result property="valueType" column="value_type" />
+		<result property="sort" column="sort" />
+		<result property="bizMark" column="biz_mark" />
+		<result property="categoryId" column="category_id" />
+		
+		<!--  updated by cwr 新增几个字段用于前端字段渲染 -->
+		<result property="must" column="must" />
+		<result property="userDefined" column="user_defined" />
+		<result property="fieldType" column="field_type" />
+		<result property="bizCode" column="biz_code" />
+		<result property="deleteMark" column="delete_mark" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	 	<result property="propertyValues" column="id" select="SkuPropertyTmplDAO.selectSkuPropertyValue" />
+	</resultMap>
+
+	<insert id="SkuPropertyTmplDAO.addSkuPropertyTmpl" parameterClass="SkuPropertyTmplDO">
+		insert into sku_property_tmpl
+		 <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        name
+      </isNotNull>
+		<isNotNull prepend="," property="code" >
+        code
+      </isNotNull>
+      <isNotNull prepend="," property="valueType" >
+        value_type
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        sort
+      </isNotNull>
+      <isNotNull prepend="," property="bizMark" >
+        biz_mark
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        category_id
+      </isNotNull>
+      <isNotNull prepend="," property="must" >
+        must
+      </isNotNull>
+      <isNotNull prepend="," property="userDefined" >
+        user_defined
+      </isNotNull>
+      <isNotNull prepend="," property="fieldType" >
+        field_type
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+     	,delete_mark
+     	,gmt_created
+     	,gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        #sellerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="name" >
+        #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="code" >
+        #code:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="valueType" >
+        #valueType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        #sort:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="bizMark" >
+        #bizMark:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        #categoryId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="must" >
+        #must:TINYINT#
+      </isNotNull>
+       <isNotNull prepend="," property="userDefined" >
+        #userDefined:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="fieldType" >
+        #fieldType:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode:VARCHAR#
+      </isNotNull>
+      ,0
+      ,now()
+      ,now()
+      )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="sku_property_tmpl_base_column_list">
+		id,
+		seller_id,
+		name,
+		code,
+		value_type,
+		sort,
+		biz_mark,
+		category_id,
+		must,
+		user_defined,
+		field_type,
+		biz_code,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	<sql id="SkuPropertyTmplDAO.queryWhere">
+		<!-- <dynamic prepend="where"> -->
+		where delete_mark = 0 
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="sellerId"> 
+				seller_id = #sellerId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="categoryId"> 
+			 	category_id = #categoryId#
+			</isNotNull>
+		<!-- </dynamic> -->
+	</sql>
+	
+	<update id="SkuPropertyTmplDAO.updateSkuPropertyTmpl" >
+		update sku_property_tmpl
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="name">
+				name = #name#
+			</isNotNull>
+			<isNotNull prepend="," property="code">
+				code = #code#
+			</isNotNull>
+			<isNotNull prepend="," property="valueType">
+				value_type = #valueType#
+			</isNotNull>
+			<isNotNull prepend="," property="sort">
+				sort = #sort#
+			</isNotNull>
+			<isNotNull prepend="," property="bizMark">
+				biz_mark =#bizMark#
+			</isNotNull>
+		</dynamic>
+		 where delete_mark = 0 and id = #id#
+	</update>
+	
+	<update id="SkuPropertyTmplDAO.deleteSkuPropertyTmpl" >
+		update sku_property_tmpl
+		set gmt_modified=now(),delete_mark = 1 
+		<include refid="SkuPropertyTmplDAO.queryWhere" />
+		<!-- where delete_mark = 0 and seller_id = #sellerId# and id = #id#  -->
+	</update>
+	
+	<select id="SkuPropertyTmplDAO.countSkuPropertyTmpl" resultClass="Integer" parameterClass="SkuPropertyTmplQTO">
+		select count(1) from sku_property_tmpl
+		<include refid="SkuPropertyTmplDAO.queryWhere" />
+	</select>
+	
+	<select id="SkuPropertyTmplDAO.getSkuPropertyTmpl" resultMap="SkuPropertyTmplDOResult"	parameterClass="SkuPropertyTmplDO">
+		select 	<include refid="sku_property_tmpl_base_column_list" />	from sku_property_tmpl
+				<!-- where delete_mark = 0 and seller_id = #sellerId# and id = #id#  -->
+				<include refid="SkuPropertyTmplDAO.queryWhere" />
+	</select>
+	
+	<select id="SkuPropertyTmplDAO.querySkuPropertyTmpl" resultMap="SkuPropertyTmplDOResult"
+		parameterClass="SkuPropertyTmplQTO">
+		select	<include refid="sku_property_tmpl_base_column_list" />	from sku_property_tmpl
+				<include refid="SkuPropertyTmplDAO.queryWhere" />
+			<isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+			</isNotNull>
+ 	</select>
+ 	
+ 	<!--  查询销售属性及其基本的属性值  -->
+ 	<select id="SkuPropertyTmplDAO.querySkuPropertyTmplWithValue" resultMap="SkuPropertyWithValue"
+		parameterClass="SkuPropertyTmplQTO">
+		select	<include refid="sku_property_tmpl_base_column_list" />	from sku_property_tmpl
+				<include refid="SkuPropertyTmplDAO.queryWhere" />
+ 	</select>
+ 	
+ 	<!--  根据sku属性id查询具体的属性的基本值 -->
+ 	<select id="SkuPropertyTmplDAO.selectSkuPropertyValue" parameterClass="java.lang.Integer" resultMap="SkuPropertyValueDO">
+		select id,name,value,delete_mark,sku_property_tmpl_id,biz_code,gmt_created,gmt_modified from sku_property_value where sku_property_tmpl_id = #value# and delete_mark = 0
+	</select>
+</sqlMap>

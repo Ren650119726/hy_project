@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- <bean id="userDao" class="com.mockuaickuai.usercenter.core.dao.impl.UserDaoImpl"/>
+	<bean id="userExtraInfoDao" class="com.mockuaickuai.usercenter.core.dao.impl.UserExtraInfoDaoImpl"/>
+	<bean id="supplierExtraDao" class="com.mockuaickuai.usercenter.core.dao.impl.SupplierExtraInfoDaoImpl"/>
+	<bean id="userBabyInfoDao" class="com.mockuaickuai.usercenter.core.dao.impl.UserBabyInfoDaoImpl"/> -->
+
+	<!-- 用户消息模块 -->
+	<!--<bean id="userMessageDao" class="com.mockuaickuai.usercenter.core.dao.impl.UserMessageDaoImpl"/>-->
+</beans>

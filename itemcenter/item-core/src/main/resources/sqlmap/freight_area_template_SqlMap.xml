@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="freight_area_template">
+
+    <typeAlias alias="FreightAreaTemplateDO" type="com.mockuai.itemcenter.core.domain.FreightAreaTemplateDO"/>
+    <typeAlias alias="FreightAreaTemplateQTO" type="com.mockuai.itemcenter.common.domain.qto.FreightAreaTemplateQTO"/>
+    <resultMap id="FreightAreaTemplateDOResult" class="FreightAreaTemplateDO">
+        <result column="id" property="id"  />
+        <result column="parent_id" property="parentId"  />
+        <result column="biz_code" property="bizCode" />
+        <result column="logistics_way" property="logisticsWay" />
+        <result column="seller_id" property="sellerId" />
+        <result column="basic_charge" property="basicCharge" />
+        <result column="basic_count" property="basicCount" />
+        <result column="extra_charge" property="extraCharge" />
+        <result column="extra_count" property="extraCount" />
+        <result column="delete_mark" property="deleteMark" />
+        <result column="gmt_created" property="gmtCreated" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+
+    <sql id="freight_area_template_column_list">
+        id, biz_code,logistics_way, seller_id,parent_id,basic_charge, basic_count, extra_charge,
+        extra_count, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <insert id="FreightAreaTemplateDAO.addAreaTemplate" parameterClass="FreightAreaTemplateDO">
+        insert into freight_area_template
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                parent_id
+            </isNotNull>
+            <isNotNull prepend="," property="logisticsWay">
+                logistics_way
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="basicCharge">
+                basic_charge
+            </isNotNull>
+            <isNotNull prepend="," property="basicCount">
+                basic_count
+            </isNotNull>
+            <isNotNull prepend="," property="extraCharge">
+                extra_charge
+            </isNotNull>
+            <isNotNull prepend="," property="extraCount">
+                extra_count
+            </isNotNull>
+            ,delete_mark,
+            gmt_created,
+            gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:INT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                #parentId:LONG#
+            </isNotNull>
+            <isNotNull prepend="," property="logisticsWay">
+                #logisticsWay:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:INT#
+            </isNotNull>
+            <isNotNull prepend="," property="basicCharge">
+                #basicCharge:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="basicCount">
+                #basicCount:INT#
+            </isNotNull>
+            <isNotNull prepend="," property="extraCharge">
+                #extraCharge:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="extraCount">
+                #extraCount:INT#
+            </isNotNull>
+            ,0,
+            now(),
+            now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="FreightAreaTemplateDAO.FreightAreaTemplateQtoQueryWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="logisticsWay">
+            logistics_way = #logisticsWay#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="basicCharge">
+            basic_charge = #basicCharge#
+        </isNotNull>
+        <isNotNull prepend="AND" property="basicCount">
+            basic_count = #basicCount#
+        </isNotNull>
+        <isNotNull prepend="AND" property="extraCharge">
+            extra_charge = #extraCharge#
+        </isNotNull>
+        <isNotNull prepend="AND" property="extraCount">
+            extra_count = #extraCount#
+        </isNotNull>
+    </sql>
+
+    <select id="FreightAreaTemplateDAO.getAreaTemplate" resultMap="FreightAreaTemplateDOResult" parameterClass="FreightAreaTemplateDO">
+        select <include refid="freight_area_template_column_list" /> from freight_area_AreaTemplate
+        where delete_mark = 0 and id = #id#  and seller_id=#sellerId#
+    </select>
+
+    <select id="FreightAreaTemplateDAO.countAreaTemplate" resultClass="Long" parameterClass="FreightAreaTemplateQTO">
+        select count(1) from freight_area_AreaTemplate
+        <include refid="FreightAreaTemplateDAO.FreightAreaTemplateQtoQueryWhere" />
+    </select>
+
+    <select id="FreightAreaTemplateDAO.queryAreaTemplateList" resultMap="FreightAreaTemplateDOResult"	parameterClass="FreightAreaTemplateQTO">
+        select	<include refid="freight_area_template_column_list" />	from freight_area_template
+        <include refid="FreightAreaTemplateDAO.FreightAreaTemplateQtoQueryWhere" />
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <update id="FreightAreaTemplateDAO.updateAreaTemplate">
+        update freight_area_template
+        set set gmt_modified=now()
+        <dynamic prepend=",">
+            <isNotNull prepend="," property="logisticsWay">
+                logistics_way = #logisticsWay#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id = #sellerId#
+            </isNotNull>
+            <isNotNull prepend="," property="basicCharge">
+                basic_charge = #basicCharge#
+            </isNotNull>
+            <isNotNull prepend="," property="basicCount">
+                basic_count = #basicCount#
+            </isNotNull>
+            <isNotNull prepend="," property="extraCharge">
+                extra_charge = #extraCharge#
+            </isNotNull>
+            <isNotNull prepend="," property="extraCount">
+                extra_count = #extraCount#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId#
+    </update>
+
+    <update id="FreightAreaTemplateDAO.deleteAreaTemplateByParentId">
+        update freight_area_template set delete_mark = 1
+        where parent_id = #parentId#
+    </update>
+
+    <update id="FreightAreaTemplateDAO.deleteAreaTemplate">
+        update freight_area_template set delete_mark = 1
+        where id = #id# and seller_id = #sellerId#
+    </update>
+
+</sqlMap>

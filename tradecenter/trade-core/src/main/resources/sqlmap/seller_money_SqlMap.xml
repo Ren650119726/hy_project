@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="seller_money">
+
+
+	
+	
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.SellerMoneyDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="currentBalance" column="current_balance" jdbcType="BIGINT" />
+		<result property="availableBalance" column="available_balance" jdbcType="BIGINT"  />
+		<result property="freezeAmount" column="freeze_amount" jdbcType="BIGINT"  />
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"  />
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"  />
+		
+		<!-- add for multishop -->
+		<result property="shopType" column="shop_type"  />
+		
+	</resultMap>
+	
+	
+	
+	
+	
+	
+	<sql id="column_set">
+		id,
+		biz_code,
+		seller_id,
+		current_balance,
+		available_balance,
+		freeze_amount,
+		shop_type,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	
+
+
+	<insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.SellerMoneyDO">
+		insert into seller_money(
+		biz_code,
+		seller_id,
+		current_balance,
+		available_balance,
+		freeze_amount,
+		shop_type,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#sellerId#,
+		#currentBalance#,
+		#availableBalance#,
+		#freezeAmount#,
+		#shopType#,
+		now(),
+		now()
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+	
+
+	<update id="update" parameterClass="com.mockuai.tradecenter.core.domain.SellerMoneyDO">
+		update seller_money 
+		set 
+		gmt_modified = now()
+		<isNotNull property="currentBalance" prepend=",">
+			current_balance = #currentBalance#
+		</isNotNull>
+		<isNotNull property="availableBalance" prepend=",">
+			available_balance = #availableBalance#
+		</isNotNull>
+		
+		<isNotNull property="freezeAmount" prepend=",">
+			freeze_amount = #freezeAmount#
+		</isNotNull>
+		
+		where 1=1  and biz_code= #bizCode# and id=#id#
+		<isNotNull property="sellerId" prepend=" and">
+			seller_id = #sellerId#
+		</isNotNull>
+	</update>
+	
+	<select id="getSellerMoneyBySellerId" parameterClass="Long" resultMap="result">
+		select
+		<include refid="column_set" />
+		from seller_money
+		where seller_id=#sellerId#
+	</select>
+	
+	<select id="getSellerMoney" parameterClass="com.mockuai.tradecenter.common.domain.settlement.SellerMoneyQTO" resultMap="result">
+		select
+		<include refid="column_set" />
+		from seller_money
+		where 1=1 and biz_code=#bizCode#
+		<isNotNull property="sellerId" prepend=" and">
+			seller_id = #sellerId#
+		</isNotNull>
+		<isNotNull property="shopType" prepend=" and">
+			shop_type = #shopType#
+		</isNotNull>
+	</select>
+	
+	<select id="querySellerMoney" parameterClass="com.mockuai.tradecenter.common.domain.settlement.SellerMoneyQTO" resultMap="result">
+		select
+		<include refid="column_set" />
+		from seller_money
+		where 1=1
+		<isNotNull property="sellerId" prepend=" and">
+			seller_id = #sellerId#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend=" and">
+			biz_code = #bizCode#
+		</isNotNull>
+		<isNotNull property="sellerIds" prepend="and">
+			 seller_id in
+			 <iterate open="(" close=")" conjunction="," property="sellerIds" >   
+                     #sellerIds[]#   
+                </iterate>  
+			</isNotNull>
+			<isEqual property="isAllSubShop" compareValue="1" prepend="and">
+			seller_id is not null
+		</isEqual>
+	</select>
+	
+	
+	
+	
+	
+</sqlMap>

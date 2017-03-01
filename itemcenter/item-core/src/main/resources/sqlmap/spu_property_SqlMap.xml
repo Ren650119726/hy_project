@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="spu_property">
+	<typeAlias alias="SpuPropertyDO" type="com.mockuai.itemcenter.core.domain.SpuPropertyDO" />
+	<typeAlias alias="SpuPropertyDTO"	type="com.mockuai.itemcenter.common.domain.dto.SpuPropertyDTO" />
+	<typeAlias alias="SpuPropertyQTO"	type="com.mockuai.itemcenter.common.domain.qto.SpuPropertyQTO" />
+
+	<resultMap class="SpuPropertyDO" id="SpuPropertyDOResult">
+		<result property="id" column="id" />
+		<result property="spuId" column="spu_id" />
+		<result property="keyName" column="key_name" />
+		<result property="val" column="val" />
+		<result property="valType" column="val_type" />
+		<result property="sort" column="sort" />
+		<result property="bizMark" column="biz_mark" />
+		<result property="imgUrl" column="img_url" />
+		<result property="isDeleted" column="is_deleted" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+
+	<sql id="SpuPropertyFields">
+		id,
+		spu_id,
+		key_name,
+		val,
+		val_type,
+		sort,
+		biz_mark,
+		img_url,
+		is_deleted,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+	<insert id="SpuPropertyDAO.addSpuProperty" parameterClass="SpuPropertyDO">
+		insert into spu_property(
+		<include refid="SpuPropertyFields" />
+		)values(
+		#id#,
+		#spuId#,
+		#keyName#,
+		#val#,
+		#valType#,
+		#sort#,
+		#bizMark#,
+		#imgUrl#,
+		#isDeleted#,
+		now(),
+		now()
+		)
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="spu_property_base_column_list">
+		id,
+		spu_id,
+		key_name,
+		val,
+		val_type,
+		sort,
+		biz_mark,
+		img_url,
+		is_deleted,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	<update id="SpuPropertyDAO.updateSpuProperty" parameterClass="SpuPropertyDO">
+		update spu_property
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="keyName">
+				key_name = #keyName#
+			</isNotNull>
+			<isNotNull prepend="," property="val">
+				val = #val#
+			</isNotNull>
+			<isNotNull prepend="," property="valType">
+				val_type =
+				#valType#
+			</isNotNull>
+			<isNotNull prepend="," property="sort">
+				sort = #sort#
+			</isNotNull>
+			<isNotNull prepend="," property="bizMark">
+				biz_mark =
+				#bizMark#
+			</isNotNull>
+			<isNotNull prepend="," property="imgUrl">
+				img_url = #imgUrl#
+			</isNotNull>
+			<isNotNull prepend="," property="isDeleted">
+				is_deleted = #isDeleted#
+			</isNotNull>
+		</dynamic>
+		where id = #id# and is_deleted=0
+	</update>
+	
+	<select id="SpuPropertyDAO.getSpuProperty" resultMap="SpuPropertyDOResult"
+		parameterClass="Long">
+		select
+		<include refid="spu_property_base_column_list" />
+		from spu_property
+		where id = #id# and is_deleted=0
+	</select>
+	
+	<select id="SpuPropertyDAO.querySpuProperty" resultMap="SpuPropertyDOResult"
+		parameterClass="SpuPropertyQTO">
+		select
+		<include refid="spu_property_base_column_list" />
+		from spu_property where is_deleted=0
+		 limit #currentPage#,#pageSize#
+	</select>
+</sqlMap>

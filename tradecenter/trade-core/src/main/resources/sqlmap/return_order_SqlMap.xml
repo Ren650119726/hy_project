@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="return_order" >
+  <resultMap id="BaseResultMap" class="com.mockuai.tradecenter.core.domain.ReturnOrderDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="return_money" property="returnMoney" jdbcType="BIGINT" />
+    <result column="return_status" property="returnStatus" jdbcType="TINYINT" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, order_id,user_id order_sn, return_money, return_status,gmt_created, gmt_modified, is_delete
+  </sql>
+  
+  <!-- 
+  <select id="gerReturnOrder" resultMap="BaseResultMap" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDO" >
+    select 
+    <include refid="return_order.Base_Column_List" />
+    from return_order
+    where id = #id:BIGINT#
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDO" >
+    delete from return_order
+    where id = #id:BIGINT#
+  </delete>
+  <delete id="deleteByExample" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDOExample" >
+    delete from return_order
+    <include refid="return_order.Example_Where_Clause" />
+  </delete>
+  
+  <insert id="insert" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDO" >
+    insert into return_order (id, order_id, order_sn, return_money, return_status, 
+      gmt_created, gmt_modified, is_delete)
+    values (#id:BIGINT#, #orderId:BIGINT#, #orderSn:VARCHAR#, #returnMoney:BIGINT#, #returnStatus:TINYINT#,
+      #gmtCreated:TIMESTAMP#, #gmtModified:TIMESTAMP#, #isDelete:TINYINT#)
+  </insert>
+   -->
+  <insert id="addReturnOrder" parameterClass="com.mockuai.tradecenter.core.domain.ReturnOrderDO" >
+    insert into return_order
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="orderSn" >
+        order_sn
+      </isNotNull>
+      <isNotNull prepend="," property="returnMoney" >
+        return_money
+      </isNotNull>
+      <isNotNull prepend="," property="returnStatus" >
+        return_status
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        gmt_created
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        gmt_modified
+      </isNotNull>
+      <isNotNull prepend="," property="isDelete" >
+        is_delete
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        #orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="orderSn" >
+        #orderSn:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnMoney" >
+        #returnMoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="returnStatus" >
+        #returnStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        #gmtCreated:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        #gmtModified:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="isDelete" >
+        #isDelete:TINYINT#
+      </isNotNull>
+      )
+    </dynamic>
+    <selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+  </insert>
+  
+ <!--  
+  <select id="countByExample" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDOExample" resultClass="java.lang.Integer" >
+    select count(*) from return_order
+    <include refid="return_order.Example_Where_Clause" />
+  </select>
+  <update id="updateByExampleSelective" >
+    update return_order
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="record.id" >
+        id = #record.id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orderId" >
+        order_id = #record.orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="record.orderSn" >
+        order_sn = #record.orderSn:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="record.returnMoney" >
+        return_money = #record.returnMoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="record.returnStatus" >
+        return_status = #record.returnStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="record.gmtCreated" >
+        gmt_created = #record.gmtCreated:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="record.gmtModified" >
+        gmt_modified = #record.gmtModified:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="record.isDelete" >
+        is_delete = #record.isDelete:TINYINT#
+      </isNotNull>
+    </dynamic>
+    <isParameterPresent >
+      <include refid="return_order.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByExample" >
+    update return_order
+    set id = #record.id:BIGINT#,
+      order_id = #record.orderId:BIGINT#,
+      order_sn = #record.orderSn:VARCHAR#,
+      return_money = #record.returnMoney:BIGINT#,
+      return_status = #record.returnStatus:TINYINT#,
+      gmt_created = #record.gmtCreated:TIMESTAMP#,
+      gmt_modified = #record.gmtModified:TIMESTAMP#,
+      is_delete = #record.isDelete:TINYINT#
+    <isParameterPresent >
+      <include refid="return_order.Example_Where_Clause" />
+    </isParameterPresent>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDO" >
+    update return_order
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="orderId" >
+        order_id = #orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="orderSn" >
+        order_sn = #orderSn:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnMoney" >
+        return_money = #returnMoney:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="returnStatus" >
+        return_status = #returnStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        gmt_created = #gmtCreated:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        gmt_modified = #gmtModified:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="isDelete" >
+        is_delete = #isDelete:TINYINT#
+      </isNotNull>
+    </dynamic>
+    where id = #id:BIGINT#
+  </update>
+  <update id="updateByPrimaryKey" parameterClass="com.mockuaickuai.tradecenter.core.domain.ReturnOrderDO" >
+    update return_order
+    set order_id = #orderId:BIGINT#,
+      order_sn = #orderSn:VARCHAR#,
+      return_money = #returnMoney:BIGINT#,
+      return_status = #returnStatus:TINYINT#,
+      gmt_created = #gmtCreated:TIMESTAMP#,
+      gmt_modified = #gmtModified:TIMESTAMP#,
+      is_delete = #isDelete:TINYINT#
+    where id = #id:BIGINT#
+  </update> -->
+</sqlMap>

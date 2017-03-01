@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="item_desc_tmpl">
+
+    <typeAlias alias="ItemDescTmplDO" type="com.mockuai.itemcenter.core.domain.ItemDescTmplDO"/>
+    <typeAlias alias="ItemDescTmplQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemDescTmplQTO"/>
+    <resultMap class="com.mockuai.itemcenter.core.domain.ItemDescTmplDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="seller_id" jdbcType="BIGINT" property="sellerId"/>
+        <result column="tms_id" jdbcType="VARCHAR" property="tmsId"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="tmpl_name" jdbcType="VARCHAR" property="tmplName"/>
+        <result column="before_desc" jdbcType="LONGVARCHAR" property="beforeDesc"/>
+        <result column="after_desc" jdbcType="LONGVARCHAR" property="afterDesc"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, seller_id,tms_id, biz_code, delete_mark, gmt_created, gmt_modified, tmpl_name
+        ,before_desc, after_desc
+    </sql>
+
+    <select id="getItemDescTmpl" parameterClass="ItemDescTmplDO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="item_desc_tmpl.Base_Column_List"/>
+        from item_desc_tmpl
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteItemDescTmpl" parameterClass="ItemDescTmplDO">
+        update item_desc_tmpl
+        set delete_mark = 1 ,gmt_modified = now()
+        where id = #id:BIGINT# and delete_mark = 0
+    </update>
+
+    <insert id="addItemDescTmpl" parameterClass="ItemDescTmplDO">
+        insert into item_desc_tmpl
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="tmsId">
+                tms_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="tmplName">
+                tmpl_name
+            </isNotNull>
+            <isNotNull prepend="," property="beforeDesc">
+                before_desc
+            </isNotNull>
+            <isNotNull prepend="," property="afterDesc">
+                after_desc
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="tmsId">
+                #tmsId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="tmplName">
+                #tmplName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="beforeDesc">
+                #beforeDesc:LONGVARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="afterDesc">
+                #afterDesc:LONGVARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+
+    <update id="updateItemDescTmpl" parameterClass="com.mockuai.itemcenter.core.domain.ItemDescTmplDO">
+        update item_desc_tmpl
+        set
+        tmpl_name = #tmplName:VARCHAR#
+        ,before_desc = #beforeDesc:LONGVARCHAR#
+        ,after_desc = #afterDesc:LONGVARCHAR#
+        where delete_mark = 0 and id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <sql id="queryWhere">
+        where
+        <isNotNull property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNull property="deleteMark">
+            delete_mark = 0
+        </isNull>
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id=#sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code=#bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryItemDescTmpl" parameterClass="ItemDescTmplQTO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="item_desc_tmpl.Base_Column_List"/>
+        from item_desc_tmpl
+        <include refid="queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            <isEqual property="needPaging" compareValue="true">
+                limit #offset#,#pageSize#
+            </isEqual>
+        </isNotNull>
+    </select>
+
+    <select id="countItemDescTmpl" parameterClass="ItemDescTmplQTO"
+            resultClass="Long">
+        select
+        count(1)
+        from item_desc_tmpl
+        <include refid="queryWhere"/>
+    </select>
+</sqlMap>

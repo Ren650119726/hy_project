@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.mockuai.rainbowcenter.core.message"/>
+
+    <bean id="consumer" class="com.aliyun.openservices.ons.api.bean.ConsumerBean" init-method="start" destroy-method="shutdown">
+        <property name="properties" > <!--消费者配置信息-->
+            <props>
+                <prop key="ConsumerId">${rainbowcenter.ons.consumer.id}</prop>
+                <prop key="AccessKey">${rainbowcenter.ons.access.key}</prop>
+                <prop key="SecretKey">${rainbowcenter.ons.secret.key}</prop>
+                <prop key="ConsumeThreadNums">20</prop>
+            </props>
+        </property>
+        <property name="subscriptionTable">
+            <map>
+                <entry value-ref="tradeOrderSuccessListener">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${rainbowcenter.ons.trade.topic}"/>
+                            <property name="expression" value="*"/>
+                        </bean>
+                    </key>
+                </entry>
+            </map>
+        </property>
+    </bean>
+    <!-- consumer -->
+    <bean id="tradeOrderSuccessListener" class="com.mockuai.rainbowcenter.core.message.listener.TradeMessageListener" />
+</beans>

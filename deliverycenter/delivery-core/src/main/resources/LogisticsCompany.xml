@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<companys>
+<!--     <company code="customer_pickup" name="客户自提"/> -->
+	<company code="huitong" name="百世汇通"/>
+	<company code="yuantong" name="圆通速递"/>
+	<company code="shunfeng" name="顺丰快递"/>
+	<company code="yunda" name="韵达快运"/>
+	<company code="yuntong" name="运通快递"/>
+	<company code="zhongtong" name="中通速递"/>
+	<company code="baifudongfang" name="百福东方"/>
+	<company code="ems" name="EMS"/>
+	<company code="guotong" name="国通快递"/>
+	<company code="tiantian" name="天天快递"/>
+	<company code="shentong" name="申通快递"/>
+	<company code="yousu" name="优速快递"/>
+	<company code="quanfeng" name="全峰快递"/>
+	<company code="suer" name="速尔快递"/>
+	<company code="other" name="其他快递"/>
+</companys>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="publishTab">
+
+
+    <typeAlias alias="PublishTabDO" type="com.mockuai.mainweb.core.domain.PublishTabDO"/>
+
+    <resultMap id="BaseResultMap" class="PublishTabDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="content" column="content"  jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+
+    </resultMap>
+
+    <sql id="item">
+        id,content,gmt_created,gmt_modified,delete_mark
+    </sql>
+
+
+
+    <insert id="add" parameterClass="PublishTabDO">
+        INSERT INTO publish_tab
+        (
+          <include refid="item"/>
+        ) VALUE (#id#,#content#,now(),now(),0)
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+
+    <update id="updatePublishTab" parameterClass="PublishTabDO">
+        update publish_tab  set content  = #content#
+    </update>
+
+    <select id="confirmRecordExist" resultClass="java.lang.Long">
+        SELECT count(id) FROM publish_tab WHERE id is NOT NULL
+    </select>
+
+    <select id="getPublishTab" resultMap="BaseResultMap">
+        select
+         <include refid="item"/>
+         from publish_tab where
+        delete_mark = 0
+    </select>
+
+    <select id="queryTabNames" resultMap="BaseResultMap">
+        select
+        <include refid="item"/>
+        from publish_tab where
+        delete_mark = 0
+    </select>
+
+
+
+
+</sqlMap>

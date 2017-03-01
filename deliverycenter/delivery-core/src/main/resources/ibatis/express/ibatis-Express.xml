@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EXPRESS">
+	<typeAlias alias="Express" type="com.mockuai.deliverycenter.core.domain.express.Express" />
+	
+	<sql id="columList">
+		   id as id,
+		   code as code,
+		   name as name,
+		   class_name as className,
+		   print_template as printTemplate,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addExpress" parameterClass="Express">
+		insert into delivery_express
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="code">code </isNotNull>
+			<isNotNull prepend="," property="name">name </isNotNull>
+			<isNotNull prepend="," property="className">class_name </isNotNull>
+			<isNotNull prepend="," property="printTemplate">print_template </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="code">#code:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="name">#name:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="className">#className:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="printTemplate">#printTemplate:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateExpress" parameterClass="Express">
+		update delivery_express
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="code"> 
+			code = #code:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="className"> 
+			class_name = #className:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="printTemplate"> 
+			print_template = #printTemplate:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<delete id="deleteExpress" parameterClass="Express">
+		delete from delivery_express 
+		where id = #id:BIGINT# and deleted=0
+	</delete>
+
+	<select id="getExpress"  parameterClass="Express" resultClass="Express">
+		select
+		<include refid="EXPRESS.columList" />
+		from delivery_express
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	
+	<sql id="queryWhere">
+		where deleted=0
+		<isNotNull prepend="AND" property="code"> 
+			code = #code:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryExpress" parameterClass="com.mockuai.deliverycenter.common.qto.express.ExpressQTO" resultClass="Express">
+		select
+		<include refid="EXPRESS.columList" />
+		from delivery_express
+		<include refid="EXPRESS.queryWhere" />
+			order by id desc 
+		<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+		</isNotNull>
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.express.ExpressQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_express
+		<include refid="EXPRESS.queryWhere" />
+	</select>
+</sqlMap>

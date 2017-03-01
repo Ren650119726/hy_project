@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_property_tmpl">
+	<typeAlias alias="ItemPropertyTmplDO" type="com.mockuai.itemcenter.core.domain.ItemPropertyTmplDO" />
+	<typeAlias alias="ItemPropertyTmplQTO"	type="com.mockuai.itemcenter.common.domain.qto.ItemPropertyTmplQTO" />
+
+	<resultMap class="ItemPropertyTmplDO" id="ItemPropertyTmplDOResult">
+		<result property="id" column="id" />
+		<result column="tmpl_name" property="tmplName" />
+		<result property="ownerType" column="owner_type" />
+		<result property="ownerId" column="owner_id" />
+		<result column="property_type" property="propertyType"/>
+		<result property="keyName" column="key_name" />
+		<result property="val" column="val" />
+		<result property="valType" column="val_type" />
+		<result property="sort" column="sort" />
+		<result property="inheritType" column="inherit_type" />
+		<result property="bizMark" column="biz_mark" />
+		<result property="imgUrl" column="img_url" />
+		<result property="categoryId" column="category_id" />
+		<result property="isDeleted" column="is_deleted" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+
+	<insert id="ItemPropertyTmplDAO.addItemPropertyTmpl" parameterClass="ItemPropertyTmplDO">
+		insert into item_property_tmpl
+		<dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="tmplName" >
+        tmpl_name
+      </isNotNull>
+      <isNotNull prepend="," property="ownerType" >
+        owner_type
+      </isNotNull>
+      <isNotNull prepend="," property="ownerId" >
+        owner_id
+      </isNotNull>
+      <isNotNull prepend="," property="propertyType" >
+        property_type
+      </isNotNull>
+      <isNotNull prepend="," property="keyName" >
+        key_name
+      </isNotNull>
+      <isNotNull prepend="," property="val" >
+        val
+      </isNotNull>
+      <isNotNull prepend="," property="valType" >
+        val_type
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        sort
+      </isNotNull>
+      <isNotNull prepend="," property="inheritType" >
+        inherit_type
+      </isNotNull>
+      <isNotNull prepend="," property="bizMark" >
+        biz_mark
+      </isNotNull>
+      <isNotNull prepend="," property="imgUrl" >
+        img_url
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        category_id
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        is_deleted
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="tmplName" >
+        #tmplName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ownerType" >
+        #ownerType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="ownerId" >
+        #ownerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="propertyType" >
+        #propertyType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="keyName" >
+        #keyName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="val" >
+        #val:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="valType" >
+        #valType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        #sort:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="inheritType" >
+        #inheritType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="bizMark" >
+        #bizMark:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="imgUrl" >
+        #imgUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        #isDeleted:INTEGER#
+      </isNotNull>
+      )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="item_property_tmpl_base_column_list">
+		id,
+		tmpl_name,
+		owner_type,
+		owner_id,
+		property_type,
+		key_name,
+		val,
+		val_type,
+		sort,
+		inherit_type,
+		biz_mark,
+		img_url,
+		category_id,
+		is_deleted,
+		gmt_created,
+		gmt_modified
+	</sql>
+	
+	<sql id="ItemPropertyTmplDAO.queryWhere">
+		<dynamic prepend="where">
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="isDeleted"> 
+				is_deleted = #isDeleted#
+			</isNotNull>
+			<isNotNull prepend="AND" property="categoryId"> 
+			category_id = #categoryId#
+			</isNotNull>
+		</dynamic>
+	</sql>
+	
+	<update id="ItemPropertyTmplDAO.updateItemPropertyTmpl">
+		update item_property_tmpl
+		set gmt_modified=now()
+		<dynamic prepend="">
+	      <isNotNull prepend="," property="record.tmplName" >
+	        tmpl_name = #record.tmplName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.propertyType" >
+	        property_type = #record.propertyType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.keyName" >
+	        key_name = #record.keyName#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.val" >
+	        val = #record.val#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.valType" >
+	        val_type = #record.valType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.sort" >
+	        sort = #record.sort#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.inheritType" >
+	        inherit_type = #record.inheritType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.bizMark" >
+	        biz_mark = #record.bizMark#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.imgUrl" >
+	        img_url = #record.imgUrl#
+	      </isNotNull>
+		</dynamic>
+		<include refid="ItemPropertyTmplDAO.queryWhere" />
+	</update>
+	
+	<update id="ItemPropertyTmplDAO.deleteItemPropertyTmpl" >
+		update item_property_tmpl
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.isDeleted">
+				is_deleted = #record.isDeleted#
+			</isNotNull>
+		</dynamic>
+		<include refid="ItemPropertyTmplDAO.queryWhere" />
+	</update>
+	
+	
+	<select id="ItemPropertyTmplDAO.getItemPropertyTmpl" resultMap="ItemPropertyTmplDOResult"	parameterClass="ItemPropertyTmplQTO">
+		select	<include refid="item_property_tmpl_base_column_list" />	from item_property_tmpl
+				<include refid="ItemPropertyTmplDAO.queryWhere" />
+	</select>
+	
+	<select id="ItemPropertyTmplDAO.countItemPropertyTmpl" resultClass="Integer" parameterClass="ItemPropertyTmplQTO">
+		select count(1) from item_property_tmpl
+		<include refid="ItemPropertyTmplDAO.queryWhere" />
+	</select>
+	
+	<select id="ItemPropertyTmplDAO.queryItemPropertyTmpl" resultMap="ItemPropertyTmplDOResult" parameterClass="ItemPropertyTmplQTO">
+		select <include refid="item_property_tmpl_base_column_list" /> from item_property_tmpl
+			   <include refid="ItemPropertyTmplDAO.queryWhere" />
+		 <isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+		 </isNotNull>
+	</select>
+</sqlMap>

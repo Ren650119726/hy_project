@@ -1,0 +1,78 @@
+<form class="navbar-form" role="search" method='get' action='/appcenter/app/query.do'>
+    <div class="form-group">
+        <span>企业标志码：</span>
+        <input type="text" name="biz_code" class="form-control">
+        <span>appKey：</span>
+        <input type="text" name="app_key" class="form-control">
+        <span>管理员手机号：</span>
+        <input type="text" name="mobile" class="form-control">
+        <button type="submit" class="btn btn-default">查询</button>
+        #if($!{userDO.level} <3)
+        <a class="btn btn-default" href="/appcenter/app/add.html">新增应用</a>
+        #end
+    </div>
+</form>
+<div role="content">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>appKey</th>
+            <th>appPwd</th>
+            <th>企业标志码</th>
+            <th>应用类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        #foreach(${appInfo} in ${appInfoList})
+        <tr>
+            <td>$!{appInfo.id}</td>
+            <td>$!{appInfo.appKey}</td>
+            <td>$!{appInfo.appPwd}</td>
+            <td>$!{appInfo.bizCode}</td>
+            <td>
+                #if($!{appInfo.appType}==1)
+                IOS客户端
+                #elseif($!{appInfo.appType}==2)
+                ANDROID客户端
+                #elseif($!{appInfo.appType}==3)
+                微商城
+                #elseif($!{appInfo.appType}==4)
+                PC商城
+                #elseif($!{appInfo.appType}==11)
+                seller管理后台
+                #elseif($!{appInfo.appType}==12)
+                boss管理后台
+                #elseif($!{appInfo.appType}==13)
+                mall管理后台
+                #end
+            </td>
+            <td>
+                <a href="/appcenter/app/get.html?app_key=$!{appInfo.appKey}">
+                    #if($!{userDO.level} < 3)
+                    修改
+                    #else
+                    查看
+                    #end
+                </a>
+                <a href="#" onclick="NameSpace.AppCenter.confirm_delete('/appcenter/app/delete.do?app_key=$!{appInfo.appKey}');">
+                    #if($!{userDO.level} < 2)
+                    删除
+                    #end
+                </a>
+            </td>
+        </tr>
+        #end
+        </tbody>
+    </table>
+    <nav class="navbar-right">
+        <ul class="pagination">
+            <li><a href="#">上一页</a></li>
+            <li><a href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><a href="#">下一页</a></li>
+        </ul>
+    </nav>
+</div>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="${distributioncenter.appName}"/>
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://${distributioncenter.dubbo.registry.address}"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:reference id="appService" interface="com.mockuai.appcenter.common.api.AppService" check="false"/>
+    <dubbo:reference id="userService" interface="com.mockuai.usercenter.common.api.UserDispatchService" check="false"/>
+    <dubbo:reference id="deliveryService" interface="com.mockuai.deliverycenter.common.api.DeliveryService"
+                     check="false"/>
+    <dubbo:reference id="itemService" interface="com.mockuai.itemcenter.common.api.ItemService" check="false"/>
+    <dubbo:reference id="tradeService" interface="com.mockuai.tradecenter.common.api.TradeService" check="false"/>
+    <dubbo:reference id="shopService" interface="com.mockuai.shopcenter.api.ShopService" check="false"/>
+    <dubbo:reference id="virtualWealthService"
+                     interface="com.mockuai.virtualwealthcenter.common.api.VirtualWealthService" check="false"/>
+    <dubbo:reference id="giftsService" interface="com.mockuai.giftscenter.common.api.GiftsService" check="false"/>
+    <dubbo:reference id="imageService" interface="com.mockuai.imagecenter.common.api.ImageService" check="false"/>
+    <dubbo:reference id="dataService" interface="com.mockuai.datacenter.common.api.DataService" check="false" />
+    <dubbo:reference id="marketingService" interface="com.mockuai.marketingcenter.common.api.MarketingService" check="false" />
+    <dubbo:reference id="headSingleService" interface="com.mockuai.headsinglecenter.common.api.HeadSingleService" check="false" />
+</beans>

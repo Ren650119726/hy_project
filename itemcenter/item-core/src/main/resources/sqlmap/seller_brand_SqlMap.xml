@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="seller_brand">
+
+    <typeAlias alias="sellerBrandDO" type="com.mockuai.itemcenter.core.domain.SellerBrandDO"/>
+    <typeAlias alias="sellerBrandQTO" type="com.mockuai.itemcenter.common.domain.qto.SellerBrandQTO"/>
+
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.SellerBrandDO">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="brand_name" property="brandName" jdbcType="VARCHAR"/>
+        <result column="brand_en_name" property="brandEnName" jdbcType="VARCHAR"/>
+        <result column="category_class" property="categoryClass" jdbcType="VARCHAR"/>
+        <result column="logo" property="logo" jdbcType="VARCHAR"/>
+        <result column="brand_desc" property="brandDesc" jdbcType="VARCHAR"/>
+        <result column="banner_img" property="bannerImg" jdbcType="VARCHAR"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="INTEGER"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME"/>
+
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, status, brand_name,brand_en_name,category_class,logo,brand_desc,biz_code, delete_mark, gmt_created,
+        gmt_modified,banner_img
+    </sql>
+
+    <select id="SellerBrandDAO.getSellerBrand" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.itemcenter.core.domain.SellerBrandDO">
+        select
+        <include refid="seller_brand.Base_Column_List"/>
+        from seller_brand
+        where id = #id:INTEGER# and delete_mark = 0
+    </select>
+
+    <!-- <insert id="insert" parameterClass="com.mockuai.itemcenter.core.domain.SellerBrandDO" >
+      insert into seller_brand (id, seller_id, authorize_type,
+        category_class, beginTime, end_time, trade_mark_license,
+        other_qualification, status, comment,brand_name,logo,brand_desc, delete_mark,
+        gmt_created, gmt_modified )
+      values (#id:INTEGER#, #sellerId:BIGINT#, #authorizeType:BIT#,
+        #categoryClass:VARCHAR#, #begintime:DATETIME#, #endTime:DATETIME#, #tradeMarkLicense:VARCHAR#,
+        #otherQualification:VARCHAR#, #status:TINYINT#, #comment:VARCHAR#, #brandName:VARCHAR#, #logo:VARCHAR#, #brandDesc:VARCHAR#, #deleteMark:INTEGER#,
+        #gmtCreated:DATETIME#, #gmtModified:DATETIME#)
+    </insert> -->
+
+    <insert id="SellerBrandDAO.addSellerBrand" parameterClass="com.mockuai.itemcenter.core.domain.SellerBrandDO">
+        insert into seller_brand
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                status
+            </isNotNull>
+            <isNotNull prepend="," property="brandName">
+                brand_name
+            </isNotNull>
+            <isNotNull prepend="," property="brandEnName">
+                brand_en_name
+            </isNotNull>
+            <isNotNull prepend="," property="categoryClass">
+                category_class
+            </isNotNull>
+            <isNotNull prepend="," property="logo">
+                logo
+            </isNotNull>
+            <isNotNull prepend="," property="brandDesc">
+                brand_desc
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="bannerImg">
+                banner_img
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                #status:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="brandName">
+                #brandName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="brandEnName">
+                #brandEnName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="categoryClass">
+                #categoryClass:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="logo">
+                #logo:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="brandDesc">
+                #brandDesc:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bannerImg">
+                #bannerImg:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <update id="SellerBrandDAO.updateSellerBrand" parameterClass="com.mockuai.itemcenter.core.domain.SellerBrandDO">
+        update seller_brand set gmt_modified = now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="status">
+                status = #status:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="brandName">
+                brand_name = #brandName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="brandEnName">
+                brand_en_name = #brandEnName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="brandDesc">
+                brand_desc = #brandDesc:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="categoryClass">
+                category_class = #categoryClass:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="logo">
+                logo = #logo:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bannerImg">
+                banner_img = #bannerImg:VARCHAR#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT# and delete_mark = 0
+    </update>
+
+    <update id="SellerBrandDAO.deleteSellerBrand" parameterClass="com.mockuai.itemcenter.core.domain.SellerBrandDO">
+        update seller_brand set delete_mark = 1,gmt_modified = now() where
+        delete_mark = 0 and id=#id#
+    </update>
+
+    <!-- 复合条件 -->
+    <sql id="SellerBrandDAO.queryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where delete_mark = 0 and biz_code=#bizCode#
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="AND" property="brandName">
+            brand_name like concat('%', #brandName#,'%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="brandEnName">
+            brand_en_name like concat('%', #brandEnName#,'%')
+        </isNotNull>
+        <isNotNull property="ids">
+            <isNotEmpty prepend="AND" property="ids">
+                id in
+                <iterate property="ids" conjunction="," close=")" open="(">
+                    #ids[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty prepend="AND" property="idList">
+            id in
+            <iterate property="idList" conjunction="," close=")" open="(">
+                #idList[]#
+            </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <!-- </dynamic> -->
+    </sql>
+
+    <select id="SellerBrandDAO.querySellerBrand" resultMap="BaseResultMap"
+            parameterClass="SellerBrandQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from seller_brand
+        <include refid="SellerBrandDAO.queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="SellerBrandDAO.countSellerBrand" resultClass="java.lang.Long">
+        select count(1) from seller_brand
+        <include refid="SellerBrandDAO.queryWhere"/>
+    </select>
+
+</sqlMap>

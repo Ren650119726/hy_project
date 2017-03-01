@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="spu_info">
+	<typeAlias alias="SpuInfoDO" type="com.mockuai.itemcenter.core.domain.SpuInfoDO" />
+	<typeAlias alias="SpuInfoDTO"	type="com.mockuai.itemcenter.common.domain.dto.SpuInfoDTO" />
+	<typeAlias alias="SpuInfoQTO"	type="com.mockuai.itemcenter.common.domain.qto.SpuInfoQTO" />
+
+	<resultMap class="SpuInfoDO" id="SpuInfoDOResult">
+		<result column="id" property="id" />
+	    <result column="spu_name" property="spuName"  />
+	    <result column="create_type" property="createType" />
+	    <result column="create_id" property="createId" />
+	    <result column="spu_status" property="spuStatus" />
+	    <result column="is_deleted" property="isDeleted" />
+	    <result column="gmt_created" property="gmtCreated" />
+	    <result column="gmt_modified" property="gmtModified" />
+	</resultMap>
+
+	<sql id="SpuInfoFields">
+		id, spu_name, create_type, create_id, spu_status, is_deleted, gmt_created, gmt_modified
+	</sql>
+
+	<insert id="SpuInfoDAO.addSpuInfo" parameterClass="SpuInfoDO">
+		insert into spu_info(
+		<include refid="SpuInfoFields" />
+		)values(
+		#id#,
+		#spuName#,
+		#createType#,
+		#createId#,
+		#spuStatus#,
+		#isDeleted#,
+		now(),
+		now()
+		)
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="spu_info_base_column_list">
+		id, spu_name, create_type, create_id, spu_status, is_deleted, gmt_created, gmt_modified
+	</sql>
+	
+	<update id="SpuInfoDAO.updateSpuInfo" parameterClass="SpuInfoDO">
+		update spu_info
+		set gmt_modified=now()
+		<dynamic prepend="">
+		      <isNotNull prepend="," property="spuName" >
+		        spu_name = #spuName#
+		      </isNotNull>
+		      <isNotNull prepend="," property="createType" >
+		        create_type = #createType#
+		      </isNotNull>
+		      <isNotNull prepend="," property="spuStatus" >
+		        spu_status = #spuStatus#
+		      </isNotNull>
+		      <isNotNull prepend="," property="isDeleted" >
+		        is_deleted = #isDeleted#
+		      </isNotNull>
+		</dynamic>
+		where id = #id# and is_deleted=0
+	</update>
+	
+	<select id="SpuInfoDAO.getSpuInfo" resultMap="SpuInfoDOResult"
+		parameterClass="Long">
+		select
+		<include refid="spu_info_base_column_list" />
+		from spu_info
+		where id = #id# and is_deleted=0
+	</select>
+	
+	<select id="SpuInfoDAO.querySpuInfo" resultMap="SpuInfoDOResult"
+		parameterClass="SpuInfoQTO">
+		select
+		<include refid="spu_info_base_column_list" />
+		from spu_info where is_deleted=0
+		 limit #currentPage#,#pageSize#
+	</select>
+</sqlMap>

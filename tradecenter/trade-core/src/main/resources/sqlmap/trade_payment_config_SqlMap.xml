@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="trade_payment_config">
+
+  
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.TradePaymentConfigDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" />
+         <result property="paymentKey" column="payment_key"/>
+         <result property="paymentName" column="payment_name"/>
+         <result property="status" column="status"/>
+         <result property="sort" column="sort"/>
+          <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        payment_key,
+        payment_name,
+        status,
+        sort,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+   <select id="query" parameterClass="com.mockuai.tradecenter.common.domain.TradePaymentConfigQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from trade_payment_config where 1=1 
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+         <isNotNull property="status" prepend="and">
+            status=#status#
+        </isNotNull>
+         <isNotNull property="deleteMark" prepend="and">
+            delete_mark=#deleteMark#
+        </isNotNull>
+       order by sort
+    </select>
+    
+   
+</sqlMap>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_track">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderTrackDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" />
+        <result property="trackInfo" column="track_info"/>
+         <result property="orderId" column="order_id"/>
+         <result property="operator" column="operator"/>
+          <result property="operateTime" column="operate_time"/>
+          <result property="orderStatus" column="order_status"/>
+          <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        track_info,
+        order_id,
+        operator,
+        operate_time,
+        order_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+   <select id="query" parameterClass="com.mockuai.tradecenter.common.domain.OrderTrackQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from order_track where 1=1 
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+        
+    </select>
+
+
+    <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.OrderTrackDO">
+        insert into order_track(
+        biz_code,
+        track_info,
+        order_id,
+        operator,
+        operate_time,
+        order_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #trackInfo#,
+        #orderId#,
+        #operator#,
+        #operateTime#,
+        #orderStatus#,
+        #deleteMark#,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+    
+  
+   
+</sqlMap>

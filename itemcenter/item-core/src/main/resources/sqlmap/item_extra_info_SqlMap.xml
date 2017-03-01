@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_extra_info">
+	<typeAlias alias="ItemExtraInfoDO" type="com.mockuai.itemcenter.core.domain.ItemExtraInfoDO" />
+	<typeAlias alias="ItemExtraInfoQTO"	type="com.mockuai.itemcenter.common.domain.qto.ItemExtraInfoQTO" />
+
+	<resultMap class="ItemExtraInfoDO" id="ItemExtraInfoDOResult">
+		 <result column="id" property="id"  />
+	    <result column="supplier_id" property="supplierId"  />
+	    <result column="item_id" property="itemId"  />
+	    <result column="cart_type" property="cartType"  />
+	    <result column="level_limit" property="levelLimit"  />
+	    <result column="comment_count" property="commentCount"  />
+	    <result column="collect_count" property="collectCount"  />
+	    <result column="score" property="score"  />
+	    <result column="stock_num" property="stockNum"  />
+	    <result column="sold_num" property="soldNum"  />
+	    <result column="is_deleted" property="isDeleted"  />
+	    <result column="gmt_created" property="gmtCreated"  />
+	    <result column="gmt_modified" property="gmtModified"  />
+	</resultMap>
+
+	<insert id="ItemExtraInfoDAO.addItemExtraInfo" parameterClass="ItemExtraInfoDO">
+		insert into item_extra_info
+		<dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="supplierId" >
+        supplier_id
+      </isNotNull>
+      <isNotNull prepend="," property="itemId" >
+        item_id
+      </isNotNull>
+      <isNotNull prepend="," property="cartType" >
+        cart_type
+      </isNotNull>
+      <isNotNull prepend="," property="levelLimit" >
+        level_limit
+      </isNotNull>
+      <isNotNull prepend="," property="commentCount" >
+        comment_count
+      </isNotNull>
+      <isNotNull prepend="," property="collectCount" >
+        collect_count
+      </isNotNull>
+      <isNotNull prepend="," property="score" >
+        score
+      </isNotNull>
+      <isNotNull prepend="," property="stockNum" >
+        stock_num
+      </isNotNull>
+      <isNotNull prepend="," property="soldNum" >
+        sold_num
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        is_deleted
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id#
+      </isNotNull>
+      <isNotNull prepend="," property="supplierId" >
+        #supplierId#
+      </isNotNull>
+      <isNotNull prepend="," property="itemId" >
+        #itemId#
+      </isNotNull>
+      <isNotNull prepend="," property="cartType" >
+        #cartType#
+      </isNotNull>
+      <isNotNull prepend="," property="levelLimit" >
+        #levelLimit#
+      </isNotNull>
+      <isNotNull prepend="," property="commentCount" >
+        #commentCount#
+      </isNotNull>
+      <isNotNull prepend="," property="collectCount" >
+        #collectCount#
+      </isNotNull>
+      <isNotNull prepend="," property="score" >
+        #score#
+      </isNotNull>
+      <isNotNull prepend="," property="stockNum" >
+        #stockNum#
+      </isNotNull>
+      <isNotNull prepend="," property="soldNum" >
+        #soldNum#
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        #isDeleted#
+      </isNotNull>
+    </dynamic>
+    )
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="item_extra_info_base_column_list">
+		 id, supplier_id, item_id, cart_type, level_limit, comment_count, collect_count, score, 
+    stock_num, sold_num, is_deleted, gmt_created, gmt_modified
+	</sql>
+	
+	<sql id="ItemExtraInfoDAO.queryWhere">
+		<dynamic prepend="where">
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="itemId"> 
+				item_id = #itemId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="isDeleted"> 
+				is_deleted = #isDeleted#
+			</isNotNull>
+		</dynamic>
+	</sql>
+
+	<select id="ItemExtraInfoDAO.getItemExtraInfo" resultMap="ItemExtraInfoDOResult" parameterClass="ItemExtraInfoQTO" >
+		select 	<include refid="item_extra_info_base_column_list" /> from item_extra_info
+				<include refid="ItemExtraInfoDAO.queryWhere" />
+	</select>
+
+	<update id="ItemExtraInfoDAO.updateItemExtraInfo" >
+		update item_extra_info
+		set gmt_modified=now()
+		<dynamic prepend="" >
+	      <isNotNull prepend="," property="record.cartType" >
+	        cart_type = #record.cartType#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.levelLimit" >
+	        level_limit = #record.levelLimit#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.commentCount" >
+	        comment_count = #record.commentCount#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.collectCount" >
+	        collect_count = #record.collectCount#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.score" >
+	        score = #record.score#
+	      </isNotNull>
+	      <isNotNull prepend="," property="record.soldNum" >
+	        sold_num = #record.soldNum#
+	      </isNotNull>
+    </dynamic>
+		<include refid="ItemExtraInfoDAO.queryWhere" />
+	</update>
+	
+	<update id="ItemExtraInfoDAO.deleteItemExtraInfo" >
+		update item_extra_info
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.isDeleted">
+				is_deleted = #record.isDeleted#
+			</isNotNull>
+		</dynamic>
+		<include refid="ItemExtraInfoDAO.queryWhere" />
+	</update>
+	
+	<select id="ItemExtraInfoDAO.countItemExtraInfo" resultClass="Integer" parameterClass="ItemExtraInfoQTO">
+		select count(1) from item_extra_info
+		<include refid="ItemExtraInfoDAO.queryWhere" />
+	</select>
+	
+	<select id="ItemExtraInfoDAO.queryItemExtraInfoList" resultMap="ItemExtraInfoDOResult"	parameterClass="ItemExtraInfoQTO">
+		select	<include refid="item_extra_info_base_column_list" /> from item_extra_info
+				<include refid="ItemExtraInfoDAO.queryWhere" />
+		 <isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+		 </isNotNull>
+	</select>
+	
+	
+</sqlMap>

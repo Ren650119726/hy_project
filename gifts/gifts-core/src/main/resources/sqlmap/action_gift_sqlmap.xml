@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="action_gift">
+
+    <resultMap id="result" class="com.mockuai.giftscenter.core.domain.ActionGiftDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="openFlag" column="open_flag" jdbcType="TINYINT"/>
+        <result property="actionType" column="action_type" jdbcType="TINYINT"/>
+        <result property="appType" column="app_type" jdbcType="varchar"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+    id,
+    open_flag,
+    action_type,
+    app_type,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+    </sql>
+
+
+
+    <insert id="insert" parameterClass="com.mockuai.giftscenter.core.domain.ActionGiftDO">
+        insert into action_gift (
+        open_flag,
+        action_type,
+        app_type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #openFlag#,
+        #actionType#,
+        #appType#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+	<select id="getByActionType" resultMap="result" parameterClass="int">
+        select
+        <include refid="columnList"/>
+        from action_gift WHERE delete_mark=0
+        and action_type = #actionType#
+    </select>
+    
+    <update id="update" parameterClass="com.mockuai.giftscenter.core.domain.ActionGiftDO">
+        UPDATE action_gift SET gmt_modified=now()
+        <isNotNull prepend="," property="appType" >
+         app_type = #appType#
+        </isNotNull>
+        <isNotNull prepend="," property="openFlag" >
+            open_flag = #openFlag#
+        </isNotNull>
+        WHERE action_type = #actionType#
+    </update>
+    
+    
+
+</sqlMap>

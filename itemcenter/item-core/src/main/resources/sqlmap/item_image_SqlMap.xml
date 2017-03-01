@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_image">
+    <typeAlias alias="ItemImageDO" type="com.mockuai.itemcenter.core.domain.ItemImageDO"/>
+    <typeAlias alias="ItemImageQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemImageQTO"/>
+
+    <resultMap class="ItemImageDO" id="ItemImageDOResult">
+        <result column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="image_type" property="imageType"/>
+        <result column="image_name" property="imageName"/>
+        <result column="image_url" property="imageUrl"/>
+        <result column="property_value_id" property="propertyValueId"/>
+        <result column="sort" property="sort"/>
+        <result column="biz_code" property="bizCode"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <insert id="ItemImageDAO.addItemImage" parameterClass="ItemImageDO">
+        insert into item_image
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="imageType">
+                image_type
+            </isNotNull>
+            <isNotNull prepend="," property="imageName">
+                image_name
+            </isNotNull>
+            <isNotNull prepend="," property="imageUrl">
+                image_url
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                property_value_id
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="imageType">
+                #imageType:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="imageName">
+                #imageName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="imageUrl">
+                #imageUrl:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                #propertyValueId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                #sort:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="item_image_base_column_list">
+        id, item_id, seller_id, image_type, image_name, image_url,property_value_id,
+        sort, biz_code,delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="ItemImageDAO.queryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where
+        <isNull property="deleteMark">
+            delete_mark = 0
+        </isNull>
+        <isNotNull property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="itemId" prepend="and">
+            item_id=#itemId#
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="and">
+            seller_id=#sellerId#
+        </isNotNull>
+        <isNotNull property="itemIdList">
+            <isNotEmpty property="itemIdList" prepend="AND">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <!-- </dynamic> -->
+    </sql>
+
+    <update id="ItemImageDAO.updateItemImage">
+        update item_image
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark = #deleteMark#
+            </isNotNull>
+        </dynamic>
+        <include refid="ItemImageDAO.queryWhere"/>
+    </update>
+
+    <select id="ItemImageDAO.getItemImage" resultMap="ItemImageDOResult" parameterClass="ItemImageQTO">
+        select
+        <include refid="item_image_base_column_list"/>
+        from item_image
+        <include refid="ItemImageDAO.queryWhere"/>
+    </select>
+
+    <update id="ItemImageDAO.deleteItemImage">
+        update item_image
+        set gmt_modified=now(),delete_mark = 1
+        where item_id = #itemId# and seller_id = #sellerId# and delete_mark in (0,2)
+    </update>
+
+    <update id="ItemImageDAO.trashItemImage">
+        update item_image
+        set gmt_modified=now(),delete_mark = 2
+        where item_id = #itemId# and seller_id = #sellerId# and delete_mark = 0
+    </update>
+
+    <update id="ItemImageDAO.recoveryItemImage">
+        update item_image
+        set gmt_modified=now(),delete_mark = 0
+        where item_id = #itemId# and seller_id = #sellerId# and delete_mark = 2
+    </update>
+
+    <update id="ItemImageDAO.emptyRecycleBin">
+        update item_image
+        set gmt_modified=now(),delete_mark = 1
+        where seller_id = #sellerId# and biz_code = #bizCode# and delete_mark = 2
+    </update>
+
+    <select id="ItemImageDAO.countItemImage" resultClass="Integer" parameterClass="ItemImageQTO">
+        select count(1) from item_image
+        <include refid="ItemImageDAO.queryWhere"/>
+    </select>
+
+    <select id="ItemImageDAO.queryItemImage" resultMap="ItemImageDOResult" parameterClass="ItemImageQTO">
+        select
+        <include refid="item_image_base_column_list"/>
+        from item_image
+        <include refid="ItemImageDAO.queryWhere"/>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+</sqlMap>

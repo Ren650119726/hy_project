@@ -1,0 +1,16 @@
+*.bat
+.idea/
+.project
+.settings/
+target/
+*.iml
+*.ipr
+*.iws
+.classpath
+.clover/
+*.log
+*.class
+.DS_Store
+~
+antx_online.properties
+antx_pre.properties

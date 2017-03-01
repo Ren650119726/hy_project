@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="Store">
+    <typeAlias alias="StoreDO" type="com.mockuai.shopcenter.core.domain.StoreDO"/>
+    <typeAlias alias="StoreQTO" type="com.mockuai.shopcenter.domain.qto.StoreQTO"/>
+    <resultMap id="BaseResultMap" class="StoreDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="store_number" property="storeNumber" jdbcType="VARCHAR"/>
+        <result column="store_name" property="storeName" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="mobile" property="mobile" jdbcType="VARCHAR"/>
+        <result column="owner_id" property="ownerId" jdbcType="BIGINT"/>
+        <result column="store_image" property="storeImage" jdbcType="VARCHAR"/>
+        <result column="service_desc" property="serviceDesc" jdbcType="VARCHAR"/>
+        <result column="service_time" property="serviceTime" jdbcType="VARCHAR"/>
+        <result column="support_pick_up" property="supportPickUp" jdbcType="TINYINT"/>
+        <result column="support_delivery" property="supportDelivery" jdbcType="TINYINT"/>
+        <result column="delivery_range" property="deliveryRange" jdbcType="VARCHAR"/>
+        <result column="longitude" property="longitude" jdbcType="VARCHAR"/>
+        <result column="latitude" property="latitude" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="country_code" property="countryCode" jdbcType="VARCHAR"/>
+        <result column="province_code" property="provinceCode" jdbcType="VARCHAR"/>
+        <result column="city_code" property="cityCode" jdbcType="VARCHAR"/>
+        <result column="area_code" property="areaCode" jdbcType="VARCHAR"/>
+        <result column="town_code" property="townCode" jdbcType="VARCHAR"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="where_clause">
+        where delete_mark = 0
+        <isNotNull property="storeNumber" prepend="and">
+            store_number = #storeNumber#
+        </isNotNull>
+        <isNotNull property="storeName" prepend="and">
+            store_name LIKE "%"#storeName#"%"
+        </isNotNull>
+        <isNotNull>
+            <isNotEmpty property="idList" prepend="and">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="and">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull property="ownerId" prepend="and">
+            owner_id = #ownerId#
+        </isNotNull>
+        <isNotNull property="supportPickUp" prepend="and">
+            support_pick_up = #supportPickUp#
+        </isNotNull>
+        <isNotNull property="supportDelivery" prepend="and">
+            support_delivery = #supportDelivery#
+        </isNotNull>
+    </sql>
+
+    <sql id="base_column_list">
+        id, seller_id,store_number,store_name,phone,mobile, owner_id, store_image, service_desc, service_time, support_pick_up,
+        support_delivery, delivery_range, longitude, latitude, address, country_code, province_code,
+        city_code, area_code, town_code, biz_code, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+
+    <insert id="addStore" parameterClass="StoreDO">
+        insert into store (seller_id,store_number,store_name,phone,mobile,owner_id,
+        store_image, service_desc, service_time,
+        support_pick_up, support_delivery, delivery_range,
+        longitude, latitude, address,
+        country_code, province_code, city_code,
+        area_code, town_code, biz_code,
+        delete_mark, gmt_created, gmt_modified
+        )
+        values (#sellerId#,#storeNumber#, #storeName#, #phone#,#mobile#,#ownerId#,
+        #storeImage#, #serviceDesc#, #serviceTime#,
+        #supportPickUp#, #supportDelivery#, #deliveryRange#,
+        #longitude#, #latitude#, #address#,
+        #countryCode#, #provinceCode#, #cityCode#,
+        #areaCode#, #townCode#, #bizCode#,
+        0, now(), now()
+        )
+    </insert>
+
+    <select id="countStore" parameterClass="StoreQTO" resultClass="java.lang.Long">
+        select count(1) from store
+        <include refid="where_clause"/>
+    </select>
+
+    <update id="updateStore" parameterClass="StoreDO">
+        update store
+        set gmt_modified = now()
+        <dynamic>
+            <!--<isNotNull prepend="," property="storeNumber">-->
+            <!--store_number = #storeNumber#-->
+            <!--</isNotNull>-->
+            <isNotNull prepend="," property="storeName">
+                store_name = #storeName#
+            </isNotNull>
+            <isNotNull prepend="," property="phone">
+                phone = #phone#
+            </isNotNull>
+            <isNotNull prepend="," property="storeImage">
+                store_image = #storeImage#
+            </isNotNull>
+            <isNotNull prepend="," property="serviceDesc">
+                service_desc = #serviceDesc#
+            </isNotNull>
+            <isNotNull prepend="," property="serviceTime">
+                service_time = #serviceTime#
+            </isNotNull>
+            <isNotNull prepend="," property="supportPickUp">
+                support_pick_up = #supportPickUp#
+            </isNotNull>
+            <isNotNull prepend="," property="supportDelivery">
+                support_delivery = #supportDelivery#
+            </isNotNull>
+            <isNotNull prepend="," property="deliveryRange">
+                delivery_range = #deliveryRange#
+            </isNotNull>
+            <isNotNull prepend="," property="longitude">
+                longitude = #longitude#
+            </isNotNull>
+            <isNotNull prepend="," property="latitude">
+                latitude = #latitude#
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                address = #address#
+            </isNotNull>
+            <isNotNull prepend="," property="countryCode">
+                country_code = #countryCode#
+            </isNotNull>
+            <isNotNull prepend="," property="provinceCode">
+                province_code = #provinceCode#
+            </isNotNull>
+            <isNotNull prepend="," property="cityCode">
+                city_code = #cityCode#
+            </isNotNull>
+            <isNotNull prepend="," property="areaCode">
+                area_code = #areaCode#
+            </isNotNull>
+            <isNotNull prepend="," property="townCode">
+                town_code = #townCode#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+    <select id="queryStore" parameterClass="StoreQTO" resultMap="BaseResultMap">
+        select
+        <include refid="base_column_list"/>
+        from store
+        <include refid="where_clause"/>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="getStore" parameterClass="StoreDO" resultMap="BaseResultMap">
+        select
+        <include refid="base_column_list"/>
+        from store
+        where id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteStore" parameterClass="StoreDO">
+        update store set delete_mark = 1
+        where id = #id# and seller_id = #sellerId# and biz_code = #bizCode#
+    </update>
+
+
+</sqlMap>

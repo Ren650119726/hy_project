@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	   default-autowire="byName">
+	<!-- <bean id="orderManager" class="com.mockuaickuai.tradecenter.core.manager.impl.DefaultOrderManager"/> -->
+	
+	<bean id="userCartItemManager" class="com.mockuai.tradecenter.core.manager.impl.UserCartItemManagerImpl"/>
+
+	<bean id="orderSeqManager" class="com.mockuai.tradecenter.core.manager.impl.OrderSeqManagerImpl"/>
+
+	<bean id="itemManager" class="com.mockuai.tradecenter.core.manager.impl.ItemManagerImpl"/>
+	
+	<bean id="userManager" class="com.mockuai.tradecenter.core.manager.impl.UserManagerImpl" />
+	
+	<bean id="supplierManager" class="com.mockuai.tradecenter.core.manager.impl.SupplierManagerImpl" />
+	
+	<bean id="deliveryManager" class="com.mockuai.tradecenter.core.manager.impl.DeliveryManagerImpl" />
+	
+	<!--<bean id="sellerOrderManager" class="com.mockuai.tradecenter.core.manager.impl.SellerOrderManagerImpl" />-->
+	
+	<!--<bean id="returnOrderItemManager" class="com.mockuai.tradecenter.core.manager.impl.ReturnOrderItemManagerImpl" />-->
+	
+	<!--<bean id="returnOrderManager" class="com.mockuai.tradecenter.core.manager.impl.ReturnOrderManagerImpl" />-->
+	
+	<!--<bean id="orderLogManagerImpl" class="com.mockuai.tradecenter.core.manager.impl.OrderLogManagerImpl" />-->
+	
+
+	<bean id="orderManager" class="com.mockuai.tradecenter.core.manager.impl.OrderManagerImpl"/>
+	<bean id="orderItemManager" class="com.mockuai.tradecenter.core.manager.impl.OrderItemManagerImpl"/>
+	<bean id="orderConsigneeManager" class="com.mockuai.tradecenter.core.manager.impl.OrderConsigneeManagerImpl" />
+	<bean id="orderPaymentManager" class="com.mockuai.tradecenter.core.manager.impl.OrderPaymentManagerImpl"/>
+	<bean id="orderInvoiceManager" class="com.mockuai.tradecenter.core.manager.impl.OrderInvoiceManagerImpl"/>
+	<bean id="orderDiscountInfoManager" class="com.mockuai.tradecenter.core.manager.impl.OrderDiscountInfoManagerImpl"/>
+	<bean id="marketingManager" class="com.mockuai.tradecenter.core.manager.impl.MarketingManagerImpl"/>
+	<bean id="threadPoolManager" class="com.mockuai.tradecenter.core.manager.impl.ThreadPoolManagerImpl"/>
+	<bean id="cacheManager" class="com.mockuai.tradecenter.core.manager.impl.CacheManagerLocal"/>
+	<bean id="appManager" class="com.mockuai.tradecenter.core.manager.impl.AppManagerImpl"/>
+	
+	<bean id="shopManager" class="com.mockuai.tradecenter.core.manager.impl.ShopManagerImpl"/>
+	
+	<bean id="dataManager" class="com.mockuai.tradecenter.core.manager.impl.DataManagerImpl"/>
+	
+	<bean id="orderViewManager" class="com.mockuai.tradecenter.core.manager.impl.OrderViewManagerImpl"/>
+	
+	<bean id="sellerTransLogManager" class="com.mockuai.tradecenter.core.manager.impl.SellerTransLogManagerImpl"/>
+	
+	<bean id="withdrawManager" class="com.mockuai.tradecenter.core.manager.impl.WithdrawManagerImpl"/>
+	
+	<bean id="msgQueueManager" class="com.mockuai.tradecenter.core.manager.impl.MsgQueueManagerImpl"
+		  scope="singleton" init-method="init"  >
+		<property name="topic" value="${tradecenter.msg.topic}" />
+		<property name="producerId" value="${tradecenter.msg.producerId}" />
+		<property name="accessKey" value="${tradecenter.msg.accessKey}" />
+		<property name="secretKey" value="${tradecenter.msg.secretKey}" />
+	</bean>
+	<bean id="refundOrderManager" class="com.mockuai.tradecenter.core.manager.impl.RefundOrderManagerImpl"/>
+	
+	<bean id="refundOrderItemManager" class="com.mockuai.tradecenter.core.manager.impl.RefundOrderItemManagerImpl"/>
+	
+	<bean id="storeManager" class="com.mockuai.tradecenter.core.manager.impl.StoreManagerImpl"/>
+	
+	<bean id="orderServiceManager" class="com.mockuai.tradecenter.core.manager.impl.OrderServiceManagerImpl"/>
+	
+	<bean id="cartItemServiceManager" class="com.mockuai.tradecenter.core.manager.impl.CartItemServiceManagerImpl"/>
+
+	<bean id="bizLockManager" class="com.mockuai.tradecenter.core.manager.impl.BizLockManagerImpl"/>
+	<bean id="higoManager" class="com.mockuai.tradecenter.core.manager.impl.HigoManagerImpl"/>
+	<bean id="tradeNotifyLogManager" class="com.mockuai.tradecenter.core.manager.impl.TradeNotifyLogManagerImpl"/>
+	<bean id="customerManager" class="com.mockuai.tradecenter.core.manager.impl.CustomerManagerImpl"/>
+	
+	<bean id="orderTrackManager" class="com.mockuai.tradecenter.core.manager.impl.OrderTrackManagerImpl"/>
+	<bean id="virtualWealthManager" class="com.mockuai.tradecenter.core.manager.impl.VirtualWealthManagerImpl"/>
+	<bean id="distributionManager" class="com.mockuai.tradecenter.core.manager.impl.DistributionManagerImpl"/>
+	<bean id="tradeConfigManager" class="com.mockuai.tradecenter.core.manager.impl.TradeConfigManagerImpl"/>
+	<bean id="tradePaymentConfigManager" class="com.mockuai.tradecenter.core.manager.impl.TradePaymentConfigManagerImpl"/>
+
+</beans>

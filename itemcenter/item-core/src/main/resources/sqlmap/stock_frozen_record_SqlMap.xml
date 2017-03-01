@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="stock_frozen_record">
+
+
+    <typeAlias alias="StockFrozenRecordDO" type="com.mockuai.itemcenter.core.domain.StockFrozenRecordDO"/>
+    <typeAlias alias="StockFrozenRecordQTO" type="com.mockuai.itemcenter.common.domain.qto.StockFrozenRecordQTO"/>
+    <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.StockFrozenRecordDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="item_id" property="itemId" jdbcType="BIGINT"/>
+        <result column="sku_id" property="skuId" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="order_sn" property="orderSn" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="store_id" property="storeId" jdbcType="BIGINT"/>
+        <result column="supplier_id" property="supplierId" jdbcType="BIGINT"/>
+        <result column="distributor_id" property="distributorId" jdbcType="BIGINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, biz_code, item_id, sku_id, seller_id, store_id ,supplier_id,distributor_id,
+        order_sn, number, status, delete_mark,
+        gmt_created, gmt_modified
+    </sql>
+
+    <select id="getStockFrozenRecord" resultMap="BaseResultMap" parameterClass="StockFrozenRecordDO">
+
+        select
+        <include refid="stock_frozen_record.Base_Column_List"/>
+        from stock_frozen_record
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode# and delete_mark = 0
+    </select>
+
+    <insert id="addStockFrozenRecord" parameterClass="StockFrozenRecordDO">
+        insert into stock_frozen_record (id, biz_code, item_id, sku_id, seller_id,
+        store_id ,supplier_id,distributor_id,
+        order_sn, number, status, delete_mark, gmt_created,
+        gmt_modified)
+        values (#id:BIGINT#, #bizCode:VARCHAR#, #itemId:BIGINT#, #skuId:BIGINT#, #sellerId:BIGINT#,
+        #storeId:BIGINT#, #supplierId:BIGINT#, #distributorId:BIGINT#,
+        #orderSn:VARCHAR#, #number:INTEGER#, #status:TINYINT#, 0, now(),
+        now())
+    </insert>
+    <update id="updateStockFrozenRecordStatus" parameterClass="StockFrozenRecordQTO">
+        update stock_frozen_record
+        set gmt_modified = now(), status = #status#
+        where order_sn = #orderSn#
+        <isNotNull property="skuIdList" prepend="AND">
+            sku_id in
+            <iterate property="skuIdList" conjunction="," open="(" close=")">
+                 #skuIdList[]#
+            </iterate>
+        </isNotNull>
+        and seller_id = #sellerId# and biz_code = #bizCode# and delete_mark = 0
+    </update>
+
+    <select id="queryStockFrozenRecord" resultMap="BaseResultMap" parameterClass="StockFrozenRecordQTO">
+
+        select
+        <include refid="stock_frozen_record.Base_Column_List"/>
+        from stock_frozen_record
+        where delete_mark = 0
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="AND">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull property="orderSn" prepend="AND">
+            order_sn = #orderSn#
+        </isNotNull>
+        <isNotNull property="itemId" prepend="AND">
+            item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="skuId" prepend="AND">
+            sku_id = #skuId#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status = #status#
+        </isNotNull>
+    </select>
+</sqlMap>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionConfig>
+	<filters>
+		<chain name="required">
+			<!-- <filter name="xxx" implClass="xxx" />
+			<filter name="xxx" implClass="xxx" /> -->
+		</chain>
+	</filters>
+</ActionConfig>

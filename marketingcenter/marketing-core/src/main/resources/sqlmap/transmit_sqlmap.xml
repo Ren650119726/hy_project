@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="transmit">
+    <resultMap id="result" class="com.mockuai.marketingcenter.core.domain.TransmitDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="percent" column="percent" jdbcType="NUMERIC" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        user_id,
+        biz_code,
+        percent,
+        status,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="insert" parameterClass="com.mockuai.marketingcenter.core.domain.TransmitDO">
+        INSERT INTO transmit(
+        user_id,
+        biz_code,
+        percent,
+        status,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+        )
+        VALUES (
+        #userId#,
+        #bizCode#,
+        #percent#,
+        #status#,
+        now(),
+        now(),
+        0
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getTransmit" parameterClass="java.lang.String" resultMap="result">
+        SELECT * FROM transmit where delete_mark = 0 AND biz_code=#bizCode#
+    </select>
+
+    <update id="update" parameterClass="com.mockuai.marketingcenter.core.domain.TransmitDO">
+        UPDATE transmit SET gmt_modified = now()
+        <isNotNull prepend="," property="percent">
+            percent = #percent#
+        </isNotNull>
+        <isNotNull prepend="," property="status">
+            status = #status#
+        </isNotNull>
+        WHERE id = #id# and biz_code=#bizCode# AND delete_mark = 0
+    </update>
+</sqlMap>

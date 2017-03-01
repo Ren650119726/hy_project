@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="gifts_packet_profit">
+
+    <typeAlias alias="giftsPacketProfitDO" type="com.mockuai.giftscenter.core.domain.GiftsPacketProfitDO"/>
+
+    <resultMap id="result" class="giftsPacketProfitDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="giftsPacketId" column="gifts_packet_id" jdbcType="BIGINT"/>
+        <result property="levelId" column="level_id" jdbcType="BIGINT"/>
+        <result property="levelMoney" column="level_money" jdbcType="BIGINT"/>
+        <result property="levelScore" column="level_score" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+
+
+   <sql id="columnList">
+    id,
+    gifts_packet_id,
+    level_id,
+    level_money,
+    level_score,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="giftsPacketId">
+            gifts_packet_id = #giftsPacketId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="levelId">
+            level_id = #levelId#
+        </isNotNull>
+    </sql>
+
+    <insert id="addGiftsPacketProfit" parameterClass="giftsPacketProfitDO">
+        insert into gifts_packet_profit (
+        gifts_packet_id,
+        level_id,
+        level_money,
+        level_score,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #giftsPacketId#,
+        #levelId#,
+        #levelMoney#,
+        #levelScore#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    
+    <select id="queryGiftsPacketProfit" parameterClass="giftsPacketProfitDO" resultMap="result">
+        select
+        <include refid="gifts_packet_profit.columnList"/>
+        from gifts_packet_profit
+        <include refid="gifts_packet_profit.queryWhere"/>
+        ORDER BY id asc
+    </select>
+    
+    
+    <update id="updateGiftsPacketProfit" parameterClass="giftsPacketProfitDO">
+        UPDATE gifts_packet_profit SET gmt_modified=now()
+        <isNotNull prepend="," property="levelMoney">
+            level_money = #levelMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="levelScore">
+            level_score = #levelScore#
+        </isNotNull>
+        WHERE level_id = #levelId# AND gifts_packet_id = #giftsPacketId#
+    </update>
+    
+    
+    <select id="getGiftsPacketProfit" resultMap="result" parameterClass="giftsPacketProfitDO">
+        select
+        <include refid="gifts_packet_profit.columnList"/>
+        from gifts_packet_profit 
+        <include refid="gifts_packet_profit.queryWhere"/>
+    </select>
+</sqlMap>

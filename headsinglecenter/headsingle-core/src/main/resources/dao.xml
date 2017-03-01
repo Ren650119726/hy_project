@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+<bean id="headSingleSubDAO" class="com.mockuai.headsinglecenter.core.dao.impl.HeadSingleSubDaoImpl"/>    
+<bean id="headSingleInfoDAO" class="com.mockuai.headsinglecenter.core.dao.impl.HeadSingleInfoDaoImpl"/>    
+<bean id="headSingleUserDAO" class="com.mockuai.headsinglecenter.core.dao.impl.HeadSingleUserDaoImpl"/>    
+</beans>

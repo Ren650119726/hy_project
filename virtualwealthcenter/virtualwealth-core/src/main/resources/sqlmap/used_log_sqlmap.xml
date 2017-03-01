@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="used_log">
+
+    <typeAlias alias="usedLogDO" type="com.mockuai.virtualwealthcenter.core.domain.UsedLogDO"/>
+    <typeAlias alias="usedLogQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.UsedLogQTO"/>
+
+    <resultMap id="BaseResultMap" class="usedLogDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="wealth_account_id" property="wealthAccountId" jdbcType="BIGINT"/>
+        <result column="granted_wealth_id" property="grantedWealthId" jdbcType="BIGINT"/>
+        <result column="used_wealth_id" property="usedWealthId" jdbcType="BIGINT"/>
+        <result column="amount" property="amount" jdbcType="BIGINT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="order_sn" property="orderSn" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="BIT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, biz_code, wealth_account_id, granted_wealth_id, used_wealth_id, amount, order_id,
+    order_sn, status, delete_mark, gmt_created, gmt_modified
+  </sql>
+
+    <select id="getUsedLog" resultMap="BaseResultMap" parameterClass="usedLogDO">
+        select
+        <include refid="used_log.Base_Column_List"/>
+        from used_log where id = #id:BIGINT#
+    </select>
+
+    <insert id="batchAddUsedLog" parameterClass="java.util.Map">
+            insert into used_log(
+            biz_code,
+            wealth_account_id,
+            granted_wealth_id,
+            used_wealth_id,
+            amount,
+            status,
+            delete_mark,
+            gmt_created,
+            gmt_modified
+            )
+            values
+        <isNotNull property="usedLogs">
+            <iterate property="usedLogs" conjunction=",">
+                (
+                #usedLogs[].bizCode#,
+                #usedLogs[].wealthAccountId#,
+                #usedLogs[].grantedWealthId#,
+                #usedLogs[].usedWealthId#,
+                #usedLogs[].amount#,
+                #usedLogs[].status#,
+                0,
+                now(),
+                now()
+                )
+            </iterate>
+        </isNotNull>
+    </insert>
+
+    <sql id="queryWhere">
+        <isNotNull property="usedWealthId" prepend="AND">
+            used_wealth_id=#usedWealthId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryUsedLog" parameterClass="usedLogQTO" resultMap="BaseResultMap">
+        SELECT
+        <include refid="used_log.Base_Column_List"/>
+        FROM used_log
+        WHERE delete_mark = 0
+        <include refid="queryWhere"/>
+    </select>
+
+    <update id="updateUsedLog" parameterClass="usedLogDO">
+        update used_log SET gmt_modified = now()
+        <isNotNull prepend="," property="status">
+            status = #status:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="," property="deleteMark">
+            delete_mark = #deleteMark:BIT#
+        </isNotNull>
+        where used_wealth_id=#usedWealthId#
+    </update>
+</sqlMap>

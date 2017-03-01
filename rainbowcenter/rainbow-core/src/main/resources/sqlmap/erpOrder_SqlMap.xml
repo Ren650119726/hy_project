@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="gyerpOrder">
+    <typeAlias alias="erpOrderDO" type="com.mockuai.rainbowcenter.core.domain.ErpOrderDO"/>
+    <typeAlias alias="erpOrderQTO" type="com.mockuai.rainbowcenter.common.qto.ErpOrderQTO"/>
+
+    <resultMap id="BaseResultMap" class="erpOrderDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+        <result property="gyerpCode" column="gyerp_code" jdbcType="VARCHAR"/>
+        <result property="createTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_list">
+        id,
+        order_id,
+        gyerp_code,
+        created_time,
+         gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addErpOrder" parameterClass="erpOrderDO">
+        insert into gyerp_order(
+        order_id,
+        gyerp_code,
+        created_time,
+        gmt_created,
+        gmt_modified,
+        delete_mark) values
+          ( #orderId#,
+            #gyerpCode#,
+            #createTime#,
+            now(),
+            now(),
+            0)
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+        select last_insert_id()
+        </selectKey>
+    </insert>
+    <select id="getGyerpCode" parameterClass="erpOrderDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from gyerp_order where order_id = #orderId# and delete_mark=0
+    </select>
+</sqlMap>

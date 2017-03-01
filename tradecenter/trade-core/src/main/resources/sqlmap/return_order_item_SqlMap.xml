@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="return_order_item" >
+  <resultMap id="BaseResultMap" class="com.mockuai.tradecenter.core.domain.ReturnOrderItemDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="return_order_id" property="returnOrderId" jdbcType="BIGINT" />
+    <result column="item_sku_id" property="itemSkuId" jdbcType="BIGINT" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="supplier_id" property="supplierId" jdbcType="BIGINT" />
+    <result column="return_money" property="returnMoney" jdbcType="BIGINT" />
+    <result column="return_reason" property="returnReason" jdbcType="String" />
+    <result column="return_desc" property="returnDesc" jdbcType="String" />
+    <result column="return_attach" property="returnAttach" jdbcType="String" />
+    <result column="number" property="number" jdbcType="INTEGER" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="TINYINT" />
+    <result column="is_returned" property="isReturned" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, return_order_id, item_sku_id, item_name, supplier_id, return_money,return_reason,return_desc,return_attach, number, gmt_created, 
+    gmt_modified, is_delete, is_returned
+  </sql>
+  
+  <insert id="addReturnOrderItem" parameterClass="com.mockuai.tradecenter.core.domain.ReturnOrderItemDO" >
+    insert into return_order_item
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="returnOrderId" >
+        return_order_id
+      </isNotNull>
+      <isNotNull prepend="," property="itemSkuId" >
+        item_sku_id
+      </isNotNull>
+      <isNotNull prepend="," property="itemName" >
+        item_name
+      </isNotNull>
+      <isNotNull prepend="," property="supplierId" >
+        supplier_id
+      </isNotNull>
+      <isNotNull prepend="," property="returnMoney" >
+        return_money
+      </isNotNull>
+      <isNotNull prepend="," property="returnReason" >
+		return_reason
+      </isNotNull>
+      <isNotNull prepend="," property="returnDesc" >
+        return_desc
+      </isNotNull>
+      <isNotNull prepend="," property="returnAttach" >
+        return_attach
+      </isNotNull>
+      <isNotNull prepend="," property="number" >
+        number
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        gmt_created
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        gmt_modified
+      </isNotNull>
+      <isNotNull prepend="," property="isDelete" >
+        is_delete
+      </isNotNull>
+      <isNotNull prepend="," property="isReturned" >
+        is_returned
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="returnOrderId" >
+        #returnOrderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemSkuId" >
+        #itemSkuId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemName" >
+        #itemName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="supplierId" >
+        #supplierId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="returnMoney" >
+        #returnMoney:BIGINT#
+      </isNotNull>
+       <isNotNull prepend="," property="returnReason" >
+        #returnReason:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnDesc" >
+        #returnDesc:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="returnAttach" >
+        #returnAttach:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="number" >
+        #number:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        #gmtCreated:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        #gmtModified:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="isDelete" >
+        #isDelete:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="isReturned" >
+        #isReturned:TINYINT#
+      </isNotNull>
+      )
+    </dynamic>
+    <selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+	</selectKey>
+  </insert>
+
+	<update id="updateReturnItemStatus">
+		update return_order_item
+			is_returned = #isReturned:TINYINT#,
+			gmt_modified = #gmtModified:DATETIME#
+		where supplier_id = #supplierId:BIGINT# and id = #id:BIGINT# 
+	</update>
+ 
+</sqlMap>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EXPRESSREGION">
+	<typeAlias alias="ExpressRegion" type="com.mockuai.deliverycenter.core.domain.express.ExpressRegion" />
+	
+	<sql id="columList">
+		   express_code as expressCode,
+		   region as region,
+		   locality as locality,
+		   citycode as citycode,
+		   province as province,
+		   city as city,
+		   area as area,
+		   town as town,
+		   openstatus as openstatus,
+		   opentime as opentime,
+		   remark as remark
+	</sql>
+
+	<insert id="addExpressRegion" parameterClass="ExpressRegion">
+		insert into delivery_express_region
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="expressCode">express_code </isNotNull>
+			<isNotNull prepend="," property="region">region </isNotNull>
+			<isNotNull prepend="," property="locality">locality </isNotNull>
+			<isNotNull prepend="," property="citycode">citycode </isNotNull>
+			<isNotNull prepend="," property="province">province </isNotNull>
+			<isNotNull prepend="," property="city">city </isNotNull>
+			<isNotNull prepend="," property="area">area </isNotNull>
+			<isNotNull prepend="," property="town">town </isNotNull>
+			<isNotNull prepend="," property="openstatus">openstatus </isNotNull>
+			<isNotNull prepend="," property="opentime">opentime </isNotNull>
+			<isNotNull prepend="," property="remark">remark </isNotNull>
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="expressCode">#expressCode:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="region">#region:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="locality">#locality:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="citycode">#citycode:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="province">#province:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="city">#city:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="area">#area:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="town">#town:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="openstatus">#openstatus:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="opentime">#opentime:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="remark">#remark:VARCHAR#</isNotNull>
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	
+	<sql id="queryWhere">
+		where
+		<isNotNull  property="expressCode"> 
+			express_code = #expressCode:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="province"> 
+			province like concat(#province:VARCHAR#,'%')
+		</isNotNull>
+		<isNotNull prepend="AND" property="city"> 
+			city like concat(#city:VARCHAR#,'%')
+		</isNotNull>
+		<isNotNull prepend="AND" property="area"> 
+			area like concat(#area:VARCHAR#,'%')
+		</isNotNull>
+		<isNotNull prepend="AND" property="town"> 
+			town like concat(#town:VARCHAR#,'%')
+		</isNotNull>
+		<isNotNull prepend="AND" property="openstatus"> 
+			openstatus = #openstatus:VARCHAR#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryExpressRegion" parameterClass="com.mockuai.deliverycenter.common.qto.express.ExpressRegionQTO" resultClass="ExpressRegion">
+		select
+		<include refid="EXPRESSREGION.columList" />
+		from delivery_express_region
+		<include refid="EXPRESSREGION.queryWhere" />
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.express.ExpressRegionQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_express_region
+		<include refid="EXPRESSREGION.queryWhere" />
+	</select>
+</sqlMap>

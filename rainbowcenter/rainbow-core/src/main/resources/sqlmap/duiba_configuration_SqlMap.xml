@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="duiba_configuration">
+    <typeAlias alias="duibaConfigurationDO" type="com.mockuai.rainbowcenter.core.domain.DuibaConfigurationDO"/>
+
+    <resultMap id="BaseResultMap" class="duibaConfigurationDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="loginUrl" column="login_url" jdbcType="VARCHAR"/>
+        <result property="redirect" column="redirect" jdbcType="VARCHAR"/>
+        <result property="appKey" column="app_key" jdbcType="VARCHAR"/>
+        <result property="appSecret" column="app_secret" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="getConfiguration" parameterClass="duibaConfigurationDO" resultMap="BaseResultMap">
+        select * from duiba_configuration where delete_mark=0
+    </select>
+
+
+</sqlMap>

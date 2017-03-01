@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+	<settings 
+	  useStatementNamespaces="true"
+	  />
+    <!--<sqlMap resource="ibatis/express/ibatis-Express.xml"/>-->
+    <!--<sqlMap resource="ibatis/express/ibatis-ExpressProperty.xml"/>-->
+    <!--<sqlMap resource="ibatis/express/ibatis-ExpressRegion.xml"/>-->
+    <!--<sqlMap resource="ibatis/fee/ibatis-StdFee.xml"/>-->
+    <!--<sqlMap resource="ibatis/fee/ibatis-RegionFee.xml"/>-->
+    <sqlMap resource="ibatis/fee/ibatis-Region.xml"/>
+    <!--<sqlMap resource="ibatis/storage/ibatis-Storage.xml"/>-->
+    <!--<sqlMap resource="ibatis/storage/ibatis-StorageSend.xml"/>-->
+    
+    <sqlMap resource="ibatis/express/delivery_detail.xml"/>
+    <sqlMap resource="ibatis/express/delivery_info.xml"/>
+</sqlMapConfig>

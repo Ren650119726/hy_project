@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+    <bean name="userAuthClient" class="com.mockuai.usercenter.client.impl.UserAuthClientImpl"/>
+    <bean name="regionClient" class="com.mockuai.deliverycenter.client.impl.RegionClientImpl"/>
+    <bean name="itemClient" class="com.mockuai.itemcenter.client.impl.ItemClientImpl"/>
+    <bean name="itemBrandClient" class="com.mockuai.itemcenter.client.impl.ItemBrandClientImpl"/>
+    <bean name="itemSkuClient" class="com.mockuai.itemcenter.client.impl.ItemSkuClientImpl"/>
+    <bean name="deliveryCompanyClient" class="com.mockuai.deliverycenter.client.impl.DeliveryCompanyClientImpl"/>
+    <bean name="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl"/>
+    <bean name="refundClient" class="com.mockuai.tradecenter.client.impl.RefundClientImpl"/>
+    <bean name="deliveryInfoClient" class="com.mockuai.deliverycenter.client.impl.DeliveryInfoClientImpl"/>
+    <bean name="appClient" class="com.mockuai.appcenter.client.impl.AppClientImpl"/>
+    <bean name="supplierClient" class="com.mockuai.itemcenter.client.impl.SupplierClientImpl"/>
+    <bean name="itemCategoryClient" class="com.mockuai.itemcenter.client.impl.ItemCategoryClientImpl"/>
+    <bean name="itemPropertyClient" class="com.mockuai.itemcenter.client.impl.ItemPropertyClientImpl" />
+    <bean name="userClient" class="com.mockuai.usercenter.client.impl.UserClientImpl" />
+    <bean id="storeItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StoreItemSkuClientImpl"/>
+    <bean id="userAutonClient" class="com.mockuai.virtualwealthcenter.client.impl.UserAuthonClientImpl" />
+    <bean id="virtualWealthClient" class="com.mockuai.virtualwealthcenter.client.impl.VirtualWealthClientImpl"/>
+    <bean id="StockItemSkuClient" class="com.mockuai.suppliercenter.client.impl.StockItemSkuClientImpl"/>
+    <bean id="limitedPurchaseClient" class="com.mockuai.marketingcenter.client.impl.LimitedPurchaseClientImpl"/>
+</beans>

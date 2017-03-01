@@ -1,0 +1,36 @@
+package com.mockuai.distributioncenter.core.service;
+
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.Map;
+
+/**
+ * Created by duke on 15/10/28.
+ */
+@Service
+public class AppContext extends Context implements ApplicationContextAware {
+    private ApplicationContext applicationContext;
+
+    public <T> T getService(Class<T> clz) {
+        Map<String, T> beans = applicationContext.getBeansOfType(clz);
+
+        Collection<T> values = beans.values();
+
+        if (values.size() == 0) {
+            return null;
+        }
+        return values.iterator().next();
+    }
+
+    public Object getBean(String beanId) {
+        return applicationContext.getBean(beanId);
+    }
+
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+}

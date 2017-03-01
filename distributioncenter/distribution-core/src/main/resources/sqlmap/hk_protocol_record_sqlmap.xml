@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="hk_protocol_record">
+   
+    <typeAlias alias="hkProtocolRecordDO" type="com.mockuai.distributioncenter.core.domain.HkProtocolRecordDO"/>
+
+    <resultMap id="BaseResultMap" class="hkProtocolRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="protocolId" column="protocol_id" jdbcType="BIGINT"/>
+        <result property="agreeDesc" column="agree_desc" jdbcType="VARCHAR"/>
+        <result property="agreeTime" column="agree_time" jdbcType="TIMESTAMP"/>
+        <result property="appType" column="app_type" jdbcType="INT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="hkProtocolRecordDO">
+        INSERT INTO hk_protocol_record
+        (
+        user_id,
+        protocol_id,
+        agree_desc,
+        agree_time,
+        app_type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #userId#,
+        #protocolId#,
+        #agreeDesc#,
+       	now(),
+        #appType#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="get" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM hk_protocol_record WHERE id = #id# AND delete_mark = 0
+    </select>
+    
+    <select id="getByUserId" parameterClass="hkProtocolRecordDO" resultMap="BaseResultMap">
+        SELECT * FROM hk_protocol_record WHERE user_id = #userId#
+        AND delete_mark = 0
+        and protocol_id in (1,2,3)
+    </select>
+
+    <select id="getProByUserId" parameterClass="hkProtocolRecordDO" resultMap="BaseResultMap">
+        SELECT * FROM hk_protocol_record WHERE user_id = #userId#
+        AND delete_mark = 0
+        and protocol_id = 0
+    </select>
+
+    <update id="update" parameterClass="hkProtocolRecordDO">
+        UPDATE hk_protocol_record SET gmt_modified = now()
+        
+        WHERE id = #id#
+    </update>
+
+</sqlMap>

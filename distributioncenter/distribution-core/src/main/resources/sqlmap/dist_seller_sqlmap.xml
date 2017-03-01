@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="dist_seller">
+    <!--
+    CREATE TABLE `dist_seller` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+    `user_name` varchar(255) NOT NULL COMMENT '用户名',
+    `real_name` varchar(255) NOT NULL COMMENT '姓名',
+    `wechat_id` varchar(32) NOT NULL COMMENT '微信号',
+    `inviter_code` varchar(32) NOT NULL COMMENT '邀请码',
+    `group_count` bigint(20) NOT NULL COMMENT '团队总人数',
+    `direct_count` bigint(20) NOT NULL COMMENT '直接下级人数',
+    `level_id` bigint(20) NOT NULL COMMENT '卖家等级ID',
+    `status` tinyint(4) NOT NULL COMMENT '状态',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='卖家表';
+    asa
+    -->
+
+    <typeAlias alias="sellerDO" type="com.mockuai.distributioncenter.core.domain.SellerDO" />
+    <typeAlias alias="sellerQTO" type="com.mockuai.distributioncenter.common.domain.qto.SellerQTO" />
+
+    <resultMap id="BaseResultMap" class="sellerDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="userName" column="user_name" jdbcType="VARCHAR" />
+        <result property="realName" column="real_name" jdbcType="VARCHAR" />
+        <result property="wechatId" column="wechat_id" jdbcType="VARCHAR" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="inviterCode" column="inviter_code" jdbcType="VARCHAR" />
+        <result property="levelId" column="level_id" jdbcType="BIGINT" />
+        <result property="directCount" column="direct_count" jdbcType="BIGINT" />
+        <result property="groupCount" column="group_count" jdbcType="BIGINT" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="levelId" prepend="AND">
+            level_id = #levelId#
+        </isNotNull>
+        <isNotNull property="realName" prepend="AND">
+            real_name LIKE concat('%', #realName#, '%')
+        </isNotNull>
+        <isNotEmpty property="userIds" prepend="AND">
+            user_id IN
+            <iterate open="(" close=")" property="userIds" conjunction=",">
+                #userIds[]#
+            </iterate>
+        </isNotEmpty>
+        <isNotEmpty property="ids" prepend="AND">
+            id IN
+            <iterate open="(" close=")" property="ids" conjunction=",">
+                #ids[]#
+            </iterate>
+        </isNotEmpty>
+    </sql>
+
+    <insert id="add" parameterClass="sellerDO">
+        INSERT INTO dist_seller
+        (
+        user_id,
+        user_name,
+        real_name,
+        wechat_id,
+        inviter_code,
+        group_count,
+        direct_count,
+        level_id,
+        status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        VALUE
+        (
+        #userId#,
+        #userName#,
+        #realName#,
+        #wechatId#,
+        #inviterCode#,
+        #groupCount#,
+        #directCount#,
+        #levelId#,
+        #status#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="query" parameterClass="sellerQTO" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller
+        <include refid="queryCondition" />
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="totalCount" parameterClass="sellerQTO" resultClass="java.lang.Long">
+        SELECT count(*) FROM dist_seller
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="get" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller WHERE id = #id# AND delete_mark = 0
+    </select>
+
+    <select id="getByUserId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller WHERE user_id = #userId# AND delete_mark = 0
+    </select>
+
+    <select id="queryByUserIds" parameterClass="java.util.List" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller WHERE delete_mark = 0 AND user_id IN
+        <iterate open="(" close=")" conjunction=",">
+            #[]#
+        </iterate>
+    </select>
+
+    <select id="getByInviterCode" parameterClass="java.lang.String" resultMap="BaseResultMap">
+        SELECT * FROM dist_seller WHERE delete_mark = 0 AND inviter_code = #inviterCode#
+    </select>
+
+    <update id="update" parameterClass="sellerDO">
+        UPDATE dist_seller SET gmt_modified = now()
+        <isNotNull property="groupCount" prepend=",">
+            group_count = #groupCount#
+        </isNotNull>
+        <isNotNull property="directCount" prepend=",">
+            direct_count = #directCount#
+        </isNotNull>
+        <isNotNull property="levelId" prepend=",">
+            level_id = #levelId#
+        </isNotNull>
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="inviterCode" prepend=",">
+            inviter_code = #inviterCode#
+        </isNotNull>
+        <isNotNull property="realName" prepend=",">
+            real_name = #realName#
+        </isNotNull>
+        <isNotNull property="userName" prepend=",">
+            user_name = #userName#
+        </isNotNull>
+        <isNotNull property="wechatId" prepend=",">
+            wechat_id = #wechatId#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+
+    <update id="updateByUserId" parameterClass="sellerDO">
+        UPDATE dist_seller SET gmt_modified = now()
+        <isNotNull property="groupCount" prepend=",">
+            group_count = #groupCount#
+        </isNotNull>
+        <isNotNull property="directCount" prepend=",">
+            direct_count = #directCount#
+        </isNotNull>
+        <isNotNull property="levelId" prepend=",">
+            level_id = #levelId#
+        </isNotNull>
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="inviterCode" prepend=",">
+            inviter_code = #inviterCode#
+        </isNotNull>
+        <isNotNull property="realName" prepend=",">
+            real_name = #realName#
+        </isNotNull>
+        <isNotNull property="userName" prepend=",">
+            user_name = #userName#
+        </isNotNull>
+        <isNotNull property="wechatId" prepend=",">
+            wechat_id = #wechatId#
+        </isNotNull>
+        WHERE user_id = #userId# AND delete_mark = 0
+    </update>
+</sqlMap>

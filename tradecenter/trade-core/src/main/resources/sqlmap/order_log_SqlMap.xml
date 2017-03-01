@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_log" >
+  <resultMap id="BaseResultMap" class="com.mockuai.tradecenter.core.domain.OrderLogDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="log_info" property="logInfo" jdbcType="VARCHAR" />
+    <result column="time_log" property="timeLog" jdbcType="DATE" />
+    <result column="order_id" property="orderId" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="log_admin" property="logAdmin" jdbcType="BIGINT" />
+    <result column="log_type" property="logType" jdbcType="TINYINT" />
+    <result column="supplier_id" property="supplierId" jdbcType="TINYINT" />
+    <result column="not_show_to_user" property="notShowToUser" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, log_info, time_log, order_id, user_id, seller_id, log_admin, log_type,supplier_id,not_show_to_user
+  </sql>
+  
+  <insert id="addOrderLog" parameterClass="com.mockuai.tradecenter.core.domain.OrderLogDO" >
+    insert into order_log
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="logInfo" >
+        log_info
+      </isNotNull>
+      <isNotNull prepend="," property="timeLog" >
+        time_log
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        order_id
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id
+      </isNotNull>
+      <isNotNull prepend="," property="logAdmin" >
+        log_admin
+      </isNotNull>
+      <isNotNull prepend="," property="logType" >
+        log_type
+      </isNotNull>
+      <isNotNull prepend="," property="supplierId" >
+        supplier_id
+      </isNotNull>
+      <isNotNull prepend="," property="notShowToUser" >
+        not_show_to_user
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="logInfo" >
+        #logInfo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="timeLog" >
+        #timeLog:DATE#
+      </isNotNull>
+      <isNotNull prepend="," property="orderId" >
+        #orderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        #sellerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="logAdmin" >
+        #logAdmin:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="logType" >
+        #logType:TINYINT#
+      </isNotNull>
+       <isNotNull prepend="," property="supplierId" >
+        supplier_id
+      </isNotNull>
+      <isNotNull prepend="," property="notShowToUser" >
+        not_show_to_user
+      </isNotNull>
+      )
+    </dynamic>
+  </insert>
+
+  <select id="getUserOrderLog" parameterClass="com.mockuai.tradecenter.core.domain.OrderLogDO">
+  	select 
+  	<include refid="order_log.Base_Column_List" />
+  	from order_log where user_id = #userId# and order_id =#orderId#  and not_show_to_user =0 order by gmt_created desc 
+  </select>
+  
+  <select id="getSupplierOrderLog" parameterClass="com.mockuai.tradecenter.core.domain.OrderLogDO">
+  	select 
+  	<include refid="order_log.Base_Column_List" />
+  	from order_log where  supplier_id =#supplierId# and order_id =#orderId# order by gmt_created desc 
+  </select>
+  
+</sqlMap>

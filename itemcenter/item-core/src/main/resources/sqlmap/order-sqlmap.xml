@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+<sqlMap namespace="clusterDO">
+	<typeAlias alias="clusterDO" type="com.aliyun.rds.rdscenter.domain.ClusterDO"/>
+	<typeAlias alias="clusterDTO" type="com.aliyun.rds.rdscenter.domain.ClusterDTO"/>
+	<typeAlias alias="clusterQTO" type="com.aliyun.rds.rdscenter.domain.ClusterQTO"/>
+	<typeAlias alias="clusterUTO" type="com.aliyun.rds.rdscenter.domain.ClusterUTO"/>
+	
+	<resultMap class="clusterDO" id="clusterDOResult">
+		<result property="id" column="id"/>
+		<result property="clustername" column="clustername"/>
+		<result property="priority" column="priority"/>
+		<result property="creator" column="creator"/>
+		<result property="modifier" column="modifier"/>
+		<result property="comment" column="comment"/>
+		<result property="location" column="location"/>
+		<result property="isAvail" column="is_avail"/>
+		<result property="adminIps" column="admin_ips"/>
+		<result property="connType" column="conn_type"/>
+		<result property="dbType" column="db_type"/>
+		<result property="bcRetention" column="bc_retention"/>
+		<result property="syncMode" column="sync_mode"/>
+		<result property="isMultiSite" column="is_multi_site"/>
+		<result property="gmtCreated" column="gmt_created"/>
+		<result property="gmtModified" column="gmt_modified"/>
+	</resultMap>
+	
+	<resultMap class="clusterDTO" id="clusterDTOResult">
+		<result property="id" column="id"/>
+		<result property="clustername" column="clustername"/>
+		<result property="priority" column="priority"/>
+		<result property="creator" column="creator"/>
+		<result property="modifier" column="modifier"/>
+		<result property="comment" column="comment"/>
+		<result property="location" column="location"/>
+		<result property="isAvail" column="is_avail"/>
+		<result property="adminIps" column="admin_ips"/>
+		<result property="connType" column="conn_type"/>
+		<result property="dbType" column="db_type"/>
+		<result property="bcRetention" column="bc_retention"/>
+		<result property="syncMode" column="sync_mode"/>
+		<result property="isMultiSite" column="is_multi_site"/>
+		<result property="gmtCreated" column="gmt_created"/>
+		<result property="gmtModified" column="gmt_modified"/>
+	</resultMap>
+	
+	<sql id="clusterFields">
+    	id,
+    	clustername,
+    	priority,
+    	creator,
+    	modifier,
+    	comment,
+    	location,
+    	is_avail,
+    	admin_ips,
+    	conn_type,
+    	db_type,
+    	bc_retention,
+    	sync_mode,
+    	is_multi_site,
+    	gmt_created,
+    	gmt_modified
+    </sql>
+	
+	<insert id="ClusterDAO.addCluster" parameterClass="clusterDO">
+		insert into clusters(
+			<include refid="clusterFields" />
+		)values(
+			#id#,
+			#clustername#,
+			#priority#,
+			#creator#,
+			#modifier#,
+			#comment#,
+			#location#,
+			#isAvail#,
+			#adminIps#,
+			#connType#,
+			#dbType#,
+			#bcRetention#,
+			#syncMode#,
+			#isMultiSite#,
+			now(),
+			now()
+		)
+		<selectKey keyProperty="id" resultClass="Integer">
+			SELECT LAST_INSERT_ID();
+        </selectKey>
+	</insert>
+	
+	<select id="ClusterDAO.queryCluster" resultMap="clusterDOResult" parameterClass="clusterQTO">
+		select 
+			<include refid="clusterFields" />
+		from
+			clusters
+			<dynamic prepend="where">
+				<isNotNull property="id" prepend="and">
+					id=#id#
+				</isNotNull>
+				<isNotNull property="idIn" prepend="and">
+					id in
+					<iterate open="(" close=")" conjunction="," property="idIn">
+						#idIn[]# 
+	            	</iterate>
+				</isNotNull>
+				<isNotNull property="clustername" prepend="and">
+					clustername=#clustername#
+				</isNotNull>
+				<isNotNull property="priority" prepend="and">
+					priority=#priority#
+				</isNotNull>
+				<isNotNull property="creator" prepend="and">
+					creator=#creator#
+				</isNotNull>
+				<isNotNull property="modifier" prepend="and">
+					modifier=#modifier#
+				</isNotNull>
+				<isNotNull property="comment" prepend="and">
+					comment=#comment#
+				</isNotNull>
+				<isNotNull property="location" prepend="and">
+					location=#location#
+				</isNotNull>
+				<isNotNull property="isAvail" prepend="and">
+					is_avail=#isAvail#
+				</isNotNull>
+				<isNotNull property="adminIps" prepend="and">
+					admin_ips=#adminIps#
+				</isNotNull>
+				<isNotNull property="connType" prepend="and">
+					conn_type=#connType#
+				</isNotNull>
+				<isNotNull property="dbType" prepend="and">
+					db_type=#dbType#
+				</isNotNull>
+				<isNotNull property="bcRetention" prepend="and">
+					bc_retention=#bcRetention#
+				</isNotNull>
+				<isNotNull property="syncMode" prepend="and">
+					sync_mode=#syncMode#
+				</isNotNull>
+				<isNotNull property="isMultiSite" prepend="and">
+					is_multi_site=#isMultiSite#
+				</isNotNull>
+				<isNotNull property="gmtCreated" prepend="and">
+					gmt_created=#gmtCreated#
+				</isNotNull>
+				<isNotNull property="gmtModified" prepend="and">
+					gmt_modified=#gmtModified#
+				</isNotNull>
+			</dynamic>
+			limit #startRow#, #rowCount#
+	</select>
+	
+	<update id="ClusterDAO.updateCluster" parameterClass="clusterUTO">
+		update 
+			clusters
+		set gmt_modified=now()
+			<dynamic prepend="">
+				<isNotNull property="clustername" prepend=",">
+					clustername=#clustername#
+				</isNotNull>
+				<isNotNull property="priority" prepend=",">
+					priority=#priority#
+				</isNotNull>
+				<isNotNull property="creator" prepend=",">
+					creator=#creator#
+				</isNotNull>
+				<isNotNull property="modifier" prepend=",">
+					modifier=#modifier#
+				</isNotNull>
+				<isNotNull property="comment" prepend=",">
+					comment=#comment#
+				</isNotNull>
+				<isNotNull property="location" prepend=",">
+					location=#location#
+				</isNotNull>
+				<isNotNull property="isAvail" prepend=",">
+					is_avail=#isAvail#
+				</isNotNull>
+				<isNotNull property="adminIps" prepend=",">
+					admin_ips=#adminIps#
+				</isNotNull>
+				<isNotNull property="connType" prepend=",">
+					conn_type=#connType#
+				</isNotNull>
+				<isNotNull property="dbType" prepend=",">
+					db_type=#dbType#
+				</isNotNull>
+				<isNotNull property="bcRetention" prepend=",">
+					bc_retention=#bcRetention#
+				</isNotNull>
+				<isNotNull property="syncMode" prepend=",">
+					sync_mode=#syncMode#
+				</isNotNull>
+				<isNotNull property="isMultiSite" prepend=",">
+					is_multi_site=#isMultiSite#
+				</isNotNull>
+			</dynamic>
+		where id in
+		<iterate open="(" close=")" conjunction="," property="idIn">
+			#idIn[]# 
+	    </iterate>
+	</update>
+	
+	<delete id="ClusterDAO.physicalDeleteCluster" parameterClass="map">
+		delete from clusters
+		where id in
+		<iterate open="(" close=")" conjunction="," property="idIn">
+			#idIn[]# 
+	    </iterate>
+	</delete>
+</sqlMap>

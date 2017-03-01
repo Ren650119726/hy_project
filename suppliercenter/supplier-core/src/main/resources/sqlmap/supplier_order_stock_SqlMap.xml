@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="supplier_order_stock">
+    <resultMap id="BaseResultMap"
+               class="com.mockuai.suppliercenter.core.domain.SupplierOrderStockDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+        <result property="distributorId" column="distributor_id" jdbcType="BIGINT"/>
+        <result property="supplierId" column="supplier_id" jdbcType="BIGINT"/>
+        <result property="storeId" column="store_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="num" column="num" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,biz_code,order_sn,distributor_id,supplier_id,store_id,
+        item_sku_id,num,status,delete_mark,gmt_created,
+        gmt_modified
+    </sql>
+
+
+    <select id="countStroeItemlockStock" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.SupplierOrderStockQTO">
+        select sum(num) from supplier_order_stock where delete_mark = 0
+
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id =
+            #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="storeId">
+            store_id =
+            #storeId:BIGINT#
+        </isNotNull>
+
+    </select>
+
+    <update id="updateOrderStockStatusByOrderSn"
+            parameterClass="com.mockuai.suppliercenter.core.domain.SupplierOrderStockDO">
+        update supplier_order_stock set gmt_modified = now(),status = #status# where
+         delete_mark = 0
+         and order_sn =#orderSn:VARCHAR#
+         and status!=#status#
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id= #itemSkuId:BIGINT#
+        </isNotNull>
+    </update>
+
+
+    <insert id="addLockOrderStockNum" parameterClass="com.mockuai.suppliercenter.core.domain.SupplierOrderStockDO">
+        insert into supplier_order_stock
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="orderSn">
+                order_sn
+            </isNotNull>
+            <isNotNull prepend="," property="distributorId">
+                distributor_id
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                supplier_id
+            </isNotNull>
+            <isNotNull prepend="," property="storeId">
+                store_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemSkuId">
+                item_sku_id
+            </isNotNull>
+            <isNotNull prepend="," property="num">
+                num
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                status
+            </isNotNull>
+            ,delete_mark,gmt_created, gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="orderSn">
+                #orderSn:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="distributorId">
+                #distributorId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                #supplierId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="storeId">
+                #storeId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemSkuId">
+                #itemSkuId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="num">
+                #num:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                #status#
+            </isNotNull>
+
+            ,0,now(),now()
+            )
+        </dynamic>
+
+    </insert>
+
+    <select id="getOrderStoreId" resultMap="BaseResultMap" parameterClass="java.util.Map">
+        select
+        <include refid="supplier_order_stock.Base_Column_List"/>
+        from supplier_order_stock
+        where delete_mark = 0
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id= #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="orderSn">
+            order_sn = #orderSn:VARCHAR#
+        </isNotNull>
+        <!--<isNotNull prepend="and" property="distributorId">-->
+        <!--distributor_id = #distributorId:BIGINT#-->
+        <!--</isNotNull>-->
+
+    </select>
+
+    <select id="getOrderSkuByOrderSn" resultMap="BaseResultMap" parameterClass="java.lang.String">
+        select
+        <include refid="supplier_order_stock.Base_Column_List"/>
+        from supplier_order_stock
+        where delete_mark = 0 and order_sn =#orderSn:VARCHAR#
+
+    </select>
+
+    <select id="queryOrderSkuByOrderSn" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.suppliercenter.common.qto.SupplierOrderStockQTO">
+        select
+        <include refid="supplier_order_stock.Base_Column_List"/>
+        from supplier_order_stock
+        where delete_mark = 0
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id= #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="orderSn">
+            order_sn = #orderSn:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status:TINYINT#
+        </isNotNull>
+    </select>
+
+
+</sqlMap>

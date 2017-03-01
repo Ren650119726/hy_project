@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+  xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://code.alibabatech.com/schema/dubbo  
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">   
+  <!-- 具体的实现bean -->  
+  <!-- <bean id="expressClient" class="com.mockuai.deliverycenter.client.impl.ExpressClientImpl"/>
+  <bean id="feeClient" class="com.mockuai.deliverycenter.client.impl.FeeClientImpl"/>
+  <bean id="storageClient" class="com.mockuai.deliverycenter.client.impl.StorageClientImpl"/> -->
+  
+  <bean id="deliveryService" class="com.mockuai.deliverycenter.core.api.impl.DeliveryServiceImpl"/>
+  
+  <!-- 提供方应用信息，用于计算依赖关系 -->  
+  <dubbo:application name="delivery_provider" />	
+  <!-- 使用multicast广播注册中心暴露服务地址-->
+  <!-- <dubbo:registry address="multicast://localhost:1234" /> -->   
+  <!-- 使用zookeeper注册中心暴露服务地址 -->  
+  <!-- <dubbo:registry address="zookeeper://192.168.31.225:2181" /> -->
+  
+ <dubbo:registry address="zookeeper://${deliverycenter.dubbo.registry.address}" />
+  
+  <!-- 用dubbo协议在20880端口暴露服务 -->  
+  <dubbo:protocol name="dubbo" port="${deliverycenter.dubbo.provider.port}" host="${deliverycenter.dubbo.provider.host}" />
+  
+  <!-- 声明需要暴露的服务接口 --> 
+  
+  <dubbo:service interface="com.mockuai.deliverycenter.common.api.DeliveryService" ref="deliveryService" protocol="dubbo" timeout="8000"/>
+  
+  <!-- <dubbo:service interface="com.mockuai.deliverycenter.client.ExpressClient" ref="expressClient" protocol="dubbo"/>
+  <dubbo:service interface="com.mockuai.deliverycenter.client.FeeClient" ref="feeClient" protocol="dubbo"/>
+  <dubbo:service interface="com.mockuai.deliverycenter.client.StorageClient" ref="storageClient" protocol="dubbo"/> -->
+  
+</beans>

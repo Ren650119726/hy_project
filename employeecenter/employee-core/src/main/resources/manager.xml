@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <!--<bean id="cacheManager" class="com.hanshu.employee.core.manager.impl.CacheManagerImpl">-->
+        <!--<property name="isLocal" value="${employeecenter.cache.isLocal}"/>-->
+    <!--</bean>-->
+</beans>

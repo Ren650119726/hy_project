@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sysFieldMap">
+
+    <!--
+    CREATE TABLE `sys_field_mapping` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `field_name` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `out_value` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '外部value',
+  `value` varchar(64) COLLATE utf8_bin DEFAULT NULL COMMENT '魔筷value',
+  `value_type` tinyint(4) NOT NULL,
+  `biz_code` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT 'bizCode',
+  `type` varchar(64) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '平台类型',
+  `gmt_created` datetime NOT NULL COMMENT '创建时间',
+  `gmt_modified` datetime NOT NULL COMMENT '修改时间',
+  `delete_mark` tinyint(4) NOT NULL COMMENT '删除标志位',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+    -->
+
+    <typeAlias alias="sysFieldMapDO" type="com.mockuai.rainbowcenter.core.domain.SysFieldMapDO"/>
+    <typeAlias alias="sysFieldMapQTO" type="com.mockuai.rainbowcenter.common.qto.SysFieldMapQTO"/>
+
+    <resultMap id="BaseResultMap" class="sysFieldMapDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="fieldName" column="field_name" jdbcType="VARCHAR"/>
+        <result property="outValue" column="out_value" jdbcType="VARCHAR"/>
+        <result property="outValueType" column="out_value_type" jdbcType="INTEGER"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+        <result property="valueType" column="value_type" jdbcType="INTEGER"/>
+        <result property="uniqueSys" column="unique_sys" jdbcType="VARCHAR" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_list">
+        id,
+        field_name,
+        out_value,
+        out_value_type,
+        value,
+        value_type,
+        unique_sys,
+        biz_code,
+        type,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <sql id="sysFieldMapQtoWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="fieldName">
+            field_name = #fieldName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="outValue">
+            out_value = #outValue#
+        </isNotNull>
+        <isNotNull prepend="AND" property="value">
+            value=#value#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="type">
+            type=#type#
+        </isNotNull>
+        <isNotNull prepend="AND" property="gmtCreatedStart">
+            gmt_created >= #gmtCreatedStart:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="AND" property="gmtCreatedEnd">
+            gmt_created <![CDATA[<]]> #gmtCreatedEnd:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="AND" property="gmtModifiedStart">
+            gmt_modified >= #gmtCreatedStart:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="AND" property="gmtModifiedEnd">
+            gmt_modified <![CDATA[<]]> #gmtCreatedEnd:TIMESTAMP#
+        </isNotNull>
+    </sql>
+
+
+    <select id="query" parameterClass="sysFieldMapQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_field_mapping
+        <include refid="sysFieldMapQtoWhere"/>
+        order by gmt_created desc
+        <isNotNull property="offset">
+            limit #offset#,#count#
+        </isNotNull>
+    </select>
+
+    <select id="total" parameterClass="sysFieldMapQTO" resultClass="java.lang.Long">
+        select count(*)
+        from sys_field_mapping
+        <include refid="sysFieldMapQtoWhere"/>
+    </select>
+
+    <update id="updateByOutValue" parameterClass="sysFieldMapDO">
+        update sys_field_mapping
+        set gmt_modified = now(),
+        unique_sys = #uniqueSys#
+        <isNotNull prepend="," property="value">
+            value = #value#
+        </isNotNull>
+        <isNotNull prepend="," property="valueType">
+            value_type = #valueType#
+        </isNotNull>
+        where biz_code = #bizCode#
+        and type = #type#
+        and field_name = #fieldName#
+        and out_value = #outValue#
+        and delete_mark = 0
+    </update>
+
+    <update id="updateByValue" parameterClass="sysFieldMapDO">
+        update sys_field_mapping
+        set gmt_modified = now(),
+        unique_sys = #uniqueSys#
+        <isNotNull prepend="," property="outValue">
+            out_value = #outValue#
+        </isNotNull>
+        <isNotNull prepend="," property="outValueType">
+            out_value_type = #outValueType#
+        </isNotNull>
+        where biz_code = #bizCode#
+        and type = #type#
+        and field_name = #fieldName#
+        and value = #value#
+        and delete_mark = 0
+    </update>
+
+    <select id="select" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_field_mapping
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <select id="getSysFieldMap" parameterClass="sysFieldMapQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from sys_field_mapping
+        <include refid="sysFieldMapQtoWhere" />
+    </select>
+
+    <select id="querySysFieldMap" parameterClass="sysFieldMapQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list" />
+        from sys_field_mapping
+        <include refid="sysFieldMapQtoWhere" />
+        order by gmt_modified desc
+    </select>
+
+    <insert id="insert" parameterClass="sysFieldMapDO">
+        insert into sys_field_mapping
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="outValue">
+                out_value
+            </isNotNull>
+            <isNotNull prepend="," property="outValueType">
+                out_value_type
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type
+            </isNotNull>
+            ,field_name,
+            unique_sys,
+            biz_code,
+            type,
+            gmt_created,
+            gmt_modified,
+            delete_mark
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="outValue">
+                #outValue#
+            </isNotNull>
+            <isNotNull prepend="," property="outValueType">
+                #outValueType#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                #value#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                #valueType#
+            </isNotNull>
+            ,#fieldName#,
+            #uniqueSys#,
+            #bizCode#,
+            #type#,
+            now(),
+            now(),
+            0
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <!--根据订单号去删除数据-->
+    <update id="updateRemoveByOutValue" parameterClass="sysFieldMapDO">
+        update sys_field_mapping
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and out_value = #outValue# and type = #type#
+    </update>
+</sqlMap>

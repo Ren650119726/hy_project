@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pageGridMergeCells">
+
+	<typeAlias alias="pageGridMergeCellsDO" type="com.mockuai.mainweb.core.domain.PageGridMergeCellsDO"/>
+
+	<typeAlias alias="pageGridMergeCellsQTO" type="com.mockuai.mainweb.common.domain.qto.PageGridQTO"/>
+
+	<resultMap id="pageGridMergeCellsResult" class="pageGridMergeCellsDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="blockId" column="block_id" jdbcType="BIGINT"/>
+		<result property="pageId" column="page_id" jdbcType="BIGINT"/>
+		<result property="gridId" column="grid_id" jdbcType="BIGINT"/>
+		<result property="gridContentId" column="grid_content_id" jdbcType="BIGINT"/>
+		<result property="cellNo" column="cell_no" jdbcType="INTEGER"/>
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+		<result property="deleteMark" column="delete_Mark" jdbcType="INTEGER"/>
+	</resultMap>
+	
+	<sql id="column_set">
+		id,
+		block_id,
+		page_id,
+		grid_id,
+		grid_content_id,
+		cell_no,
+		gmt_created,
+		gmt_modified,
+		delete_mark
+	</sql>
+	
+	<sql id="column_set_insert">
+		block_id,
+		page_id,
+		grid_id,
+		grid_content_id,
+		cell_no,
+		gmt_created,
+		gmt_modified,
+		delete_mark
+	</sql>
+	
+	<sql id="dynamic_where_clause">
+		<isNotNull prepend="and" property="deleteMark">
+			delete_mark = #deleteMark#
+		</isNotNull>
+		<isNotNull prepend="and" property="gridContentId">
+			grid_content_id = #gridContentId#
+		</isNotNull>
+	</sql>
+	
+	<sql id="dynamic_where_clause_update">
+		<isNotNull prepend="and" property="gridContentId">
+			grid_content_id = #gridContentId#
+		</isNotNull>
+		<isNotNull prepend="and" property="pageId">
+			page_id = #pageId#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryPageGridMergeCells" resultMap="pageGridMergeCellsResult" parameterClass="pageGridMergeCellsQTO">
+		select
+			<include refid="column_set"/>
+		from page_grid_merge_cells
+		<dynamic prepend="where">
+			<include refid="dynamic_where_clause"/>
+		</dynamic>
+	</select>
+	
+	<insert id="addPageGridMergeCells" parameterClass="pageGridMergeCellsDO">
+		insert into page_grid_merge_cells (
+			<include refid="column_set_insert"/>
+		)
+		values(
+			#blockId#,
+			#pageId#,
+			#gridId#,
+			#gridContentId#,
+			#cellNo#,
+			now(),
+			now(),
+			0
+		)		
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+		
+	<update id="updatePageGridMergeCells" parameterClass="pageGridMergeCellsQTO">
+		update 
+			page_grid_merge_cells
+		set gmt_modified = now()
+		<dynamic prepend=",">
+			<isNotNull prepend="," property="deleteMark">
+				delete_mark = #deleteMark#
+			</isNotNull>
+		</dynamic>
+		where delete_mark = 0 
+		<include refid="dynamic_where_clause_update"/>
+	</update>
+	
+	<delete id="deletePageGridMergeCells" parameterClass="pageGridMergeCellsQTO">
+		delete from page_grid_merge_cells
+		<dynamic prepend="where">
+			<include refid="dynamic_where_clause"/>
+		</dynamic>		
+	</delete>
+
+</sqlMap>

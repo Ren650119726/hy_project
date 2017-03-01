@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+		http://www.springframework.org/schema/aop 
+		http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx-2.5.xsd
+     	http://www.springframework.org/schema/context 
+     	http://www.springframework.org/schema/context/spring-context-2.5.xsd
+     	http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.5.xsd"
+        default-autowire="byName">
+
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="configLocation" value="classpath:sqlmap-config.xml" />
+    </bean>
+	
+	<!-- 
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"  
+        destroy-method="close">  
+        <property name="url" value="${jdbc.url}" />  
+        <property name="driverClassName" value="${jdbc.DriverClassName}" />  
+        <property name="username" value="${jdbc.username}" />  
+        <property name="password" value="${jdbc.password}" />  
+        <property name="maxActive" value="${jdbc.maxActive}" />  
+        <property name="maxIdle" value="${jdbc.maxIdle}" />  
+        <property name="maxWait" value="${jdbc.maxWait}" />  
+    </bean>  
+    --> 
+	
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />  
+    </bean>  
+	
+	 <!--<context:property-placeholder location="classpath:database.properties" /> --> 
+	<!-- 
+	<bean id="parentDataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">     
+		<property name="driver" value="${jdbc.driverClass}"/>
+		<property name="simultaneousBuildThrottle" value="${jdbc.simultaneousBuildThrottle}"/>
+	    <property name="prototypeCount" value="${jdbc.prototypeCount}"/>
+	    <property name="minimumConnectionCount" value="${jdbc.minimumConnectionCount}"/>
+	    <property name="maximumConnectionCount" value="${jdbc.maximumConnectionCount}"/>
+	    <property name="maximumActiveTime" value="${jdbc.maximumActiveTime}"/>
+	    <property name="testBeforeUse" value="true"/>
+	    <property name="houseKeepingTestSql" value="select sysdate() from dual"/>
+    </bean> -->
+
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+		<property name="driver" value="${jdbc.driverClass}"/>
+		<property name="driverUrl" value="${jdbc.url}" />
+    	<property name="user" value="${jdbc.username}" />
+    	<property name="password" value="${jdbc.password}" />
+    	<property name="alias" value="Pool_dbname" />
+		<property name="simultaneousBuildThrottle" value="${jdbc.simultaneousBuildThrottle}"/>
+		<property name="prototypeCount" value="${jdbc.prototypeCount}"/>
+		<property name="minimumConnectionCount" value="${jdbc.minimumConnectionCount}"/>
+		<property name="maximumConnectionCount" value="${jdbc.maximumConnectionCount}"/>
+		<property name="maximumActiveTime" value="${jdbc.maximumActiveTime}"/>
+		<property name="testBeforeUse" value="true"/>
+		<property name="houseKeepingTestSql" value="select sysdate() from dual"/>
+	</bean>
+
+	 
+
+	<!-- 事务模板 -->
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+		<property name="transactionManager">
+			<ref local="transactionManager" />
+		</property>
+	</bean>
+	
+</beans>

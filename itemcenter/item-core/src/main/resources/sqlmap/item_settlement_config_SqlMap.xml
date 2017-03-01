@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="ItemSettlementConfig">
+
+    <typeAlias alias="ItemSettlementConfigDO" type="com.mockuai.itemcenter.core.domain.ItemSettlementConfigDO"/>
+    <typeAlias alias="ItemSettlementConfigQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemSettlementConfigQTO"/>
+    <resultMap class="com.mockuai.itemcenter.core.domain.ItemSettlementConfigDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="scope" jdbcType="TINYINT" property="scope"/>
+        <result column="enable" jdbcType="TINYINT" property="enable"/>
+        <result column="config_name" jdbcType="VARCHAR" property="configName"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, biz_code, scope, enable, config_name, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="getItemSettlementConfig" parameterClass="ItemSettlementConfigDO"
+            resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from item_settlement_config
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </select>
+
+    <update id="deleteItemSettlementConfig" parameterClass="ItemSettlementConfigDO">
+        update item_settlement_config
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <update id="enableItemSettlementConfig" parameterClass="ItemSettlementConfigDO">
+        update item_settlement_config
+        set gmt_modified = now(),enable = 1
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <update id="disableItemSettlementConfig" parameterClass="ItemSettlementConfigDO">
+        update item_settlement_config
+        set gmt_modified = now(),enable = 0
+        where delete_mark = 0 and id = #id# and biz_code = #bizCode#
+    </update>
+
+    <insert id="addItemSettlementConfig" parameterClass="ItemSettlementConfigDO">
+
+        insert into item_settlement_config
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="scope">
+                scope
+            </isNotNull>
+            <isNotNull prepend="," property="enable">
+                enable
+            </isNotNull>
+            <isNotNull prepend="," property="configName">
+                config_name
+            </isNotNull>
+            ,
+            delete_mark
+            ,
+            gmt_created
+            ,
+            gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="scope">
+                #scope:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="enable">
+                #enable:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="configName">
+                #configName:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey resultClass="Long" keyProperty="id">
+            select LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark = 0
+        <isNotNull property="id" prepend="AND">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="idList">
+            id in
+            <iterate property="idList" conjunction="," open="(" close=")">
+                #idList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="scope" prepend="AND">
+            scope = #scope#
+        </isNotNull>
+        <isNotNull property="enable" prepend="AND">
+            enable = #enable#
+        </isNotNull>
+        <isNotNull property="configName" prepend="AND">
+            config_name like %#configName#%
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code = #bizCode#
+        </isNotNull>
+    </sql>
+
+    <select id="queryItemSettlementConfig" resultMap="BaseResultMap" parameterClass="ItemSettlementConfigQTO">
+        select
+        <include refid="Base_Column_List"/>
+        from item_settlement_config
+        <include refid="queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            <isEqual property="needPaging" compareValue="true">
+                limit #offset#,#pageSize#
+            </isEqual>
+        </isNotNull>
+    </select>
+
+    <select id="countItemSettlementConfig" resultClass="Integer" parameterClass="ItemSettlementConfigQTO">
+        select
+        count(1)
+        from item_settlement_config
+        <include refid="queryWhere"/>
+        order by gmt_created desc;
+    </select>
+
+    <update id="updateItemSettlementConfig" parameterClass="ItemSettlementConfigDO">
+        update item_settlement_config
+        set
+            gmt_modified = now()
+            <isNotNull prepend="," property="scope">
+                scope = #scope:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="enable">
+                enable = #enable:TINYINT#
+            </isNotNull>
+            <isNotNull prepend="," property="configName">
+                config_name = #configName:VARCHAR#
+            </isNotNull>
+        where delete_mark = 0 and id = #id:BIGINT# and biz_code= #bizCode#
+    </update>
+    <update id="updateByPrimaryKey" parameterClass="com.mockuai.itemcenter.core.domain.ItemSettlementConfigDO">
+        <!--
+          WARNING - @mbggenerated
+          This element is automatically generated by MyBatis Generator, do not modify.
+          This element was generated on Tue Jan 19 10:06:45 CST 2016.
+        -->
+        update item_settlement_config
+        set biz_code = #bizCode:VARCHAR#,
+        scope = #scope:TINYINT#,
+        enable = #enable:TINYINT#,
+        config_name = #configName:VARCHAR#,
+        delete_mark = #deleteMark:TINYINT#,
+        gmt_created = #gmtCreated:TIMESTAMP#,
+        gmt_modified = #gmtModified:TIMESTAMP#
+        where id = #id:BIGINT#
+    </update>
+</sqlMap>

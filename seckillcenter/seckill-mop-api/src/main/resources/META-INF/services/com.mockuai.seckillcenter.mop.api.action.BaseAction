@@ -1,0 +1,3 @@
+com.mockuai.seckillcenter.mop.api.action.ApplySeckill
+com.mockuai.seckillcenter.mop.api.action.SeckillPolling
+com.mockuai.seckillcenter.mop.api.action.DetailOfSeckill

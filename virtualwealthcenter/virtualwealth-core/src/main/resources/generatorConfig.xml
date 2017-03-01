@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <classPathEntry
+            location="E:/Users/idoud/work/m3/mysql/mysql-connector-java/5.1.13/mysql-connector-java-5.1.13.jar"/>
+    <context id="my" targetRuntime="Ibatis2Java5" defaultModelType="flat">
+        <commentGenerator>
+            <property name="suppressDate" value="false"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://10.10.10.11/timelimit_db" userId="hanshu_dev"
+                        password="hanshu123"/>
+
+        <javaModelGenerator targetPackage="com.mockuai.virtualwealthcenter.core.domain"
+                            targetProject="/Users/edgar/Documents/Company/HZMK/source/virtualwealthcenter/virtualwealth-core/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="sqlmap"
+                         targetProject="/Users/edgar/Documents/Company/HZMK/source/virtualwealthcenter/virtualwealth-core/src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="SPRING" targetPackage="com.mockuai.virtualwealthcenter.core.dao.impl"
+                             targetProject="/Users/edgar/Documents/Company/HZMK/source/virtualwealthcenter/virtualwealth-core/src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <table tableName="withdrawals_item_log" domainObjectName="WithdrawalsItemLogDO"
+               enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+
+    </context>
+</generatorConfiguration>

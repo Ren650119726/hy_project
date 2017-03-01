@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="dtask">
+	<typeAlias alias="exportTaskDO" type="com.mockuai.dts.core.domain.ExportTaskDO" />
+	<typeAlias alias="exportTaskQTO" type="com.mockuai.dts.common.domain.ExportTaskQTO" />
+
+	<resultMap id="exportTaskDOResult" class="exportTaskDO">
+	    <result column="id" property="id"  />
+	    <result column="app_key" property="appKey"  />
+		<result column="seller_id" property="sellerId" />
+		<result column="task_type" property="taskType" />
+		<result column="task_status" property="taskStatus" />
+		<result column="task_process" property="taskProcess" />
+		<result column="oss_bucket_name" property="ossBucketName"/>
+		<result column="oss_object_key" property="ossObjectKey" />
+		<result column="file_link" property="fileLink" />
+		<result column="delete_mark" property="deleteMark" />
+	    <result column="gmt_created" property="gmtCreated"  />
+	    <result column="gmt_modified" property="gmtModified"  />
+	</resultMap>
+
+
+	<insert id="insertExportTask" parameterClass="exportTaskDO">
+		insert into export_task
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">
+				id
+			</isNotNull>
+			<isNotNull prepend="," property="appKey">
+				app_key
+			</isNotNull>
+			<isNotNull prepend="," property="sellerId">
+				seller_id
+			</isNotNull>
+			<isNotNull prepend="," property="taskType">
+				task_type
+			</isNotNull>
+			<isNotNull prepend="," property="taskProcess">
+				task_process
+			</isNotNull>
+			<isNotNull prepend="," property="ossBucketName">
+				oss_bucket_name
+			</isNotNull>
+			<isNotNull prepend="," property="ossObjectKey">
+				oss_object_key
+			</isNotNull>
+			<isNotNull prepend="," property="deleteMark">
+				delete_mark
+			</isNotNull>
+			<isNotNull prepend="," property="fileLink">
+				file_link
+			</isNotNull>
+			<isNotNull prepend="," property="taskStatus">
+				task_status
+			</isNotNull>
+			<isNotNull prepend="," property="bizCode">
+				biz_code
+			</isNotNull>
+			,gmt_created
+			,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">
+				#id:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="appKey">
+				#appKey:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="sellerId">
+				#sellerId:Long#
+			</isNotNull>
+			<isNotNull prepend="," property="taskType">
+				#taskType:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="taskProcess">
+				#taskProcess:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="ossBucketName">
+				#ossBucketName:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="ossObjectKey">
+				#ossObjectKey:VARCHAR#
+			</isNotNull>
+			,0
+			<isNotNull prepend="," property="fileLink">
+				#fileLink:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="taskStatus">
+				#taskStatus:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="bizCode">
+				#bizCode:VARCHAR#
+			</isNotNull>
+			,now()
+			,now()
+			)
+		</dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="task_base_column_list">
+		id, app_key, seller_id, task_type, task_status, task_process,oss_bucket_name, oss_object_key, file_link, delete_mark, gmt_created, gmt_modified
+	</sql>
+
+	<sql id="TaskQtoQueryWhere">
+		where delete_mark = 0
+			<isNotNull prepend="AND" property="id">
+				id=#id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="sellerId" >
+				seller_id=#sellerId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="bizCode">
+				biz_code=#bizCode#
+			</isNotNull>
+			<isNotNull prepend="AND" property="taskType">
+				task_type=#taskType#
+			</isNotNull>
+	</sql>
+
+	<select id="queryExportTask" resultMap="exportTaskDOResult" parameterClass="exportTaskQTO">
+		select <include refid="task_base_column_list" /> from export_task
+		<include refid="TaskQtoQueryWhere" />
+		order by gmt_created desc
+		<isNotNull property="needPaging">
+			limit #offset#,#pageSize#
+		</isNotNull>
+	</select>
+	<select id="countExportTask" resultClass="Integer" parameterClass="exportTaskQTO">
+		select count(1) from export_task
+		<include refid="TaskQtoQueryWhere" />
+	</select>
+
+	<update id="updateTask" parameterClass="exportTaskDO" >
+		update export_task
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="taskProcess">
+				task_process = #taskProcess#
+			</isNotNull>
+			<isNotNull prepend="," property="taskStatus">
+				task_status = #taskStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="fileLink">
+				file_link = #fileLink#
+			</isNotNull>
+			<isNotNull prepend="," property="ossBucketName">
+				oss_bucket_name = #ossBucketName#
+			</isNotNull>
+			<isNotNull prepend="," property="ossObjectKey">
+				oss_object_key = #ossObjectKey#
+			</isNotNull>
+		</dynamic>
+		where id = #id#  and seller_id=#sellerId#
+	</update>
+
+	<update id="deleteTask" parameterClass="exportTaskDO" >
+		update export_task
+		set delete_mark=1 where id = #id#  and seller_id=#sellerId#
+	</update>
+
+</sqlMap>

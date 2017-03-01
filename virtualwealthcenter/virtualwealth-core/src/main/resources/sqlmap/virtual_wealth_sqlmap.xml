@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="virtual_wealth">
+
+    <typeAlias alias="virtualWealthDO" type="com.mockuai.virtualwealthcenter.core.domain.VirtualWealthDO"/>
+    <typeAlias alias="virtualWealthQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.VirtualWealthQTO"/>
+
+    <resultMap id="result" class="virtualWealthDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="amount" column="amount" jdbcType="BIGINT"/>
+        <result property="creatorId" column="creator_id" jdbcType="BIGINT"/>
+        <result property="grantedAmount" column="granted_amount" jdbcType="BIGINT"/>
+        <result property="upperLimit" column="upper_limit" jdbcType="TINYINT"/>
+        <result property="tradeMark" column="trade_mark" jdbcType="INTEGER"/>
+        <result property="exchangeRate" column="exchange_rate" jdbcType="DOUBLE"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        biz_code,
+        type,
+        name,
+        amount,
+        creator_id,
+        granted_amount,
+        upper_limit,
+        trade_mark,
+        exchange_rate,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="type" prepend="and">
+            type=#type#
+        </isNotNull>
+        <isNotNull property="typeIn" prepend="and">
+            type in
+            <iterate property="typeIn" conjunction="," open="(" close=")">
+                #typeIn[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="creatorId" prepend="and">
+            creator_id=#creatorId#
+        </isNotNull>
+        <isNotNull property="tradeMark" prepend="and">
+            trade_mark=#tradeMark#
+        </isNotNull>
+    </sql>
+
+    <insert id="addVirtualWealth" parameterClass="virtualWealthDO">
+        insert into virtual_wealth(
+        biz_code,
+        type,
+        name,
+        amount,
+        creator_id,
+        granted_amount,
+        upper_limit,
+        trade_mark,
+        exchange_rate,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #type#,
+        #name#,
+        #amount#,
+        #creatorId#,
+        #grantedAmount#,
+        #upperLimit#,
+        #tradeMark#,
+        #exchangeRate#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getVirtualWealth" resultMap="result" parameterClass="virtualWealthDO">
+        select
+        <include refid="virtual_wealth.columnList"/>
+        from virtual_wealth where delete_mark=0
+        <isNotNull property="id" prepend="AND">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="creatorId" prepend="AND">
+            creator_id=#creatorId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="type" prepend="AND">
+            type=#type#
+        </isNotNull>
+    </select>
+
+    <select id="queryVirtualWealth" resultMap="result" parameterClass="virtualWealthQTO">
+        select
+        <include refid="virtual_wealth.columnList"/>
+        from virtual_wealth
+        <include refid="virtual_wealth.queryWhere"/>
+    </select>
+
+    <update id="increaseVirtualWealth" parameterClass="java.util.Map">
+        update virtual_wealth set gmt_modified = now(), amount = amount + #amount# where id = #id#
+    </update>
+
+    <update id="increaseGrantedVirtualWealth" parameterClass="java.util.Map">
+        update virtual_wealth set gmt_modified = now(), granted_amount = granted_amount + #grantedAmount#
+        where id = #id#
+    </update>
+
+    <update id="deleteVirtualWealth" parameterClass="java.util.Map">
+        update virtual_wealth set delete_mark = 1, and gmt_modified=now()
+        where id=#id# and creator_id=#creatorId#
+    </update>
+
+    <update id="updateVirtualWealth" parameterClass="virtualWealthDO">
+        update virtual_wealth set gmt_modified=now()
+        <isNotNull property="exchangeRate" prepend=",">
+            exchange_rate=#exchangeRate#
+        </isNotNull>
+        <isNotNull property="upperLimit" prepend=",">
+            upper_limit=#upperLimit#
+        </isNotNull>
+        where id=#id#
+        <isNotNull property="creatorId" prepend="AND">
+            creator_id=#creatorId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+    </update>
+</sqlMap>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_group" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserGroupDO" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="group_no" property="groupNo" jdbcType="INTEGER"/>
+    <result column="max_integral" property="maxIntegral" jdbcType="BIGINT" />
+    <result column="min_integral" property="minIntegral" jdbcType="BIGINT" />
+    <result column="discount" property="discount" jdbcType="INTEGER" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, name,group_no, max_integral, min_integral, discount, gmt_created, gmt_modified
+  </sql>
+  <select id="select" resultMap="BaseResultMap" parameterClass="java.lang.Integer" >
+    select 
+    <include refid="user_group.Base_Column_List" />
+    from user_group
+    where id = #id:INTEGER#
+  </select>
+  
+  <select id="compare" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+  	select <include refid="user_group.Base_Column_List" /> from user_group where max_integral>=#minIntegral:BIGINT#
+  </select>
+  
+  <select id="selectByNo" resultMap="BaseResultMap" parameterClass="java.lang.Integer">
+  	select <include refid="user_group.Base_Column_List" /> from user_group where group_no = #groupNo:INTEGER#
+  </select>
+  
+  <select id="selectMax" resultClass="java.lang.Long">
+  	select max(max_integral) from user_group
+  </select>
+  
+  <select id = "selectMaxNo" resultClass="java.lang.Integer">
+  	select max(group_no) from user_group
+  </select>
+  
+  <select id="query" resultMap="BaseResultMap">
+  	select <include refid="user_group.Base_Column_List" /> from user_group order by id
+  </select>
+  
+  <select id="selectByIntegral" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+  	select <include refid="user_group.Base_Column_List" /> from user_group where max_integral>=#maxIntegral:BIGINT# ORDER BY max_integral LIMIT 1
+  </select>
+  
+   <select id="nextGroup" resultMap="BaseResultMap" parameterClass="java.lang.Integer">
+  	select <include refid="user_group.Base_Column_List" /> from user_group where group_no <![CDATA[<]]> #groupNo:INTEGER# order by group_no desc limit 1
+  </select>
+  <select id="upGroup" resultMap="BaseResultMap" parameterClass="java.lang.Integer">
+  	select <include refid="user_group.Base_Column_List" /> from user_group where group_no <![CDATA[>]]> #groupNo:INTEGER# order by group_no desc limit 1
+  </select>
+  
+  <delete id="delete" parameterClass="java.lang.Integer" >
+    delete from user_group
+    where id = #id:INTEGER#
+  </delete>
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.UserGroupDO" >
+    insert into user_group
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="name" >
+        name
+      </isNotNull>
+        ,group_no,max_integral,min_integral,discount,gmt_created,gmt_modified
+     
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="name" >
+        #name:VARCHAR#
+      </isNotNull>
+        ,#groupNo:INTEGER#,#maxIntegral:BIGINT#,#minIntegral:BIGINT#,#discount:INTEGER#,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+  <update id="update" parameterClass="com.mockuai.usercenter.core.domain.UserGroupDO" >
+    update user_group set gmt_modified = now()
+      <isNotNull prepend="," property="name" >
+        name = #name:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="maxIntegral" >
+        max_integral = #maxIntegral:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="minIntegral" >
+        min_integral = #minIntegral:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="discount" >
+        discount = #discount:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated" >
+        gmt_created = #gmtCreated:TIMESTAMP#
+      </isNotNull>
+    where id = #id:INTEGER#
+  </update>
+  
+</sqlMap>

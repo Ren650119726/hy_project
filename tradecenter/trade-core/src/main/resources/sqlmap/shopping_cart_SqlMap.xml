@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="shopping_cart">
+	<resultMap class="com.mockuai.tradecenter.core.domain.CartItemDO"
+		id="BaseResultMap">
+		<result column="id" jdbcType="BIGINT" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="item_sku_id" jdbcType="BIGINT" property="itemSkuId" />
+		<result column="supplier_id" jdbcType="BIGINT" property="supplierId" />
+		<result column="user_id" jdbcType="BIGINT" property="userId" />
+		<result column="item_id" jdbcType="BIGINT" property="itemId" />
+		<result column="sub_name" jdbcType="VARCHAR" property="subName" />
+		<result column="session_id" jdbcType="VARCHAR" property="sessionId" />
+		<result column="origin_price" jdbcType="BIGINT" property="originPrice" />
+		<result column="unit_price" jdbcType="BIGINT" property="unitPrice" />
+		<result column="number" jdbcType="INTEGER" property="number" />
+		<result column="total_price" jdbcType="BIGINT" property="totalPrice" />
+		<result column="save_price" jdbcType="BIGINT" property="savePrice" />
+		<result column="total_save" jdbcType="BIGINT" property="totalSave" />
+		<result column="return_money" jdbcType="BIGINT" property="returnMoney" />
+		<result column="return_total_money" jdbcType="BIGINT" property="returnTotalMoney" />
+		<result column="return_score" jdbcType="INTEGER" property="returnScore" />
+		<result column="return_total_score" jdbcType="INTEGER"
+			property="returnTotalScore" />
+		<result column="return_point" jdbcType="INTEGER" property="returnPoint" />
+		<result column="return_total_point" jdbcType="INTEGER"
+			property="returnTotalPoint" />
+		<result column="is_gift" jdbcType="TINYINT" property="isGift" />
+		<result column="source" jdbcType="TINYINT" property="source" />
+		<result column="gmt_created" jdbcType="DATEIIME" property="gmtCreated" />
+		<result column="gmt_modified" jdbcType="DATEIIME" property="gmtModified" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		id, name, item_sku_id, supplier_id, user_id, item_id, sub_name,
+		session_id, origin_price,
+		unit_price, number, total_price, save_price, total_save, return_money,
+		return_total_money,
+		return_score, return_total_score, return_point, return_total_point, is_gift, source,
+		gmt_created, gmt_modified
+	</sql>
+
+	<insert id="addCartItem" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		insert into shopping_cart
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">
+				id
+			</isNotNull>
+			<isNotNull prepend="," property="name">
+				name
+			</isNotNull>
+			<isNotNull prepend="," property="itemSkuId">
+				item_sku_id
+			</isNotNull>
+			<isNotNull prepend="," property="supplierId">
+				supplier_id
+			</isNotNull>
+			<isNotNull prepend="," property="userId">
+				user_id
+			</isNotNull>
+			<isNotNull prepend="," property="itemId">
+				item_id
+			</isNotNull>
+			<isNotNull prepend="," property="subName">
+				sub_name
+			</isNotNull>
+			<isNotNull prepend="," property="sessionId">
+				session_id
+			</isNotNull>
+			<isNotNull prepend="," property="originPrice">
+				origin_price
+			</isNotNull>
+			<isNotNull prepend="," property="unitPrice">
+				unit_price
+			</isNotNull>
+			<isNotNull prepend="," property="number">
+				number
+			</isNotNull>
+			<isNotNull prepend="," property="totalPrice">
+				total_price
+			</isNotNull>
+			<isNotNull prepend="," property="savePrice">
+				save_price
+			</isNotNull>
+			<isNotNull prepend="," property="totalSave">
+				total_save
+			</isNotNull>
+			<isNotNull prepend="," property="returnMoney">
+				return_money
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalMoney">
+				return_total_money
+			</isNotNull>
+			<isNotNull prepend="," property="returnScore">
+				return_score
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalScore">
+				return_total_score
+			</isNotNull>
+			<isNotNull prepend="," property="returnPoint">
+				return_point
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalPoint">
+				return_total_point
+			</isNotNull>
+			<isNotNull prepend="," property="isGift">
+				is_gift
+			</isNotNull>
+			<isNotNull prepend="," property="source">
+				source
+			</isNotNull>
+			<isNotNull prepend="," property="gmtCreated">
+				gmt_created
+			</isNotNull>
+			<isNotNull prepend="," property="gmtModified">
+				gmt_modified
+			</isNotNull>
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">
+				#id:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="name">
+				#name:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="itemSkuId">
+				#itemSkuId:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="supplierId">
+				#supplierId:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="userId">
+				#userId:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="itemId">
+				#itemId:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="subName">
+				#subName:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="sessionId">
+				#sessionId:VARCHAR#
+			</isNotNull>
+			<isNotNull prepend="," property="originPrice">
+				#originPrice:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="unitPrice">
+				#unitPrice:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="number">
+				#number:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="totalPrice">
+				#totalPrice:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="savePrice">
+				#savePrice:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="totalSave">
+				#totalSave:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="returnMoney">
+				#returnMoney:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalMoney">
+				#returnTotalMoney:BIGINT#
+			</isNotNull>
+			<isNotNull prepend="," property="returnScore">
+				#returnScore:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalScore">
+				#returnTotalScore:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="returnPoint">
+				#returnPoint:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="returnTotalPoint">
+				#returnTotalPoint:INTEGER#
+			</isNotNull>
+			<isNotNull prepend="," property="isGift">
+				#isGift:TINYINT#
+			</isNotNull>
+			<isNotNull prepend="," property="source">
+				#source:TINYINT#
+			</isNotNull>
+			<isNotNull prepend="," property="gmtCreated">
+				#gmtCreated:DATETIME#
+			</isNotNull>
+			<isNotNull prepend="," property="gmtModified">
+				#gmtModified:DATETIME#
+			</isNotNull>
+			)
+		</dynamic>
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<delete id="deleteCartItem" parameterClass="long">
+		delete from shopping_cart
+		where id = #value#
+	</delete>
+
+	<delete id="cleanCart" parameterClass="String">
+		delete from shopping_cart
+		where session_id = #value#
+	</delete>
+
+	<update id="updateCartItemNumber" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		update shopping_cart
+  		set number = #number#, 
+			total_price = unit_price * #number#,
+			total_save = save_price * #number#,
+			gmt_modified = now()
+			where id = #id#
+  	</update>
+
+ 	<!--  更新购物车项数目、金额  -->
+	<update id="updateCartItem" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+		update shopping_cart
+		<!--set number = #number#,
+		unit_price = #unitPrice#,
+		save_price = #savePrice#,
+		total_price = #totalPrice#,
+		total_save = #totalSave#,
+		 return_total_money = ##,
+		return_total_score = ##,
+		return_total_point = ##, 
+		gmt_modified = #gmtModified:DATE#
+		where id = #id:BIGINT#
+		-->
+		
+	<dynamic prepend="set" >
+      <isNotNull prepend="," property="unitPrice" >
+        unit_price = #unitPrice#
+      </isNotNull>
+      <isNotNull prepend="," property="number" >
+        number = #number#
+      </isNotNull>
+      <isNotNull prepend="," property="originPrice">
+      	origin_price = #originPrice#
+      </isNotNull>
+      <isNotNull prepend="," property="totalPrice" >
+        total_price = #totalPrice#
+      </isNotNull>
+      <isNotNull prepend="," property="savePrice">
+      	save_price =#savePrice#
+      </isNotNull>
+      <isNotNull prepend="," property="totalSave">
+      	total_save =#totalSave#
+      </isNotNull>
+      <isNotNull prepend="," property="source"> 
+      	source = #source#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtModified" >
+        gmt_modified = #gmtModified#
+      </isNotNull>
+      where id = #id#
+    </dynamic>
+		
+	</update>
+	
+	<!--  根据sessionId 查询购物车项  -->
+	<select id="querytCartItems" parameterClass="String" resultMap="BaseResultMap">
+		select
+		<include refid="shopping_cart.Base_Column_List" />
+		from shopping_cart where session_id = #value#
+	</select>
+	
+  	<!-- 移除购物车中的赠品  -->
+  	<delete id="deleteGiftItems" parameterClass="String">
+  		delete from shopping_cart
+		where session_id = #value# and is_gift = 1
+  	</delete>
+  	
+  	<select id="queryCartItemByProperty" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO">
+  		select
+		<include refid="shopping_cart.Base_Column_List" />
+		from shopping_cart where session_id = #sessionId# and item_sku_id = #itemSkuId# and supplier_id = #supplierId#
+  	</select>
+
+	<!-- 新加入购物车时候判断是不是已经存在该商品 -->
+	<select id="getCartItemBySkuId" parameterClass="com.mockuai.tradecenter.core.domain.CartItemDO" resultMap="BaseResultMap">
+		select
+		<include refid="shopping_cart.Base_Column_List" />
+		from shopping_cart where item_sku_id = #itemSkuId# and supplier_id = #supplierId# and session_id = #sessionId# 
+	</select>
+	
+	<select id="getCartItemsCount" parameterClass="String" resultClass="java.lang.Integer">
+		select count(*) from shopping_cart where session_id = #value#
+	</select>
+	
+	<select id="getCartItem" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+		select
+		<include refid="shopping_cart.Base_Column_List" />
+		from shopping_cart where id = #value# 
+	</select>
+
+	
+</sqlMap>

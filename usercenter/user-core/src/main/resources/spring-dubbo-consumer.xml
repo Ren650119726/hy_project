@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+    <!--消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
+    <!-- 使用multicast广播注册中心暴露服务地址-->
+    <!-- <dubbo:registry address="multicast://localhost:1234" /> -->
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry address="zookeeper://${usercenter.dubbo.registry.address}"/>
+
+    <dubbo:reference id="deliveryService" interface="com.mockuai.deliverycenter.common.api.DeliveryService"
+                     check="false"/>
+    <dubbo:reference id="appService" interface="com.mockuai.appcenter.common.api.AppService" check="false"/>
+    <!-- <dubbo:reference id="dataService" interface="com.mockuai.datacenter.common.api.DataService" check="false"/> -->
+    <dubbo:reference id="marketingService" interface="com.mockuai.marketingcenter.common.api.MarketingService"
+                     check="false"/>
+    <dubbo:reference id="customerService" interface="com.mockuai.customer.common.api.CustomerService" check="false"/>
+    <dubbo:reference id="virtualWealthService" interface="com.mockuai.virtualwealthcenter.common.api.VirtualWealthService" check="false" />
+    <dubbo:reference id="tradeService" interface="com.mockuai.tradecenter.common.api.TradeService" check="false" />
+    <dubbo:reference id="distributionService" interface="com.mockuai.distributioncenter.common.api.DistributionService" check="false"/>  
+    <dubbo:reference id="imageService" interface="com.mockuai.imagecenter.common.api.ImageService" check="false"/>
+</beans>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionConfig>
+    <filters>
+        <chain name="required">
+            <filter name="appCheckFilter" implClass="com.mockuai.virtualwealthcenter.core.filter.impl.AppCheckFilter"/>
+            <filter name="hiCoinExpireCheckFilter"
+                    implClass="com.mockuai.virtualwealthcenter.core.filter.impl.HiCoinExpireCheckFilter"/>
+        </chain>
+    </filters>
+</ActionConfig>

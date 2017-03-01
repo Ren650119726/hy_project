@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <settings useStatementNamespaces="true" />
+    <sqlMap resource="sqlmap/pageItem_sqlmap.xml" />
+    <sqlMap resource="sqlmap/pageItemCategory_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publishPage_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publishTab_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_block_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_gallery_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_seckill_sqlmap.xml" />
+    
+    <sqlMap resource="sqlmap/page_grid_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_grid_content_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_grid_merge_cells_sqlmap.xml" />
+
+    <sqlMap resource="sqlmap/publish/publish_pageItem_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publish/publish_pageItemCategory_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publish/publish_index_page_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publish/publish_page_block_sqlmap.xml" />
+    <sqlMap resource="sqlmap/publish/publish_page_gallery_sqlmap.xml" />
+    <sqlMap resource="sqlmap/page_picture_sqlmap.xml" />
+
+</sqlMapConfig>

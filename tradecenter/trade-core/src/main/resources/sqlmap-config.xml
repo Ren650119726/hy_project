@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <!-- <sqlMap resource="sqlmap/order-sqlmap.xml"/> -->
+    
+    <settings 
+	  cacheModelsEnabled="false" 
+	  enhancementEnabled="false"
+	  lazyLoadingEnabled="false" 
+	  maxRequests="3000" 
+	  maxSessions="3000"
+	  maxTransactions="3000"
+	  useStatementNamespaces="true"
+	/>
+	
+   	<!-- 已登入用户购物车表 -->
+    <sqlMap resource="sqlmap/user_cart_SqlMap.xml"/>
+    
+    <!--  订单流水 -->
+	<!--<sqlMap resource="sqlmap/order_seq_SqlMap.xml"/>-->
+	
+	<!-- 退款申请单 -->
+	<!--<sqlMap resource="sqlmap/return_order_SqlMap.xml"/>-->
+	
+	<!-- 退款申请单明细 -->
+	<!--<sqlMap resource="sqlmap/return_order_item_SqlMap.xml"/>-->
+	
+	<!-- 发货单 -->
+	<!--<sqlMap resource="sqlmap/delivery_notice_SqlMap.xml"/>-->
+	
+	<!-- 支付方式表 -->
+	<!--<sqlMap resource="sqlmap/payment_SqlMap.xml"/>-->
+
+	<!-- 订单表  -->
+	<sqlMap resource="sqlmap/order_SqlMap.xml"/>
+
+	<!-- 订单明细表  -->
+	<sqlMap resource="sqlmap/order_item_SqlMap.xml"/>
+	
+	<!--  支付单表 -->
+	<sqlMap resource="sqlmap/order_payment_SqlMap.xml"/>
+
+	<!--订单收货地址信息表-->
+	<sqlMap resource="sqlmap/order_consignee_SqlMap.xml"/>
+
+	<!--订单报销信息表-->
+	<sqlMap resource="sqlmap/order_invoice_SqlMap.xml"/>
+
+	<!--订单优惠信息-->
+	<sqlMap resource="sqlmap/order_discount_info_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/order_view_SqlMap.xml"/>
+
+
+	<sqlMap resource="sqlmap/seller_trans_log_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/withdraw_info_SqlMap.xml"/>
+
+	<sqlMap resource="sqlmap/seller_money_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/withdraw_batch_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/refund_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/refund_item_image_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/refund_item_log_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/order_store_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/order_service_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/cart_item_service_SqlMap.xml"/>
+
+	<sqlMap resource="sqlmap/biz_lock_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/trade_notify_log_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/trade_config_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/trade_payment_config_SqlMap.xml"/>
+	
+	<sqlMap resource="sqlmap/order_track_SqlMap.xml"/>
+	
+</sqlMapConfig>

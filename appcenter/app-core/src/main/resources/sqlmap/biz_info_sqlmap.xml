@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="biz_info">
+	<!--CREATE TABLE `biz_info` (-->
+	<!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+	<!--`biz_code` varchar(64) NOT NULL COMMENT '业务唯一标志符',-->
+	<!--`biz_type` tinyint(4) NOT NULL COMMENT '业务类型，1代表企业业务，2代表个人业务',-->
+	<!--`biz_name` varchar(64) NOT NULL COMMENT '业务名称',-->
+	<!--`biz_desc` varchar(256) DEFAULT NULL COMMENT '业务描述',-->
+	<!--`administrator` varchar(64) DEFAULT NULL COMMENT '管理员名称',-->
+	<!--`mobile` varchar(11) DEFAULT NULL COMMENT '管理员手机号',-->
+	<!--`email` varchar(64) DEFAULT NULL COMMENT '管理员邮箱',-->
+	<!--`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',-->
+	<!--`gmt_created` datetime NOT NULL COMMENT '记录创建时间',-->
+	<!--`gmt_modified` datetime NOT NULL COMMENT '记录最后一次修改时间',-->
+	<!--PRIMARY KEY (`id`)-->
+	<!--) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT="业务信息表"-->
+
+	<resultMap id="result" class="com.mockuai.appcenter.core.domain.BizInfoDO">
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="bizType" column="biz_type" jdbcType="TINYINT"/>
+		<result property="bizName" column="biz_name" jdbcType="VARCHAR"/>
+		<result property="bizDesc" column="biz_desc" jdbcType="VARCHAR"/>
+		<result property="administrator" column="administrator" jdbcType="VARCHAR"/>
+		<result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+		<result property="email" column="email" jdbcType="VARCHAR"/>
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+	</resultMap>
+
+	<sql id="column_set">
+		id,
+		biz_code,
+		biz_type,
+		biz_name,
+		biz_desc,
+		administrator,
+		mobile,
+		email,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+
+	<insert id="addBizInfo" parameterClass="com.mockuai.appcenter.core.domain.BizInfoDO">
+		insert into biz_info(
+		biz_code,
+		biz_type,
+		biz_name,
+		biz_desc,
+		administrator,
+		mobile,
+		email,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		delete_version
+		)
+		values(
+		#bizCode#,
+		#bizType#,
+		#bizName#,
+		#bizDesc#,
+		#administrator#,
+		#mobile#,
+		#email#,
+		0,
+		now(),
+		now(),
+		0
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<update id="updateBizInfo" parameterClass="com.mockuai.appcenter.core.domain.BizInfoDO">
+		update biz_info
+		set gmt_modified=now()
+		<dynamic>
+			<isNotNull property="bizType" prepend=",">
+				biz_type=#bizType#
+			</isNotNull>
+			<isNotNull property="bizName" prepend=",">
+				biz_name=#bizName#
+			</isNotNull>
+			<isNotNull property="bizDesc" prepend=",">
+				biz_desc=#bizDesc#
+			</isNotNull>
+			<isNotNull property="administrator" prepend=",">
+				administrator=#administrator#
+			</isNotNull>
+			<isNotNull property="mobile" prepend=",">
+				mobile=#mobile#
+			</isNotNull>
+			<isNotNull property="email" prepend=",">
+				email=#email#
+			</isNotNull>
+		</dynamic>
+		where id = #id# and delete_mark=0
+	</update>
+
+
+
+	<!-- 新加入购物车时候判断是不是已经存在该商品 -->
+	<select id="getBizInfo" parameterClass="java.lang.String" resultMap="result">
+		select
+		<include refid="biz_info.column_set" />
+		from biz_info where biz_code = #bizCode# and delete_mark=0
+	</select>
+
+	<select id="queryBizInfo" parameterClass="com.mockuai.appcenter.common.domain.BizInfoQTO" resultMap="result">
+		select
+		<include refid="biz_info.column_set" />
+		from biz_info
+		where delete_mark=0
+		<dynamic>
+			<isNotNull property="bizCode" prepend="and">
+				biz_code=#bizCode#
+			</isNotNull>
+			<isNotNull property="mobile" prepend="and">
+				mobile=#mobile#
+			</isNotNull>
+			<isNotNull property="bizNameLike" prepend="and">
+				biz_name like concat('%', #bizNameLike#,'%')
+			</isNotNull>
+		</dynamic>
+		limit #offset#,#count#
+	</select>
+
+	<select id="queryBizInfoCount" parameterClass="com.mockuai.appcenter.common.domain.BizInfoQTO"
+			resultClass="java.lang.Long">
+		select count(1)
+		from biz_info
+		where delete_mark=0
+		<dynamic>
+			<isNotNull property="bizCode" prepend="and">
+				biz_code=#bizCode#
+			</isNotNull>
+			<isNotNull property="mobile" prepend="and">
+				mobile=#mobile#
+			</isNotNull>
+			<isNotNull property="bizNameLike" prepend="and">
+				biz_name like concat('%', #bizNameLike#,'%')
+			</isNotNull>
+		</dynamic>
+	</select>
+
+	<update id="deleteBizInfo" parameterClass="com.mockuai.appcenter.core.domain.BizInfoDO">
+		update biz_info set gmt_modified=now(), delete_mark=1, delete_version=#deleteVersion#
+		where biz_code=#bizCode# and delete_mark=0
+	</update>
+</sqlMap>

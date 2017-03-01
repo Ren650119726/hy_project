@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_brand">
+	<typeAlias alias="itemBrandDO" type="com.mockuai.itemcenter.core.domain.ItemBrandDO" />
+	<typeAlias alias="itemBrandQTO"	type="com.mockuai.itemcenter.common.domain.qto.ItemBrandQTO" />
+
+	<resultMap class="itemBrandDO" id="itemBrandDOResult">
+		<result property="id" column="id" />
+		<result property="cname" column="cname" />
+		<result property="ename" column="ename" />
+		<result property="brandStatus" column="brand_status" />
+		<result property="logoUrl" column="logo_url" />
+		<result property="country" column="country" />
+		<result property="countryIcon" column="country_icon" />
+		<result property="buildTime" column="build_time" />
+		<result property="initiator" column="initiator" />
+		<result property="background" column="background" />
+		<result property="headAddress" column="head_address" />
+		<result property="sort" column="sort" />
+		<result property="isDeleted" column="is_deleted" />
+		<result property="gmtCreated" column="gmt_created" />
+		<result property="gmtModified" column="gmt_modified" />
+	</resultMap>
+
+	<insert id="ItemBrandDAO.addItemBrand" parameterClass="itemBrandDO">
+		 insert into item_brand
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="cname" >
+        cname
+      </isNotNull>
+      <isNotNull prepend="," property="ename" >
+        ename
+      </isNotNull>
+      <isNotNull prepend="," property="brandStatus" >
+        brand_status
+      </isNotNull>
+      <isNotNull prepend="," property="logoUrl" >
+        logo_url
+      </isNotNull>
+      <isNotNull prepend="," property="country" >
+        country
+      </isNotNull>
+      <isNotNull prepend="," property="countryIcon" >
+        country_icon
+      </isNotNull>
+      <isNotNull prepend="," property="buildTime" >
+        build_time
+      </isNotNull>
+      <isNotNull prepend="," property="initiator" >
+        initiator
+      </isNotNull>
+      <isNotNull prepend="," property="background" >
+        background
+      </isNotNull>
+      <isNotNull prepend="," property="headAddress" >
+        head_address
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        sort
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        is_deleted
+      </isNotNull>
+      <isNotNull prepend="," property="descs" >
+        descs
+      </isNotNull>
+		<isNotNull prepend="," property="bannerUrl" >
+			banner_img
+		</isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="cname" >
+        #cname:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="ename" >
+        #ename:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="brandStatus" >
+        #brandStatus:BIT#
+      </isNotNull>
+      <isNotNull prepend="," property="logoUrl" >
+        #logoUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="country" >
+        #country:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="countryIcon" >
+        #countryIcon:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="buildTime" >
+        #buildTime:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="initiator" >
+        #initiator:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="background" >
+        #background:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="headAddress" >
+        #headAddress:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sort" >
+        #sort:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDeleted" >
+        #isDeleted:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="descs" >
+        #descs:LONGVARCHAR#
+      </isNotNull>
+		<isNotNull prepend="," property="bannerUrl" >
+			#banner_img:VARCHAR#
+		</isNotNull>
+      )
+    </dynamic>
+		<selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+	</insert>
+
+	<sql id="item_brand_base_column_list">
+		id, cname, ename, brand_status, logo_url, country,
+		country_icon,
+		build_time, initiator,
+		background, head_address, sort,
+		is_deleted, gmt_created, gmt_modified
+	</sql>
+	
+	
+	<sql id="ItemBrandDAO.queryWhere">
+		<dynamic prepend="where">
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="isDeleted"> 
+				is_deleted = #isDeleted#
+			</isNotNull>
+			<isNotNull prepend="AND" property="brandStatus"> 
+				brand_status = #brandStatus#
+			</isNotNull>
+			<isNotNull prepend="AND" property="cname"> 
+				cname = #cname#
+			</isNotNull>
+			<isNotNull prepend="AND" property="ename"> 
+				ename = #ename#
+			</isNotNull>
+		</dynamic>
+	</sql>
+	
+
+	<select id="ItemBrandDAO.getItemBrand" resultMap="itemBrandDOResult" parameterClass="itemBrandQTO">
+		select <include refid="item_brand_base_column_list" /> from item_brand
+		 	   <include refid="ItemBrandDAO.queryWhere" />
+	</select>
+	
+	<update id="ItemBrandDAO.updateItemBrand" >
+		update item_brand
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.cname">
+				cname = #record.cname#
+			</isNotNull>
+			<isNotNull prepend="," property="record.ename">
+				ename = #record.ename#
+			</isNotNull>
+			<isNotNull prepend="," property="record.logoUrl">
+				logo_url = #record.logoUrl#
+			</isNotNull>
+			<isNotNull prepend="," property="record.country">
+				country = #record.country#
+			</isNotNull>
+			<isNotNull prepend="," property="record.countryIcon">
+				country_icon = #record.countryIcon#
+			</isNotNull>
+			<isNotNull prepend="," property="record.buildTime">
+				build_time = #record.buildTime#
+			</isNotNull>
+			<isNotNull prepend="," property="record.initiator">
+				initiator = #record.initiator#
+			</isNotNull>
+			<isNotNull prepend="," property="record.background">
+				background = #record.background#
+			</isNotNull>
+			<isNotNull prepend="," property="record.headAddress">
+				head_address =#record.headAddress#
+			</isNotNull>
+			<isNotNull prepend="," property="record.sort">
+				sort = #record.sort#
+			</isNotNull>
+			<isNotNull prepend="," property="record.descs">
+				descs = #record.descs#
+			</isNotNull>
+		</dynamic>
+		<include refid="ItemBrandDAO.queryWhere" />
+	</update>
+	
+	<update id="ItemBrandDAO.deleteItemBrand" >
+		update item_brand
+		set gmt_modified=now()
+		<dynamic prepend="">
+			<isNotNull prepend="," property="record.isDeleted">
+				is_deleted = #record.isDeleted#
+			</isNotNull>
+		</dynamic>
+		<include refid="ItemBrandDAO.queryWhere" />
+	</update>
+	
+	
+	<select id="ItemBrandDAO.countBrand" resultClass="Integer" parameterClass="itemBrandQTO">
+		select count(1) from item_brand
+		<include refid="ItemBrandDAO.queryWhere" />
+	</select>
+	
+	
+	<select id="ItemBrandDAO.queryItemBrandList" resultMap="itemBrandDOResult"
+		parameterClass="itemBrandQTO">
+		select 	<include refid="item_brand_base_column_list" /> from item_brand
+				<include refid="ItemBrandDAO.queryWhere" />
+			<isNotNull property="needPaging">
+				limit #offset#,#pageSize#
+			</isNotNull>
+	</select>
+</sqlMap>

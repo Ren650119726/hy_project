@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="REGION">
+	<typeAlias alias="Region" type="com.mockuai.deliverycenter.core.domain.fee.Region" />
+	
+	<sql id="columList">
+		   id as id,
+		   parent_code as parentCode,
+		   code as code,
+		   name as name,
+		   region_level as regionLevel,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addRegion" parameterClass="Region">
+		insert into delivery_region
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="parentCode">parent_code </isNotNull>
+			<isNotNull prepend="," property="code">code </isNotNull>
+			<isNotNull prepend="," property="name">name </isNotNull>
+			<isNotNull prepend="," property="regionLevel">region_level </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="parentCode">#parentCode:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="code">#code:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="name">#name:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="regionLevel">#regionLevel:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateRegion" parameterClass="Region">
+		update delivery_region
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="code"> 
+			code = #code:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<delete id="deleteRegion" parameterClass="Region">
+		delete from delivery_region 
+		where id = #id:BIGINT# and deleted=0
+	</delete>
+
+	<select id="getRegion"  parameterClass="Region" resultClass="Region">
+		select
+		<include refid="REGION.columList" />
+		from delivery_region
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	
+	<sql id="queryWhere">
+		where deleted=0
+		<isNotNull prepend="AND" property="parentCode">
+			parent_code = #parentCode:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="name">
+			name = #name#
+		</isNotNull>
+		<isNotNull property="regionCodes">
+			<isNotEmpty prepend="AND" property="regionCodes">
+				code in
+				<iterate  property="regionCodes" conjunction="," open="(" close=")"  >
+					#regionCodes[]#
+				</iterate>
+			</isNotEmpty>
+		</isNotNull>
+
+	</sql>
+	
+	<select id="queryRegion" parameterClass="com.mockuai.deliverycenter.common.qto.fee.RegionQTO" resultClass="Region">
+		select
+		<include refid="REGION.columList" />
+		from delivery_region
+		<include refid="REGION.queryWhere" />
+		<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+		</isNotNull>
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.fee.RegionQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_region
+		<include refid="REGION.queryWhere" />
+	</select>
+</sqlMap>

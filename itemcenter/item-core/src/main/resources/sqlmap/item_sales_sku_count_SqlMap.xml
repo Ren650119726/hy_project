@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="itemSalesSku">   
+    <resultMap class="com.mockuai.itemcenter.core.domain.ItemSalesSkuCountDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="item_id" jdbcType="BIGINT" property="itemId"/>
+        <result column="sku_id" jdbcType="BIGINT" property="skuId"/>
+        <result column="sku_sales_count" jdbcType="BIGINT" property="skuSalesCount"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, item_id, sku_id, sku_sales_count, delete_mark, gmt_created, gmt_modified
+    </sql>
+    
+    <select id="getItemSalesSkuByItemId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from item_sales_sku_count
+        where sku_id = #skuId:BIGINT#
+    </select>
+
+    <insert id="addItemSalesSkuCount" parameterClass="com.mockuai.itemcenter.core.domain.ItemSalesSkuCountDO">
+        insert into item_sales_sku_count
+        <dynamic prepend="(">         
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="skuId">
+                sku_id
+            </isNotNull>             
+            <isNotNull prepend="," property="skuSalesCount">
+                sku_sales_count
+            </isNotNull>
+            , delete_mark, gmt_created, gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">            
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="skuId">
+                #skuId:BIGINT#
+            </isNotNull>             
+            <isNotNull prepend="," property="skuSalesCount">
+                #skuSalesCount:BIGINT#
+            </isNotNull>            
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+
+    <update id="updateItemSalesSkuCount" parameterClass="com.mockuai.itemcenter.core.domain.ItemSalesSkuCountDO">
+        update item_sales_sku_count set gmt_modified = now(), sku_sales_count = #skuSalesCount:BIGINT#      
+        where sku_id = #skuId:BIGINT#
+    </update>
+</sqlMap>

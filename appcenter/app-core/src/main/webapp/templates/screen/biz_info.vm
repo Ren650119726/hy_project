@@ -1,0 +1,379 @@
+<form class="form-horizontal" method='post'
+      action='#if($!{bizInfo})/appcenter/biz/update.do #else /appcenter/biz/add.do #end'>
+    <input type="hidden" name="biz_id", value="$!{bizInfo.id}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                企业基本信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">企业标志码：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="biz_code" class="form-control" value="$!{bizInfo.bizCode}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">企业名称：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="biz_name" class="form-control" value="$!{bizInfo.bizName}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">管理员：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="admin" class="form-control" value="$!{bizInfo.administrator}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">联系电话：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="mobile" class="form-control" value="$!{bizInfo.mobile}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">邮箱：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="email" class="form-control" value="$!{bizInfo.email}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">企业描述信息：</label>
+
+                <div class="col-sm-4">
+                    <textarea type="text" class="form-control" rows="3" value="$!{bizInfo.bizDesc}"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                企业基本配置信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">短信title：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="biz_message_title" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.biz_message_title.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">商城主色调：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="biz_main_color" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.biz_main_color.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">商城首页数据地址：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="homepage_wireless_data_url" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.homepage_wireless_data_url.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">商城名称：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="site_name" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.site_name.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">商城关键字：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="site_keywords" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.site_keywords.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">使用魔筷支付账号：</label>
+                <span>是</span>
+                <input class="btn btn-default" type="radio" name="is_pay_by_mockuai" class="form-control" value="1" #if($!{bizInfo.bizPropertyMap.is_pay_by_mockuai.value}=="1") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('pay_conf', 0);">
+                <span>否</span>
+                <input class="btn btn-default" type="radio" name="is_pay_by_mockuai" class="form-control" value="0" #if($!{bizInfo.bizPropertyMap.is_pay_by_mockuai.value}=="0") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('pay_conf', 1);">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">使用魔筷微信登录账号：</label>
+                <span>是</span>
+                <input class="btn btn-default" type="radio" name="is_wechat_login_by_mockuai" class="form-control" value="1" #if($!{bizInfo.bizPropertyMap.is_wechat_login_by_mockuai.value}=="1") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('login_conf', 0);">
+                <span>否</span>
+                <input class="btn btn-default" type="radio" name="is_wechat_login_by_mockuai" class="form-control" value="0" #if($!{bizInfo.bizPropertyMap.is_wechat_login_by_mockuai.value}=="0") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('login_conf', 1);">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">支持商品搜索：</label>
+                <span>是</span>
+                <input class="btn btn-default" type="radio" name="is_search_available" class="form-control" value="1" #if($!{bizInfo.bizPropertyMap.is_search_available.value}=="1") checked="true" #end>
+                <span>否</span>
+                <input class="btn btn-default" type="radio" name="is_search_available" class="form-control" value="0" #if($!{bizInfo.bizPropertyMap.is_search_available.value}=="0") checked="true" #end>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">支持微信分享配置：</label>
+                <span>是</span>
+                <input class="btn btn-default" type="radio" name="is_wechat_share_conf_support" class="form-control" value="1" #if($!{bizInfo.bizPropertyMap.is_wechat_share_conf_support.value}=="1") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('wechat_share_conf', 1);">
+                <span>否</span>
+                <input class="btn btn-default" type="radio" name="is_wechat_share_conf_support" class="form-control" value="0" #if($!{bizInfo.bizPropertyMap.is_wechat_share_conf_support.value}=="0") checked="true" #end onclick="NameSpace.AppCenter.slide_toggle('wechat_share_conf', 0);">
+            </div>
+        </div>
+    </div>
+
+    <div id="pay_conf" #if($!{bizInfo.bizPropertyMap.is_pay_by_mockuai.value}=="1") hidden="true" #end class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                支付配置信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div id="alipay_conf">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付宝商户号：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="alipay_partner" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.alipay_partner.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付宝账号：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="alipay_account" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.alipay_account.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付宝商户私钥：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="alipay_mch_private_key" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.alipay_mch_private_key.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">支付宝公钥：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="alipay_public_key" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.alipay_public_key.value}">
+                    </div>
+                </div>
+            </div>
+
+            <div id="wechat_conf">
+                <div id="wechat_h5_conf">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信h5端appId：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_h5_app_id" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_h5_app_id.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信h5端密钥：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_h5_app_secret" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_h5_app_secret.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信h5端商户号：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_h5_partner_id" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_h5_partner_id.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信h5端商户key：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_h5_partner_key" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_h5_partner_key.value}">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="wechat_app_conf">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信app端appId：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_app_app_id" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_app_app_id.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信app端密钥：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_app_app_secret" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_app_app_secret.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信app端商户号：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_app_partner_id" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_app_partner_id.value}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">微信app端商户key：</label>
+
+                        <div class="col-sm-4">
+                            <input type="text" name="wechat_app_partner_key" class="form-control"
+                                   value="$!{bizInfo.bizPropertyMap.wechat_app_partner_key.value}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="unionpay_conf">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">银联商户号：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="unionpay_mch_id" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.unionpay_mch_id.value}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login_conf" #if($!{bizInfo.bizPropertyMap.is_wechat_login_by_mockuai.value}=="1") hidden="true" #end class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                登录配置信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div id="wechat_login_conf">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">微信登录h5端appId：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="wechat_login_h5_app_id" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.wechat_login_h5_app_id.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">微信登录h5端密钥：</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="wechat_login_h5_app_secret" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.wechat_login_h5_app_secret.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">微信登录app端appId：</label>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="wechat_login_app_app_id" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.wechat_login_app_app_id.value}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">微信登录app端密钥：</label>
+                    <div class="col-sm-4">
+                        <input type="text" name="wechat_login_app_app_secret" class="form-control"
+                               value="$!{bizInfo.bizPropertyMap.wechat_login_app_app_secret.value}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wechat_share_conf" #if($!{bizInfo.bizPropertyMap.is_wechat_share_conf_support.value}=="1") hidden="false" #else hidden="true" #end class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                微信分享配置信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">微信分享标题：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="wechat_share_conf_title" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.wechat_share_conf_title.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">微信分享描述：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="wechat_share_conf_desc" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.wechat_share_conf_desc.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">微信分享logo地址：</label>
+
+                <div class="col-sm-4">
+                    <input type="text" name="wechat_share_conf_logo" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.wechat_share_conf_logo.value}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                客服联系方式配置信息
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">客服电话：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="cs_tel" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.cs_tel.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">在线客服链接：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="cs_online_url" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.cs_online_url.value}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">关于我们链接：</label>
+                <div class="col-sm-4">
+                    <input type="text" name="about_us" class="form-control"
+                           value="$!{bizInfo.bizPropertyMap.about_us.value}">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-6 text-right">
+        #if($!{userDO.level} <3)
+        <button type="submit" class="btn btn-default">保存</button>
+        #end
+        <a href="/appcenter/biz/manager.html" class="btn btn-default">返回</a>
+    </div>
+</form>

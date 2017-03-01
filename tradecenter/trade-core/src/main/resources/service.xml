@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+	   default-autowire="byName">
+	   
+	   <context:component-scan base-package="com.mockuai.tradecenter.core.service.action.payment.client.*" />
+	     <context:component-scan base-package="com.mockuai.tradecenter.core.base.service.*" />
+	     <context:component-scan base-package="com.mockuai.tradecenter.core.listener.*" />
+	     
+	   <bean id="abstractRuleChian" class="com.mockuai.tradecenter.core.service.impl.AbstractRuleChian" abstract="true" scope="prototype"></bean>
+	    
+	    <bean id="tradeInnerOperFactory" class="com.mockuai.tradecenter.core.base.factory.impl.TradeInnerFactoryImpl">
+		<property name="transMap">
+			<map>
+				<entry key="040700"><value>queryItemInnerTrans</value></entry> <!-- 验证商品 -->
+				<entry key="010000"><value>addPreOrderInnerTrans</value></entry> <!-- 验证商品 -->
+				<entry key="010003"><value>addActivityOrderInnerTrans</value></entry>
+				<entry key="020500"><value>getSettlementInnerTrans</value></entry>
+			</map>
+		</property>
+	</bean>
+	    
+	  <bean id="ossClientAPI" class="com.mockuai.tradecenter.core.api.impl.OSSClientAPI" init-method="init">
+        <constructor-arg>
+            <value>${tradecenter.oss.accesskey.id}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${tradecenter.oss.accesskey.secret}</value>
+        </constructor-arg>
+    </bean>
+	   
+	   <bean id="paymentClientExecutorFactory"
+		class="com.mockuai.tradecenter.core.base.impl.ClientExecutorFactoryImpl">
+		<property name="executorsMap">
+			<map>
+				<entry key="1" value-ref="alipayClientForApp" />
+				<entry key="4" value-ref="alipayClientForWap" />
+				<entry key="aliPayBatchTrans" value-ref="alipayClientForPayment" />
+				<entry key="1_Refund" value-ref="alipayClientForRefundNoPwd" />
+				<entry key="4_Refund" value-ref="alipayClientForRefundNoPwd" />
+				
+				<entry key="5" value-ref="wxpayClientForWap" />
+				<entry key="2" value-ref="wxpayClientForApp" />
+				<entry key="2_Refund" value-ref="wxpayClientForRefund" />
+				<entry key="5_Refund" value-ref="wxpayClientForRefund" />
+				<entry key="wxpayDaily" value-ref="wxpayClientForDaily" />
+				<entry key="wxpayRefundSingleQuery" value-ref="wxpayClientForRefundSingleQuery" />
+				<entry key="wxpayClientForCloseOrder" value-ref="wxpayClientForCloseOrder" />
+				
+				<entry key="6" value-ref="unipayClientForWap" />
+				<entry key="3" value-ref="unipayClientForApp" />
+				<entry key="3_Refund" value-ref="unipayClientForRefund" />
+				<entry key="6_Refund" value-ref="unipayClientForRefund" />				
+				
+				<entry key="13" value-ref="lianlianpayClientForApp" />
+<!-- 				<entry key="14" value-ref="lianlianpayClientForWap" /> -->
+				<entry key="13_Refund" value-ref="lianlianpayClientForRefund" />
+<!-- 				<entry key="14_Refund" value-ref="lianlianpayClientForRefund" /> -->
+				
+				<entry key="7" value-ref="sumPayClientForApp" />
+				<entry key="8" value-ref="sumPayClientForWap" />
+				<entry key="9" value-ref="orderDiscountPayClient" />
+				<entry key="7_Refund" value-ref="sumPayClientForRefund" />
+				<entry key="8_Refund" value-ref="sumPayClientForRefund" />
+				<!--  支付单笔查询 -->
+				<entry key="1_PaymentSingleQuery" value-ref="alipayClientForPaymentSingleQuery" />
+				<entry key="4_PaymentSingleQuery" value-ref="alipayClientForPaymentSingleQuery" />
+				<entry key="2_PaymentSingleQuery" value-ref="wxpayClientForPaymentSingleQuery" />
+				<entry key="5_PaymentSingleQuery" value-ref="wxpayClientForPaymentSingleQuery" />
+<!-- 				<entry key="13_PaymentSingleQuery" value-ref="lianlianpayClientForPaymentSingleQuery" /> -->
+<!-- 				<entry key="14_PaymentSingleQuery" value-ref="lianlianpayClientForPaymentSingleQuery" /> -->
+				
+				<!-- 申报 -->
+
+				<entry key="1_CustomDeclare" value-ref="alipayClientForCustomDeclare" />
+				<entry key="4_CustomDeclare" value-ref="alipayClientForCustomDeclare" />
+				<entry key="2_CustomDeclare" value-ref="wxpayClientForCustomDeclare" />
+				<entry key="5_CustomDeclare" value-ref="wxpayClientForCustomDeclare" />
+
+				
+				
+			</map>
+		</property>
+	</bean>
+	   
+	   
+	<bean id="tradeService" class="com.mockuai.tradecenter.core.api.impl.TradeServiceImpl" />
+	<bean id="actionHoloder" class="com.mockuai.tradecenter.core.service.action.ActionHolder"/>
+	<bean id="appContext" class="com.mockuai.tradecenter.core.service.AppContext" />
+
+	<bean id="mapper" class="org.dozer.DozerBeanMapper">
+    </bean>
+	<bean id="dozerBeanService" class="com.mockuai.tradecenter.core.util.DozerBeanService" >
+		<property name="mapper" ref="mapper"></property>
+	</bean>
+
+	<bean id="requestDispatcher" class="com.mockuai.tradecenter.core.service.RequestDispatcher">
+		<property name="actionHoloder" ref="actionHoloder" />
+		<property name="appContext" ref="appContext" />
+	</bean>
+	
+	<bean id="orderClient" class="com.mockuai.tradecenter.client.impl.OrderClientImpl" >
+		<property name="tradeService" ref="tradeService" />
+	</bean>
+	
+	<bean id="tradeCoreConfig" class="com.mockuai.tradecenter.core.util.TradeCoreConfig" >
+		<property name="timeoutCancelMinuteNumber" value="360" />
+		<property name="timeoutDeliveryDay" value="10" />
+		<property name="zkRegistryAddress" value="${tradecenter.dubbo.registry.address}" />
+		<property name="unipayCertDir" value="${tradecenter.unipay.cent.dir}" />
+		<property name="wechatpayCertDir" value="${tradecenter.wechatpay.cent.dir}" />
+		<property name="timeoutAutoRefundDay" value="90" />
+	</bean>
+	
+	<bean id="executor" class="com.mockuai.tradecenter.core.util.ExecutorFactory">
+		<property name="corePoolSize" value="10"></property>
+	</bean>
+	
+
+	<!-- ****************************** 购物车模块接口     ******************************  -->
+
+	<!-- 已登入用户添加购物车 -->
+	
+	<bean id="addUserCartItem" class="com.mockuai.tradecenter.core.service.action.cart.AddUserCartItem"/>
+	
+	
+	<bean id="querycomment" class="com.mockuai.tradecenter.core.service.action.order.QuerySellerComment"/>
+
+	<!-- 移除用户购物车商品 -->
+	<bean id="deleteUserCartItem" class="com.mockuai.tradecenter.core.service.action.cart.DeleteUserCartItem"/>
+
+	<!-- 清空用户购物车 -->
+	<bean id="cleanUserCart" class="com.mockuai.tradecenter.core.service.action.cart.CleanUserCart"/>
+
+	<!--  用户购物车列表  -->
+	<bean id="queryUserCartItems" class="com.mockuai.tradecenter.core.service.action.cart.QueryUserCartItems"/>
+
+	<!-- 修改用户购物车商品数量   -->
+	<bean id="updateUserCartItem" class="com.mockuai.tradecenter.core.service.action.cart.UpdateUserCartItem"/>
+	
+	
+	
+	<!-- 查询购买车 (多店铺) -->
+<!-- 	<bean id="queryUserCartItemsForMultiShops" class="com.mockuai.tradecenter.core.service.action.cart.QueryUserCartItemsForMultipleShops"> -->
+<!-- 	</bean> -->
+
+	<!-- ****************************** 订单模块接口     ******************************  -->
+
+	<!-- 修改订单备注  -->
+	<bean id="updateOrderMemo" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrderMemo"/>
+
+	<!-- 查询订单 --> 
+	<bean id="getOrder" class="com.mockuai.tradecenter.core.service.action.order.GetOrder"/>
+	
+	<!-- 查询支付方式列表 --> 
+	<bean id="getPaymentConfig" class="com.mockuai.tradecenter.core.service.action.order.GetPaymentConfig"/>
+	
+	<!-- 查询用户订单数 --> 
+	<bean id="queryUserOrderCount" class="com.mockuai.tradecenter.core.service.action.order.QueryUserOrderCount"/>
+
+	<!--  取消订单 -->  
+	<bean id="cancelOrder" class="com.mockuai.tradecenter.core.service.action.order.CancelOrder"/>
+
+	<!-- 删除订单  -->
+	<bean id="deleteOrder" class="com.mockuai.tradecenter.core.service.action.order.DeleteOrder"/>
+
+	<!-- 结单 -->
+	<bean id="closeOrder" class="com.mockuai.tradecenter.core.service.action.order.CloseOrder"/>
+
+	<bean id="addOrderComment" class="com.mockuai.tradecenter.core.service.action.order.AddOrderComment"/>
+
+	<bean id="addOrder" class="com.mockuai.tradecenter.core.service.action.order.add.AddOrder"/>
+
+	<bean id="addPreOrder" class="com.mockuai.tradecenter.core.service.action.order.add.AddPreOrder"/>
+
+	<!-- 发货操作 -->
+	<bean id="deliveryGoods" class="com.mockuai.tradecenter.core.service.action.order.DeliveryGoods"/>
+
+	<!-- 复合条件查询买家订单 -->
+	<bean id="queryUserOrders" class="com.mockuai.tradecenter.core.service.action.order.QueryUserOrders"/>
+	
+	<!-- 复合条件查询买家订单 -->
+	<bean id="querySellerOrders" class="com.mockuai.tradecenter.core.service.action.order.QuerySellerOrders"/>
+
+	<!-- 订单回滚 -->
+	<bean id="rollBackOrder" class="com.mockuai.tradecenter.core.service.action.order.RollBackOrder"/>	
+	
+	<!-- 回调问题处理 -->
+	<bean id="callbackRecover" class="com.mockuai.tradecenter.core.service.action.payment.CallbackRecover"/>	
+
+	<!-- 支付宝支付回调接口 -->
+	<bean id="alipayCallback" class="com.mockuai.tradecenter.core.service.action.payment.AlipayCallback"/>
+	<!-- 连连支付回调接口 -->
+	<bean id="lianlianpayCallback" class="com.mockuai.tradecenter.core.service.action.payment.LianlianpayCallback"/>
+	<!-- 连连支付退款回调接口 -->
+	<bean id="lianlianRefundCallback" class="com.mockuai.tradecenter.core.service.action.payment.LianlianRefundCallback"/>
+	 <!---->
+	<bean id="wxPayCallback" class="com.mockuai.tradecenter.core.service.action.payment.WxPayCallback"/>
+	<bean id="unionPayCallbackForOldVersion" class="com.mockuai.tradecenter.core.service.action.payment.UnionPayCallbackForOldVersion"/>
+
+	
+
+	<bean id="confirmReceipt" class="com.mockuai.tradecenter.core.service.action.order.ConfirmReceipt"/>
+	<bean id="getPaymentUrl" class="com.mockuai.tradecenter.core.service.action.payment.GetPaymentUrl"/>
+	<bean id="getPaymentUrlForWap" class="com.mockuai.tradecenter.core.service.action.payment.GetPaymentUrlForWap"/>
+
+	<bean id="getOrderStatistic" class="com.mockuai.tradecenter.core.service.action.order.GetOrderStatistic"/>
+	<bean id="updateOrderPayType" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrderPayType"/>
+	
+	<bean id="updateOrderPrice" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrderPrice"/>
+	
+	<bean id="updateOrderAsterisksMark" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrderAsterisksMark"/>
+	
+	
+	<bean id="queryComment" class="com.mockuai.tradecenter.core.service.action.order.QuerySellerComment"/>
+	
+	<bean id="replyComment" class="com.mockuai.tradecenter.core.service.action.order.ReplyComment"/>
+	<!--  
+	<bean id="queryData" class="com.mockuai.tradecenter.core.service.action.dataCenter.QueryData"/>
+	-->
+	
+	<bean id="queryTop10Item" class="com.mockuai.tradecenter.core.service.action.dataCenter.QueryTOP10Item"/>
+	
+	<bean id="querySalesRatio" class="com.mockuai.tradecenter.core.service.action.dataCenter.QuerySalesRatio"/>
+	
+	<bean id="refundOrder" class="com.mockuai.tradecenter.core.service.action.order.RefundOrder"/>
+	
+	<bean id="getData" class="com.mockuai.tradecenter.core.service.action.dataCenter.GetData"/>
+	<bean id="getDataDaily" class="com.mockuai.tradecenter.core.service.action.dataCenter.GetDataDaily"/>
+	
+	
+	
+	<!-- 批量发货 -->
+	<bean id="batchDeliveryGoods" class="com.mockuai.tradecenter.core.service.action.order.BatchDeliveryGoods"/>
+	
+	<!-- ****************************************结算**************************************** -->
+	<bean id="querySellertranslog" class="com.mockuai.tradecenter.core.service.action.settlement.QuerySellerTransLog"/>
+	<bean id="applyWithdraw" class="com.mockuai.tradecenter.core.service.action.settlement.ApplyWithDraw"/>
+	<bean id="queryWithdraw" class="com.mockuai.tradecenter.core.service.action.settlement.QueryWithdraw"/>
+	<bean id="querySellerMoney" class="com.mockuai.tradecenter.core.service.action.settlement.QuerySellerMoney"/>
+	<bean id="processWithdraw" class="com.mockuai.tradecenter.core.service.action.settlement.ProcessWithdraw"/>
+	<bean id="queryUnsettlementOrders" class="com.mockuai.tradecenter.core.service.action.settlement.QueryUnSettlementOrders"/>
+	<bean id="notifyWithdrawResult" class="com.mockuai.tradecenter.core.service.action.settlement.NotifyWithdrawResult"/>
+	
+	<!-- ****************************************退款**************************************** -->
+	<bean id="applyReturn" class="com.mockuai.tradecenter.core.service.action.refund.ApplyRefund"/>
+	<bean id="auditReturnApply" class="com.mockuai.tradecenter.core.service.action.refund.AuditRefundApply"/>
+	<bean id="confirmRefund" class="com.mockuai.tradecenter.core.service.action.refund.ConfirmRefund"/>
+	<bean id="getItemRefundDetail" class="com.mockuai.tradecenter.core.service.action.refund.GetItemRefundDetail"/>
+	<bean id="queryRefundOrder" class="com.mockuai.tradecenter.core.service.action.refund.QueryRefundOrder"/>
+	
+	<bean id="refundService" class="com.mockuai.tradecenter.core.service.impl.RefundServiceImpl"/>
+	
+	
+	<bean id="getPickupCode" class="com.mockuai.tradecenter.core.service.action.message.GetPickupCode"/>
+	
+	<bean id="sendWechatMessage" class="com.mockuai.tradecenter.core.service.action.message.SendWechatMessage"/>
+	<bean id="orderService" class="com.mockuai.tradecenter.core.service.impl.OrderServiceImpl"/>
+	<bean id="queryMallWithdrawInfo" class="com.mockuai.tradecenter.core.service.action.settlement.QueryMallWithdrawInfo"/>
+	<bean id="refuseWithdrawApply" class="com.mockuai.tradecenter.core.service.action.settlement.RefuseWithdrawApply"/>
+	<bean id="sumPayCallBack" class="com.mockuai.tradecenter.core.service.action.payment.SumPayCallback"/>
+	<bean id="applyFrozen" class="com.mockuai.tradecenter.core.service.action.settlement.ApplyFrozen"/>
+	<bean id="batchAuditWithdraw" class="com.mockuai.tradecenter.core.service.action.settlement.BatchAduitWithdraw"/>
+	<bean id="queryCategoryTopSaleItems" class="com.mockuai.tradecenter.core.service.action.dataCenter.QueryCategoryTopItems"/>
+	<bean id="markRefund" class="com.mockuai.tradecenter.core.service.action.order.RefundOrder"/>
+	<bean id="addShopDeposit" class="com.mockuai.tradecenter.core.service.action.settlement.AddShopDeposit"/>
+	<bean id="batchAddUserCartItem" class="com.mockuai.tradecenter.core.service.action.cart.BatchAddUserCartItem"/>
+    <bean id="batchAddUserCartItemJ" class="com.mockuai.tradecenter.core.service.action.cart.BatchAddUserCartItemJ"/>
+
+	<bean id="sumPayRefundCallback" class="com.mockuai.tradecenter.core.service.action.payment.SumPayRefundCallback"/>
+	
+	<bean id="updateTradeConfig" class="com.mockuai.tradecenter.core.service.action.UpdateTradeConfig"/>
+	<bean id="queryTradeConfig" class="com.mockuai.tradecenter.core.service.action.QueryTradeConfig"/>
+	<bean id="reviseRefund" class="com.mockuai.tradecenter.core.service.action.refund.ReviseRefund"/>
+	<bean id="updateOrder2Paid" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrder2Paid"/>
+	<bean id="payOrder" class="com.mockuai.tradecenter.core.service.action.order.PayOrder"/>
+	<bean id="orderSettlementGet" class="com.mockuai.tradecenter.core.service.action.order.OrderSettlementGet"/>
+	
+	<bean id="getUserTotalCost" class="com.mockuai.tradecenter.core.service.action.order.GetUserTotalCost"/>
+	<bean id="updateOrderConsignee" class="com.mockuai.tradecenter.core.service.action.order.UpdateOrderConsignee"/>
+	<!--<bean id="getShareUserIdByOrderMobilePhone" class="com.mockuai.tradecenter.core.service.action.order.GetShareUserIdByOrderMobilePhone"/>-->
+	<bean id="orderTrackInfoMap" class="java.util.HashMap"> 
+	   <constructor-arg> 
+	    <map> 
+	    	<entry key="10" value="您提交了订单、等待付款" />
+	    	<entry key="20" value="您取消了订单" />
+	    	<entry key="30" value="您已支付了订单、请等待卖家发货" />
+	    	<entry key="40" value="您的订单已经发货、预计几天后送达到您手中" />
+	    	<entry key="50" value="您已经确认收货" />
+	    	<entry key="60" value="您已评价" />
+	    	<entry key="80" value="订单已经退款完成" />
+	    	<entry key="90" value="订单已经关闭" />
+	    </map> 
+	   </constructor-arg> 
+	</bean>
+	
+	<bean id="trackUtil" class="com.mockuai.tradecenter.core.util.TrackUtil" init-method="init"> 
+		<property name="trackInfoMap" ref="orderTrackInfoMap"/> 
+   </bean> 
+   
+   <bean id="queryOrderTrack" class="com.mockuai.tradecenter.core.service.action.order.QueryOrderTrack"/>
+	
+<!-- 	<bean id="queryUsercartItemsForSupplier" class="com.mockuai.tradecenter.core.service.action.cart.QueryUserCartItemsForSupplier"/> -->
+	<bean id="queryUsercartItemsForDistributor" class="com.mockuai.tradecenter.core.service.action.cart.QueryUserCartItemsForDistributor"/>
+    <bean id="queryTradeNotifyLog" class="com.mockuai.tradecenter.core.service.action.order.QueryTradeNotifyLog"/>
+    <bean id="queryAllOrderBg" class="com.mockuai.tradecenter.core.service.action.order.QueryAllOrderBg"/>
+    <bean id="queryStatisticsActivity" class="com.mockuai.tradecenter.core.service.action.order.QueryStatisticsActivity"/>
+
+</beans>

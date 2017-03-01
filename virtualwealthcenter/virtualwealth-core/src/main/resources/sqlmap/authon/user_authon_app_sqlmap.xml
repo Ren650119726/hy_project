@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_authon">
+
+    <typeAlias alias="userAuthonAppDO" type="com.mockuai.virtualwealthcenter.core.domain.UserAuthonAppDO"/>
+    <typeAlias alias="mopUserAuthonAppQTO" type="com.mockuai.virtualwealthcenter.common.domain.dto.mop.MopUserAuthonAppQTO"/>
+    <typeAlias alias="UserAuthonQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.UserAuthonQTO"/>
+    <resultMap id="result" class="userAuthonAppDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="authonPersonalid" column="authon_personalid" jdbcType="VARCHAR"/>
+        <result property="authonBankname" column="authon_bankname" jdbcType="VARCHAR"/>
+        <result property="authonNo" column="authon_no" jdbcType="VARCHAR"/>
+        <result property="authonMobile" column="authon_mobile" jdbcType="VARCHAR"/>
+        <result property="authonRealname" column="authon_realname" jdbcType="VARCHAR"/>
+        <result property="authonText" column="authon_text" jdbcType="VARCHAR"/>
+        <result property="authonStatus" column="authon_status" jdbcType="TINYINT"/>
+         <result property="authonTime" column="authon_time" jdbcType="TIMESTAMP"/>
+            <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+             <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+             <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+             <result property="pictureFront" column="picture_front" jdbcType="VARCHAR"/>
+             <result property="pictureBack" column="picture_back" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        user_id,
+        biz_code,
+        authon_personalid,
+        authon_bankname,
+        authon_no,
+        authon_mobile,
+        authon_realname,
+        authon_text,
+        authon_status,
+        authon_time,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        picture_front,
+        picture_back
+    </sql>
+    
+     <!-- 实名认证申请 -->
+    <insert id ="addUserAuthon" parameterClass = "userAuthonAppDO">
+    	insert into user_authon 
+    	(user_id,biz_code,authon_personalid,authon_bankname,authon_no,authon_mobile,authon_realname,authon_text,authon_status,authon_time,delete_mark,gmt_created,gmt_modified,picture_front,
+        picture_back) values 
+        (#userId#,#bizCode#,#authonPersonalid#,#authonBankname#,#authonNo#,#authonMobile#,#authonRealname#,#authonText#,#authonStatus#,now(),0,now(),now(),#pictureFront#,
+        #pictureBack#)
+    	<selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <!-- 获取实名认证信息-->
+    <select id ="selectUserAuton" resultMap="result" parameterClass = "java.util.Map">
+       select
+        <include refid="user_authon.columnList"/>
+        from user_authon where user_id = #userId# 
+        and delete_mark=0
+    </select>
+    
+    <!-- 判断是否重复绑定 -->
+    <select id ="selectPersonalId" resultMap="result" parameterClass = "java.util.Map">
+    	select
+        <include refid="user_authon.columnList"/>
+        from user_authon where authon_personalid = #authonPersonalid# 
+        and delete_mark=0
+    </select>
+    
+     <sql id="queryUserAuthonQto">
+        where delete_mark=0
+        <isNotNull property="userIdList" prepend="AND">
+            user_id in
+            <iterate property="userIdList" conjunction="," open="(" close=")">
+                #userIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="authonPersonalid" prepend="AND">
+            authon_personalid = #authonPersonalid#
+        </isNotNull>
+        <isNotNull property="authonRealname" prepend="AND">
+            authon_realname = #authonRealname#
+        </isNotNull>
+        <isNotNull property="authonTime" prepend="AND">
+            authon_time = #authonTime#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend="AND">
+            gmt_modified = #gmtModified#
+        </isNotNull>
+        
+    </sql>
+    
+    <!-- 通用查询接口 -->
+    <select id = "selectUserAuthonByQto" resultMap="result" parameterClass = "mopUserAuthonAppQTO">
+    	select
+    	<include refid="user_authon.columnList"/>
+    	from user_authon 
+    	<include refid="user_authon.queryUserAuthonQto"/>
+    </select>
+    
+    <!-- 查询所有待审核信息接口 -->
+    <select id = "selectUserAuthonAll" resultMap="result" parameterClass = "UserAuthonQTO">
+    	select
+    	<include refid="user_authon.columnList"/>
+    	from user_authon
+    	where delete_mark=0
+    	<isNotNull property="userId" >
+           and user_id = #userId# 
+        </isNotNull>
+        <isNotNull property="authonStatus" >
+           and authon_status = #authonStatus#
+        </isNotNull>
+        
+    	order by authon_time desc
+        <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+    </isNotNull>
+    
+    </select>
+     <!-- 查询所有待审核信息总条数 -->
+     <select id = "selectUserAuthonAllCount" resultClass="long" parameterClass = "UserAuthonQTO">
+    	select   count(1) 
+    	from user_authon
+    	where delete_mark=0
+    	<isNotNull property="userId" >
+           and user_id = #userId# 
+        </isNotNull>
+        <isNotNull property="authonStatus" >
+           and authon_status = #authonStatus#
+        </isNotNull>
+      </select>
+      
+    <!-- 修改审核状态 -->
+    <update id="modifyAuditStatus" parameterClass = "java.util.Map">
+        update user_authon set authon_status = #authonStatus#,authon_text = #authonText#, gmt_modified=now()
+        where authon_status=0 and delete_mark=0 and id = #id# 
+    </update>
+    
+     <!-- 根据主键获取用户信息-->
+    <select id ="selectUserAutonById" resultMap="result" parameterClass = "java.util.Map">
+       select
+        <include refid="user_authon.columnList"/>
+        from user_authon where id = #id# 
+        and delete_mark=0
+    </select>
+    
+     <!-- 根据用户id获取用户信息-->
+    <select id ="selectAuditStatusByUserId" resultMap="result" parameterClass = "java.util.Map">
+       select
+        <include refid="user_authon.columnList"/>
+        from user_authon where user_id = #userId# 
+        and delete_mark=0
+    </select>
+    <!-- 根据id修改用户信息(审核失败重新提交信息)  -->
+    <update id="updateUserAuton" parameterClass = "java.util.Map">
+        update user_authon set authon_realname=#authonRealname#,authon_personalid=#authonPersonalid#,authon_status = 0, 
+        gmt_modified=now(),authon_text=null, picture_front=#pictureFront#,picture_back=#pictureBack#
+        where user_id=#userId# 
+    </update>
+    <!-- 用户更改用户名时更新到实名表中  (user表中的用户名是mobile)-->
+    <update id="updateUserName" parameterClass = "java.util.Map">
+        update user_authon set  
+        authon_mobile=#authonMobile#
+        where user_id=#userId# 
+    </update>
+    
+<!-- 
+    <insert id="addWealthAccount" parameterClass="wealthAccountDO">
+        insert into wealth_account(
+        user_id,
+        biz_code,
+        wealth_type,
+        amount,
+        frozen_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #userId#,
+        #bizCode#,
+        #wealthType#,
+        0,
+        0,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+
+    </insert>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull property="userIdList" prepend="AND">
+            user_id in
+            <iterate property="userIdList" conjunction="," open="(" close=")">
+                #userIdList[]#
+            </iterate>
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type = #wealthType#
+        </isNotNull>
+        <isNotNull property="startTime" prepend="AND">
+            gmt_modified >= #startTime#
+        </isNotNull>
+        <isNotNull property="endTime" prepend="AND">
+            #endTime# > gmt_modified
+        </isNotNull>
+    </sql>
+
+    <select id="getWealthAccount" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account where user_id = #userId#
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type=#wealthType#
+        </isNotNull>
+        and delete_mark=0
+    </select>
+
+    <select id="queryUserWealthAccount" resultMap="result" parameterClass="wealthAccountQTO">
+        select
+        <include refid="wealth_account.columnList"/>
+        from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryUserWealthAccount" resultClass="java.lang.Integer" parameterClass="wealthAccountQTO">
+        select count(1) from wealth_account
+        <include refid="wealth_account.queryWhere"/>
+    </select>
+
+    <update id="increaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount+#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+
+    <update id="increaseAccountBalanceBatch" parameterClass="java.util.Map">
+        UPDATE wealth_account SET gmt_modified = now(),
+          amount = amount + CASE id
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs">
+                WHEN #wealthAccountDOs[].id# THEN #wealthAccountDOs[].amount#
+            </iterate>
+        </isNotNull>
+        END WHERE id in (
+        <isNotNull property="wealthAccountDOs">
+            <iterate property="wealthAccountDOs" conjunction=",">
+                #wealthAccountDOs[].id#
+            </iterate>
+        </isNotNull>
+        )
+    </update>
+
+    <update id="decreaseAccountBalance" parameterClass="java.util.Map">
+        update wealth_account set amount = amount-#amount#, gmt_modified=now()
+        where id=#wealthAccountId# and user_id=#userId#
+    </update>
+ -->
+ 
+</sqlMap>

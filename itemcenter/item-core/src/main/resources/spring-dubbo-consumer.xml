@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:duboo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://code.alibabatech.com/schema/dubbo  
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">   
+
+  <!-- 提供方应用信息，用于计算依赖关系 -->  
+   <dubbo:application name="item_consumer"  />
+  <!-- 使用multicast广播注册中心暴露服务地址-->
+  <!-- <dubbo:registry address="multicast://localhost:1234" /> -->   
+  <!-- 使用zookeeper注册中心暴露服务地址 -->
+  
+  <dubbo:registry address="zookeeper://${itemcenter.dubbo.registry.address}" />
+
+  <!-- 声明需要暴露的服务接口 -->  
+   <!-- <dubbo:service interface="com.ve.deliverycenter.client.ExpressClient" ref="expressClient" protocol="dubbo"/> -->  
+  <!--<dubbo:service interface="com.ve.deliverycenter.client.FeeClient" ref="feeClient" protocol="dubbo"/> -->
+  
+  <!-- <dubbo:service interface="com.ve.deliverycenter.client.StorageClient" ref="storageClient" protocol="dubbo"/> -->
+  
+ 
+ <!--  <dubbo:reference id="feeClient"  interface="com.ve.deliverycenter.client.FeeClient" />
+  <dubbo:reference id="userClient"  interface="com.ve.usercenter.client.UserClient" />  --> 
+  
+  <dubbo:reference id="itemClient"  interface="com.mockuai.itemcenter.client.ItemClient" />
+    <dubbo:reference id="marketingService"
+                     interface="com.mockuai.marketingcenter.common.api.MarketingService" check="false"/>
+    <dubbo:reference id="appService"
+                     interface="com.mockuai.appcenter.common.api.AppService" check="false"/>
+    <dubbo:reference id="dataService"
+                     interface="com.mockuai.datacenter.common.api.DataService" check="false"/>
+    <dubbo:reference id="deliveryService"
+                     interface="com.mockuai.deliverycenter.common.api.DeliveryService" check="false"/>
+    <dubbo:reference id="userDispatchService"
+                     interface="com.mockuai.usercenter.common.api.UserDispatchService" check="false"/>
+    <dubbo:reference id="shopService" interface="com.mockuai.shopcenter.api.ShopService" check="false"/>
+    <dubbo:reference id="tradeService"
+                     interface="com.mockuai.tradecenter.common.api.TradeService" check="false"/>
+    <dubbo:reference id="seckillService" interface="com.mockuai.seckillcenter.common.api.SeckillService" check="false"/>
+<!--
+    <dubbo:reference id="groupBuyService" interface="com.mockuai.groupbuycenter.common.api.GroupBuyService" check="false"/>
+-->
+
+    <!--写入商品和sku跨境信息非幂等性操作,设置重试次数为0,快速失败-->
+    <dubbo:reference id="higoService" interface="com.mockuai.higocenter.common.api.HigoService" check="false" retries="0"/>
+    <dubbo:reference id="distributionService" interface="com.mockuai.distributioncenter.common.api.DistributionService"
+                     check="false"/>
+    <dubbo:reference id="supplierDispatchService" interface="com.mockuai.suppliercenter.common.api.SupplierDispatchService"
+                     check="false"/>
+    <dubbo:reference id="distributorService" interface="com.mockuai.distributioncenter.common.api.DistributionService"/>
+</beans>

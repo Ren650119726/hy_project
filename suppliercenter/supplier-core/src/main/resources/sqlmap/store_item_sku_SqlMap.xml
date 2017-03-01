@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="store_item_sku">
+    <resultMap id="BaseResultMap" class="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="storeId" column="store_id" jdbcType="BIGINT"/>
+        <result property="supplierId" column="supplier_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="supplierItmeSkuSn" column="supplier_item_sku_sn" jdbcType="VARCHAR"/>
+        <result property="itemName" column="item_name" jdbcType="VARCHAR"/>
+        <result property="iconUrl" column="icon_url" jdbcType="VARCHAR"/>
+        <result property="stockNum" column="stock_num" jdbcType="BIGINT"/>
+        <result property="salesNum" column="sales_num" jdbcType="BIGINT"/>
+        <result property="frozenStockNum" column="frozen_stock_num" jdbcType="BIGINT"/>
+        <result property="soldNum" column="sold_num" jdbcType="BIGINT"/>
+        <result property="version" column="version" jdbcType="BIGINT"/>
+        <result property="timestamp" column="timestamp" jdbcType="BIGINT"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="level" column="level" jdbcType="TINYINT"/>
+        <result property="deleteVersion" column="delete_version" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="mark" column="mark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,biz_code,store_id,supplier_id,item_id,item_sku_id,seller_id,supplier_item_sku_sn,
+        item_name,icon_url,stock_num,stock_num,sales_num,frozen_stock_num,sold_num,version,timestamp,end_time,
+        level,delete_version,delete_mark,gmt_created,gmt_modified,mark
+    </sql>
+
+    <insert id="insert" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        insert into supplier_store_item_sku
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="storeId">
+                store_id
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                supplier_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemSkuId">
+                item_sku_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="supplierItmeSkuSn">
+                supplier_item_sku_sn
+            </isNotNull>
+            <isNotNull prepend="," property="itemName">
+                item_name
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                icon_url
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="salesNum">
+                sales_num
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                frozen_stock_num
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                sold_num
+            </isNotNull>
+            <isNotNull prepend="," property="endTime">
+                end_time
+            </isNotNull>
+            <isNotNull prepend="," property="level">
+                level
+            </isNotNull>
+            <isNotNull prepend="," property="timestamp">
+                timestamp
+            </isNotNull>
+            ,version,delete_version,delete_mark,gmt_created, gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="storeId">
+                #storeId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                #supplierId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemSkuId">
+                #itemSkuId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierItmeSkuSn">
+                #supplierItmeSkuSn:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemName">
+                #itemName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="iconUrl">
+                #iconUrl:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="stockNum">
+                #stockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="salesNum">
+                #salesNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="frozenStockNum">
+                #frozenStockNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="soldNum">
+                #soldNum:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="endTime">
+                #endTime:TIMESTAMP#
+            </isNotNull>
+            <isNotNull prepend="," property="level">
+                #level#
+            </isNotNull>
+            <isNotNull prepend="," property="timestamp">
+                #timestamp#
+            </isNotNull>
+            ,0,0,0,now(),now()
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getStoreItemSkuById" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where id=#id:BIGINT# and delete_mark = 0
+    </select>
+
+    <select id="getStoreItemSku" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0
+        <isNotNull prepend="and" property="storeId">
+            store_id = #storeId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierItmeSkuSn">
+            supplier_item_sku_sn = #supplierItmeSkuSn#
+        </isNotNull>
+    </select>
+
+    <select id="selectStoreItemSku" resultMap="BaseResultMap" parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0
+        <isNotNull prepend="and" property="storeId">
+            store_id = #storeId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemId">
+            item_id = #itemId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemName">
+            item_name like concat('%',#itemName:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>        
+        <isNotNull property="itemIdList">
+            <isNotEmpty prepend="AND" property="itemIdList">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="itemSkuIdList">
+            <isNotEmpty prepend="AND" property="itemSkuIdList">
+                item_sku_id in
+                <iterate property="itemSkuIdList" conjunction="," open="(" close=")">
+                    #itemSkuIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="orItemSkuIdList">
+            <isNotEmpty prepend="or" property="orItemSkuIdList">
+                item_sku_id in
+                <iterate property="orItemSkuIdList" conjunction="," open="(" close=")">
+                    #orItemSkuIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierItmeSkuSn">
+            supplier_item_sku_sn = #supplierItmeSkuSn:VARCHAR#
+        </isNotNull>
+       	 	order by level,id asc 
+        <isNotNull property="pageSize">
+            <isNotNull property="offset">
+                LIMIT #offset#, #pageSize#
+            </isNotNull>
+    	</isNotNull>
+    </select>    
+    
+    <select id="selectStoreItemSkuByItemId" resultMap="BaseResultMap" parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0      
+        <isNotNull prepend="and" property="itemId">
+            item_id = #itemId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemName">
+            item_name like concat('%',#itemName:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierItmeSkuSn">
+            supplier_item_sku_sn = #supplierItmeSkuSn:VARCHAR#
+        </isNotNull>
+       	 	group by store_id,item_sku_id order by level,id asc
+        <isNotNull property="pageSize">
+            <isNotNull property="offset">
+                LIMIT #offset#, #pageSize#
+            </isNotNull>
+    	</isNotNull>
+    </select>
+
+    <select id="selectStoreItemSkuInfForOrder" resultMap="BaseResultMap"
+            parameterClass="java.util.Map">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0 and item_sku_id = #itemSkuId:BIGINT# and
+        (sales_num-frozen_stock_num-#orderNum:BIGINT#)>0
+        order by level,id
+    </select>
+
+    <select id="queryStoresItemSkuNumForOrderOtherSku" resultMap="BaseResultMap" parameterClass="java.util.Map">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0 and store_id = #storeId:BIGINT# and item_sku_id =
+        #itemSkuId:BIGINT# and (sales_num-frozen_stock_num- #orderNum:BIGINT#)>0
+    </select>
+
+    <select id="totalCount" resultClass="java.lang.Long" parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select count(*) from supplier_store_item_sku where delete_mark = 0
+        <isNotNull prepend="and" property="storeId">
+            store_id = #storeId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemId">
+            item_id = #itemId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemName">
+            item_name like concat('%',#itemName:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierItmeSkuSn">
+            supplier_item_sku_sn = #supplierItmeSkuSn:VARCHAR#
+        </isNotNull>
+    </select>
+
+    <select id="getItemSkuIdTotleNumExpStoreId" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select sum(sales_num) from supplier_store_item_sku where delete_mark = 0 and item_sku_id = #itemSkuId:BIGINT#
+        <isNotNull prepend="and" property="storeId">
+            store_id != #storeId:BIGINT#
+        </isNotNull>
+        <isNotNull property="storeIdList">
+            <isNotEmpty prepend="AND" property="storeIdList">
+                store_id in
+                <iterate property="storeIdList" conjunction="," open="(" close=")">
+                    #storeIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+
+    </select>
+
+
+    <select id="getStoreNumByStoreSku" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreItemSkuQTO">
+        select sales_num from supplier_store_item_sku where delete_mark = 0
+        <isNotNull prepend="and" property="storeId">
+            store_id = #storeId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+
+    </select>
+
+    <select id="getStoreTotelItemSku" resultClass="java.lang.Long" parameterClass="java.lang.Long">
+        select count(*) from supplier_store_item_sku where delete_mark = 0 and store_id = #storeId:BIGINT#
+
+    </select>
+
+    <update id="updateStoreItemSku" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        update supplier_store_item_sku set gmt_modified = now()
+        <isNotNull prepend="," property="salesNum">
+            sales_num = #salesNum:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="," property="level">
+            level= #level#
+        </isNotNull>
+        <isNotNull prepend="," property="endTime">
+            end_time= #endTime:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="," property="supplierItmeSkuSn">
+            supplier_item_sku_sn = #supplierItmeSkuSn:VARCHAR#
+        </isNotNull>
+        where id = #id:BIGINT#
+    </update>
+
+    <!--lizg-->
+    <update id="updateStoreItemSkuNum" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        update supplier_store_item_sku set gmt_modified = now(),
+        frozen_stock_num =IFNULL(frozen_stock_num,0) + #frozenStockNum:BIGINT#,
+        sales_num = sales_num - #frozenStockNum:BIGINT#,
+        version=version+1
+        where delete_mark = 0
+        and store_id = #storeId:BIGINT#
+        and item_sku_id = #itemSkuId:BIGINT#
+        and version=#version#
+    </update>
+
+    <!--lizg-->
+    <update id="reduceStoreItemSkuNum" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        update supplier_store_item_sku set gmt_modified = now(),frozen_stock_num =IFNULL(frozen_stock_num,0)-#frozenStockNum:BIGINT#,
+        sales_num = sales_num + #frozenStockNum:BIGINT#
+        where delete_mark = 0
+        and store_id = #storeId:BIGINT#
+        and item_sku_id=#itemSkuId:BIGINT#
+        and(frozen_stock_num -#frozenStockNum:BIGINT# >=0)
+    </update>
+
+
+    <update id="cancleStoreItemSku" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        update supplier_store_item_sku t set t.gmt_modified = now(),t.delete_mark=1,t.delete_version=t.id
+        where t.store_id = #storeId:BIGINT# and item_sku_id = #itemSkuId:BIGINT#
+
+    </update>
+
+    <update id="cancleStoreItemSkuList" parameterClass="java.util.List">
+        update supplier_store_item_sku t set t.gmt_modified = now(),t.delete_mark=1,t.delete_version=t.id
+        where item_sku_id in
+        <iterate conjunction="," open="(" close=")">
+            #skuIdList[]#
+        </iterate>
+
+    </update>
+
+    <update id="increaseStoreNum" parameterClass="java.util.Map">
+        update supplier_store_item_sku t set t.sales_num=t.sales_num + #storeNum:BIGINT#
+        ,gmt_modified = now()
+        where delete_mark = 0 and t.store_id = #storeId:BIGINT# and item_sku_id = #itemSkuId:BIGINT#
+
+    </update>
+
+
+    <update id="reduceStoreNum" parameterClass="java.util.Map">
+        update supplier_store_item_sku t set t.sales_num=t.sales_num- #storeNum:BIGINT#,
+        gmt_modified = now()
+        <isNotNull prepend="," property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        where delete_mark = 0 and t.store_id = #storeId:BIGINT# and item_sku_id = #itemSkuId:BIGINT#
+
+    </update>
+
+    <update id="reduceStoreAndNum" parameterClass="java.util.Map">
+        update supplier_store_item_sku t set t.sales_num=t.sales_num - #storeNum:BIGINT#,frozen_stock_num =IFNULL(frozen_stock_num,0)-#storeNum:BIGINT#
+        ,gmt_modified = now()
+        where delete_mark = 0 and t.store_id = #storeId:BIGINT# and item_sku_id = #itemSkuId:BIGINT#
+        and (t.sales_num-#storeNum:BIGINT# >=0)
+
+    </update>
+
+    <select id="getStoreItemSkuListByStroeId" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0 and sales_num>=0 and store_id = #storeId:BIGINT#
+
+    </select>
+
+    <select id="getStoreByItemSkuIdList" resultMap="BaseResultMap" parameterClass="java.util.Map">
+        select
+        <include refid="store_item_sku.Base_Column_List"/>
+        from supplier_store_item_sku where delete_mark = 0 and (sales_num-#number:BIGINT#>=0)
+        and item_sku_id =#itemSkuId:BIGINT# order by level asc
+    </select>
+	
+	<!-- 公共库存数量变更方法 -->
+	<update id="changeStoreItemSkuNum" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+        update supplier_store_item_sku set gmt_modified = now()
+        <isNotNull prepend="," property="stockNum" >
+       		stock_num = #stockNum:BIGINT#
+    	</isNotNull>
+    	<isNotNull prepend="," property="salesNum" >
+       		sales_num = #salesNum:BIGINT#
+    	</isNotNull>
+    	<isNotNull prepend="," property="frozenStockNum" >
+       		frozen_stock_num = #frozenStockNum:BIGINT#
+    	</isNotNull>
+    	<isNotNull prepend="," property="soldNum" >
+       		sold_num = #soldNum:BIGINT#
+    	</isNotNull>    	
+    		where delete_mark = 0 and store_id = #storeId:BIGINT#
+    	<isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+    </update>
+	
+    <!--同步skuId的库存-->
+    <update id="updateStockToGyerpBySkuSn" parameterClass="com.mockuai.suppliercenter.core.domain.StoreItemSkuDO">
+     update supplier_store_item_sku set gmt_modified = now(),
+        sales_num = sales_num+(#gyerpStockNum:BIGINT# - stock_num),
+        stock_num =#gyerpStockNum:BIGINT#,
+        version=version+1,
+        timestamp=#timestamp:BIGINT#
+        where delete_mark = 0
+        and store_id = #storeId:BIGINT#
+        and supplier_item_sku_sn = #supplierItmeSkuSn:BIGINT#
+        and version=#version#
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+    </update>
+</sqlMap>

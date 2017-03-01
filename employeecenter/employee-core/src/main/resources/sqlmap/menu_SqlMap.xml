@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="menu">
+    <resultMap id="BaseResultMap" class="com.hanshu.employee.core.domain.MenuDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="title" column="title" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="sort" column="sort" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="version" column="version" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        title,
+        parent_id,
+        sort,
+        status,
+        type,
+        url,
+        version,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addMenu" parameterClass="com.hanshu.employee.core.domain.MenuDO">
+        insert into permission_info(
+        title,
+        parent_id,
+        sort,
+        status,
+        type,
+        url,
+        version,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+        )
+        values(
+        #title#,
+        #parentId#,
+        #sort#,
+        #status#,
+        #type#,
+        #url#,
+        #version#,
+        now(),
+        now(),
+        0
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="getMenuById" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from permission_info
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <update id="updateMenu" parameterClass="com.hanshu.employee.core.domain.MenuDO">
+        update permission_info
+        set gmt_modified = now()
+        <isNotNull prepend="," property="title">
+            title = #title#
+        </isNotNull>
+        <isNotNull prepend="," property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="," property="sort">
+            sort = #sort#
+        </isNotNull>
+        <isNotNull prepend="," property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="," property="url">
+            url = #url#
+        </isNotNull>
+        <isNotNull prepend="," property="version">
+            version = #version#
+        </isNotNull>
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="deleteMenuById" parameterClass="java.lang.Long">
+        update permission_info
+        set gmt_modified = now(),
+        delete_mark = 1
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <select id="queryMenu" parameterClass="com.hanshu.employee.common.qto.MenuQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from permission_info
+        where delete_mark = 0
+        <isNotNull prepend="and" property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="AND">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="parentIdList">
+            <isNotEmpty property="parentIdList" prepend="AND">
+                parent_id in
+                <iterate property="parentIdList" conjunction="," open="(" close=")">
+                    #parentIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        order by sort asc
+        <isNotNull property="offset">
+            limit #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <select id="getTotalCount" parameterClass="com.hanshu.employee.common.qto.MenuQTO"
+            resultClass="java.lang.Long">
+        select count(*)
+        from permission_info
+        where delete_mark = 0
+    </select>
+
+    <select id="getParentMenuByUrl" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from permission_info
+        where id in (
+          select parent_id from permission_info
+          where url = #url# and version = #version# and delete_mark = 0
+        ) and delete_mark = 0
+    </select>
+
+    <select id="getMenuByTitleMenuUrl" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from permission_info
+        where delete_mark = 0
+        and title=#title#
+        and url=#url#
+    </select>
+
+    <select id="getMenuByUrl" parameterClass="java.util.Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from permission_info
+        where delete_mark = 0
+        and url = #url#
+        and version = #version#
+        limit 1
+    </select>
+</sqlMap>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.mockuai.toolscenter.core.message"/>
+
+
+
+
+    <!-- concrete consumer define -->
+
+    <bean id="consumer" class="com.aliyun.openservices.ons.api.bean.ConsumerBean" init-method="start" destroy-method="shutdown">
+        <property name="properties" > <!--消费者配置信息-->
+            <props>
+                <prop key="ConsumerId">${toolscenter.ons.consumer.id}</prop>
+                <prop key="AccessKey">${toolscenter.ons.access.key}</prop>
+                <prop key="SecretKey">${toolscenter.ons.secret.key}</prop>
+                <prop key="ConsumeThreadNums">5</prop>
+            </props>
+        </property>
+        <property name="subscriptionTable">
+            <map>
+                <entry value-ref="checkBehaviourListener">
+                    <key>
+                        <bean class="com.aliyun.openservices.ons.api.bean.Subscription">
+                            <property name="topic" value="${toolscenter.ons.mop.check.behaviour.topic}"/>
+                            <property name="expression" value="*"/>
+                        </bean>
+                    </key>
+                </entry>
+
+            </map>
+        </property>
+    </bean>
+
+
+    <!-- 删除商品二维码 -->
+    <bean id="checkBehaviourListener"
+          class="com.mockuai.toolscenter.core.message.listener.CheckBeHaviourListener">
+    </bean>
+
+</beans>

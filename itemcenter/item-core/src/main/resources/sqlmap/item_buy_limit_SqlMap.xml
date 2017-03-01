@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ItemBuyLimit">
+    <typeAlias alias="itemBuyLimitDO" type="com.mockuai.itemcenter.core.domain.ItemBuyLimitDO"/>
+<typeAlias alias="itemBuyLimitQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemBuyLimitQTO"/>
+    <resultMap id="itemBuyLimitDOResult" class="itemBuyLimitDO">
+        <result column="id" property="id"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="item_id" property="itemId"/>
+        <result column="biz_code" property="bizCode"/>
+        <result column="begin_time" property="beginTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="buy_count" property="buyCount"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <insert id="addItemBuyLimit" parameterClass="itemBuyLimitDO">
+        insert into item_buy_limit
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="beginTime">
+                begin_time
+            </isNotNull>
+            <isNotNull prepend="," property="endTime">
+                end_time
+            </isNotNull>
+            <isNotNull prepend="," property="buyCount">
+                buy_count
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark
+            </isNotNull>
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:Long#
+            </isNotNull>
+            <isNotNull prepend="," property="beginTime">
+                #beginTime#
+            </isNotNull>
+            <isNotNull prepend="," property="endTime">
+                #endTime#
+            </isNotNull>
+            <isNotNull prepend="," property="buyCount">
+                #buyCount:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                #deleteMark:INTEGER#
+            </isNotNull>
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="item_buy_limit_column_list">
+        id, seller_id, item_id, biz_code, begin_time, end_time, buy_count, delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <select id="queryItemBuyLimit" resultMap="itemBuyLimitDOResult" parameterClass="itemBuyLimitQTO">
+        select
+        <include refid="item_buy_limit_column_list"/>
+        from item_buy_limit
+        where
+        <isNull property="deleteMark">
+            delete_mark=0
+        </isNull>
+        <isNotNull property="deleteMark">
+            delete_mark= #deleteMark#
+        </isNotNull>
+        <isNotNull property="itemId" prepend="AND">
+            item_id=#itemId#
+        </isNotNull>
+        <isNotNull property="itemIdList">
+            <isNotEmpty property="itemIdList" prepend="AND">
+                item_id in
+                <iterate property="itemIdList" conjunction="," open="(" close=")">
+                    #itemIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        and seller_id=#sellerId#
+    </select>
+
+    <update id="deleteItemBuyLimit" parameterClass="itemBuyLimitDO">
+        update item_buy_limit
+        set gmt_modified=now(),delete_mark = 1 where delete_mark in (0,2) and item_id=#itemId# and seller_id=#sellerId#
+    </update>
+
+    <update id="trashItemBuyLimit" parameterClass="itemBuyLimitDO">
+        update item_buy_limit
+        set gmt_modified=now(),delete_mark = 2 where delete_mark = 0 and item_id=#itemId# and seller_id=#sellerId#
+    </update>
+
+    <update id="recoveryItemBuyLimit" parameterClass="itemBuyLimitDO">
+        update item_buy_limit
+        set gmt_modified=now(),delete_mark = 0 where delete_mark = 2 and item_id=#itemId# and seller_id=#sellerId#
+    </update>
+
+    <update id="emptyRecycleBin" parameterClass="itemBuyLimitDO">
+        update item_buy_limit
+        set gmt_modified=now(),delete_mark = 1 where delete_mark = 2 and biz_code = #bizCode# and seller_id=#sellerId#
+    </update>
+
+</sqlMap>

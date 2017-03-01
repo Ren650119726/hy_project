@@ -1,0 +1,15 @@
+/.settings
+/supplier-mop-api
+/.project
+/supplier-client/.project
+/supplier-client/.settings
+/supplier-client/target
+/supplier-client/.classpath
+/supplier-common/.classpath
+/supplier-common/.project
+/supplier-common/.settings
+/supplier-common/target
+/supplier-core/.classpath
+/supplier-core/.project
+/supplier-core/.settings
+/supplier-core/target

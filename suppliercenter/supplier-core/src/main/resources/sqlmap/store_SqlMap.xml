@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="store">
+    <resultMap id="BaseResultMap" class="com.mockuai.suppliercenter.core.domain.StoreDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="supplierId" column="supplier_id" jdbcType="BIGINT"/>
+        <result property="supplierName" column="supplier_name" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="provinceCode" column="province_code" jdbcType="VARCHAR"/>
+        <result property="cityCode" column="city_code" jdbcType="VARCHAR"/>
+        <result property="areaCode" column="area_code" jdbcType="VARCHAR"/>
+        <result property="address" column="address" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="mark" column="mark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,biz_code,supplier_id,supplier_name,
+        name,type,status,province_code,city_code,area_code,address,delete_mark,gmt_created, gmt_modified,mark
+    </sql>
+    <insert id="insert" parameterClass="com.mockuai.suppliercenter.core.domain.StoreDO">
+        insert into supplier_store
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                supplier_id
+            </isNotNull>
+            <isNotNull prepend="," property="supplierName">
+                supplier_name
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                name
+            </isNotNull>
+            <isNotNull prepend="," property="type">
+                type
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                status
+            </isNotNull>
+            <isNotNull prepend="," property="provinceCode">
+                province_code
+            </isNotNull>
+            <isNotNull prepend="," property="cityCode">
+                city_code
+            </isNotNull>
+            <isNotNull prepend="," property="areaCode">
+                area_code
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                address
+            </isNotNull>
+
+            ,delete_mark,gmt_created, gmt_modified,mark
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierId">
+                #supplierId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="supplierName">
+                #supplierName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                #name:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="type">
+                #type#
+            </isNotNull>
+            <isNotNull prepend="," property="status">
+                #status#
+            </isNotNull>
+            <isNotNull prepend="," property="provinceCode">
+                #provinceCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="cityCode">
+                #cityCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="areaCode">
+                #areaCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="address">
+                #address:VARCHAR#
+            </isNotNull>
+
+            ,0,now(),now(),#mark:VARCHAR#
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="updateStore" parameterClass="com.mockuai.suppliercenter.core.domain.StoreDO">
+        update supplier_store set gmt_modified = now()
+        <isNotNull prepend="," property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="type">
+            type = #type#
+        </isNotNull>
+        <isNotNull prepend="," property="provinceCode">
+            province_code = #provinceCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="cityCode">
+            city_code = #cityCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="areaCode">
+            area_code = #areaCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="," property="address">
+            address = #address:VARCHAR#
+        </isNotNull>
+
+        where id = #id:BIGINT#
+    </update>
+
+    <update id="updateStoreSupplierName" parameterClass="com.mockuai.suppliercenter.core.domain.StoreDO">
+        update supplier_store set gmt_modified = now() ,supplier_name=#supplierName:VARCHAR# where supplier_id =
+        #supplierId:BIGINT#
+
+    </update>
+
+    <update id="forbiddenStore" parameterClass="java.lang.Long">
+        update supplier_store set gmt_modified = now() , status=0
+        where id = #id:BIGINT#
+    </update>
+
+    <update id="enableStore" parameterClass="java.lang.Long">
+        update supplier_store set gmt_modified = now() , status=1
+        where id = #id:BIGINT#
+    </update>
+
+
+    <update id="deleteStore" parameterClass="java.lang.Long">
+        update supplier_store set gmt_modified = now() , delete_mark=1
+        where id = #id:BIGINT#
+    </update>
+
+    <select id="getStoreByStatus" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select
+        <include refid="store.Base_Column_List"/>
+        from supplier_store
+        where delete_mark = 0 and status=#status#
+    </select>
+
+
+    <select id="selectStoreById" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+        select
+        <include refid="store.Base_Column_List"/>
+        from supplier_store
+        where id = #id:BIGINT# and delete_mark != 1 and status = 1
+    </select>
+
+    <select id="queryStore" resultMap="BaseResultMap" parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select
+        <include refid="store.Base_Column_List"/>
+        from supplier_store where delete_mark = 0
+        <isNotNull prepend="and" property="type">
+            type = #type#
+        </isNotNull>
+        <isNotNull prepend="and" property="key">
+            (name like concat('%',#key:VARCHAR#,'%') or supplier_name like concat('%',#key:VARCHAR#,'%') )
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+        order by id desc limit #offset#,#pageSize#
+    </select>
+
+    <select id="getStoreList" resultMap="BaseResultMap" parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select
+        <include refid="store.Base_Column_List"/>
+        from supplier_store where 1=1
+        <isNotNull prepend="and" property="type">
+            type = #type#
+        </isNotNull>
+        <isNotNull prepend="and" property="key">
+            name like concat('%',#key:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+        order by id
+    </select>
+
+    <select id="getStoreIdListByStatus" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select id from supplier_store where delete_mark = 0 and status = #status# order by id
+
+    </select>
+
+
+    <select id="totalCount" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select count(*) from supplier_store where delete_mark = 0
+        <isNotNull prepend="and" property="type">
+            type = #type#
+        </isNotNull>
+        <isNotNull prepend="and" property="key">
+            name like concat('%',#key:VARCHAR#,'%') or supplier_name like concat('%',#key:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+    </select>
+
+    <select id="queryStoreForOrder" resultMap="BaseResultMap"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select
+        <include refid="store.Base_Column_List"/>
+        from supplier_store where delete_mark = 0 and status=1
+        <isNotNull prepend="and" property="key">
+            name like concat('%',#key:VARCHAR#,'%') or supplier_name like concat('%',#key:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+        order by id desc limit #offset#,#pageSize#
+    </select>
+
+    <select id="totalCountForOrder" resultClass="java.lang.Long"
+            parameterClass="com.mockuai.suppliercenter.common.qto.StoreQTO">
+        select count(*) from supplier_store where delete_mark = 0 and status=1
+        <isNotNull prepend="and" property="key">
+            name like concat('%',#key:VARCHAR#,'%') or supplier_id like concat('%',#key:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+    </select>
+
+
+    <select id="getSupplierTotalStore" resultClass="java.lang.Long" parameterClass="java.lang.Long">
+        select count(*) from supplier_store
+        where delete_mark = 0 and supplier_id = #supplierId:BIGINT#
+
+
+    </select>
+
+    <select id="checkSupplierStoreName" resultClass="java.lang.Long" parameterClass="java.util.Map">
+        select count(*) from supplier_store
+        where delete_mark = 0
+        <isNotNull prepend="and" property="name">
+            name = #name:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="supplierId">
+            supplier_id = #supplierId:BIGINT#
+        </isNotNull>
+
+    </select>
+
+
+    <update id="updateGoodsUseCAS" parameterClass="com.mockuai.suppliercenter.core.domain.StoreDO">
+    update supplier_store
+        set status=#status#,name=#name#,type=type+1
+        where id=#id# and type=#type#
+    </update>
+</sqlMap>

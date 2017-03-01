@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="collection_shop">
+    <!--
+    CREATE TABLE `collection_shop` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+    `shop_id` bigint(20) NOT NULL COMMENT '店铺ID',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收藏店铺';
+    -->
+
+    <typeAlias alias="collectionShopDO" type="com.mockuai.distributioncenter.core.domain.CollectionShopDO" />
+    
+    <resultMap id="BaseResultMap" class="collectionShopDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="shopId" column="shop_id" jdbcType="BIGINT" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <insert id="add" parameterClass="collectionShopDO">
+        INSERT INTO collection_shop
+        (
+        user_id,
+        shop_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #userId#,
+        #shopId#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <update id="delete" parameterClass="java.lang.Long">
+        UPDATE collection_shop SET delete_mark = 1, gmt_modified = now() WHERE id = #id#
+    </update>
+
+    <select id="queryByUserId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM collection_shop WHERE user_id = #userId# AND delete_mark = 0
+    </select>
+</sqlMap>

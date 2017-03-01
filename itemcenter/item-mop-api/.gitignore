@@ -1,0 +1,13 @@
+*.bat
+.idea/
+.project
+.settings/
+target/
+*.iml
+*.ipr
+*.iws
+.classpath
+.clover/
+*.log
+*.class
+.DS_Store

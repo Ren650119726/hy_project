@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <settings useStatementNamespaces="true" />
+    <sqlMap resource="sqlmap/seller_config_sqlmap.xml" />
+    <sqlMap resource="sqlmap/seller_upgrade_sqlmap.xml" />
+    <sqlMap resource="sqlmap/dist_shop_sqlmap.xml" />
+    <sqlMap resource="sqlmap/dist_seller_sqlmap.xml" />
+    <sqlMap resource="sqlmap/collection_shop_sqlmap.xml" />
+    <sqlMap resource="sqlmap/item_dist_plan_sqlmap.xml" />
+    <sqlMap resource="sqlmap/item_sku_dist_plan_sqlmap.xml" />
+    <sqlMap resource="sqlmap/dist_record_sqlmap.xml" />
+    <sqlMap resource="sqlmap/dist_seller_relationship_sqlmap.xml" />
+    <sqlMap resource="sqlmap/message_record_sqlmap.xml" />
+    <sqlMap resource="sqlmap/seller_level_apply_sqlmap.xml" />
+    <sqlMap resource="sqlmap/gains_set_sqlmap.xml" />
+    <sqlMap resource="sqlmap/hk_protocol_record_sqlmap.xml" />
+    <sqlMap resource="sqlmap/hk_protocol_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/dist_error_log_sqlmap.xml"/>
+</sqlMapConfig>

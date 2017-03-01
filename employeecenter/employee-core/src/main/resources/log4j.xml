@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE log4j:configuration SYSTEM "http://toolkit.alibaba-inc.com/dtd/log4j/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+    <!-- ===================================================================== -->
+    <!--  ������appender�Ķ���                                                 -->
+    <!-- ===================================================================== -->
+    <!-- A time/date based rolling appender -->
+    <appender name="app" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="file" value="/data/log/employeecenter/root.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="usercenter-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/employeecenter/usercenter.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="manager-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/employeecenter/manager.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+    <appender name="service-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/employeecenter/service.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+    <appender name="ibatis-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/employeecenter/employee-ibatis.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+    <appender name="notify-appender" class="org.apache.log4j.DailyRollingFileAppender">
+        <errorHandler class="org.apache.log4j.helpers.OnlyOnceErrorHandler"/>
+        <param name="File" value="/data/log/employeecenter/notify.log"/>
+        <param name="Append" value="true"/>
+        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p [%c] %m%n"/>
+        </layout>
+    </appender>
+
+
+    <logger name="com.hanshu.employee">
+        <level value="INFO"/>
+        <appender-ref ref="usercenter-appender"/>
+    </logger>
+
+    <logger name="com.hanshu.employee.core.manager">
+        <level value="INFO"/>
+        <appender-ref ref="manager-appender"/>
+    </logger>
+    <logger name="com.hanshu.employee.core.service">
+        <level value="INFO"/>
+        <appender-ref ref="service-appender"/>
+    </logger>
+    <logger name="com.ibatis" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="ibatis-appender"/>
+    </logger>
+    <logger name="notifyLogger" additivity="false">
+        <level value="INFO"/>
+        <appender-ref ref="notify-appender"/>
+    </logger>
+
+    <logger name="org.logicalcobwebs.proxool" additivity="true">
+        <level value="ERROR"/>
+        <appender-ref ref="proxool-appender"/>
+    </logger>
+
+    <root>
+        <priority value="INFO"/>
+        <appender-ref ref="app"/>
+        <appender-ref ref="console"/>
+    </root>
+</log4j:configuration>

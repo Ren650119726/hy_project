@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pageGrid">
+
+    <typeAlias alias="pageGridDO" type="com.mockuai.mainweb.core.domain.PageGridDO"/>
+	
+	<typeAlias alias="pageGridQTO" type="com.mockuai.mainweb.common.domain.qto.PageGridQTO"/>
+    
+    <resultMap id="pageGridResult" class="pageGridDO" >
+    	<result property="id" column="id" jdbcType="BIGINT"/>
+    	<result property="blockId" column="block_id" jdbcType="BIGINT"/>
+    	<result property="pageId" column="page_id" jdbcType="BIGINT"/>
+    	<result property="gridRow" column="grid_row" jdbcType="INTEGER"/>
+    	<result property="gridColumn" column="grid_column" jdbcType="INTEGER"/>
+    	<result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+    	<result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    	<result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+    </resultMap>
+    
+    <sql id="column_set">
+        id,
+        block_id,
+        page_id,
+        grid_row,
+        grid_column,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+    
+    <sql id="column_set_insert">
+        block_id,
+        page_id,
+        grid_row,
+        grid_column,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+    
+    <sql id="dynamic_where_clause">
+    	<isNotNull prepend="and" property="deleteMark">
+    		delete_mark = #deleteMark#
+    	</isNotNull>
+    	<isNotNull prepend="and" property="blockId">
+    		block_id = #blockId#
+    	</isNotNull>
+    </sql>
+    
+    <sql id="dynamic_where_clause_update">
+    	<isNotNull prepend="and" property="blockId">
+    		block_id = #blockId#
+    	</isNotNull>
+    	<isNotNull prepend="and" property="pageId">
+    		page_id = #pageId#
+    	</isNotNull>
+    </sql>
+    
+    <select id="queryGrid" parameterClass="pageGridQTO" resultMap="pageGridResult">
+    	select 
+    	<include refid="column_set"/>
+    	from page_grid
+    	<dynamic prepend="where">
+    		<include refid="dynamic_where_clause"/>
+    	</dynamic>
+    </select>
+
+	<insert id="addPageGrid" parameterClass="pageGridDO">
+		insert into page_grid (
+			<include refid="column_set_insert"/>
+		) values (
+			#blockId#,
+	        #pageId#,
+	        #gridRow#,
+	        #gridColumn#,
+	        now(),
+	        now(),
+	        0
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>		
+	</insert>
+	
+	<update id="updatePageGrid" parameterClass="pageGridQTO">
+		update 
+			page_grid
+		set gmt_modified = now()
+		<dynamic prepend=",">
+			<isNotNull prepend="," property="deleteMark">
+				delete_mark = #deleteMark#
+			</isNotNull>
+		</dynamic>			
+		where delete_mark = 0
+		<include refid="dynamic_where_clause_update"/> 
+	</update>
+	
+	<delete id="deletePageGrid" parameterClass="pageGridQTO">
+		delete from page_grid
+		<dynamic prepend="where">
+			<include refid="dynamic_where_clause"/>
+		</dynamic>
+	</delete>
+
+</sqlMap>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_message" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserMessageDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="sender_id" property="senderId" jdbcType="BIGINT" />
+    <result column="receiver_id" property="receiverId" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="send_type" property="sendType" jdbcType="TINYINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="delete_mark" property="deleteMark" jdbcType="TINYINT" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME" />
+    <result column="global_id" property="globalId" jdbcType="BIGINT" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, biz_code, sender_id, receiver_id, type, send_type, title, content, status, delete_mark, gmt_created,
+    gmt_modified,global_id
+  </sql>
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.UserMessageDO">
+    insert into user_message
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="senderId" >
+        sender_id
+      </isNotNull>
+      <isNotNull prepend="," property="receiverId" >
+        receiver_id
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        type
+      </isNotNull>
+      <isNotNull prepend="," property="sendType" >
+        send_type
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        title
+      </isNotNull>
+      <isNotNull prepend="," property="content" >
+        content
+      </isNotNull>
+      <isNotNull prepend="," property="globalId">
+        global_id
+      </isNotNull>
+        ,status,delete_mark,gmt_created, gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="senderId" >
+        #senderId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="receiverId" >
+        #receiverId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="type" >
+        #type:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="sendType" >
+        #sendType:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="title" >
+        #title:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="content" >
+        #content:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="globalId">
+        #globalId:VARCHAR#
+      </isNotNull>
+       ,0,0,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert> 
+  
+   <select id="selectByUserId" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserMessageDO" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_message
+    where id=#id:BIGINT# and receiver_id = #receiverId:BIGINT#
+  </select>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserMessageQTO" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_message
+    where id = #id:BIGINT# and delete_mark != 1
+  </select>
+  
+  <sql id="userMessageQueryWhere">
+ 	 	where is_deleted = 0 
+		<dynamic prepend="">
+			<isNotNull prepend="AND" property="senderId"> 
+				sender_id = #senderId#
+			</isNotNull>
+			<isNotNull prepend="and" property="receiverId">
+      			receiver_id = #receiverId#
+    		</isNotNull>
+            <isNotNull prepend="and" property="bizCode">
+                biz_code = #bizCode#
+            </isNotNull>
+		</dynamic>
+	</sql>
+
+  <select id="queryUserMessage" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserMessageQTO">
+  	select 
+  	<include refid="Base_Column_List"/>
+  	from user_message
+  	where 
+  	delete_mark = 0
+    <isNotNull prepend="and" property="userRegDate">
+      gmt_created > #userRegDate:DATETIME#
+    </isNotNull>
+    <isNotNull prepend="and" property="receiverId">
+      receiver_id = #receiverId#
+    </isNotNull>
+    <isNotNull prepend="and" property="type">
+      type = #type#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="globalId">
+      global_id = #globalId#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+  	order by id desc limit #offset#,#count#
+  </select>
+
+  <select id="queryMaxGlobalIdMessage" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserMessageQTO">
+    select
+    <include refid="Base_Column_List"/>
+    from user_message
+    where
+    delete_mark = 0 and type=1
+    <isNotNull prepend="and" property="userRegDate">
+      gmt_created > #userRegDate:DATETIME#
+    </isNotNull>
+    <isNotNull prepend="and" property="receiverId">
+      receiver_id = #receiverId#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+    and global_id !=0
+    order by id desc limit 1;
+  </select>
+
+  <select id="queryGlobalMessage" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserMessageQTO">
+    select
+    <include refid="Base_Column_List"/>
+    from user_message
+    where
+    delete_mark = 0 and type=2
+    <isNotNull prepend="and" property="userRegDate">
+      gmt_created > #userRegDate:DATETIME#
+    </isNotNull>
+    <isNotNull prepend="and" property="globalId">
+      id > #globalId#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    order by id
+  </select>
+
+  <select id="totalCount" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.common.qto.UserMessageQTO">
+  	select count(id) from user_message where delete_mark = 0
+    <isNotNull prepend="and" property="userRegDate">
+      gmt_created > #userRegDate:DATETIME#
+    </isNotNull>
+    <isNotNull prepend="and" property="type">
+      type = #type#
+    </isNotNull>
+    <isNotNull prepend="and" property="receiverId">
+      receiver_id = #receiverId#
+    </isNotNull>
+    <isNotNull prepend="and" property="bizCode">
+      biz_code = #bizCode#
+    </isNotNull>
+    <isNotNull prepend="and" property="globalId">
+      global_id = #globalId#
+    </isNotNull>
+    <isNotNull prepend="and" property="status">
+      status = #status#
+    </isNotNull>
+  </select>
+
+
+  <update id="updateUserMessageStatus" parameterClass="com.mockuai.usercenter.core.domain.UserMessageDO" >
+    update user_message
+    set status = #status:TINYINT#,gmt_modified = now()
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="deleteUserMessage" parameterClass="com.mockuai.usercenter.core.domain.UserMessageDO">
+  	update user_message
+  	set delete_mark = 1,gmt_modified = now()
+    where id = #id:BIGINT# and receiver_id = #receiverId:BIGINT#
+  </update>
+  
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

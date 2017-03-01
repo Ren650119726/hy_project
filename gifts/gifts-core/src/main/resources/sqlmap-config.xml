@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+    <settings useStatementNamespaces="true"/>
+    <sqlMap resource="sqlmap/action_gift_marketing_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/action_gift_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/gifts_packet_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/gifts_packet_profit_sqlmap.xml"/>
+    <sqlMap resource="sqlmap/grant_coupon_record_sqlmap.xml"/>
+
+</sqlMapConfig>

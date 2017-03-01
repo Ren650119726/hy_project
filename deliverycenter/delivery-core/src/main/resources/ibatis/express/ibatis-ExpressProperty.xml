@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="EXPRESSPROPERTY">
+	<typeAlias alias="ExpressProperty" type="com.mockuai.deliverycenter.core.domain.express.ExpressProperty" />
+	
+	<sql id="columList">
+		   id as id,
+		   express_id as expressId,
+		   property_name as propertyName,
+		   property_key as propertyKey,
+		   property_value as propertyValue,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addExpressProperty" parameterClass="ExpressProperty">
+		insert into delivery_express_property
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="expressId">express_id </isNotNull>
+			<isNotNull prepend="," property="propertyName">property_name </isNotNull>
+			<isNotNull prepend="," property="propertyKey">property_key </isNotNull>
+			<isNotNull prepend="," property="propertyValue">property_value </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="expressId">#expressId:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="propertyName">#propertyName:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="propertyKey">#propertyKey:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="propertyValue">#propertyValue:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateExpressProperty" parameterClass="ExpressProperty">
+		update delivery_express_property
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="expressId"> 
+			express_id = #expressId:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="propertyName"> 
+			property_name = #propertyName:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="propertyKey"> 
+			property_key = #propertyKey:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="propertyValue"> 
+			property_value = #propertyValue:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<select id="getExpressProperty"  parameterClass="ExpressProperty" resultClass="ExpressProperty">
+		select
+		<include refid="EXPRESSPROPERTY.columList" />
+		from delivery_express_property
+		where id = #id:BIGINT# and deleted=0
+	</select>
+
+	<select id="queryByExpressId"  parameterClass="java.lang.Integer" resultClass="ExpressProperty">
+		select
+		<include refid="EXPRESSPROPERTY.columList" />
+		from delivery_express_property
+		where express_id = #expressId:VARCHAR# and deleted=0
+	</select>
+	
+</sqlMap>

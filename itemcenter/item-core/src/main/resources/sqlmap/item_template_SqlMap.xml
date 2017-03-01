@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_template" >
+	
+	<typeAlias alias="itemTemplateQTO"	type="com.mockuai.itemcenter.common.domain.qto.ItemTemplateQTO" />
+	
+  <resultMap id="BaseResultMap" class="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="template_name" property="templateName" jdbcType="VARCHAR" />
+    <result column="item_name" property="itemName" jdbcType="VARCHAR" />
+    <result column="item_brief" property="itemBrief"  jdbcType="VARCHAR"/>
+    <result column="seller_id" property="sellerId" jdbcType="BIGINT" />
+    <result column="item_brand_id" property="itemBrandId" jdbcType="BIGINT" />
+    <result column="item_type" property="itemType" jdbcType="INTEGER" />
+    <result column="icon_url" property="iconUrl" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="BIGINT" />
+    <result column="market_price" property="marketPrice" jdbcType="INTEGER" />
+    <result column="promotion_price" property="promotionPrice" jdbcType="INTEGER" />
+    <result column="wireless_price" property="wirelessPrice" jdbcType="INTEGER" />
+    <result column="sale_begin" property="saleBegin" jdbcType="DATETIME" />
+    <result column="sale_end" property="saleEnd" jdbcType="DATETIME" />
+    <result column="sale_min_num" property="saleMinNum" jdbcType="INTEGER" />
+    <result column="sale_max_num" property="saleMaxNum" jdbcType="INTEGER" />
+    <result column="item_status" property="itemStatus" jdbcType="INTEGER" />
+    <result column="biz_code" property="bizCode" jdbcType="VARCHAR" />
+    <result column="corner_icon_id" property="cornerIconId" jdbcType="BIGINT" />
+    <result column="delivery_type" property="deliveryType" jdbcType="INTEGER" />
+    <result column="delete_mark" property="deleteMark" jdbcType="INTEGER" />
+    <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" class="com.mockuai.itemcenter.core.domain.ItemTemplateDO" extends="item_template.BaseResultMap" >
+    <result column="item_desc" property="itemDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, template_name, item_brief,item_name, seller_id, item_brand_id, item_type,
+    icon_url, category_id, market_price, promotion_price, wireless_price, sale_begin, 
+    sale_end, sale_min_num, sale_max_num, item_status, 
+    biz_code, corner_icon_id,delivery_type,delete_mark, gmt_created, gmt_modified
+  </sql>
+  <sql id="Blob_Column_List" >
+    item_desc
+  </sql>
+  
+  <select id="ItemTemplateDAO.getItemTemplate" resultMap="ResultMapWithBLOBs" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    select 
+    <include refid="item_template.Base_Column_List" />
+    ,
+    <include refid="item_template.Blob_Column_List" />
+    from item_template
+    where id = #id:BIGINT# and seller_id = #sellerId# and delete_mark = 0
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    delete from item_template
+    where id = #id:INTEGER# and seller_id = #sellerId# and delete_mark = 0;
+  </delete>
+  
+  <insert id="insert" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    insert into item_template (id, template_name, item_brief,item_name,
+      seller_id, item_brand_id, item_type, icon_url, 
+      category_id, spu_id, market_price, promotion_price, 
+      wireless_price, sale_begin, sale_end, sale_min_num, 
+      sale_max_num, item_status, audit_msg, audit_time, 
+      audit_admin_id, biz_code,is_seller_post, delete_mark, gmt_created, 
+      gmt_modified, item_desc)
+    values (#id:BIGINT#, #templateName:VARCHAR#, #itemBrief:VARCHAR#,#itemName:VARCHAR#,
+      #sellerId:BIGINT#, #itemBrandId:BIGINT#, #itemType:INTEGER#, #iconUrl:VARCHAR#, 
+      #categoryId:INTEGER#, #marketPrice:INTEGER#, #promotionPrice:INTEGER#, 
+      #wirelessPrice:INTEGER#, #saleBegin:DATETIME#, #saleEnd:DATETIME#, #saleMinNum:INTEGER#, 
+      #saleMaxNum:INTEGER#, #itemStatus:INTEGER#, #bizCode:VARCHAR#, #deleteMark:INTEGER#, #gmtCreated:DATETIME#, 
+      #gmtModified:DATETIME#, #itemDesc:LONGVARCHAR#)
+  </insert>
+  
+  <insert id="ItemTemplateDAO.addItemTemplate" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    insert into item_template
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        id
+      </isNotNull>
+      <isNotNull prepend="," property="templateName" >
+        template_name
+      </isNotNull>
+        <isNotNull prepend="," property="itemBrief" >
+            item_brief
+        </isNotNull>
+      <isNotNull prepend="," property="itemName" >
+        item_name
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id
+      </isNotNull>
+      <isNotNull prepend="," property="itemBrandId" >
+        item_brand_id
+      </isNotNull>
+      <isNotNull prepend="," property="itemType" >
+        item_type
+      </isNotNull>
+      <isNotNull prepend="," property="iconUrl" >
+        icon_url
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        category_id
+      </isNotNull>
+      <isNotNull prepend="," property="marketPrice" >
+        market_price
+      </isNotNull>
+      <isNotNull prepend="," property="promotionPrice" >
+        promotion_price
+      </isNotNull>
+      <isNotNull prepend="," property="wirelessPrice" >
+        wireless_price
+      </isNotNull>
+      <isNotNull prepend="," property="saleBegin" >
+        sale_begin
+      </isNotNull>
+      <isNotNull prepend="," property="saleEnd" >
+        sale_end
+      </isNotNull>
+      <isNotNull prepend="," property="saleMinNum" >
+        sale_min_num
+      </isNotNull>
+      <isNotNull prepend="," property="saleMaxNum" >
+        sale_max_num
+      </isNotNull>
+      <isNotNull prepend="," property="itemStatus" >
+        item_status
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        biz_code
+      </isNotNull>
+      <isNotNull prepend="," property="cornerIconId" >
+        corner_icon_id
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryType" >
+        delivery_type
+      </isNotNull>
+      ,delete_mark
+      ,gmt_created
+      ,gmt_modified
+      <isNotNull prepend="," property="itemDesc" >
+        item_desc
+      </isNotNull>
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="id" >
+        #id:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="templateName" >
+        #templateName:VARCHAR#
+      </isNotNull>
+        <isNotNull prepend="," property="itemBrief" >
+            #itemBrief:VARCHAR#
+        </isNotNull>
+      <isNotNull prepend="," property="itemName" >
+        #itemName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        #sellerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemBrandId" >
+        #itemBrandId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemType" >
+        #itemType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="iconUrl" >
+        #iconUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        #categoryId:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="marketPrice" >
+        #marketPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="promotionPrice" >
+        #promotionPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="wirelessPrice" >
+        #wirelessPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="saleBegin" >
+        #saleBegin:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="saleEnd" >
+        #saleEnd:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="saleMinNum" >
+        #saleMinNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="saleMaxNum" >
+        #saleMaxNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="itemStatus" >
+        #itemStatus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        #bizCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cornerIconId" >
+        #cornerIconId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryType" >
+        #deliveryType:INTEGER#
+      </isNotNull>
+      ,0,now(),now()
+      <isNotNull prepend="," property="itemDesc" >
+        #itemDesc:LONGVARCHAR#
+      </isNotNull>
+      )
+    </dynamic>
+    <selectKey keyProperty="id" resultClass="Long">
+			SELECT
+			LAST_INSERT_ID();
+		</selectKey>
+  </insert>
+  
+  <update id="ItemTemplateDAO.updateItemTemplate" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+    update item_template
+    <dynamic prepend="set" >
+      <isNotNull prepend="," property="templateName" >
+        template_name = #templateName:VARCHAR#
+      </isNotNull>
+        <isNotNull prepend="," property="itemBrief" >
+            item_brief = #itemBrief:VARCHAR#
+        </isNotNull>
+      <isNotNull prepend="," property="itemName" >
+        item_name = #itemName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sellerId" >
+        seller_id = #sellerId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemBrandId" >
+        item_brand_id = #itemBrandId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="itemType" >
+        item_type = #itemType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="iconUrl" >
+        icon_url = #iconUrl:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="categoryId" >
+        category_id = #categoryId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="marketPrice" >
+        market_price = #marketPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="promotionPrice" >
+        promotion_price = #promotionPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="wirelessPrice" >
+        wireless_price = #wirelessPrice:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="saleBegin" >
+        sale_begin = #saleBegin:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="saleEnd" >
+        sale_end = #saleEnd:DATETIME#
+      </isNotNull>
+      <isNotNull prepend="," property="saleMinNum" >
+        sale_min_num = #saleMinNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="saleMaxNum" >
+        sale_max_num = #saleMaxNum:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="itemStatus" >
+        item_status = #itemStatus:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="bizCode" >
+        biz_code = #bizCode:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="cornerIconId" >
+        corner_icon_id = #cornerIconId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="deliveryType" >
+        delivery_type = #deliveryType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="deleteMark" >
+        delete_mark = #deleteMark:INTEGER#
+      </isNotNull>
+      ,gmt_modified = now()
+      <isNotNull prepend="," property="itemDesc" >
+        item_desc = #itemDesc:LONGVARCHAR#
+      </isNotNull>
+    </dynamic>
+    where id = #id:BIGINT# and seller_id = #sellerId# and delete_mark = 0
+  </update>
+  
+ 
+ 	<!--  复合条件查询 -->
+	<sql id="ItemTemplateDAO.QtoQueryWhere">
+		<!-- <dynamic prepend="where"> -->
+			where delete_mark = 0 
+			<isNotNull prepend="AND" property="id"> 
+				id = #id#
+			</isNotNull>
+			<isNotNull prepend="AND" property="templateName"> 
+				template_name like concat('%', #templateName#,'%')
+			</isNotNull>
+			<isNotNull  prepend="and" property="createTimeBegin">
+					gmt_created > #createTimeBegin#
+			</isNotNull>
+			<isNotNull prepend="and" property="createTimeEnd" >
+					#createTimeEnd# > gmt_created
+			</isNotNull>
+			<isNotNull prepend="AND" property="itemBrandId"> 
+				item_brand_id = #itemBrandId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="categoryId"> 
+				category_id = #categoryId#
+			</isNotNull>
+			<isNotNull prepend="AND" property="sellerId" >
+				seller_id=#sellerId#
+			</isNotNull>
+		<!-- </dynamic> -->
+	</sql>
+	
+	<select id="ItemTemplateDAO.getTotalCount" resultClass="Integer"
+		parameterClass="itemTemplateQTO">
+		select count(1) from item_template 
+		<include refid="ItemTemplateDAO.QtoQueryWhere" />
+	</select>
+
+	<select id="ItemTemplateDAO.queryItemTemplate" resultMap="BaseResultMap"
+		parameterClass="itemTemplateQTO">
+		select
+		<include refid="item_template.Base_Column_List" />
+		from item_template 
+		<include refid="ItemTemplateDAO.QtoQueryWhere" />
+		 order by gmt_created desc 
+		 <isNotNull property="needPaging">
+			 limit #offset#,#pageSize#
+		 </isNotNull>
+	</select>
+	
+	<update id="ItemTemplateDAO.deleteItemTemplate" parameterClass="com.mockuai.itemcenter.core.domain.ItemTemplateDO" >
+		update item_template
+		set gmt_modified=now(),delete_mark = 1 where id = #id# and seller_id = #sellerId# and delete_mark = 0
+	</update>
+ 
+  
+</sqlMap>

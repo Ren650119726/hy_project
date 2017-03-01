@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sysConfig">
+
+    <!--
+
+    -->
+
+    <typeAlias alias="sysConfigDO" type="com.mockuai.rainbowcenter.core.domain.SysConfigDO"/>
+    <typeAlias alias="sysConfigQTO" type="com.mockuai.rainbowcenter.common.qto.SysConfigQTO"/>
+
+    <resultMap id="BaseResultMap" class="sysConfigDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="appKey" column="appkey" jdbcType="VARCHAR"/>
+        <result property="appSecret" column="appsecret" jdbcType="VARCHAR"/>
+        <result property="token" column="token" jdbcType="VARCHAR"/>
+        <result property="serverUrl" column="server_url" jdbcType="VARCHAR"/>
+        <result property="fieldName" column="field_name" jdbcType="VARCHAR"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="outValue" column="out_value" jdbcType="VARCHAR"/>
+        <result property="outValueType" column="out_value_type" jdbcType="INTEGER"/>
+        <result property="value" column="value" jdbcType="VARCHAR"/>
+        <result property="valueType" column="value_type" jdbcType="INTEGER"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+        <result property="itemPollOn" column="item_poll_on" jdbcType="INTEGER"/>
+        <result property="itemOrderPollOn" column="item_order_poll_on" jdbcType="INTEGER"/>
+        <result property="itemStockPollOn" column="item_stock_poll_on" jdbcType="INTEGER"/>
+    </resultMap>
+    <sql id="Base_Column_list">
+        id,
+        account,
+        appkey,
+        appsecret,
+        token,
+        server_url,
+        field_name,
+        seller_id,
+        out_value,
+        out_value_type,
+        value,
+        value_type,
+        biz_code,
+        type,
+        gmt_created,
+        gmt_modified,
+        delete_mark,
+        item_poll_on,
+        item_order_poll_on,
+        item_stock_poll_on
+    </sql>
+
+    <sql id="sysConfigQtoWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="account">
+            account = #account#
+        </isNotNull>
+        <isNotNull prepend="AND" property="fieldName">
+            field_name = #fieldName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="outValue">
+            out_value = #outValue#
+        </isNotNull>
+        <isNotNull prepend="AND" property="value">
+            value=#value#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="type">
+            type=#type#
+        </isNotNull>
+    </sql>
+
+
+    <select id="query" parameterClass="sysConfigQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_config
+        <include refid="sysConfigQtoWhere"/>
+        order by gmt_created desc
+        <isNotNull property="offset">
+            limit #offset#,#count#
+        </isNotNull>
+    </select>
+
+    <select id="total" parameterClass="sysConfigQTO" resultClass="java.lang.Long">
+        select count(*)
+        from sys_config
+        <include refid="sysConfigQtoWhere"/>
+    </select>
+
+    <select id="queryConfigOfAccount" parameterClass="sysConfigQTO" resultClass="sysConfigDO">
+        select account, field_name as fieldName ,appkey,appsecret,token,type,seller_id as sellerId,biz_code as bizCode,server_url as serverUrl
+        from sys_config
+        where field_name = #fieldName#
+        and type = #type#
+        group by field_name,account,appkey,appsecret,token ,type,seller_id,biz_code,server_url
+    </select>
+
+    <!--<update id="updateByOutValue" parameterClass="sysConfigDO">-->
+    <!--update sys_config-->
+    <!--set gmt_modified = now()-->
+    <!--<isNotNull prepend="," property="value">-->
+    <!--value = #value#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="valueType">-->
+    <!--value_type = #valueType#-->
+    <!--</isNotNull>-->
+    <!--where biz_code = #bizCode#-->
+    <!--and type = #type#-->
+    <!--and field_name = #fieldName#-->
+    <!--and out_value = #outValue#-->
+    <!--and delete_mark = 0-->
+    <!--</update>-->
+
+    <!--<update id="updateByValue" parameterClass="sysConfigDO">-->
+    <!--update sys_config-->
+    <!--set gmt_modified = now()-->
+    <!--<isNotNull prepend="," property="outValue">-->
+    <!--out_value = #outValue#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="outValueType">-->
+    <!--out_value_type = #outValueType#-->
+    <!--</isNotNull>-->
+    <!--where biz_code = #bizCode#-->
+    <!--and type = #type#-->
+    <!--and field_name = #fieldName#-->
+    <!--and value = #value#-->
+    <!--and delete_mark = 0-->
+    <!--</update>-->
+
+    <select id="select" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_config
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <select id="getSysConfigByValue" parameterClass="sysConfigQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_config
+        where
+        value = #value#
+        and field_name = #fieldName#
+        and type = #type#
+        and biz_code = #bizCode#
+        and delete_mark = 0
+    </select>
+
+    <select id="querySysConfig" parameterClass="sysConfigQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_list"/>
+        from sys_config
+        <include refid="sysConfigQtoWhere"/>
+        order by gmt_modified desc
+    </select>
+
+    <!--<insert id="insert" parameterClass="sysConfigDO">-->
+    <!--insert into sys_config-->
+    <!--<dynamic prepend="(">-->
+    <!--<isNotNull prepend="," property="outValue">-->
+    <!--out_value-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="outValueType">-->
+    <!--out_value_type-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="value">-->
+    <!--value-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="valueType">-->
+    <!--value_type-->
+    <!--</isNotNull>-->
+    <!--,field_name,-->
+    <!--biz_code,-->
+    <!--type,-->
+    <!--gmt_created,-->
+    <!--gmt_modified,-->
+    <!--delete_mark-->
+    <!--)-->
+    <!--</dynamic>-->
+    <!--values-->
+    <!--<dynamic prepend="(">-->
+    <!--<isNotNull prepend="," property="outValue">-->
+    <!--#outValue#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="outValueType">-->
+    <!--#outValueType#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="value">-->
+    <!--#value#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull prepend="," property="valueType">-->
+    <!--#valueType#-->
+    <!--</isNotNull>-->
+    <!--,#fieldName#,-->
+    <!--#bizCode#,-->
+    <!--#type#,-->
+    <!--now(),-->
+    <!--now(),-->
+    <!--0-->
+    <!--)-->
+    <!--</dynamic>-->
+    <!--<selectKey resultClass="java.lang.Long" keyProperty="id">-->
+    <!--select last_insert_id()-->
+    <!--</selectKey>-->
+    <!--</insert>-->
+</sqlMap>

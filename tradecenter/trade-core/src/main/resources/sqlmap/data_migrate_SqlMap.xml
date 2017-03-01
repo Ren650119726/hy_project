@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="data_migrate">
+
+	<sql id="column_set">
+		id,
+		biz_code,
+		order_sn,
+		type,
+		user_id,
+		seller_id,
+		order_status,
+		total_amount,
+		total_price,
+		delivery_fee,
+		delivery_id,
+		payment_id,
+		discount_amount,
+		discount_mark,
+		invoice_mark,
+		user_memo,
+		seller_memo,
+		admin_memo,
+		attach_info,
+		order_time,
+		pay_time,
+		consign_time,
+		receipt_time,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+	<insert id="insertOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		insert into user_order(
+		biz_code,
+		order_sn,
+		type,
+		user_id,
+		seller_id,
+		order_status,
+		total_amount,
+		total_price,
+		delivery_fee,
+		delivery_id,
+		payment_id,
+		discount_amount,
+		discount_mark,
+		invoice_mark,
+		user_memo,
+		seller_memo,
+		admin_memo,
+		attach_info,
+		order_time,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#orderSn#,
+		#type#,
+		#userId#,
+		#sellerId#,
+		#orderStatus#,
+		#totalAmount#,
+		#totalPrice#,
+		#deliveryFee#,
+		#deliveryId#,
+		#paymentId#,
+		#discountAmount#,
+		#discountMark#,
+		#invoiceMark#,
+		#userMemo#,
+		#sellerMemo#,
+		#adminMemo#,
+		#attachInfo#,
+		#orderTime#,
+		#deleteMark#,
+		#gmtCreated#,
+		#gmtModified#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrderConsignee" parameterClass="com.mockuai.tradecenter.core.domain.OrderConsigneeDO">
+		insert into order_consignee(
+		order_id,
+		user_id,
+		biz_code,
+		country_code,
+		province_code,
+		city_code,
+		area_code,
+		town_code,
+		address,
+		phone,
+		mobile,
+		zip,
+		consignee,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#orderId#,
+		#userId#,
+		#bizCode#,
+		#countryCode#,
+		#provinceCode#,
+		#cityCode#,
+		#areaCode#,
+		#townCode#,
+		#address#,
+		#phone#,
+		#mobile#,
+		#zip#,
+		#consignee#,
+		#deleteMark#,
+		#gmtCreated#,
+		#gmtModified#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrderPayment" parameterClass="com.mockuai.tradecenter.core.domain.OrderPaymentDO">
+		insert into order_payment(
+		biz_code,
+		payment_sn,
+		order_id,
+		user_id,
+		payment_id,
+		total_amount,
+		pay_amount,
+		out_trade_no,
+		pay_time,
+		pay_status,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#paymentSn#,
+		#orderId#,
+		#userId#,
+		#paymentId#,
+		#totalAmount#,
+		#payAmount#,
+		#outTradeNo#,
+		#payTime#,
+		#payStatus#,
+		#deleteMark#,
+		#gmtCreated#,
+		#gmtModified#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrderItem" parameterClass="com.mockuai.tradecenter.core.domain.OrderItemDO">
+		insert into order_item(
+		biz_code,
+		user_id,
+		user_name,
+		order_id,
+		item_id,
+		item_sku_id,
+		item_sku_desc,
+		item_name,
+		item_image_url,
+		delivery_type,
+		seller_id,
+		unit_price,
+		number,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+		)
+		values(
+		#bizCode#,
+		#userId#,
+		#userName#,
+		#orderId#,
+		#itemId#,
+		#itemSkuId#,
+		#itemSkuDesc#,
+		#itemName#,
+		#itemImageUrl#,
+		#deliveryType#,
+		#sellerId#,
+		#unitPrice#,
+		#number#,
+		#deleteMark#,
+		#gmtCreated#,
+		#gmtModified#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+</sqlMap>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="gifts_packet">
+
+    <typeAlias alias="giftsPacketDO" type="com.mockuai.giftscenter.core.domain.GiftsPacketDO"/>
+<typeAlias alias="giftsPacketQTO" type="com.mockuai.giftscenter.common.domain.qto.GiftsPacketQTO"/>
+    <resultMap id="result" class="giftsPacketDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="giftsName" column="gifts_name" jdbcType="VARCHAR"/>
+        <result property="giftsValidate" column="gifts_validate" jdbcType="TINYINT"/>
+        <result property="giftsAdminId" column="gifts_admin_id" jdbcType="BIGINT"/>
+        <result property="giftsStartTime" column="gifts_start_time" jdbcType="TIMESTAMP"/>
+        <result property="giftsEndTime" column="gifts_end_time" jdbcType="TIMESTAMP"/>
+        <result property="giftsDealPrice" column="gifts_deal_price" jdbcType="BIGINT"/>
+        <result property="giftsOldPrice" column="gifts_old_price" jdbcType="BIGINT"/>
+        <result property="giftsReturnedMoney" column="gifts_returned_money" jdbcType="BIGINT"/>
+        <result property="giftsImgPath" column="gifts_img_path" jdbcType="VARCHAR"/>
+       
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+        <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+        <result property="goodsSkuId" column="goods_sku_id" jdbcType="BIGINT"/>
+        <result property="goodsAmount" column="goods_amount" jdbcType="BIGINT"/>
+       
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+
+
+    <sql id="columnList">
+    id,
+    gifts_name,
+    gifts_validate,
+    gifts_admin_id,
+    gifts_start_time,
+    gifts_end_time,
+    gifts_deal_price,
+    gifts_old_price,
+    gifts_returned_money,
+    gifts_img_path,
+    item_id,
+    sku_id,
+    goods_id,
+    goods_sku_id,
+    goods_amount,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="giftsName">
+            gifts_name LIKE concat('%',#giftsName#,'%') 
+        </isNotNull>
+    </sql>
+
+    <insert id="addGiftsPacket" parameterClass="giftsPacketDO">
+        insert into gifts_packet (
+        gifts_name,
+        gifts_validate,
+        gifts_admin_id,
+        gifts_start_time,
+        gifts_end_time,
+        gifts_deal_price,
+        gifts_old_price,
+        gifts_returned_money,
+        gifts_img_path,
+        item_id,
+        sku_id,
+        goods_id,
+        goods_sku_id,
+        goods_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #giftsName#,
+        #giftsValidate#,
+        #giftsAdminId#,
+        #giftsStartTime#,
+        #giftsEndTime#,
+        #giftsDealPrice#,
+        #giftsOldPrice#,
+        #giftsReturnedMoney#,
+        #giftsImgPath#,
+        #itemId#,
+        #skuId#,
+        #goodsId#,
+        #goodsSkuId#,
+        #goodsAmount#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+	<select id="getGiftsPacket" resultMap="result" parameterClass="giftsPacketDO">
+        select
+        <include refid="gifts_packet.columnList"/>
+        from gifts_packet WHERE delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="goodsId">
+            goods_id = #goodsId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="goodsSkuId">
+            goods_sku_id = #goodsSkuId#
+        </isNotNull>
+    </select>
+    
+    <update id="updateGiftsPacket" parameterClass="giftsPacketDO">
+        UPDATE gifts_packet SET gmt_modified=now()
+        
+        <isNotNull prepend="," property="giftsName">
+            gifts_name = #giftsName#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsValidate">
+            gifts_validate = #giftsValidate#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsAdminId">
+            gifts_admin_id = #giftsAdminId#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsStartTime">
+            gifts_start_time = #giftsStartTime#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsEndTime">
+            gifts_end_time = #giftsEndTime#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsDealPrice">
+            gifts_deal_price = #giftsDealPrice#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsOldPrice">
+            gifts_old_price = #giftsOldPrice#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsReturnedMoney">
+            gifts_returned_money = #giftsReturnedMoney#
+        </isNotNull>
+        <isNotNull prepend="," property="giftsImgPath">
+            gifts_img_path = #giftsImgPath#
+        </isNotNull>
+        <isNotNull prepend="," property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <isNotNull prepend="," property="skuId">
+            sku_id = #skuId#
+        </isNotNull>
+        <isNotNull prepend="," property="goodsId">
+            goods_id = #goodsId#
+        </isNotNull>
+        <isNotNull prepend="," property="goodsSkuId">
+            goods_sku_id = #goodsSkuId#
+        </isNotNull>
+        <isNotNull prepend="," property="goodsAmount">
+            goods_amount = #goodsAmount#
+        </isNotNull>
+        <isNotNull prepend="," property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        WHERE id = #id#
+    </update>
+    
+    
+    
+    <select id="queryGiftsPacket" parameterClass="giftsPacketQTO" resultMap="result">
+        select
+        <include refid="gifts_packet.columnList"/>
+        from gifts_packet
+        <include refid="gifts_packet.queryWhere"/>
+        ORDER BY id desc
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfGiftsPacket" parameterClass="giftsPacketQTO" resultClass="java.lang.Integer">
+        select count(1) from gifts_packet
+        <include refid="gifts_packet.queryWhere"/>
+    </select>
+    
+	<select id="appQueryGiftsPacket"  resultMap="result">
+        select
+        <include refid="gifts_packet.columnList"/>
+        from gifts_packet where delete_mark = 0 and 
+        <![CDATA[( gifts_start_time < now() AND now() < date_add(gifts_end_time, INTERVAL 1 day))]]>
+		ORDER BY id desc
+    </select>
+</sqlMap>

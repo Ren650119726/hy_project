@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_consignee">
+
+    <!--CREATE TABLE `order_consignee` (-->
+    <!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+    <!--`order_id` bigint(20) NOT NULL COMMENT '所属订单id',-->
+    <!--`user_id` bigint(20) NOT NULL COMMENT '所属订单用户id',-->
+    <!--`biz_code` varchar(64) NOT NULL COMMENT '业务CODE',-->
+    <!--`country_code` varchar(64) NOT NULL COMMENT '国家行政编号',-->
+    <!--`province_code` varchar(64) NOT NULL COMMENT '省行政编号',-->
+    <!--`city_code` varchar(64) NOT NULL COMMENT '城市行政编号',-->
+    <!--`area_code` varchar(64) NOT NULL COMMENT '区行政编号',-->
+    <!--`town_code` varchar(64) DEFAULT NULL COMMENT '乡镇行政编号，可以不填',-->
+    <!--`address` varchar(255) NOT NULL COMMENT '详细地址',-->
+    <!--`phone` varchar(20) DEFAULT NULL COMMENT '电话号码',-->
+    <!--`mobile` varchar(20) NOT NULL COMMENT '手机号码',-->
+    <!--`zip` varchar(10) DEFAULT NULL COMMENT '邮编',-->
+    <!--`consignee` varchar(50) NOT NULL COMMENT '收货人',-->
+    <!--`delete_mark` tinyint(4) DEFAULT '0',-->
+    <!--`gmt_created` datetime NOT NULL COMMENT '创建时间',-->
+    <!--`gmt_modified` datetime NOT NULL COMMENT '修改时间',-->
+    <!--PRIMARY KEY (`id`)-->
+    <!--) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8-->
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderConsigneeDO">
+        <result property="id" column="id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="bizCode" column="biz_code"/>
+        <result property="countryCode" column="country_code"/>
+        <result property="provinceCode" column="province_code"/>
+        <result property="cityCode" column="city_code"/>
+        <result property="areaCode" column="area_code"/>
+        <result property="townCode" column="town_code"/>
+        <result property="address" column="address"/>
+        <result property="phone" column="phone"/>
+        <result property="mobile" column="mobile"/>
+        <result property="zip" column="zip"/>
+        <result property="consignee" column="consignee"/>
+        <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="gmtModified" column="gmt_modified"/>
+        <result property="idCardNo" column="id_card_no"/>
+        <result property="consigneeId" column="consignee_id"/>
+    </resultMap>
+
+    <sql id="select_column_set">
+        id,
+        order_id,
+        user_id,
+        biz_code,
+        country_code,
+        province_code,
+        city_code,
+        area_code,
+        town_code,
+        address,
+        phone,
+        mobile,
+        zip,
+        consignee,
+        id_card_no,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        consignee_id
+
+    </sql>
+
+    <sql id="dynamic_set_clause">
+        <isNotNull property="id" prepend=",">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="orderId" prepend=",">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend=",">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend=",">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="countryCode" prepend=",">
+            country_code=#countryCode#
+        </isNotNull>
+        <isNotNull property="provinceCode" prepend=",">
+            province_code=#provinceCode#
+        </isNotNull>
+        <isNotNull property="cityCode" prepend=",">
+            city_code=#cityCode#
+        </isNotNull>
+        <isNotNull property="areaCode" prepend=",">
+            area_code=#areaCode#
+        </isNotNull>
+        <isNotNull property="townCode" prepend=",">
+            town_code=#townCode#
+        </isNotNull>
+        <isNotNull property="address" prepend=",">
+            address=#address#
+        </isNotNull>
+        <isNotNull property="phone" prepend=",">
+            phone=#phone#
+        </isNotNull>
+        <isNotNull property="mobile" prepend=",">
+            mobile=#mobile#
+        </isNotNull>
+        <isNotNull property="zip" prepend=",">
+            zip=#zip#
+        </isNotNull>
+        <isNotNull property="consignee" prepend=",">
+            consignee=#consignee#
+        </isNotNull>
+    </sql>
+
+    <sql id="dynamic_where_clause">
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend="and">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="countryCode" prepend="and">
+            country_code=#countryCode#
+        </isNotNull>
+        <isNotNull property="provinceCode" prepend="and">
+            province_code=#provinceCode#
+        </isNotNull>
+        <isNotNull property="cityCode" prepend="and">
+            city_code=#cityCode#
+        </isNotNull>
+        <isNotNull property="areaCode" prepend="and">
+            area_code=#areaCode#
+        </isNotNull>
+        <isNotNull property="townCode" prepend="and">
+            town_code=#townCode#
+        </isNotNull>
+        <isNotNull property="address" prepend="and">
+            address=#address#
+        </isNotNull>
+        <isNotNull property="phone" prepend="and">
+            phone=#phone#
+        </isNotNull>
+        <isNotNull property="mobile" prepend="and">
+            mobile=#mobile#
+        </isNotNull>
+        <isNotNull property="zip" prepend="and">
+            zip=#zip#
+        </isNotNull>
+        <isNotNull property="consignee" prepend="and">
+            consignee=#consignee#
+        </isNotNull>
+    </sql>
+
+    <insert id="addOrderConsignee" parameterClass="com.mockuai.tradecenter.core.domain.OrderConsigneeDO">
+        insert into order_consignee(
+        order_id,
+        user_id,
+        biz_code,
+        country_code,
+        province_code,
+        city_code,
+        area_code,
+        town_code,
+        address,
+        phone,
+        mobile,
+        zip,
+        consignee,
+        id_card_no,
+        consignee_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #orderId#,
+        #userId#,
+        #bizCode#,
+        #countryCode#,
+        #provinceCode#,
+        #cityCode#,
+        #areaCode#,
+        #townCode#,
+        #address#,
+        #phone#,
+        #mobile#,
+        #zip#,
+        #consignee#,
+        #idCardNo#,
+        #consigneeId#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+
+    <select id="getOrderConsignee" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="order_consignee.select_column_set"/>
+        from order_consignee
+        where
+        1=1
+        <isNotNull property="userId" prepend="and">
+            user_id=#userId#
+        </isNotNull>
+        and order_id = #orderId:BIGINT#
+    </select>
+
+    <update id="updateOrderConsignee" parameterClass="com.mockuai.tradecenter.core.domain.OrderConsigneeDO">
+        update order_consignee
+        set gmt_modified = now(),
+        consignee=#consignee#,
+        mobile=#mobile#,
+        province_code =#provinceCode#,
+        city_code=#cityCode#,
+        area_code=#areaCode#,
+        address=#address#
+        <isNotNull prepend="," property="idCardNo">
+            id_card_no=#idCardNo#
+        </isNotNull>
+        where order_id=#orderId#
+        and delete_mark=0
+    </update>
+</sqlMap>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sms_template" >
+  <resultMap id="BaseResultMap" class="com.mockuai.messagecenter.core.domain.SmsTemplateDO" >
+    <result property="id" column="id"  jdbcType="BIGINT" />
+    <result property="tempSn" column="temp_sn"  jdbcType="VARCHAR" />
+    <result property="tempContent" column="temp_content"  jdbcType="VARCHAR" />
+    <result property="tempDesc" column="temp_desc"  jdbcType="VARCHAR" />
+    <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    <result property="gmtCreated" column="gmt_created"  jdbcType="TIMESTAMP" />
+    <result property="gmtModified" column="gmt_modified"  jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id,
+    temp_sn,
+    temp_content,
+    temp_desc,
+    delete_mark,
+    gmt_created,
+    gmt_modified
+  </sql>
+  
+   <select id="selectByTempSn" resultMap="BaseResultMap" parameterClass="java.lang.String" >
+    select 
+    <include refid="sms_template.Base_Column_List" />
+    from haiyn_sms_templates
+    where delete_mark = 0     
+    <isNotEmpty prepend="and" property="value">
+    	temp_sn = #value# 
+    </isNotEmpty>
+    
+  </select>
+
+</sqlMap>

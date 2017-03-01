@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="seller_level_apply">
+
+    <!--CREATE TABLE `seller_config` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `level` tinyint(4) NOT NULL COMMENT '等级1，2，3',
+    `level_name` varchar(64) NOT NULL DEFAULT '' COMMENT '等级名称',
+    `under_count` int(11) NOT NULL COMMENT '直属人数',
+    `team_count` int(11) NOT NULL COMMENT '团队人数',
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    `delete_mark` tinyint(4) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;-->
+
+<!--
+    INSERT INTO `seller_config` (`level`, `level_name`, `under_count`, `team_count`, `gmt_created`, `gmt_modified`, `delete_mark`)
+    VALUES
+    (1, '等级1', 0, 0, now(), now(), 0),
+    (2, '等级2', 0, 0, now(), now(), 0),
+    (3, '等级3', 0, 0, now(), now(), 0);-->
+
+    <resultMap id="BaseResultMap" class="com.mockuai.distributioncenter.core.domain.SellerLevelApplyDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="applicantId" column="applicant_id" jdbcType="BIGINT"/>
+		<result property="realName" column="real_name" jdbcType="VARCHAR"/>
+		<result property="status" column="status" jdbcType="TINYINT"/>
+		<result property="type" column="type" jdbcType="TINYINT"/>
+		<result property="source" column="source" jdbcType="VARCHAR"/>
+		<result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="realName" prepend="AND">
+            real_name LIKE concat('%', #realName#, '%')
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="type" prepend="AND">
+            type = #type#
+        </isNotNull>
+    </sql>
+
+    <insert id="add_seller_level_apply" parameterClass="com.mockuai.distributioncenter.core.domain.SellerLevelApplyDO">
+        INSERT INTO seller_level_apply
+        (
+        applicant_id,
+        real_name,
+        status,
+        type,
+        source,
+        reason,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        VALUES (
+        #applicantId#,
+        #realName#,
+        #status#,
+        #type#,
+        #source#,
+        #reason#,
+        0,  
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="get_seller_level_apply" parameterClass="com.mockuai.distributioncenter.core.domain.SellerLevelApplyDO" resultMap="BaseResultMap">
+        SELECT * FROM seller_level_apply WHERE delete_mark = 0 
+        
+        <isNotNull property="applicantId" prepend="AND">
+            applicant_id = #applicantId#
+        </isNotNull>
+        <isNotNull property="type" prepend="AND">
+            type = #type#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status = #status#
+        </isNotNull>
+    </select>
+
+    <update id="update_seller_level_apply" parameterClass="com.mockuai.distributioncenter.core.domain.SellerLevelApplyDO">
+        UPDATE seller_level_apply SET gmt_modified = now()
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="reason" prepend=",">
+            reason = #reason#
+        </isNotNull>
+        <isNotNull property="realName" prepend=",">
+            real_name = #realName#
+        </isNotNull>
+        WHERE  delete_mark = 0
+        
+        <isNotNull property="id" prepend="AND">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="applicantId" prepend="AND">
+            applicant_id = #applicantId#
+        </isNotNull>
+        <isNotNull property="type" prepend="AND">
+            type = #type#
+        </isNotNull>
+    </update>
+
+    <select id="query_seller_level_apply" parameterClass="com.mockuai.distributioncenter.common.domain.qto.SellerLevelApplyQTO" resultMap="BaseResultMap">
+        SELECT * from seller_level_apply
+        <include refid="queryCondition" />
+         ORDER BY gmt_created desc
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+    
+     <select id="countOfSellerLevelApplyPacket" parameterClass="com.mockuai.distributioncenter.common.domain.qto.SellerLevelApplyQTO" resultClass="java.lang.Integer">
+        select count(1) from seller_level_apply
+        <include refid="queryCondition"/>
+    </select>
+</sqlMap>

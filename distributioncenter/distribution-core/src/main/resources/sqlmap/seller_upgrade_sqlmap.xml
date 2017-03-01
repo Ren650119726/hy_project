@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="seller_upgrade">
+
+    <!--CREATE TABLE `seller_upgrade_apply` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `applicant_id` bigint(20) NOT NULL COMMENT '申请者id',
+    `status` tinyint(4) NOT NULL COMMENT '申请状态，0：待审核，1：同意，2：拒绝',
+    `reason` varchar(64) NOT NULL DEFAULT '' COMMENT '理由',
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    `delete_mark` tinyint(4) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;-->
+
+    <resultMap id="BaseResultMap" class="com.mockuai.distributioncenter.core.domain.SellerUpgradeDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="applicantId" column="applicant_id" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <insert id="add_seller_upgrade" parameterClass="com.mockuai.distributioncenter.core.domain.SellerUpgradeDO">
+        INSERT INTO seller_upgrade_apply
+        <dynamic prepend="(">
+            applicant_id,
+            status,
+            <isNotNull prepend="," property="reason" close=",">
+                reason
+            </isNotNull>
+            gmt_created,
+            gmt_modified,
+            delete_mark
+            )
+        </dynamic>
+        VALUES
+        <dynamic prepend="(">
+            #applicantId#,
+            #status#,
+            <isNotNull prepend="," property="reason" close=",">
+                #reason#
+            </isNotNull>
+            now(),
+            now(),
+            0
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="get_seller_upgrade" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM seller_upgrade_apply WHERE delete_mark = 0 AND id = #id#
+    </select>
+
+    <!--<update id="update_seller_upgrade" parameterClass="com.mockuai.distributioncenter.core.domain.SellerConfigDO">-->
+    <!--UPDATE seller_upgrade_apply SET gmt_modified = now()-->
+    <!--<isNotNull property="level" prepend=",">-->
+    <!--level = #level#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull property="levelName" prepend=",">-->
+    <!--level_name = #levelName#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull property="underCount" prepend=",">-->
+    <!--under_count = #underCount#-->
+    <!--</isNotNull>-->
+    <!--<isNotNull property="teamCount" prepend=",">-->
+    <!--team_count = #teamCount#-->
+    <!--</isNotNull>-->
+    <!--WHERE id = #id# AND delete_mark = 0-->
+    <!--</update>-->
+
+    <update id="agree_seller_upgrade" parameterClass="java.util.Map">
+        update seller_upgrade_apply
+        set gmt_modified = now(),
+        status=1
+        <isNotNull prepend="," property="reason">
+            reason=#reason#
+        </isNotNull>
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <update id="reject_seller_upgrade" parameterClass="java.util.Map">
+        update seller_upgrade_apply
+        set gmt_modified = now(),
+        status=2
+        <isNotNull prepend="," property="reason">
+            reason=#reason#
+        </isNotNull>
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <select id="query_seller_upgrade" parameterClass="com.mockuai.distributioncenter.common.domain.qto.SellerUpgradeQTO"
+            resultMap="BaseResultMap">
+      SELECT * from seller_upgrade_apply
+      where delete_mark = 0
+    </select>
+</sqlMap>

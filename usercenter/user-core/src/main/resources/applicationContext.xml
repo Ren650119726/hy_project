@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       				http://www.springframework.org/schema/beans/spring-beans-2.0.xsd ">
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="searchSystemEnvironment" value="true"/>
+    </bean>
+   <import resource="service.xml" />
+   <import resource="manager.xml" />
+   <import resource="dao.xml" />
+   <import resource="persistence.xml" />
+    <import resource="biz-consumer.xml" />
+    <import resource="spring-dubbo-consumer.xml" />
+   <import resource="spring-dubbo-provider.xml" />
+    <import resource="message.xml" />
+    <!--<import resource="webservice.xml" />-->
+    <!--<import resource="mop-api-test.xml" />-->
+
+</beans>

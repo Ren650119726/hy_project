@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="page_picture">
+
+
+    <typeAlias alias="PagePictureDO" type="com.mockuai.mainweb.core.domain.PagePictureDO"/>
+
+    <resultMap id="PagePictureMap" class="PagePictureDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="blockId" column="block_id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="sortIndex" column="sort_index" jdbcType="BIGINT"/>
+        <result property="imageUrl" column="image_url" jdbcType="VARCHAR"/>
+        <result property="targetUrl" column="target_url" jdbcType="VARCHAR"/>
+        <result property="width" column="width" jdbcType="BIGINT"/>
+        <result property="height" column="height" jdbcType="BIGINT"/>
+
+    </resultMap>
+
+
+    <sql id="picture">
+        id,
+        block_id,
+        page_id,
+        image_url,
+        sort_index,
+        target_url,
+        width,
+        height,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <insert id="addPagePicture" parameterClass="PagePictureDO">
+        INSERT INTO page_picture
+        (
+       <include refid="picture"/>
+        ) VALUE (
+        #id#,
+        #blockId#,
+        #pageId#,
+        #imageUrl#,
+        #sortIndex#,
+        #targetUrl#,
+        #width#,
+        #height#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <update id="deletePagePicture" parameterClass="java.lang.Long" >
+        update  page_picture set delete_mark = 1
+        where delete_mark = 0
+        and page_id = #pageId#
+    </update>
+
+    <select id="queryPagePicture" resultMap="PagePictureMap"  parameterClass="java.lang.Long">
+        select
+        <include refid="picture"/>
+        FROM page_picture
+        where
+        block_id= #blockId#
+        order by  sort_index asc
+    </select>
+
+
+
+
+</sqlMap>

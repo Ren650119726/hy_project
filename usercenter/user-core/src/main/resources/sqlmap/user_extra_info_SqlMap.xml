@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_extra_info" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserExtraInfoDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="country" property="country" jdbcType="INTEGER" />
+    <result column="province" property="province" jdbcType="INTEGER" />
+    <result column="city" property="city" jdbcType="INTEGER" />
+    <result column="area" property="area" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="birthday" property="birthday" jdbcType="INTEGER" />
+    <result column="height" property="height" jdbcType="INTEGER" />
+    <result column="weight" property="weight" jdbcType="INTEGER" />
+    <result column="profession" property="profession" jdbcType="VARCHAR" />
+    <result column="alipay_id" property="alipayId" jdbcType="VARCHAR" />
+    <result column="taobao_id" property="taobaoId" jdbcType="VARCHAR" />
+    <result column="weibo_id" property="weiboId" jdbcType="VARCHAR" />
+    <result column="weibo_token" property="weiboToken" jdbcType="VARCHAR" />
+    <result column="sync_weibo_mark" property="syncWeiboMark" jdbcType="TINYINT" />
+    <result column="qq_id" property="qqId" jdbcType="VARCHAR" />
+    <result column="sync_qq_mark" property="syncQqMark" jdbcType="TINYINT" />
+    <result column="auth_type" property="authType" jdbcType="INTEGER" />
+    <result column="open_id" property="openId" jdbcType="VARCHAR" />
+    <result column="source_type" property="sourceType" jdbcType="TINYINT" />
+    <result column="utm_medium" property="utmMedium" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, country, province, city, area, address, sex, birthday, height, weight, 
+    profession, alipay_id, taobao_id, weibo_id, weibo_token, sync_weibo_mark, qq_id, 
+    sync_qq_mark, auth_type, open_id, source_type, utm_medium, deleted,gmt_created, gmt_modified
+  </sql>
+ 
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.UserExtraInfoDO" >
+    insert into user_extra_info
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="country" >
+        country
+      </isNotNull>
+      <isNotNull prepend="," property="province" >
+        province
+      </isNotNull>
+      <isNotNull prepend="," property="city" >
+        city
+      </isNotNull>
+      <isNotNull prepend="," property="area" >
+        area
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        address
+      </isNotNull>
+      <isNotNull prepend="," property="sex" >
+        sex
+      </isNotNull>
+      <isNotNull prepend="," property="birthday" >
+        birthday
+      </isNotNull>
+      <isNotNull prepend="," property="height" >
+        height
+      </isNotNull>
+      <isNotNull prepend="," property="weight" >
+        weight
+      </isNotNull>
+      <isNotNull prepend="," property="profession" >
+        profession
+      </isNotNull>
+      <isNotNull prepend="," property="alipayId" >
+        alipay_id
+      </isNotNull>
+      <isNotNull prepend="," property="taobaoId" >
+        taobao_id
+      </isNotNull>
+      <isNotNull prepend="," property="weiboId" >
+        weibo_id
+      </isNotNull>
+      <isNotNull prepend="," property="weiboToken" >
+        weibo_token
+      </isNotNull>
+      <isNotNull prepend="," property="syncWeiboMark" >
+        sync_weibo_mark
+      </isNotNull>
+      <isNotNull prepend="," property="qqId" >
+        qq_id
+      </isNotNull>
+      <isNotNull prepend="," property="syncQqMark" >
+        sync_qq_mark
+      </isNotNull>
+      <isNotNull prepend="," property="authType" >
+        auth_type
+      </isNotNull>
+      <isNotNull prepend="," property="openId" >
+        open_id
+      </isNotNull>
+      <isNotNull prepend="," property="sourceType" >
+        source_type
+      </isNotNull>
+      <isNotNull prepend="," property="utmMedium" >
+        utm_medium
+      </isNotNull>
+      ,deleted,gmt_created, gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="country" >
+        #country:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="province" >
+        #province:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="city" >
+        #city:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="area" >
+        #area:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sex" >
+        #sex:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="birthday" >
+        #birthday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="height" >
+        #height:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="weight" >
+        #weight:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="profession" >
+        #profession:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="alipayId" >
+        #alipayId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="taobaoId" >
+        #taobaoId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="weiboId" >
+        #weiboId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="weiboToken" >
+        #weiboToken:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="syncWeiboMark" >
+        #syncWeiboMark:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="qqId" >
+        #qqId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="syncQqMark" >
+        #syncQqMark:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="authType" >
+        #authType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="openId" >
+        #openId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sourceType" >
+        #sourceType:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="utmMedium" >
+        #utmMedium:VARCHAR#
+      </isNotNull>
+      ,0,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+  <select id="selectById" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserExtraInfoDO">
+  	select
+  	<include refid="user_extra_info.Base_Column_List" />
+  	from user_extra_info where id = #id:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.UserExtraInfoDO">
+  	select 
+  	<include refid="user_extra_info.Base_Column_List" />
+  	from user_extra_info where user_id = #userId:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="getByOpenIdAndType" resultClass="com.mockuai.usercenter.core.domain.UserExtraInfoDO" parameterClass="com.mockuai.usercenter.common.dto.UserExtraInfoDTO">
+  	select * from user_extra_info where open_id = #openId:VARCHAR# and auth_type = #authType:Integer# and deleted = 0
+  </select>
+  
+  <update id="update" parameterClass="com.mockuai.usercenter.core.domain.UserExtraInfoDO">
+	update user_extra_info
+    set gmt_modified = now()
+      <isNotNull prepend="," property="country" >
+        country = #country:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="province" >
+        province = #province:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="city" >
+        city = #city:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="area" >
+        area = #area:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="address" >
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sex" >
+        sex = #sex:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="birthday" >
+        birthday = #birthday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="height" >
+        height = #height:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="weight" >
+        weight = #weight:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="profession" >
+        profession = #profession:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="alipayId" >
+        alipay_id = #alipayId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="taobaoId" >
+        taobao_id = #taobaoId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="weiboId" >
+        weibo_id = #weiboId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="weiboToken" >
+        weibo_token = #weiboToken:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="syncWeiboMark" >
+        sync_weibo_mark = #syncWeiboMark:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="qqId" >
+        qq_id = #qqId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="syncQqMark" >
+        sync_qq_mark = #syncQqMark:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="authType" >
+        auth_type = #authType:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="openId" >
+        open_id = #openId:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="sourceType" >
+        source_type = #sourceType:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="utmMedium" >
+        utm_medium = #utmMedium:VARCHAR#
+      </isNotNull>
+    where user_id = #userId:BIGINT# and deleted = 0
+  </update>
+  
+  <select id="queryUserExtraInfo" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.common.qto.UserExtraInfoQTO">
+    select
+    <include refid="user_extra_info.Base_Column_List"/>
+    from user_extra_info
+    where
+    deleted = 0 and biz_code = #bizCode#
+    <isNotNull prepend="and" property="startTime">
+      gmt_created >= #startTime:TIMESTAMP#
+    </isNotNull>
+    <isNotNull prepend="and" property="endTime">
+      gmt_created <![CDATA[<=]]> #endTime:TIMESTAMP#
+    </isNotNull>
+  </select>
+  
+  <update id="delete" parameterClass="java.lang.Long">
+  	update user_extra_info set deleted = 1,gmt_modified = now() where user_id = #userId:BIGINT#
+  </update>
+  
+  <update id="restore" parameterClass="java.lang.Long">
+  	update user_extra_info set deleted = 0,gmt_modified = now() where user_id = #userId:BIGINT#
+  </update>
+  
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

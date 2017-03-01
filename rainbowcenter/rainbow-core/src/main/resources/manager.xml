@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- <bean id="appInfoManager" class="com.mockuai.appcenter.core.manager.impl.AppInfoManagerImpl" />
+	<bean id="appPropertyManager" class="com.mockuai.appcenter.core.manager.impl.AppPropertyManagerImpl" />
+	<bean id="bizInfoManager" class="com.mockuai.appcenter.core.manager.impl.BizInfoManagerImpl" />
+	<bean id="bizPropertyManager" class="com.mockuai.appcenter.core.manager.impl.BizPropertyManagerImpl" /> -->
+	<!-- <bean id="supplierManagerImpl" class="com.mockuai.rainbowcenter.core.manager.impl.SupplierManagerImpl"/>
+	 
+	 <bean id="appManager" class="com.mockuai.rainbowcenter.core.manager.impl.AppManagerImpl" />-->
+</beans>

@@ -1,0 +1,4 @@
+<div class="container">
+    <span>操作失败，原因:$!{errorMsg}</span>
+    <input type="button" value="返回" onClick="javascript :history.go(-1);">
+</div>

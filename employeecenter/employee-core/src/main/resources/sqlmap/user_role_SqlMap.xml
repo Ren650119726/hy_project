@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="userRole">
+    <resultMap id="BaseResultMap" class="com.hanshu.employee.core.domain.UserRoleDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="roleName" column="role_name" jdbcType="VARCHAR"/>
+        <result property="roleDesc" column="role_desc" jdbcType="VARCHAR"/>
+        <result property="role" column="role" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id,
+        role_name,
+        role_desc,
+        role,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addUserRole" parameterClass="com.hanshu.employee.core.domain.UserRoleDO">
+        insert into user_role(
+        role_name,
+        role_desc,
+        role,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+        )
+        values(
+        #roleName#,
+        #roleDesc#,
+        #role#,
+        now(),
+        now(),
+        0
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="getUserRoleById" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_role
+        where id = #id# and delete_mark = 0
+    </select>
+
+    <update id="updateUserRole" parameterClass="com.hanshu.employee.core.domain.UserRoleDO">
+        update user_role
+        set gmt_modified = now()
+        <isNotNull prepend="," property="roleName">
+            role_name = #roleName#
+        </isNotNull>
+        <isNotNull prepend="," property="roleDesc">
+            role_desc = #roleDesc#
+        </isNotNull>
+        <isNotNull prepend="," property="role">
+            role = #role#
+        </isNotNull>
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="deleteUserRoleById" parameterClass="java.lang.Long">
+        update user_role
+        set gmt_modified = now(),
+        delete_mark = 1
+        where id = #id# and delete_mark = 0
+    </update>
+
+    <select id="queryUserRole" parameterClass="com.hanshu.employee.common.qto.UserRoleQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_role
+        where delete_mark = 0
+        order by id asc
+        <isNotNull property="offset">
+            limit #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <select id="getTotalCount" parameterClass="com.hanshu.employee.common.qto.UserRoleQTO"
+            resultClass="java.lang.Long">
+        select count(*)
+        from user_role
+        where delete_mark = 0
+    </select>
+
+    <select id="getUserRoleByRoleName" parameterClass="java.lang.String" resultMap="BaseResultMap">
+        select * from user_role where delete_mark = 0 and role_name = #roleName#
+    </select>
+
+
+</sqlMap>

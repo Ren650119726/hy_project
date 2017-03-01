@@ -1,0 +1,10 @@
+com.mockuai.shopcenter.mop.api.action.ListStore
+com.mockuai.shopcenter.mop.api.action.GetStoreByCoordinates
+com.mockuai.shopcenter.mop.api.action.GetStoreDeliveryTypeSupppotConfig
+com.mockuai.shopcenter.mop.api.action.GetStoreRecoveryConfig
+com.mockuai.shopcenter.mop.api.action.GetStoreRepairConfig
+com.mockuai.shopcenter.mop.api.action.AddShopCollection
+com.mockuai.shopcenter.mop.api.action.DeleteShopCollection
+com.mockuai.shopcenter.mop.api.action.QueryUserCollectionShop
+com.mockuai.shopcenter.mop.api.action.GetShopDetails
+com.mockuai.shopcenter.mop.api.action.ListShopItemGroup

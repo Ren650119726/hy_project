@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="headsingle_sub">
+    <resultMap id="result" class="com.mockuai.headsinglecenter.core.domain.HeadSingleSubDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="subType" column="sub_type" jdbcType="TINYINT"/>
+        <result property="limitFullAmt" column="limit_full_amt" jdbcType="BIGINT"/>
+        <result property="privilegeAmt" column="privilege_amt" jdbcType="BIGINT"/>
+        <result property="discomStatus" column="discom_status" jdbcType="TINYINT"/>
+        <result property="activityTerminalType" column="activity_terminal_type" jdbcType="VARCHAR"/>
+        <result property="openStatus" column="open_status" jdbcType="TINYINT"/>                
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="res1" column="res1" jdbcType="VARCHAR"/>
+        <result property="res2" column="res2" jdbcType="VARCHAR"/>
+        <result property="res3" column="res3" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        sub_type,
+        limit_full_amt,                
+        privilege_amt,                
+        discom_status,                
+        activity_terminal_type,                
+        open_status,                
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        res1,
+        res2,
+        res3
+    </sql>
+
+    <insert id="addHeadSingleSub" parameterClass="com.mockuai.headsinglecenter.core.domain.HeadSingleSubDO">
+      	insert into headsingle_sub
+      	<dynamic prepend="(" >
+        <isNotNull prepend="," property="subType" >
+       		sub_type
+      	</isNotNull>
+      	<isNotNull prepend="," property="limitFullAmt" >
+       		limit_full_amt
+      	</isNotNull>
+      	<isNotNull prepend="," property="privilegeAmt" >
+       		privilege_amt
+      	</isNotNull>
+      	<isNotNull prepend="," property="discomStatus" >
+       		discom_status
+      	</isNotNull>
+      	<isNotNull prepend="," property="activityTerminalType" >
+       		activity_terminal_type
+      	</isNotNull>
+      	<isNotNull prepend="," property="openStatus" >
+       		open_status
+      	</isNotNull>      	     	
+      	<isNotNull prepend="," property="res1" >
+       		res1
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2" >
+       		res2
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3" >
+       		res3
+      	</isNotNull>
+        ,delete_mark, gmt_created, gmt_modified        
+        )
+        </dynamic>
+        values
+        <dynamic prepend="(" >
+        <isNotNull prepend="," property="subType">
+        #subType:TINYINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="limitFullAmt">
+        #limitFullAmt:BIGINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="privilegeAmt">
+        #privilegeAmt:BIGINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="discomStatus">
+        #discomStatus:TINYINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="activityTerminalType">
+        #activityTerminalType:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="openStatus">
+        #openStatus:TINYINT#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res1">
+        #res1:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res2">
+        #res2:VARCHAR#
+      	</isNotNull>
+      	<isNotNull prepend="," property="res3">
+        #res3:VARCHAR#
+      	</isNotNull>       
+        ,0, now(), now()
+        )
+        </dynamic>        
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    
+    <select id="queryHeadSingleSubById" resultMap="result" parameterClass="java.util.Map" >
+     select 
+     <include refid="headsingle_sub.column_set" />
+     from headsingle_sub where Id = #id:BIGINT# 
+    </select>
+   
+   <select id="queryHeadSingleSub" resultMap="result" parameterClass="java.util.Map" >
+    select 
+    <include refid="headsingle_sub.column_set" />
+    from headsingle_sub
+    where delete_mark != 1 
+    <isNotNull prepend="and" property="id">
+  		Id = #id:BIGINT#
+  	</isNotNull>
+   </select>
+  
+  <update id="modifyHeadSingleSub" parameterClass="com.mockuai.headsinglecenter.core.domain.HeadSingleSubDO" >
+    update headsingle_sub set gmt_modified = now()
+    <isNotNull prepend="," property="subType" >
+       sub_type = #subType:TINYINT#
+    </isNotNull>
+    <isNotNull prepend="," property="limitFullAmt" >
+       limit_full_amt = #limitFullAmt:BIGINT#
+    </isNotNull>
+    <isNotNull prepend="," property="privilegeAmt" >
+       privilege_amt = #privilegeAmt:BIGINT#
+    </isNotNull> 
+    <isNotNull prepend="," property="discomStatus" >
+       discom_status = #discomStatus:TINYINT#
+    </isNotNull> 
+    <isNotNull prepend="," property="activityTerminalType" >
+       activity_terminal_type = #activityTerminalType:VARCHAR#
+    </isNotNull> 
+    <isNotNull prepend="," property="openStatus" >
+       open_status = #openStatus:TINYINT#
+    </isNotNull>     
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+  <update id="updateHeadSingleDeleteMark">
+    update headsingle_sub set gmt_modified = now(), delete_mark = 1
+  </update>
+</sqlMap>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="central">
+    <typeAlias alias="centralCopywriterDO" type="com.mockuai.itemcenter.core.domain.CentralCopywriterDO"/>
+    <typeAlias alias="centralCopywriterQTO" type="com.mockuai.itemcenter.common.domain.qto.CentralCopywriterQTO"/>
+
+    <resultMap class="centralCopywriterDO" id="centralCopywriterDOResult">
+        <result column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="display" property="display"/>
+        <result column="recommend" property="recommend"/>
+        <result column="sort" property="sort"/>
+        <result column="virtual_count" property="virtualCount"/>
+        <result column="show_location" property="showLocation"/>
+        <result column="choose_link" property="chooseLink"/>
+        <result column="link_url" property="linkUrl"/>
+        <result column="item_id" property="itemId"/>
+        <result column="item_name" property="itemName"/>
+        <result column="minutes" property="minutes"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <sql id="centralCopywriter_base_column_list">
+        title,recommend,display,virtual_count,gmt_modified
+    </sql>
+
+    <sql id="cenCopywriterQueryWhere">
+        <!-- 如果没传入delete_mark条件,默认为0 -->
+        where
+        <isNotNull property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNull property="deleteMark">
+            delete_mark = 0
+        </isNull>
+        <isNotNull prepend="AND" property="title">
+            title like concat('%', #title#,'%')
+        </isNotNull>
+
+        <isNotNull prepend="AND" property="itemName">
+            item_name like concat('%', #itemName#,'%')
+        </isNotNull>
+
+        <isNotNull prepend="AND" property="createTimeBegin">
+            gmt_created > #createTimeBegin#
+        </isNotNull>
+        <isNotNull prepend="AND" property="createTimeEnd">
+            #createTimeEnd# > gmt_created
+        </isNotNull>
+    </sql>
+
+    <insert id="addCenCopywriter" parameterClass="centralCopywriterDO">
+        insert into central_copywriter(
+        title,
+        content,
+        display,
+        recommend,
+        sort,
+        virtual_count,
+        show_location,
+        choose_link,
+        link_url,
+        item_id,
+        item_name,
+        gmt_created,
+        gmt_modified,
+        delete_mark) values
+        (#title#,
+        #content#,
+        #display#,
+        #recommend#,
+        #sort#,
+        #virtualCount#,
+        #showLocation#,
+        #chooseLink#,
+        #linkUrl#,
+        #itemId#,
+        #itemName#,
+        now(),
+        now(),
+        0)
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <update id="updateCenCopywriter" parameterClass="centralCopywriterDO">
+        update central_copywriter
+        set gmt_modified =now(),
+            title = #title#,
+            content = #content#,
+            display = #display#,
+            recommend = #recommend#,
+            sort = #sort#,
+            virtual_count = #virtualCount#,
+            show_location = #showLocation#,
+            choose_link = #chooseLink#,
+            link_url = #linkUrl#,
+            item_id = #itemId#,
+            item_name = #itemName#
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="removeCenCopywriter" parameterClass="centralCopywriterDO">
+        update central_copywriter
+        set gmt_modified = now(),delete_mark = 1
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="updateVirtualCountById" parameterClass="centralCopywriterDO">
+        update central_copywriter
+        set virtual_count = virtual_count + #virtualCount:BIGINT#
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <select id="countCenCopywriter" resultClass="Long" parameterClass="centralCopywriterQTO">
+        select count(1) from central_copywriter
+        <include refid="cenCopywriterQueryWhere"/>
+    </select>
+
+    <select id="queryCenCopywriterList" resultMap="centralCopywriterDOResult" parameterClass="centralCopywriterQTO">
+        select
+        <include refid="centralCopywriter_base_column_list"/>
+        from central_copywriter
+        <include refid="cenCopywriterQueryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="getCopyListByItemId" resultMap="centralCopywriterDOResult" parameterClass="centralCopywriterQTO">
+     SELECT a.id,a.title,a.content,a.item_id,a.virtual_count, ROUND((UNIX_TIMESTAMP(NOW())-UNIX_TIMESTAMP(a.gmt_created))/60) AS minutes
+     FROM central_copywriter a WHERE
+        a.show_location LIKE concat('%', #showLocation#,'%')
+        and a.delete_mark = 0
+        and a.display = 1
+        <isNotNull prepend="AND" property="itemId">
+            a.item_id = #itemId#
+        </isNotNull>
+    </select>
+
+</sqlMap>

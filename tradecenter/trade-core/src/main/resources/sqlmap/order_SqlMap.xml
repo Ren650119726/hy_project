@@ -1,0 +1,2072 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="user_order">
+
+	<typeAlias alias="orderQTO"	type="com.mockuai.tradecenter.common.domain.OrderQTO" />
+		
+	<resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="TINYINT" />
+		<result property="userId" column="user_id" jdbcType="BIGINT" />
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="orderStatus" column="order_status" jdbcType="TINYINT" />
+		<result property="totalPrice" column="total_price" jdbcType="BIGINT"  />
+		<result property="deliveryFee" column="delivery_fee" jdbcType="BIGINT"  />
+		<result property="totalAmount" column="total_amount" jdbcType="BIGINT"  />
+		<result property="deliveryId" column="delivery_id" jdbcType="INTEGER"  />
+		<result property="paymentId" column="payment_id" jdbcType="TINYINT"  />
+		<result property="discountAmount" column="discount_amount" jdbcType="BIGINT"  />
+		<result property="discountMark" column="discount_mark" jdbcType="TINYINT"  />
+		<result property="userMemo" column="user_memo" jdbcType="VARCHAR"  />
+		<result property="sellerMemo" column="seller_memo" jdbcType="VARCHAR"  />
+		<result property="adminMemo" column="admin_memo" jdbcType="VARCHAR"  />
+		<result property="invoiceMark" column="invoice_mark" jdbcType="TINYINT"  />
+		<result property="attachInfo" column="attach_info" jdbcType="VARCHAR"  />
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"  />
+		<result property="orderTime" column="order_time" jdbcType="DATETIME"  />
+		<result property="payTime" column="pay_time" jdbcType="DATETIME"  />
+		<result property="consignTime" column="consign_time" jdbcType="DATETIME"  />
+		<result property="receiptTime" column="receipt_time" jdbcType="DATETIME"  />
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"  />
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"  />
+		<result property="asteriskMark" column="asterisk_mark" jdbcType="TINYINT"  />
+		<result property="floatingPrice" column="floating_price" jdbcType="BIGINT"  />
+		<result property="refundMark" column="refund_mark" jdbcType="INTEGER"  />
+		<result property="point" column="point" />
+		<result property="appType" column="app_type" />
+		<result property="timeoutCancelSeconds" column="timeout_cancel_seconds" />
+		<result property="taxFee" column="tax_fee" />
+		<result property="higoExtraInfo" column="higo_extra_info" />
+		<!-- <result property="activityId" column="activity_id" /> -->
+		<result property="mallCommission" column="mall_commission" />  <!-- 商城佣金 -->
+		<result property="originalOrder" column="original_order" />
+		<result property="parentMark" column="parent_mark" />
+		<result property="cancelTime" column="cancel_time" jdbcType="DATETIME"  />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"  />
+		<result property="supplierId" column="supplier_id" jdbcType="BIGINT"  />
+		<result property="higoMark" column="higo_mark" jdbcType="TINYINT"  />
+		
+	</resultMap>
+	
+	<resultMap id="result_ext" class="com.mockuai.tradecenter.core.domain.OrderDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="TINYINT" />
+		<result property="userId" column="user_id" jdbcType="BIGINT" />
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="orderStatus" column="order_status" jdbcType="TINYINT" />
+		<result property="totalPrice" column="total_price" jdbcType="BIGINT"  />
+		<result property="deliveryFee" column="delivery_fee" jdbcType="BIGINT"  />
+		<result property="totalAmount" column="total_amount" jdbcType="BIGINT"  />
+		<result property="deliveryId" column="delivery_id" jdbcType="INTEGER"  />
+		<result property="paymentId" column="payment_id" jdbcType="TINYINT"  />
+		<result property="discountAmount" column="discount_amount" jdbcType="BIGINT"  />
+		<result property="discountMark" column="discount_mark" jdbcType="TINYINT"  />
+		<result property="userMemo" column="user_memo" jdbcType="VARCHAR"  />
+		<result property="sellerMemo" column="seller_memo" jdbcType="VARCHAR"  />
+		<result property="adminMemo" column="admin_memo" jdbcType="VARCHAR"  />
+		<result property="invoiceMark" column="invoice_mark" jdbcType="TINYINT"  />
+		<result property="attachInfo" column="attach_info" jdbcType="VARCHAR"  />
+		<result property="deleteMark" column="delete_mark" jdbcType="TINYINT"  />
+		<result property="orderTime" column="order_time" jdbcType="DATETIME"  />
+		<result property="payTime" column="pay_time" jdbcType="DATETIME"  />
+		<result property="consignTime" column="consign_time" jdbcType="DATETIME"  />
+		<result property="receiptTime" column="receipt_time" jdbcType="DATETIME"  />
+		<result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"  />
+		<result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"  />
+		<!-- consignee -->
+		<result property="consignee" column="consignee" jdbcType="VARCHAR"  />
+		<!-- mobile -->
+		<result property="consigneeMobile" column="mobile" jdbcType="VARCHAR"  />
+		<result property="asteriskMark" column="asterisk_mark" jdbcType="TINYINT"  />
+		
+		<result property="floatingPrice" column="floating_price" jdbcType="BIGINT"  />
+		<result property="cancelReason" column="cancel_reason" jdbcType="VARCHAR"  />
+		<result property="refundMark" column="refund_mark"  />
+		<result property="point" column="point" />
+		<result property="taxFee" column="tax_fee" />
+		<!--<result property="higoExtraInfo" column="higo_extra_info" />-->
+		<result property="mallCommission" column="mall_commission" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"  />
+		<result property="supplierId" column="supplier_id" jdbcType="BIGINT"  />
+		<result property="higoMark" column="higo_mark" jdbcType="TINYINT"  />
+		<result property="originalOrder" column="original_order" />
+        <result property="appType" column="app_type" jdbcType="TINYINT" />
+
+    </resultMap>
+	
+	
+	<resultMap id="result_ext_upgrade" class="com.mockuai.tradecenter.core.domain.OrderDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+		<result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+		<result property="type" column="type" jdbcType="TINYINT" />
+		<result property="userId" column="user_id" jdbcType="BIGINT" />
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="orderStatus" column="order_status" jdbcType="TINYINT" />
+		<result property="totalPrice" column="total_price" jdbcType="BIGINT"  />
+		<result property="deliveryFee" column="delivery_fee" jdbcType="BIGINT"  />
+		<result property="totalAmount" column="total_amount" jdbcType="BIGINT"  />
+		<result property="deliveryId" column="delivery_id" jdbcType="INTEGER"  />
+		<result property="paymentId" column="payment_id" jdbcType="TINYINT"  />
+		<result property="discountAmount" column="discount_amount" jdbcType="BIGINT"  />
+		<result property="orderTime" column="order_time" jdbcType="DATETIME"  />
+		<result property="payTime" column="pay_time" jdbcType="DATETIME"  />
+		<result property="consignTime" column="consign_time" jdbcType="DATETIME"  />
+		<result property="receiptTime" column="receipt_time" jdbcType="DATETIME"  />
+		<result property="floatingPrice" column="floating_price" jdbcType="BIGINT"  />
+		<result property="refundMark" column="refund_mark"  />
+		<result property="point" column="point" />
+		<result property="taxFee" column="tax_fee" />
+		<result property="higoMark" column="higo_mark" jdbcType="TINYINT"  />
+		<result property="appType" column="app_type" />
+		<result property="storeId" column="store_id" jdbcType="BIGINT"  />
+		<result property="supplierId" column="supplier_id" jdbcType="BIGINT"  />
+	</resultMap>
+	
+	<resultMap id="result_ext_inner" class="com.mockuai.tradecenter.core.domain.OrderDO" >
+		<result property="id" column="id" jdbcType="BIGINT"/>
+		<result property="userId" column="user_id" jdbcType="BIGINT" />
+		<result property="sellerId" column="seller_id" jdbcType="BIGINT" />
+		<result property="orderTime" column="order_time" jdbcType="DATETIME"  />
+		<result property="originalOrder" column="original_order" />
+	</resultMap>
+	
+	
+	
+    <!--
+     user_order.id,
+			user_order.biz_code,
+			user_order.order_sn,
+			user_order.user_id,
+			user_order.app_type
+     -->
+    <resultMap id="result_pre_order" class="com.mockuai.tradecenter.core.domain.OrderDO" >
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="orderSn" column="order_sn" jdbcType="VARCHAR"/>
+        <result property="appType" column="app_type" />
+        <result property="userId" column="user_id" />
+    </resultMap>
+
+	<resultMap id="TOPItem_result" class="com.mockuai.tradecenter.core.domain.TOPItemDO" >
+		<result property="id" column="item_id" jdbcType="BIGINT"/>
+		<result property="sales_volume" column="sum(trade_db.order_item.number)" />
+	</resultMap>
+	
+	<resultMap id="dailyData_result" class="com.mockuai.tradecenter.core.domain.DailyDataDO">
+		<result property="date" column="date"/>
+		<result property="value" column="result"/>
+	</resultMap>
+	
+	
+	<resultMap id="salesRatio_result" class="com.mockuai.tradecenter.core.domain.SalesRatioDO" >
+		<result property="categoryId" column="category_id" jdbcType="BIGINT"/>
+		<result property="totalAmount" column="total" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	<resultMap id="brand_salesRatio_result" class="com.mockuai.tradecenter.core.domain.SalesRatioDO" >
+		<result property="itemBrandId" column="item_brand_id" jdbcType="BIGINT"/>
+		<result property="totalAmount" column="total" jdbcType="BIGINT"/>
+	</resultMap>
+	
+
+	<sql id="column_set">
+		user_order.id,
+		user_order.biz_code,
+		order_sn,
+		type,
+		user_order.user_id,
+		user_order.seller_id,
+		order_status,
+		total_amount,
+		total_price,
+		delivery_fee,
+		delivery_id,
+		payment_id,
+		user_order.discount_amount,
+		discount_mark,
+		invoice_mark,
+		user_memo,
+		seller_memo,
+		admin_memo,
+		attach_info,
+		order_time,
+		pay_time,
+		consign_time,
+		receipt_time,
+		user_order.delete_mark,
+		user_order.gmt_created,
+		user_order.gmt_modified,
+		asterisk_mark,
+		floating_price,
+		refund_mark,
+		user_order.point,
+		app_type,
+		timeout_cancel_seconds,
+		tax_fee,
+		user_order.higo_extra_info,
+		mall_commission,
+		original_order,
+		parent_mark,
+		cancel_time,		
+		user_order.store_id,
+		user_order.supplier_id,
+		user_order.higo_mark
+		<!-- activity_id -->
+		<!--  point_discount_amount  -->
+	</sql>
+	
+	<sql id="column_set_ext">
+		user_order.id,
+		user_order.biz_code,
+		order_sn,
+		type,
+		app_type,
+		user_order.user_id,
+		user_order.seller_id,
+		order_status,
+		total_amount,
+		total_price,
+		delivery_fee,
+		delivery_id,
+		payment_id,
+		user_order.discount_amount,
+		discount_mark,
+		invoice_mark,
+		user_memo,
+		seller_memo,
+		admin_memo,
+		attach_info,
+		order_time,
+		pay_time,
+		consign_time,
+		receipt_time,
+		user_order.delete_mark,
+		user_order.gmt_created,
+		user_order.gmt_modified,
+		consignee,
+		mobile,
+		asterisk_mark,
+		floating_price,
+		cancel_reason,
+		refund_mark,
+		user_order.point,
+		user_order.mall_commission,
+		user_order.tax_fee,
+		user_order.store_id,
+		user_order.supplier_id,
+		user_order.higo_mark,
+		user_order.original_order
+	</sql>
+	
+	<sql id="column_set_ext_upgrade">
+		user_order.id,
+		user_order.biz_code,
+		user_order.order_sn,
+		user_order.type,
+		user_order.user_id,
+		user_order.seller_id,
+		user_order.order_status,
+		user_order.total_amount,
+		user_order.total_price,
+		user_order.delivery_fee,
+		user_order.delivery_id,
+		user_order.payment_id,
+		user_order.discount_amount,
+		user_order.order_time,
+		user_order.pay_time,
+		user_order.consign_time,
+		user_order.receipt_time,
+		user_order.floating_price,
+		user_order.refund_mark,
+		user_order.point,
+		user_order.tax_fee,
+		user_order.higo_mark,
+		user_order.app_type,
+		user_order.supplier_id,
+		user_order.store_id
+	</sql>
+	
+	<sql id="column_set_ext_inner">
+		user_order.id,
+		user_order.user_id,
+		user_order.seller_id,
+		user_order.order_time,
+		user_order.original_order
+	</sql>
+	
+	<!-- **************************************按天算 ************************************************** -->
+	
+	
+	
+	<!-- **************************************订单总金额************************************************** -->
+
+	<!-- huangsiqian 0831 -->
+
+	<!--<select id="getUserTotalCost" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO"  resultClass="Long">-->
+		<!--SELECT sum(payment_amount) FROM order_item-->
+		<!--WHERE refund_status != 4 AND order_id IN-->
+		<!--(select id-->
+		<!--from user_order-->
+		<!--where 1=1-->
+		<!--and user_id = #userId#-->
+		<!--and delete_mark = 0-->
+		<!--and parent_mark = 0-->
+		<!--and <![CDATA[user_order.order_status>=30 ]]> and <![CDATA[user_order.order_status>!=80 ]]>)-->
+	<!--</select>-->
+
+	<!-- 把订单 总金额 和 总退款 分别统计出来 -->
+	<select id="getUserTotalPaid" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO"  resultClass="Long">
+		select ifnull(sum(total_amount),0)
+		from user_order
+		where 1=1
+		and user_id = #userId#
+		and delete_mark = 0
+		and parent_mark = 0
+		and <![CDATA[user_order.order_status>=30 ]]>
+	</select>
+
+
+	<!-- 总退款 -->
+	<select id="getUserTotalRefund" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO"  resultClass="Long">
+		select ifnull(sum(refund_amount),0)
+		from order_item
+		where 1=1
+		and user_id = #userId#
+		and delete_mark = 0
+		and <![CDATA[order_item.refund_status=4 ]]>
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- *****************************************总累计****************************************************** -->
+	
+	<select id="getActiveOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO" resultMap="result">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		where user_id = #userId# and id = #id# and delete_mark = 0
+	</select>
+	
+	<!-- 根据order_sn查询order，用于批量发货 -->
+	<select id="getOrderByOrder_sn" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO" resultMap="result">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		where order_sn = #orderSn#
+	</select>
+	
+	
+	
+	<!--  查询订单及其详情   -->
+	<select id="getOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO" resultMap="result">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		where 1=1 and  id = #id# 
+		
+		<isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+		
+	</select>
+
+	<insert id="addOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		insert into user_order(
+		biz_code,
+		order_sn,
+		type,
+		user_id,
+		seller_id,
+		order_status,
+		total_amount,
+		total_price,
+		delivery_fee,
+		delivery_id,
+		payment_id,
+		discount_amount,
+		discount_mark,
+		invoice_mark,
+		user_memo,
+		seller_memo,
+		admin_memo,
+		attach_info,
+		order_time,
+		delete_mark,
+		gmt_created,
+		gmt_modified,
+		asterisk_mark,
+		original_order,
+		point,
+		app_type,
+		timeout_cancel_seconds,
+		tax_fee,
+		higo_mark,
+		higo_extra_info,
+		store_id,
+		supplier_id,
+		parent_mark
+		)
+		values(
+		#bizCode#,
+		#orderSn#,
+		#type#,
+		#userId#,
+		#sellerId#,
+		#orderStatus#,
+		#totalAmount#,
+		#totalPrice#,
+		#deliveryFee#,
+		#deliveryId#,
+		#paymentId#,
+		#discountAmount#,
+		#discountMark#,
+		#invoiceMark#,
+		#userMemo#,
+		#sellerMemo#,
+		#adminMemo#,
+		#attachInfo#,
+		now(),
+		0,
+		now(),
+		now(),
+		#asteriskMark#,
+		#originalOrder#,
+		#point#,
+		#appType#,
+		#timeoutCancelSeconds#,
+		#taxFee#,
+		#higoMark#,
+		#higoExtraInfo#,
+		#storeId#,
+		#supplierId#,
+		#parentMark#
+		)
+		<selectKey resultClass="long" keyProperty="id">
+			select
+			LAST_INSERT_ID() as value
+		</selectKey>
+	</insert>
+
+<!-- 	<sql id="dynamic_set_clause"> -->
+<!-- 		<isNotNull property="orderStatus" prepend=","> -->
+<!-- 			order_status=#orderStatus# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="totalAmount" prepend=","> -->
+<!-- 			total_amount=#totalAmount# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="deliveryFee" prepend=","> -->
+<!-- 			delivery_fee=#deliveryFee# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="deliveryId" prepend=","> -->
+<!-- 			delivery_id=#deliveryId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="paymentId" prepend=","> -->
+<!-- 			payment_id=#paymentId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="discountAmount" prepend=","> -->
+<!-- 			discount_amount=#discountAmount# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="discountMark" prepend=","> -->
+<!-- 			discount_mark=#discountMark# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="invoiceMark" prepend=","> -->
+<!-- 			invoice_mark=#invoiceMark# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="userMemo" prepend=","> -->
+<!-- 			user_memo=#userMemo# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="sellerMemo" prepend=","> -->
+<!-- 			seller_memo=#sellerMemo# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="adminMemo" prepend=","> -->
+<!-- 			admin_memo=#adminMemo# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="deleteMark" prepend=","> -->
+<!-- 			delete_mark=#deleteMark# -->
+<!-- 		</isNotNull> -->
+<!-- 	</sql> -->
+
+	<sql id="dynamic_where_clause">
+		<isNotNull property="id" prepend="and">
+			id=#id#
+		</isNotNull>
+		<isNotEmpty property="orderSn" prepend="and">
+			order_sn=#orderSn#
+		</isNotEmpty>
+		<isNotNull property="type" prepend="and">
+			type=#type#
+		</isNotNull>
+		<isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend="and">
+			seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderStatus" prepend="and">
+			order_status=#orderStatus#
+		</isNotNull>
+		<isNotNull property="deliveryId" prepend="and">
+			delivery_id=#deliveryId#
+		</isNotNull>
+		<isNotNull property="paymentId" prepend="and">
+			payment_id=#paymentId#
+		</isNotNull>
+		<isNotNull property="invoiceMark" prepend="and">
+			invoice_mark=#invoiceMark#
+		</isNotNull>
+		<isNotNull property="discountMark" prepend="and">
+			coupon_mark=#discountMark#
+		</isNotNull>
+		<isNotNull property="orderTimeStart" prepend="and">
+			<![CDATA[order_time >= #orderTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeEnd" prepend="and">
+			<![CDATA[ order_time <= #orderTimeEnd# ]]>
+		</isNotNull>
+<!-- 		<isNotNull property="orderTimeEnd" prepend="consigneeMobile"> -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="orderTimeEnd" prepend="and"> -->
+<!-- 		</isNotNull> -->
+		<isNotEmpty property="bizCode" prepend="and">
+			biz_code=#bizCode#
+		</isNotEmpty>
+		<isNotNull property="parentMark" prepend="and">
+			parent_mark=#parentMark#
+		</isNotNull>
+	</sql>
+	
+	<sql id="dynamic_where_clause_ext">
+		<isNotNull property="id" prepend="and">
+			user_order.id=#id#
+		</isNotNull>
+		<isNotEmpty property="orderSn" prepend="and">
+			user_order.order_sn like CONCAT('%', #orderSn#, '%')  
+		</isNotEmpty>
+		<isNotNull property="type" prepend="and">
+			user_order.type=#type#
+		</isNotNull>
+		<isNotNull property="userId" prepend="and">
+			user_order.user_id=#userId#
+		</isNotNull>
+<!-- 		<isNotNull property="sellerId" prepend="and"> -->
+<!-- 			user_order.seller_id=#sellerId# -->
+<!-- 		</isNotNull> -->
+<!-- 		<isNotNull property="orderStatus" prepend="and"> -->
+<!-- 			user_order.order_status=#orderStatus# -->
+<!-- 		</isNotNull> -->
+		<isNotEmpty property="orderStatusStr" prepend="and">
+			user_order.order_status in ( $orderStatusStr$ )
+		</isNotEmpty>
+		<isNotNull property="deliveryId" prepend="and">
+			user_order.delivery_id=#deliveryId#
+		</isNotNull>
+		<isNotNull property="paymentId" prepend="and">
+			user_order.payment_id=#paymentId#
+		</isNotNull>
+		<isNotNull property="invoiceMark" prepend="and">
+			user_order.invoice_mark=#invoiceMark#
+		</isNotNull>
+		<isNotNull property="discountMark" prepend="and">
+			user_order.coupon_mark=#discountMark#
+		</isNotNull>
+		<isNotNull property="orderTimeStart" prepend="and">
+			<![CDATA[user_order.order_time >= #orderTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeEnd" prepend="and">
+			<![CDATA[ user_order.order_time <= #orderTimeEnd# ]]>
+		</isNotNull>
+		<isNotNull property="payTimeStart" prepend="and">
+			<![CDATA[user_order.pay_time >= #payTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="payTimeEnd" prepend="and">
+			<![CDATA[ user_order.pay_time <= #payTimeEnd# ]]>
+		</isNotNull>
+		<isNotEmpty property="consigneeMobile" prepend="and">
+			order_consignee.mobile=#consigneeMobile#
+		</isNotEmpty>
+		<isNotEmpty property="consignee" prepend="and">
+			order_consignee.consignee like CONCAT('%', #consignee#, '%')  
+		</isNotEmpty>
+		<isEqual property="asteriskMark" compareValue="0" prepend="and">
+			(user_order.asterisk_mark=1 or user_order.asterisk_mark is null)
+		</isEqual>
+		<isEqual property="asteriskMark" compareValue="1" prepend="and">
+			user_order.asterisk_mark=1 
+		</isEqual>
+		<isNotEmpty property="sellerIds" prepend="and">
+			 user_order.seller_id in
+			 <iterate open="(" close=")" conjunction="," property="sellerIds" >   
+                     #sellerIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		<isNotEmpty property="userIds" prepend="and">
+			 user_order.user_id in
+			 <iterate open="(" close=")" conjunction="," property="userIds" >   
+                     #userIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		<isNotEmpty property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotEmpty>
+<!-- 		<isNotNull property="storeId" prepend="and"> -->
+<!-- 			order_store.store_id=#storeId# -->
+<!-- 		</isNotNull> -->
+		<isNotNull property="supplierStoreId" prepend="and">
+			user_order.store_id=#supplierStoreId#
+		</isNotNull>
+		<isNotNull property="supplierId" prepend="and">
+			user_order.supplier_id=#supplierId#
+		</isNotNull>
+		<isNotNull property="higoMark" prepend="and">
+			user_order.higo_mark=#higoMark#
+		</isNotNull>
+		<isNotNull property="deleteMark" prepend="and">
+			user_order.delete_mark=#deleteMark#
+		</isNotNull>
+		<isNotNull property="settlementMark" prepend="and">
+			user_order.settlement_mark=#settlementMark#
+		</isNotNull>
+		<isNotNull property="refundStatus" prepend="and">
+			order_item.refund_status=#refundStatus#
+		</isNotNull>
+		<isNotEmpty property="orderIds" prepend="and">
+			 user_order.id in
+			 <iterate open="(" close=")" conjunction="," property="orderIds" >   
+                     #orderIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		<isEqual property="allRefundingMark" compareValue="1" prepend="and">
+			(order_item.refund_status=1  or order_item.refund_status=2)  
+		</isEqual>
+		<isNotNull property="refundMark" prepend="and">
+			user_order.refund_mark=#refundMark#
+		</isNotNull>
+		<isEqual property="deliveryId" compareValue="1" prepend="and">
+			(user_order.delivery_id=1 or user_order.delivery_id=0)  
+		</isEqual>
+		<isNotNull property="originalOrder" prepend="and">
+			user_order.original_order=#originalOrder#
+		</isNotNull>
+		<isNotNull property="shareUserId" prepend="and">
+			order_item.share_user_id=#shareUserId#
+		</isNotNull>
+		<isNotNull prepend="AND" property="itemName">
+            order_item.item_name like concat('%', #itemName#,'%')
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemSkuId">
+            order_item.item_sku_id like concat('%', #itemSkuId#,'%')
+        </isNotNull>
+	</sql>
+	
+	<sql id="dynamic_where_clause_ext_upgrade">
+		<isNotEmpty property="orderSn" prepend="and">
+			user_order.order_sn=#orderSn#
+		</isNotEmpty>
+		<isNotNull property="userId" prepend="and">
+			user_order.user_id=#userId#
+		</isNotNull>
+<!-- 		<isNotNull property="orderStatus" prepend="and"> -->
+<!-- 			user_order.order_status=#orderStatus# -->
+<!-- 		</isNotNull> -->
+		<isNotEmpty property="orderStatusStr" prepend="and">
+			( $orderStatusStr$ )
+		</isNotEmpty>
+		<isNotEmpty property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotEmpty>
+		<isNotNull property="deleteMark" prepend="and">
+			user_order.delete_mark=#deleteMark#
+		</isNotNull>
+		<isEqual property="allRefundingMark" compareValue="1" prepend="and">
+			(order_item.refund_status=1  or order_item.refund_status=2)  
+		</isEqual>
+		<isNotNull property="refundMark" prepend="and">
+			user_order.refund_mark=#refundMark#
+		</isNotNull>
+		<isNotNull property="originalOrder" prepend="and">
+			user_order.original_order=#originalOrder#
+		</isNotNull>
+		<isNotEmpty property="orderIds" prepend="and">
+			 user_order.id in
+			 <iterate open="(" close=")" conjunction="," property="orderIds" >   
+                     #orderIds[]#   
+                </iterate>  
+		</isNotEmpty>
+	</sql>
+
+	<update id="cancelOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set order_status=#orderStatus#, gmt_modified = now(), cancel_time = now()
+		<isNotNull property="cancelReason" prepend=",">
+			cancel_reason = #cancelReason#
+		</isNotNull>
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status=10 and delete_mark=0
+	</update>
+
+	<update id="closeOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set order_status = #orderStatus:TINYINT#, gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<update id="updateOrderStatusById" parameterClass="java.util.HashMap">
+		update user_order 
+		set order_status = #orderStatus#, gmt_modified = now()
+		where id= #orderId# and delete_mark = 0
+	</update>
+	
+	<update id="updateDeliveryMarkById" parameterClass="java.util.HashMap">
+		update order_item 
+		set delivery_mark = #deliveryMark#, gmt_modified = now()
+		where order_id= #orderId# and delete_mark = 0
+	</update>
+	
+	<update id="pushOrder" parameterClass="java.util.List">
+		update user_order 
+		set order_status = 35, gmt_modified = now()
+		where delete_mark = 0 and order_sn in 
+		<iterate open="(" close=")" conjunction="," >   
+             #orderQTOList[].orderSn#   
+        </iterate>  
+	</update>
+	
+	<update id="UpdateOrderSupplier" parameterClass="orderQTO">
+		update user_order 
+		set supplier_id = #supplierId#, store_id=#storeId#, gmt_modified = now()
+		where delete_mark = 0 and id = #id#		  
+	</update>
+
+	<update id="commentOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order
+		set order_status=60, gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status=50 and delete_mark=0
+	</update>
+
+	<update id="deleteOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+			set delete_mark = 1, gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status in (20,21,50,60,80,90);
+	</update>
+
+	<update id="updateOrderMemo"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now()
+		<dynamic prepend=",">
+			<isNotNull prepend="," property="userMemo">
+				user_memo = #userMemo#
+			</isNotNull>
+			<isNotNull prepend="," property="sellerMemo">
+				seller_memo = #sellerMemo#
+			</isNotNull>
+			<isNotNull prepend="," property="adminMemo">
+				admin_memo = #adminMemo#
+			</isNotNull>
+		</dynamic>
+		where user_id = #userId# and id =#id# and delete_mark = 0
+	</update>
+
+	<update id="updateOrderPayType"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), payment_id = #paymentId#
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+
+
+	<update id="confirmArrival" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set order_status=50, receipt_time=now(), gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status = 40 and delete_mark = 0
+	</update>
+
+	<update id="deliveryGoods" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set order_status=40, consign_time=now(), gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status = 35 and delete_mark = 0
+	</update>
+	
+	<select id="queryUserOrders" resultMap="result_ext"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext" />
+		from user_order,order_consignee,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.id=order_item.order_id
+		and user_order.parent_mark=0
+		and user_order.order_status!=5
+		<!-- and user_order.delete_mark=0 -->
+<!-- 		and user_order.seller_id != 0 -->
+<!-- 		and user_order.type!=5 -->
+<!-- 		and user_order.type!=6 -->
+<!-- 		and (order_item.original_sku_id is null or order_item.original_sku_id =0) -->
+		<include refid="dynamic_where_clause_ext" />
+		group by user_order.id
+		<isNotNull property="sortType" prepend=" ">
+			order by user_order.$sortType$ desc   
+		</isNotNull>
+		<isNull property="sortType" prepend=" ">
+			order by user_order.gmt_created desc   
+		</isNull>
+		limit #offset#,#count#
+	</select>
+	
+	<select id="queryUserOrdersUpgrade" resultMap="result_ext_upgrade"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext_upgrade" />
+		from user_order
+		where 1=1
+			and user_order.parent_mark=0
+			and user_order.order_status!=5
+	
+			<include refid="dynamic_where_clause_ext_upgrade" />
+			
+			<isNotNull property="sortType" prepend=" ">
+				order by user_order.$sortType$ desc   
+			</isNotNull>
+			<isNull property="sortType" prepend=" ">
+				order by user_order.gmt_created desc   
+			</isNull>
+		<isNotNull property="offset" prepend=" ">
+			limit #offset#,#count#
+		</isNotNull>
+	</select>
+	
+	<select id="queryInnerUserOrders" resultMap="result_ext_inner"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext_inner" />
+		from user_order
+		where 1=1
+			and user_order.parent_mark=0
+			<include refid="dynamic_where_clause_ext_upgrade" />
+		order by user_order.gmt_created desc   
+
+	</select>	
+	
+	<select id="queryUser" resultMap="result_ext_inner"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext_inner" />
+		from user_order
+		where 1=1
+			and parent_mark = 0
+			and order_status >= 30
+			and delete_mark = 0
+		<isNotNull property="offset" prepend=" ">
+			limit #offset#,#count#
+		</isNotNull>  
+
+	</select>		
+	
+	<select id="queryUserOrdersUpgradeSeckill" resultMap="result_ext_upgrade"
+		parameterClass="orderQTO">
+		select
+		<include refid="column_set_ext_upgrade" />
+		from user_order
+		where 1=1
+			and user_order.parent_mark=0
+	
+			<include refid="dynamic_where_clause_ext_upgrade" />
+			
+	</select>
+	
+	
+	<select id="queryUserOrderCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select 
+			count(*)
+		from user_order
+		where 1=1 and delete_mark = 0 and order_status >= 30 and parent_mark = 0
+			<isNotNull property="userId" prepend="and">
+				user_order.user_id=#userId#
+			</isNotNull>
+	</select>
+	
+	<select id="getCallBackOrderXX" resultClass="String" parameterClass="orderQTO">
+		$orderSn$
+	</select>
+	
+	<select id="queryUserOrdersRefund" resultMap="result_ext_upgrade"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext_upgrade" />
+		from user_order,order_item
+		where 1=1
+		and user_order.id=order_item.order_id
+		and user_order.parent_mark=0
+		and user_order.order_status!=5
+		<include refid="dynamic_where_clause_ext_upgrade" />
+		group by user_order.id
+		<isNotNull property="sortType" prepend=" ">
+			order by user_order.$sortType$ desc   
+		</isNotNull>
+		<isNull property="sortType" prepend=" ">
+			order by user_order.gmt_created desc   
+		</isNull>
+		limit #offset#,#count#
+	</select>
+	
+	<select id="queryUserOrdersCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select 
+		count(*)
+		from (
+		select user_order.id
+		from user_order,order_consignee,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.id=order_item.order_id
+		and user_order.parent_mark=0
+		and user_order.order_status!=5
+<!-- 		and user_order.seller_id != 0 -->
+<!-- 		and user_order.type!=5 -->
+<!-- 		and user_order.type!=6 -->
+<!-- 		and (order_item.original_sku_id is null or order_item.original_sku_id =0) -->
+		<include refid="dynamic_where_clause_ext" />
+		group by user_order.id) ac
+	</select>
+	
+	<select id="queryStoreOrders" resultMap="result_ext"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext" />
+		from user_order,order_consignee,order_store,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.id=order_item.order_id
+		and user_order.id=order_store.order_id
+		<!-- and user_order.delete_mark=0 -->
+		and user_order.seller_id != 0
+		<include refid="dynamic_where_clause_ext" />
+		group by user_order.id
+		<isNotNull property="sortType" prepend=" ">
+			order by user_order.$sortType$ desc   
+		</isNotNull>
+		<isNull property="sortType" prepend=" ">
+			order by user_order.gmt_created desc   
+		</isNull>
+		limit #offset#,#count#
+		
+	</select>
+	
+	<select id="querySubOrdersByOriginalOrder" resultMap="result"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set" />
+		from user_order
+		where 1=1
+		and user_order.delete_mark=0 
+		and original_order=#originalOrder#
+	</select>
+
+
+   <select id="getSellerOrdersTotalCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select count(distinct(user_order.id)) from user_order,order_consignee,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		<!-- and user_order.delete_mark = 0 -->
+		and user_order.id=order_item.order_id
+		<include refid="dynamic_where_clause_ext" />
+	</select>
+	
+	  <select id="getStoreOrdersTotalCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select count(distinct(user_order.id)) from user_order,order_consignee,order_store,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.id=order_store.order_id 
+		<!-- and user_order.delete_mark = 0 -->
+		and user_order.id=order_item.order_id
+		<include refid="dynamic_where_clause_ext" />
+	</select>
+	
+	 <select id="getItemHasPurchasedCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select ifnull(sum(order_item.number),0) from user_order,order_item
+		where 1=1
+		and user_order.id=order_item.order_id
+		and user_order.order_status>=30
+		and ( user_order.order_status != 70 and user_order.order_status != 80)
+		and order_item.user_id=#userId#
+		and order_item.item_sku_id=#itemSkuId#
+	</select>
+	
+	 <select id="getPreOrder" resultMap="result"
+		parameterClass="orderQTO">
+		select user_order.* from user_order,order_item
+		where 1=1
+		and order_status = 5
+		and user_order.id=order_item.order_id
+		and order_item.user_id=#userId#
+		and order_item.item_sku_id=#itemSkuId#
+		and user_order.delete_mark = 0
+	</select>
+	
+	<select id="getActivityOrder" resultMap="result"
+		parameterClass="orderQTO">
+		select user_order.* from user_order,order_item
+		where 1=1
+		and ( user_order.type=4 or user_order.type=3 )
+		and user_order.id=order_item.order_id
+		and order_item.user_id=#userId#
+		and order_item.item_sku_id=#itemSkuId#
+	</select>
+
+	<select id="getTotalCount" resultClass="Integer"
+		parameterClass="orderQTO">
+		select count(*)
+		from user_order
+		<dynamic prepend="where">
+			<include refid="dynamic_where_clause" />
+		</dynamic>
+		and delete_mark = 0
+		and seller_id != 0
+		and type!=6
+		and type!=5
+	</select>
+	
+	<select id="getLimitBuyCount" resultClass="Integer" parameterClass="orderQTO">
+		select IFNULL(sum(number),0)
+		from user_order a,order_item b
+		where a.id=b.order_id
+		and b.user_id=#userId#
+		and b.item_id=#itemId#
+		<![CDATA[ and (a.order_status=10 or a.order_status=30 or a.order_status=35 or a.order_status=40 or a.order_status=50 or a.order_status=60 or a.order_status=70 or a.order_status=80 or a.order_status=90)  ]]>
+		and a.delete_mark = 0
+		and a.type!=10
+		and a.type!=11
+	</select>
+	
+	<select id="queryTimeoutUnpaidOrders" resultMap="result"
+		parameterClass="orderQTO">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		where 1=1
+		<!-- and TIMESTAMPDIFF(MINUTE, order_time, now()) > #timeoutMinuteNumber# -->
+		and TIMESTAMPDIFF(SECOND, order_time, now()) > (select IFNULL(sum(trade_config.attr_value),360)*60 from trade_config where  attr_key='cancel_timeout_minutes' and 	trade_config.biz_code=user_order.biz_code)
+		and user_order.delete_mark = 0 
+		and user_order.order_status = 10
+		and user_order.type != 7
+		and user_order.parent_mark = 0
+		<include refid="dynamic_where_clause" />
+		order by id desc
+		limit #offset#,#count#
+	</select>
+
+	<update id="orderPaySuccess">
+		update user_order 
+		set order_status=30, pay_time=now(), gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and order_status = 10 and delete_mark = 0
+	</update>
+
+	<update id="orderPaySuccessTest">
+		update user_order 
+		set order_status=30, pay_time=now(), gmt_modified = now()
+		where user_id = #userId:BIGINT# and id= #id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<update id="updateSubOrderPaySuccess">
+		update user_order 
+		set order_status=30, pay_time=now(), gmt_modified = now()
+		where user_id = #userId:BIGINT# and original_order= #originalOrder# and order_status = 10 and delete_mark = 0
+	</update>
+	
+	<update id="updateOrderTotalAmountAndDeliveryFee"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), total_amount = #totalAmount#, delivery_fee=#deliveryFee#,floating_price=#floatingPrice#
+		<isNotNull property="orderSn" prepend=" ,">
+			user_order.order_sn=#orderSn#
+		</isNotNull>	
+		<isNotNull property="orderStatus" prepend=" ,">
+			order_status=#orderStatus#   
+		</isNotNull>
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<update id="updateOrderAsteriskMark"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), asterisk_mark=#asteriskMark#
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+	
+	
+	<!-- 查询超时收货订单 -->
+	<select id="queryOverTimeOrder" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO" resultMap="result">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		<!-- <![CDATA[ where 1=1 and order_status=40 and TO_DAYS(NOW()) - TO_DAYS(order_time)>=#timeoutDeliveryDay#]]> -->
+<!-- 		<![CDATA[ where 1=1 and order_status=40 and TO_DAYS(NOW()) - TO_DAYS(consign_time)>=  (select IFNULL(sum(trade_config.attr_value),15) from trade_config where  attr_key='delivery_timeout_days' and  trade_config.biz_code=user_order.biz_code)]]> -->
+
+		<![CDATA[ where 1=1 and order_status=40 and TIMESTAMPDIFF(SECOND, IFNULL(consign_time,now()), now()) >=  (select IFNULL(sum(trade_config.attr_value),15)*86400 from trade_config where  attr_key='delivery_timeout_days' and  trade_config.biz_code=user_order.biz_code)]]>
+<!-- 		<![CDATA[ where 1=1 and order_status=40 and TIMESTAMPDIFF(SECOND, IFNULL(consign_time,now()), now()) >= 15*60 ]]> -->
+		order by id desc
+		limit #offset#,#count#
+	</select>
+	
+	<select id="queryDeliveriedOrders" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO" resultMap="result">
+		select
+		<include refid="user_order.column_set" />
+		from user_order
+		where 1=1 and order_status=#orderStatus#
+		order by consign_time
+		limit #offset#,#count#
+	</select>
+	
+	
+	
+	
+	<!-- 根据 分类 统计 -->
+	<select id="querySalesRatioByCategory" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultMap="salesRatio_result">
+		select  trade_db.order_item.category_id,sum(trade_db.user_order.total_amount) as total
+		from trade_db.user_order,trade_db.order_item  where trade_db.order_item.order_id=trade_db.user_order.id  
+		and trade_db.order_item.category_id is not null
+		and (<![CDATA[order_status>20 ]]> and user_order.order_status!=21 and <![CDATA[order_status!=70 ]]> and <![CDATA[order_status!=80 ]]>)
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			trade_db.order_item.biz_code=#bizCode#
+		</isNotNull>
+		group by order_item.category_id
+	</select>
+	
+	<!-- 根据品牌 统计销量 -->
+	<select id="querySalesRatioByBrand" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultMap="brand_salesRatio_result">
+		select  trade_db.order_item.item_brand_id,sum(trade_db.user_order.total_amount) as total
+		from trade_db.user_order,trade_db.order_item  where trade_db.order_item.order_id=trade_db.user_order.id  
+		and trade_db.order_item.category_id is not null
+		and (<![CDATA[order_status>20 ]]> and user_order.order_status!=21 and <![CDATA[order_status!=70 ]]> and <![CDATA[order_status!=80 ]]>)
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			trade_db.order_item.biz_code=#bizCode#
+		</isNotNull>
+		group by order_item.item_brand_id
+	</select>
+	
+	<!-- 标注退款 -->
+	<update id="updateOrderRefund"  parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO">
+		update user_order set gmt_modified=now(),order_status=80
+		where user_id = #userId:BIGINT# and 
+		id=#id#
+		and delete_mark = 0
+	</update>
+	
+	
+	<!-- **************************************按天算 ************************************************** -->
+	
+	<!-- 查询某天内的回头客数，时间段在service里循环，支持按设备或按seller_id查询 -->
+	<select id="getOldUserCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultClass="Long">
+		SELECT date(#timeStart#)as date,count(DISTINCT user_id)as result FROM trade_db.user_order,trade_db.order_view
+		where order_view.order_id=user_order.id and date(order_time)=#timeStart# and user_id in(
+		select user_id from trade_db.user_order
+		where <![CDATA[order_time<#timeStart#]]> )
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull> 
+			<isNotNull property="device_type"  prepend=" and ">
+				order_view.device_type=#device_type#
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+	<!-- 按天查询成交额，给定时间段，返回每天的成交额 -->
+	<select id="getTotalAmoutDaily" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="dailyData_result">
+		select date(order_time)as date,sum(total_amount)as result from user_order,order_view
+		where  <![CDATA[user_order.order_status>20 ]]> and user_order.order_status!=21 and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 ]]> and 
+		 order_view.order_id=user_order.id
+		<isNotNull property="timeEnd"  prepend=" and ">
+			<![CDATA[user_order.order_time<date(#timeEnd#)]]>
+		</isNotNull>
+		<isNotNull property="timeStart"  prepend=" and ">
+			<![CDATA[user_order.order_time>date(#timeStart#)]]>
+		</isNotNull> 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+		<isNotNull property="seller_id"  prepend=" and ">
+			user_order.seller_id=#seller_id#
+		</isNotNull> 
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by date(order_time);
+	</select>
+	
+	<!-- 按天查询订单总数，给定时间段，返回每天的订单总数 -->
+	<select id="getTotalOrderCountDaily" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="dailyData_result">
+		select date(order_time)as date,count(*)as result from user_order,order_view
+		where  order_view.order_id=user_order.id
+		<isNotNull property="timeEnd"  prepend=" and ">
+			<![CDATA[user_order.order_time<date(#timeEnd#)]]>
+		</isNotNull>
+		<isNotNull property="timeStart"  prepend=" and ">
+			<![CDATA[user_order.order_time>date(#timeStart#)]]>
+		</isNotNull> 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+		<isNotNull property="seller_id"  prepend=" and ">
+			user_order.seller_id=#seller_id#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by date(order_time);
+	</select>
+	
+	<!-- 按天查询付款订单数，给定时间段，返回每天的付款订单数 -->
+	<select id="getPaidOrderCountDaily" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="dailyData_result">
+		select date(order_time)as date,count(*)as result from user_order,order_view
+		where <![CDATA[user_order.order_status>20 ]]>and user_order.order_status!=21  and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 ]]> and  
+		 order_view.order_id=user_order.id
+		<isNotNull property="timeEnd"  prepend=" and ">
+			<![CDATA[user_order.order_time<date(#timeEnd#)]]>
+		</isNotNull>
+		<isNotNull property="timeStart"  prepend=" and ">
+			<![CDATA[user_order.order_time>date(#timeStart#)]]>
+		</isNotNull> 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+		<isNotNull property="seller_id"  prepend=" and ">
+			user_order.seller_id=#seller_id#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by date(order_time);
+	</select>
+	
+	<!-- 按天查询下单人数，给定时间段，返回每天的下单人数 -->
+	<select id="getTotalUserCountDaily" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="dailyData_result">
+		select date(order_time)as date,count(DISTINCT user_id)as result from user_order,order_view
+		where  order_view.order_id=user_order.id
+		<isNotNull property="timeEnd"  prepend=" and ">
+			<![CDATA[user_order.order_time<date(#timeEnd#)]]>
+		</isNotNull>
+		<isNotNull property="timeStart"  prepend=" and ">
+			<![CDATA[user_order.order_time>date(#timeStart#)]]>
+		</isNotNull> 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+		<isNotNull property="seller_id"  prepend=" and ">
+			user_order.seller_id=#seller_id#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by date(order_time);
+	</select>
+	
+	<!-- 按天查询付款人数，给定时间段，返回每天的付款人数 -->
+	<select id="getPaidUserCountDaily" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="dailyData_result">
+		select date(order_time)as date,count(DISTINCT user_id)as result from user_order,order_view
+		where <![CDATA[user_order.order_status>20 ]]> and user_order.order_status!=21 and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 ]]> and  
+		 order_view.order_id=user_order.id
+		<isNotNull property="timeEnd"  prepend=" and ">
+			<![CDATA[user_order.order_time<date(#timeEnd#)]]>
+		</isNotNull>
+		<isNotNull property="timeStart"  prepend=" and ">
+			<![CDATA[user_order.order_time>date(#timeStart#)]]>
+		</isNotNull> 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+		<isNotNull property="seller_id"  prepend=" and ">
+			user_order.seller_id=#seller_id#
+		</isNotNull>
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by date(order_time);
+	</select>
+	
+	
+	<!-- *****************************************总累计****************************************************** -->
+	 
+	<!-- 查询top10的item及数量 -->
+	<select id="getTop10Item" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultMap="TOPItem_result">
+		select trade_db.order_item.item_id,sum(trade_db.order_item.number)
+		from trade_db.user_order,trade_db.order_item 
+		where <![CDATA[user_order.order_status>20 ]]> and user_order.order_status!=21 and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 ]]> and 
+		trade_db.order_item.order_id=trade_db.user_order.id 
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart"  prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+			</isNotNull>
+			<isNotEmpty property="itemIds" prepend="and">
+			 order_item.item_id in
+			 <iterate open="(" close=")" conjunction="," property="itemIds" >   
+                     #itemIds[]#   
+                </iterate>  
+			</isNotEmpty>
+		group by item_id
+		order by count(trade_db.order_item.item_id) desc
+		limit 0,#top_number#;
+	</select>
+	
+		<!--  查询订单总价 -->
+	<select id="getTotalPrice" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select IFNULL(sum(total_price),0)
+		from user_order
+		where 1=1 and
+		<![CDATA[user_order.order_status>20 ]]> and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 and user_order.order_status!=21]]>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart"  prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart#]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd#]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		<isNotNull property="userId" prepend="and">
+			user_order.user_id=#userId#
+		</isNotNull>
+	</select>
+	
+	<!--  查询成交额 -->
+	<select id="getTotalAmount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select IFNULL(sum(total_amount),0)
+		from user_order,order_view
+		where trade_db.order_view.order_id=trade_db.user_order.id  and
+		<![CDATA[user_order.order_status>20 ]]> and <![CDATA[user_order.order_status!=70 ]]> and <![CDATA[user_order.order_status!=80 and user_order.order_status!=21]]>
+			<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+			</isNotNull>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart"  prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart#]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd#]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		<isNotNull property="userId" prepend="and">
+			user_order.user_id=#userId#
+		</isNotNull>
+	</select>
+	
+	<!--  查询订单总数 -->
+	<select id="getTotalOrderCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO" resultClass="Long">
+		select count(*)
+		from user_order,order_view
+		where trade_db.order_view.order_id=trade_db.user_order.id 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+	<!--  查询付款订单数 -->
+	<select id="getPaidOrderCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select count(*)
+		from user_order,order_view
+		where trade_db.order_view.order_id=trade_db.user_order.id and 
+		<![CDATA[order_status>20 ]]> and <![CDATA[order_status!=70 ]]> and <![CDATA[order_status!=80 and user_order.order_status!=21]]>
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+	<!--  查询下单人数 -->
+	<select id="getTotalUserCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select count(*)
+		from (
+		select count(*) user_id
+		from user_order,order_view
+		where trade_db.order_view.order_id=trade_db.user_order.id 
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by user_id)
+		as total
+	</select>
+	
+	<!--  查询付款人数 -->
+	<select id="getPaidUserCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select count(*)
+		from (
+		select count(*) user_id
+		from user_order,order_view
+		where trade_db.order_view.order_id=trade_db.user_order.id  and 
+		<![CDATA[order_status>20 ]]> and <![CDATA[order_status!=70 ]]> and <![CDATA[order_status!=80 and user_order.order_status!=21]]>
+		<isNotNull property="device_type"  prepend=" and ">
+			order_view.device_type=#device_type#
+		</isNotNull>
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart" prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart# ]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd# ]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		group by user_id)
+		as total
+	</select>
+	
+	
+	<!--  查询成交额 -->
+	<select id="getAllTotalAmount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select IFNULL(sum(total_amount),0)
+		from user_order
+		where 1=1  and
+		<![CDATA[user_order.order_status>20 ]]> and <![CDATA[user_order.order_status!=70 and user_order.order_status!=21]]> and <![CDATA[user_order.order_status!=80 ]]>
+			
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart"  prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart#]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd#]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+	
+	
+	<select id="getUnSettlementAmount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select IFNULL(sum(total_amount),0)
+		from user_order,order_consignee
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.seller_id != 0
+		and (user_order.refund_mark=0 or user_order.refund_mark is null)
+		and (user_order.order_status=30 or user_order.order_status=40 or user_order.order_status=50 or user_order.order_status=60)
+			<isNotNull property="seller_id"  prepend=" and ">
+				user_order.seller_id=#seller_id#
+			</isNotNull>
+			<isNotNull property="timeStart"  prepend=" and ">
+				<![CDATA[user_order.order_time>#timeStart#]]>
+			</isNotNull>
+			<isNotNull property="timeEnd" prepend=" and ">
+				<![CDATA[user_order.order_time<#timeEnd#]]>
+			</isNotNull>
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+		
+		
+	<select id="queryUnSettlementOrders" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO"  resultMap="result_ext">
+		select 
+		<include refid="column_set_ext" />
+		from user_order,order_consignee
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.seller_id != 0
+		and (user_order.refund_mark=0 or user_order.refund_mark is null)
+		and (user_order.order_status=30 or user_order.order_status=40 or user_order.order_status=50 or user_order.order_status=60)
+		and (user_order.settlement_mark is null or user_order.settlement_mark=1)
+		<isNotNull property="orderSn" prepend=" and">
+			user_order.order_sn=#orderSn#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend=" and">
+			user_order.seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderStatus" prepend=" and">
+			user_order.order_status=#orderStatus#
+		</isNotNull>
+		<isNotNull property="consignee" prepend=" and">
+			order_consignee.consignee like CONCAT('%', #consignee#, '%')  
+		</isNotNull>
+		<isNotNull property="orderTimeStart" prepend=" and">
+			<![CDATA[user_order.order_time >= #orderTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeEnd" prepend=" and">
+			<![CDATA[ user_order.order_time < #orderTimeEnd# ]]>
+		</isNotNull>
+			<isNotNull property="bizCode" prepend=" and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		<isNotEmpty property="userIds" prepend=" and">
+			 user_order.user_id in
+			 <iterate open="(" close=")" conjunction="," property="userIds" >   
+                     #userIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		order by user_order.id desc
+		limit #offset#,#count#
+		
+	</select>
+	
+	
+	
+	<select id="getUnsettlementOrderCount" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO" resultClass="Long">
+		select 
+		IFNULL(count(*),0)
+		from user_order,order_consignee
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.seller_id != 0
+		and (user_order.refund_mark=0 or user_order.refund_mark is null)
+		and (user_order.order_status=30 or user_order.order_status=40 or user_order.order_status=50 or user_order.order_status=60) 
+		and (user_order.settlement_mark is null or user_order.settlement_mark=1)
+		<isNotNull property="orderSn" prepend=" and">
+			user_order.order_sn=#orderSn#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend=" and">
+			user_order.seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderStatus" prepend=" and">
+			user_order.order_status=#orderStatus#
+		</isNotNull>
+		<isNotNull property="consignee" prepend=" and">
+			<![CDATA[ order_consignee.consignee like CONCAT('%', #consignee#, '%')  ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeStart" prepend=" and">
+			<![CDATA[user_order.order_time >= #orderTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeEnd" prepend=" and">
+			<![CDATA[ user_order.order_time < #orderTimeEnd# ]]>
+		</isNotNull>
+		 <isNotNull property="bizCode" prepend=" and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		<isNotEmpty property="userIds" prepend=" and">
+			 user_order.user_id in
+			 <iterate open="(" close=")" conjunction="," property="userIds" >   
+                     #userIds[]#   
+                </iterate>  
+		</isNotEmpty>
+	</select>
+		
+	<select id="queryNoSettlementOrdersOld" resultMap="result"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set" />
+		from user_order
+		where 1=1
+		and user_order.delete_mark=0 
+		and ( user_order.settlement_mark is null or user_order.settlement_mark=1 )
+		and ( user_order.order_status=50 or  user_order.order_status = 60) 
+		and ( refund_mark=0 or refund_mark is null)
+	    and TIMESTAMPDIFF(MINUTE, order_time, now()) > 10
+		<!-- and TO_DAYS(NOW()) - TO_DAYS(user_order.order_time)>=15 -->
+	    <!--    and TIMESTAMPDIFF(MINUTE, order_time, now()) > 10 -->
+		and TO_DAYS(NOW()) - TO_DAYS(user_order.order_time)>=15
+		limit #offset#,#count#
+	</select>
+		
+	<select id="queryNoSettlementOrders" resultMap="result"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set" />
+		from user_order,order_item
+		where 1=1
+		and user_order.id=order_item.order_id
+		and user_order.delete_mark=0 
+		and user_order.order_status=50 
+		and (order_item.refund_status NOT IN (1, 2, 6) or order_item.refund_status is null)
+<!-- 	    and TIMESTAMPDIFF(SECOND, IFNULL(receipt_time,now()), now()) > (select IFNULL(sum(trade_config.attr_value),15)*600 from trade_config where attr_key='rights_timeout_days' and trade_config.biz_code=user_order.biz_code) -->
+	    
+	    and TIMESTAMPDIFF(SECOND, IFNULL(receipt_time,now()), now()) > (select IFNULL(sum(trade_config.attr_value),15)*86400 from trade_config where attr_key='rights_timeout_days' and trade_config.biz_code=user_order.biz_code)
+<!-- 		and TIMESTAMPDIFF(SECOND, IFNULL(receipt_time,now()), now()) > 5*60 -->
+<!-- 		and ( user_order.settlement_mark is null or user_order.settlement_mark=1 ) -->
+<!-- 		and ( refund_mark=0 or refund_mark is null) -->
+		<!-- and TO_DAYS(NOW()) - TO_DAYS(user_order.order_time)>=15 -->
+	    <!--    and TIMESTAMPDIFF(MINUTE, order_time, now()) > 10 -->
+<!-- 		and TO_DAYS(NOW()) - TO_DAYS(user_order.order_time)>=15 -->
+
+		order by receipt_time asc
+		limit #offset#,#count#
+	</select>
+	
+	<update id="modifySettlementStatus" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set settlement_mark=#settlementMark#, gmt_modified = now()
+		where id= #id:BIGINT# and delete_mark=0
+	</update>	
+	
+	<sql id="dynamic_where_for_refund">
+		<isNotNull property="id" prepend="and">
+			user_order.id=#id#
+		</isNotNull>
+		<isNotNull property="orderSn" prepend="and">
+			user_order.order_sn=#orderSn#
+		</isNotNull>
+		<isNotNull property="type" prepend="and">
+			user_order.type=#type#
+		</isNotNull>
+		<isNotNull property="userId" prepend="and">
+			user_order.user_id=#userId#
+		</isNotNull>
+		<isNotNull property="sellerId" prepend="and">
+			user_order.seller_id=#sellerId#
+		</isNotNull>
+		<isNotNull property="orderStatus" prepend="and">
+			user_order.order_status=#orderStatus#
+		</isNotNull>
+		<isNotNull property="deliveryId" prepend="and">
+			user_order.delivery_id=#deliveryId#
+		</isNotNull>
+		<isNotNull property="paymentId" prepend="and">
+			user_order.payment_id=#paymentId#
+		</isNotNull>
+		<isNotNull property="invoiceMark" prepend="and">
+			user_order.invoice_mark=#invoiceMark#
+		</isNotNull>
+		<isNotNull property="discountMark" prepend="and">
+			user_order.coupon_mark=#discountMark#
+		</isNotNull>
+		<isNotNull property="orderTimeStart" prepend="and">
+			<![CDATA[user_order.order_time >= #orderTimeStart# ]]>
+		</isNotNull>
+		<isNotNull property="orderTimeEnd" prepend="and">
+			<![CDATA[ user_order.order_time <= #orderTimeEnd# ]]>
+		</isNotNull>
+		<isNotNull property="consigneeMobile" prepend="and">
+			order_consignee.mobile=#consigneeMobile#
+		</isNotNull>
+		<isNotNull property="consignee" prepend="and">
+			order_consignee.consignee like CONCAT('%', #consignee#, '%')  
+		</isNotNull>
+		<isEqual property="asteriskMark" compareValue="0" prepend="and">
+			(user_order.asterisk_mark=1 or user_order.asterisk_mark is null)
+		</isEqual>
+		<isEqual property="asteriskMark" compareValue="1" prepend="and">
+			user_order.asterisk_mark=1 
+		</isEqual>
+		<isNotEmpty property="sellerIds" prepend="and">
+			 user_order.seller_id in
+			 <iterate open="(" close=")" conjunction="," property="sellerIds" >   
+                     #sellerIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		<isNotEmpty property="userIds" prepend="and">
+			 user_order.user_id in
+			 <iterate open="(" close=")" conjunction="," property="userIds" >   
+                     #userIds[]#   
+                </iterate>  
+		</isNotEmpty>
+		<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+		</isNotNull>
+		
+		<isNotNull property="refundStatus" prepend="and">
+			order_item.refund_status=#refundStatus#
+		</isNotNull>
+			<isNull property="refundStatus" prepend="and">
+				(order_item.refund_status=1 or order_item.refund_status=2 or refund_status=3 )
+			</isNull>
+	</sql>
+	
+	<select id="queryRefundStatusOrders" resultMap="result_ext"
+		parameterClass="orderQTO">
+		select 
+		<include refid="column_set_ext" />
+		from user_order,order_consignee,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.delete_mark=0 
+		and user_order.seller_id != 0
+		and user_order.order_status != 5
+		and (refund_mark=1)
+		and user_order.id=order_item.order_id
+		<include refid="dynamic_where_for_refund" />
+		group by user_order.id
+		order by user_order.id desc
+		limit #offset#,#count#
+	</select>
+	
+	<select id="queryRefundStatusOrderItems" resultMap="result"
+		parameterClass="orderQTO">
+		select 
+ 			a.*
+		from user_order as a,order_item as b
+		where a.id=b.order_id
+		and a.delete_mark=0 
+		and b.refund_status=#refundStatus#
+		<isNotNull property="bizCode" prepend="and">
+			a.biz_code=#bizCode#
+		</isNotNull>
+		limit #offset#,#count#
+	</select>
+	
+	<select id="getRefundStatusOrderItemCount" resultClass="Long"
+		parameterClass="orderQTO">
+	select distinct(user_order.id)
+		from user_order as a,order_item as b
+		where a.id=b.order_id
+		and a.delete_mark=0 
+		and b.refund_status=#refundStatus#
+		<isNotNull property="bizCode" prepend="and">
+			a.biz_code=#bizCode#
+		</isNotNull>
+	</select>
+	
+	
+	<select id="getRefundStatusOrderCount" resultClass="Long"
+		parameterClass="orderQTO">
+		select count(distinct(user_order.id))
+		from user_order,order_consignee,order_item
+		where 1=1
+		and user_order.id=order_consignee.order_id
+		and user_order.delete_mark=0 
+		and user_order.seller_id != 0
+		and user_order.order_status != 5
+		and (refund_mark=1)
+		and user_order.id=order_item.order_id
+		<include refid="dynamic_where_for_refund" />
+	</select>
+	
+	<update id="updatePreOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set gmt_modified = now()
+		<isNotNull property="type" prepend=",">
+			type = #type#
+		</isNotNull>
+		<isNotNull property="totalAmount" prepend=",">
+			total_amount = #totalAmount#
+		</isNotNull>
+		<isNotNull property="deliveryId" prepend=",">
+			delivery_id = #deliveryId#
+		</isNotNull>
+		<isNotNull property="deliveryFee" prepend=",">
+			delivery_fee = #deliveryFee#
+		</isNotNull>
+		<isNotNull property="paymentId" prepend=",">
+			payment_id = #paymentId#
+		</isNotNull>
+		<isNotNull property="discountMark" prepend=",">
+			discount_mark = #discountMark#
+		</isNotNull>
+		where user_id = #userId:BIGINT# and id= #id:BIGINT#
+	</update>
+	
+	
+	
+	<update id="falseDeleteOrderById" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO">
+		update user_order 
+		set gmt_modified = now(),delete_mark = 1
+		where id= #id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<update id="update2ActivityOrder" parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order 
+		set gmt_modified = now(),
+		order_status = 10
+		<isNotNull property="type" prepend=",">
+			type = #type#
+		</isNotNull>
+		<isNotNull property="totalAmount" prepend=",">
+			total_amount = #totalAmount#
+		</isNotNull>
+		<isNotNull property="deliveryId" prepend=",">
+			delivery_id = #deliveryId#
+		</isNotNull>
+		<isNotNull property="deliveryFee" prepend=",">
+			delivery_fee = #deliveryFee#
+		</isNotNull>
+		<isNotNull property="paymentId" prepend=",">
+			payment_id = #paymentId#
+		</isNotNull>
+		<isNotNull property="discountMark" prepend=",">
+			discount_mark = #discountMark#
+		</isNotNull>
+		<isNotNull property="appType" prepend=",">
+			app_type = #appType#
+		</isNotNull>
+		<isNotNull property="totalPrice" prepend=",">
+			total_price = #totalPrice#
+		</isNotNull>
+		<isNotNull property="point" prepend=",">
+			point = #point#
+		</isNotNull>
+		<isNotNull property="discountAmount" prepend=",">
+			discount_amount = #discountAmount#
+		</isNotNull>
+		where user_id = #userId:BIGINT# and id= #id:BIGINT#
+	</update>
+	
+	<select id="queryTimeoutPreOrders" resultMap="result_ext_upgrade"
+		parameterClass="orderQTO">
+		select
+        <include refid="column_set_ext_upgrade"/>
+		from user_order
+		where  user_order.delete_mark=0
+		and order_status = 5
+		and user_order.timeout_cancel_seconds is not null
+		and UNIX_TIMESTAMP(now())-UNIX_TIMESTAMP(user_order.order_time)>user_order.timeout_cancel_seconds
+		limit #offset#,#count#
+	</select>
+	
+	<delete id="deletePreOrder" parameterClass="orderQTO" >
+	  delete from user_order	   
+	  where delete_mark = 0 
+	  and order_status = 5
+      and id=#id#
+	</delete>
+	
+	
+	<delete id="deleteCallBackOrderXX" parameterClass="orderQTO" >
+	  $orderSn$
+	</delete>
+	
+	<delete id="phyDeleteOrder" parameterClass="orderQTO" >
+	  delete from user_order	   
+	  where delete_mark = 0 
+      		and id=#id# and order_status = 5
+	</delete>
+
+	<select id="getItemCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select  ifnull(sum(order_item.number),0)
+		from user_order,order_item  where order_item.order_id=user_order.id  
+		<isNotNull property="userId" prepend="and">
+			order_item.user_id=#userId#
+		</isNotNull>
+		<isNotNull property="itemSkuId" prepend="and">
+			order_item.item_sku_id=#itemSkuId#
+		</isNotNull>
+		<isNotNull property="orderStatus" prepend="and">
+			user_order.order_status=#orderStatus#
+		</isNotNull>
+	</select>
+	
+	<select id="getPaidItemCount" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select  ifnull(sum(order_item.number),0)
+		from user_order,order_item  where order_item.order_id=user_order.id  
+		and user_order.order_status in(30,40,50,60,90)
+		<isNotNull property="userId" prepend="and">
+			order_item.user_id=#userId#
+		</isNotNull>
+		<isNotNull property="itemSkuId" prepend="and">
+			order_item.item_sku_id=#itemSkuId#
+		</isNotNull>
+	</select>
+	
+	
+	<select id="getPaidCountBySkuId" parameterClass="com.mockuai.tradecenter.common.domain.DataQTO"  resultClass="Long">
+		select  ifnull(count(user_order.id),0)
+		from user_order,order_item  where order_item.order_id=user_order.id  
+		and user_order.order_status in(30,40,50,60,90)
+		<isNotNull property="userId" prepend="and">
+			order_item.user_id=#userId#
+		</isNotNull>
+		<isNotNull property="itemSkuId" prepend="and">
+			order_item.item_sku_id=#itemSkuId#
+		</isNotNull>
+	</select>
+	
+	<update id="updateOrderDiscountInfo"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), total_amount = #totalAmount#
+		<isNotNull property="totalAmount" prepend=" ,">
+			user_order.total_amount=#totalAmount#
+		</isNotNull>	
+		<isNotNull property="orderStatus" prepend=" ,">
+			order_status=#orderStatus#   
+		</isNotNull>
+		<isNotNull property="discountAmount" prepend=" ,">
+			discount_amount=#discountAmount#   
+		</isNotNull>
+		<isNotNull property="discountMark" prepend=" ,">
+			discount_mark=#discountMark#   
+		</isNotNull>
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+	
+	
+		<select id="getMallCommissionSumAmount" parameterClass="com.mockuai.tradecenter.common.domain.OrderQTO"  resultClass="Long">
+		select IFNULL(sum(mall_commission),0)
+		from user_order
+		where 1=1  
+		
+			
+			<isNotNull property="sellerId"  prepend=" and ">
+				user_order.seller_id=#sellerId#
+			</isNotNull>
+		
+			<isNotNull property="bizCode" prepend="and">
+			user_order.biz_code=#bizCode#
+			</isNotNull>
+			
+			<isNotNull property="settlementMark" prepend=" and">
+			settlement_mark=#settlementMark#   
+		</isNotNull>
+	</select>
+	
+	<update id="updateOrderCommission"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), mall_commission = #mallCommission#
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<update id="updateOrderTotalAmount"  parameterClass="com.mockuai.tradecenter.core.domain.OrderDO">
+		update user_order set gmt_modified=now(), total_amount = #totalAmount#
+		where user_id = #userId:BIGINT# and id =#id:BIGINT# and delete_mark = 0
+	</update>
+	
+	<select id="getSellerSettleTotalAmount" resultClass="Long"
+		parameterClass="orderQTO">
+			select 
+			ifnull(sum(total_amount),0)
+			from user_order
+			where 1=1
+			and user_order.delete_mark=0 
+			and user_order.settlement_mark=0
+			and user_order.seller_id=#sellerId#
+	</select>
+	
+	<!-- 店铺的优惠总额 -->
+	<select id="getShopDiscountTotalAmount" resultClass="Long"
+		parameterClass="orderQTO">
+			select 
+  			ifnull(sum(order_discount_info.discount_amount),0)
+			from user_order,order_discount_info
+			where 1=1
+			and user_order.id=order_discount_info.order_id
+			and user_order.delete_mark=0 
+			and user_order.settlement_mark=0
+			and order_discount_info.discount_type=1
+			and user_order.seller_id=#sellerId#
+	</select>
+
+
+    <select id="queryOrderByUserIdAndPaymentId" resultMap="result"
+            parameterClass="com.mockuai.tradecenter.common.domain.TradeNotifyLogQTO">
+        select <include refid="column_set"/>
+        from user_order user_order
+        where delete_mark = 0
+        <isNotNull property="userId"  prepend=" and ">
+              user_order.user_id = #userId#
+        </isNotNull>
+        <isNotNull property="paymentId"  prepend=" and ">
+            user_order.payment_id = #paymentId#
+        </isNotNull>
+    </select>
+
+
+    <select id="queryOrderByTradeNotifyLog" resultMap="result"
+            parameterClass="java.util.List">
+        select <include refid="column_set"/>
+        from user_order user_order
+        where delete_mark = 0 and
+        id IN
+        <iterate open="(" close=")" conjunction=",">
+            #List[].orderId#
+        </iterate>
+
+    </select>
+
+    <select id="queryAllOrderBg" resultMap="result_ext"
+            parameterClass="orderQTO">
+        select
+        <include refid="column_set_ext" />
+        from user_order,order_consignee,order_item
+        where
+         user_order.id=order_consignee.order_id
+        and user_order.id=order_item.order_id
+        and user_order.parent_mark=0
+
+        <include refid="dynamic_where_clause_ext" />
+        group by user_order.id
+        <isNotNull property="sortType" prepend=" ">
+            order by user_order.$sortType$ desc
+        </isNotNull>
+        <isNull property="sortType" prepend=" ">
+            order by user_order.gmt_created desc
+        </isNull>
+        limit #offset#,#count#
+    </select>
+
+
+    <select id="queryAllOrderCountBg" resultClass="Integer"
+            parameterClass="orderQTO">
+        select
+        count(0)
+        from (
+        select user_order.id
+        from user_order,order_consignee,order_item
+        where 1=1
+        and user_order.id=order_consignee.order_id
+        and user_order.id=order_item.order_id
+        and user_order.parent_mark=0
+        <!-- 		and user_order.seller_id != 0 -->
+        <!-- 		and user_order.type!=5 -->
+        <!-- 		and user_order.type!=6 -->
+        <!-- 		and (order_item.original_sku_id is null or order_item.original_sku_id =0) -->
+        <include refid="dynamic_where_clause_ext" />
+        group by user_order.id) ac
+    </select>
+
+
+
+
+</sqlMap>

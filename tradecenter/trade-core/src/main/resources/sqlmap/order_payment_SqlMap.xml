@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_payment">
+
+    <!--CREATE TABLE `order_payment` (-->
+    <!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+    <!--`biz_code` varchar(64) NOT NULL COMMENT '应用唯一标志符',-->
+    <!--`payment_sn` varchar(64) NOT NULL COMMENT '支付流水号',-->
+    <!--`order_id` bigint(20) NOT NULL COMMENT '所属订单ID',-->
+    <!--`user_id` bigint(20) NOT NULL COMMENT '下单用户ID',-->
+    <!--`payment_id` int(4) NOT NULL COMMENT '支付方式ID',-->
+    <!--`total_amount` bigint(20) NOT NULL COMMENT '待支付总额',-->
+    <!--`pay_amount` bigint(20) NOT NULL COMMENT '已支付金额',-->
+    <!--`out_trade_no` varchar(256) DEFAULT NULL COMMENT '外部支付交易号',-->
+    <!--`pay_time` date DEFAULT NULL COMMENT '支付时间',-->
+    <!--`pay_status` tinyint(4) NOT NULL COMMENT '支付状态',-->
+    <!--`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',-->
+    <!--`gmt_created` date NOT NULL COMMENT '记录创建时间',-->
+    <!--`gmt_modified` date NOT NULL COMMENT '记录最后一次修改时间',-->
+    <!--PRIMARY KEY (`id`)-->
+    <!--) ENGINE=InnoDB AUTO_INCREMENT=384 DEFAULT CHARSET=utf8-->
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderPaymentDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="paymentSn" column="payment_sn" jdbcType="VARCHAR"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="paymentId" column="payment_id" jdbcType="INT"/>
+        <result property="totalAmount" column="total_amount" jdbcType="BIGINT"/>
+        <result property="payAmount" column="pay_amount" jdbcType="BIGINT"/>
+        <result property="outTradeNo" column="out_trade_no" jdbcType="VARCHAR"/>
+        <result property="payTime" column="pay_time" jdbcType="DATE"/>
+        <result property="payStatus" column="pay_status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        payment_sn,
+        order_id,
+        user_id,
+        payment_id,
+        total_amount,
+        pay_amount,
+        out_trade_no,
+        pay_time,
+        pay_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="dynamic_set_clause">
+        <isNotNull property="id" prepend=",">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend=",">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="paymentSn" prepend=",">
+            payment_sn=#paymentSn#
+        </isNotNull>
+        <isNotNull property="orderId" prepend=",">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend=",">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="paymentId" prepend=",">
+            payment_id=#paymentId#
+        </isNotNull>
+        <isNotNull property="totalAmount" prepend=",">
+            total_amount=#totalAmount#
+        </isNotNull>
+        <isNotNull property="payAmount" prepend=",">
+            pay_amount=#payAmount#
+        </isNotNull>
+        <isNotNull property="outTradeNo" prepend=",">
+            out_trade_no=#outTradeNo#
+        </isNotNull>
+        <isNotNull property="payTime" prepend=",">
+            pay_time=#payTime#
+        </isNotNull>
+        <isNotNull property="payStatus" prepend=",">
+            pay_status=#payStatus#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend=",">
+            delete_mark=#deleteMark#
+        </isNotNull>
+        <isNotNull property="gmtCreated" prepend=",">
+            gmt_created=#gmtCreated#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend=",">
+            gmt_modified=#gmtModified#
+        </isNotNull>
+    </sql>
+
+    <sql id="dynamic_where_clause">
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="paymentSn" prepend="and">
+            payment_sn=#paymentSn#
+        </isNotNull>
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend="and">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="paymentId" prepend="and">
+            payment_id=#paymentId#
+        </isNotNull>
+        <isNotNull property="totalAmount" prepend="and">
+            total_amount=#totalAmount#
+        </isNotNull>
+        <isNotNull property="payAmount" prepend="and">
+            pay_amount=#payAmount#
+        </isNotNull>
+        <isNotNull property="outTradeNo" prepend="and">
+            out_trade_no=#outTradeNo#
+        </isNotNull>
+        <isNotNull property="payTime" prepend="and">
+            pay_time=#payTime#
+        </isNotNull>
+        <isNotNull property="payStatus" prepend="and">
+            pay_status=#payStatus#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend="and">
+            delete_mark=#deleteMark#
+        </isNotNull>
+        <isNotNull property="gmtCreated" prepend="and">
+            gmt_created=#gmtCreated#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend="and">
+            gmt_modified=#gmtModified#
+        </isNotNull>
+    </sql>
+
+
+    <insert id="addOrderPayment" parameterClass="com.mockuai.tradecenter.core.domain.OrderPaymentDO">
+        insert into order_payment(
+        biz_code,
+        payment_sn,
+        order_id,
+        user_id,
+        payment_id,
+        total_amount,
+        pay_amount,
+        out_trade_no,
+        pay_time,
+        pay_status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #paymentSn#,
+        #orderId#,
+        #userId#,
+        #paymentId#,
+        #totalAmount#,
+        #payAmount#,
+        #outTradeNo#,
+        #payTime#,
+        #payStatus#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+    <select id="getOrderPayment" parameterClass="java.util.Map"
+            resultMap="result">
+        select
+        <include refid="order_payment.column_set"/>
+        from order_payment where 1=1
+        
+        <isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+         
+        and order_id = #orderId# and delete_mark = 0
+        order by gmt_created DESC
+    </select>
+
+    <update id="updatePaymentType">
+        update order_payment set payment_id=#paymentId#,gmt_modified = now()
+        where order_id= #orderId:BIGINT# and user_id = #userId:BIGINT# and delete_mark = 0
+    </update>
+
+    <update id="paySuccess">
+        update order_payment set pay_time = now(),out_trade_no = #outTradeNo# ,pay_status = 3 ,
+        pay_amount =#payAmount#,gmt_modified = now()
+        where id= #id:BIGINT# and user_id = #userId:BIGINT# and delete_mark = 0
+    </update>
+</sqlMap>

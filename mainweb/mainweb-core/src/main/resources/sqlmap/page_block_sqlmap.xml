@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="page_block">
+
+    <typeAlias alias="PageBlockDO" type="com.mockuai.mainweb.core.domain.PageBlockDO"/>
+    <!--<typeAlias alias="PageBlockDTO" type="com.mockuai.mainweb.common.domain.dto.PageBlockDTO"/>-->
+
+
+    <resultMap id="PageBlockMap" class="PageBlockDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="blockType" column="block_type" jdbcType="BIGINT"/>
+        <result property="blockOrder" column="block_order" jdbcType="BIGINT"/>
+        <result property="height" column="height" jdbcType="BIGINT"/>
+        <result property="subCategoryId" column="sub_category_id" jdbcType="BIGINT"/>
+        <result property="tmsName" column="tms_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <sql id="item">
+        id,
+        page_id,
+        block_type,
+        block_order,
+        height,
+        sub_category_id,
+        tms_name,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+
+    </sql>
+
+
+    <!-- pageBlock -->
+    <insert id="addPageBlock" parameterClass="PageBlockDO">
+        INSERT INTO block
+        (
+         <include refid="item"/>
+        ) VALUE (
+        #id#,
+        #pageId#,
+        #blockType#,
+        #blockOrder#,
+        #height#,
+        #subCategoryId#,
+        #tmsName#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="addPageBlockList" parameterClass="java.util.List">
+        INSERT INTO block
+        (
+        <include refid="item"/>
+        ) VALUE
+        <iterate  conjunction="," >
+            (#list[].id#,#list[].pageId#,#list[].blockType#,#list[].blockOrder#,#list[].height#,#list[].subCategoryId#,#list[].tmsName#,
+            0,now(),now())
+        </iterate>
+    </insert>
+
+
+    <update id="deletePageBlock" parameterClass="java.lang.Long" >
+        update  block set delete_mark = 1
+        where delete_mark = 0
+        and page_id=#id#
+    </update>
+
+
+    <select id="existBlockOrder" parameterClass="java.lang.Long" resultClass="long">
+        select count(0) from page
+        where delete_mark = 0 and block_order = #blockOrder#
+    </select>
+
+
+
+
+    <select id="queryPageBlock" resultMap="PageBlockMap"  parameterClass="java.lang.Long">
+        select
+        <include refid="item"/>
+        FROM block
+        where delete_mark = 0 and
+        page_id=#pageId#
+        ORDER BY
+        block_order asc
+    </select>
+
+</sqlMap>

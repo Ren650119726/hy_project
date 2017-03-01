@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_sku_dist_plan">
+    <!--
+    CREATE TABLE `item_sku_dist_plan` (
+    `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `item_id` bigint(20) NOT NULL COMMENT '商品ID',
+    `item_sku_id` bigint(20) NOT NULL COMMENT '商品SKU ID',
+    `sale_dist_ratio` decimal(10,4) NOT NULL COMMENT '销售分拥比率',
+    `delete_mark` tinyint(4) NOT NULL,
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品SKU级别的分拥方案';
+    lizg 0902 新添加收益比率
+    ALTER TABLE `item_sku_dist_plan`  ADD COLUMN `dist_gains_ratio` decimal(10,4) NULL DEFAULT '0.0000' COMMENT '分拥收益比率';
+    -->
+
+    <typeAlias alias="itemSkuDistPlanDO" type="com.mockuai.distributioncenter.core.domain.ItemSkuDistPlanDO"/>
+    <typeAlias alias="itemSkuDistPlanQTO" type="com.mockuai.distributioncenter.common.domain.qto.ItemSkuDistPlanQTO"/>
+
+    <resultMap id="BaseResultMap" class="itemSkuDistPlanDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="saleDistRatio" column="sale_dist_ratio" jdbcType="NUMERIC"/>
+        <result property="distGainsRatio" column="dist_gains_ratio" jdbcType="NUMERIC"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="itemSkuDistPlanDO">
+        INSERT INTO item_sku_dist_plan
+        (
+        item_id,
+        item_sku_id,
+        sale_dist_ratio,
+        dist_gains_ratio,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        VALUE
+        (
+        #itemId#,
+        #itemSkuId#,
+        #saleDistRatio#,
+        #distGainsRatio#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+    </sql>
+
+    <select id="query" parameterClass="itemSkuDistPlanQTO" resultMap="BaseResultMap">
+        SELECT * FROM item_sku_dist_plan
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="getByItemSkuId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM item_sku_dist_plan WHERE delete_mark = 0 and item_sku_id = #itemSkuId#
+    </select>
+
+    <select id="totalCount" parameterClass="itemSkuDistPlanQTO" resultMap="BaseResultMap">
+        SELECT count(*) FROM item_sku_dist_plan
+        <include refid="queryCondition" />
+    </select>
+
+    <select id="getByItemId" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM item_sku_dist_plan WHERE item_id = #itemId# AND delete_mark = 0
+    </select>
+
+    <update id="deleteByItemSkuId" parameterClass="java.lang.Long">
+        UPDATE item_sku_dist_plan SET gmt_modified = now() , delete_mark = 1 WHERE item_sku_id = #itemSkuId# AND delete_mark = 0
+    </update>
+
+    <update id="update" parameterClass="itemSkuDistPlanDO">
+        UPDATE item_sku_dist_plan SET gmt_modified = now()
+        <isNotNull property="saleDistRatio" prepend=",">
+            sale_dist_ratio = #saleDistRatio#
+        </isNotNull>
+        <isNotNull property="distGainsRatio" prepend=",">
+            dist_gains_ratio = #distGainsRatio#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend=",">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+
+    <select id="getDistByItemSkuId" parameterClass="ItemSkuDistPlanQTO" resultMap="BaseResultMap">
+        SELECT * FROM item_sku_dist_plan WHERE delete_mark = 0
+        <isNotNull prepend="and" property="itemSkuId">
+            item_sku_id = #itemSkuId:BIGINT#
+        </isNotNull>
+        <isNotNull property="itemSkuIdList">
+            <isNotEmpty prepend="AND" property="itemSkuIdList">
+                item_sku_id in
+                <iterate property="itemSkuIdList" conjunction="," open="(" close=")">
+                    #itemSkuIdList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+    </select>
+</sqlMap>

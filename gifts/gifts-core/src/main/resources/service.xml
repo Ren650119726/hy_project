@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName">
+
+	 <!-- 
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                
+                <value>classpath:jdbc.properties</value>
+            </list>
+        </property>
+    </bean>
+-->
+<!--  
+    <context:component-scan base-package="com.mockuai.giftscenter.core.message"/>
+
+    <bean class="com.mockuai.giftscenter.core.message.consumer.BaseConsumer">
+        <property name="address" value="${giftscenter.rocketmq.address}"/>
+        <property name="port" value="${giftscenter.rocketmq.port}"/>
+        <property name="consumerGroup" value="${giftscenter.rocketmq.group}"/>
+    </bean>
+    <bean class="com.mockuai.giftscenter.core.message.producer.BaseProducer">
+        <property name="address" value="${giftscenter.rocketmq.address}"/>
+        <property name="port" value="${giftscenter.rocketmq.port}"/>
+    </bean>
+-->
+    <context:component-scan base-package="com.mockuai.giftscenter.core.service.action"/>
+
+    <bean id="actionHolder" class="com.mockuai.giftscenter.core.service.action.ActionHolder"/>
+    <bean id="appContext" class="com.mockuai.giftscenter.core.service.AppContext"/>
+
+    <bean id="requestDispatcher" class="com.mockuai.giftscenter.core.service.RequestDispatcher">
+        <property name="actionHolder" ref="actionHolder"/>
+        <property name="appContext" ref="appContext"/>
+    </bean>
+    <!-- 	<aop:config>
+            apectBean 为一个自定义的bean
+            <aop:aspect id="TestAspect" ref="aspectBean">
+                配置com.spring.service包下所有类或接口的所有方法
+                <aop:pointcut id="businessService"
+                    expression="execution(* com.spring.service.*.*(..))" />
+                <aop:before pointcut-ref="businessService" method="doBefore" />
+                <aop:after pointcut-ref="businessService" method="doAfter" />
+                <aop:around pointcut-ref="businessService" method="doAround" />
+                <aop:after-throwing pointcut-ref="businessService"
+                    method="doThrowing" throwing="ex" />
+            </aop:aspect>
+        </aop:config> -->
+</beans>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="pageItemCategory">
+
+
+    <typeAlias alias="PageItemCategoryDO" type="com.mockuai.mainweb.core.domain.PageItemCategoryDO"/>
+
+    <resultMap id="BaseResultMap" class="PageItemCategoryDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="pageId" column="page_id" jdbcType="BIGINT"/>
+        <result property="blockId" column="block_id" jdbcType="BIGINT"/>
+        <result property="categoryTitle" column="category_title"  jdbcType="VARCHAR"/>
+        <result property="subCategoryTitle" column="sub_category_title" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATETIME"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATETIME"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="INTEGER"/>
+
+    </resultMap>
+
+
+    <sql id="item">
+        id,page_id,block_id,category_title,sub_category_title,gmt_created,gmt_modified,delete_mark
+    </sql>
+
+    <insert id="add" parameterClass="PageItemCategoryDO">
+        INSERT INTO page_item_category
+        (
+        <include refid="item"/>
+        ) VALUE (#id#,#pageId#,#blockId#,#categoryTitle#,#subCategoryTitle#,now(),now(),0)
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+
+    <update id="deleteByPageId" parameterClass="long">
+        update page_item_category set delete_mark = 1  where page_id = #pageId#
+    </update>
+
+    <select id="getPageItemCategory" resultMap="pageItemCategory.BaseResultMap"  parameterClass="long">
+        select
+        <include refid="item"/>
+        from page_item_category where
+        delete_mark = 0 AND block_id = #pageBlockId#
+    </select>
+
+</sqlMap>

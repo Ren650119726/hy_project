@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_browse_log">
+    <resultMap id="browseUserLog" class="com.mockuai.usercenter.core.domain.UserBrowseLogDO">
+        <result property="browseLogId" column="browse_log_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
+        <result property="storeId" column="store_id" jdbcType="BIGINT"/>
+        <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="sellerUserId" column="seller_user_id" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="column_set">
+        browse_log_id,
+        user_id,
+        nick_name,
+        store_id,
+        goods_id,        
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        seller_user_id
+    </sql>
+
+    <insert id="addUserBrowseLog" parameterClass="com.mockuai.usercenter.core.domain.UserBrowseLogDO">
+        insert into user_browse_log(
+        user_id,
+        nick_name,
+        store_id,
+        goods_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified,
+        seller_user_id
+        )
+        values(
+        #userId#,
+        #nickName#,
+        #storeId#,
+        #goodsId#,
+        #sellerUserId#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="browseLogId">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+	
+    <select id="getBrowseLogByID" resultMap="browseUserLog" parameterClass="java.lang.Long">
+        select
+        <include refid="user_browse_log.column_set"/>
+        from user_browse_log
+        where browse_log_id = #browseLogId:BIGINT# and delete_mark=0
+    </select>
+    
+    <select id="getBrowseLogByUserId" resultMap="browseUserLog" parameterClass="java.lang.Long">
+        select
+        <include refid="user_browse_log.column_set"/>
+        from user_browse_log
+        where user_id = #userId:BIGINT# and delete_mark=0
+    </select>
+</sqlMap>

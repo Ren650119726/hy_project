@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="activity_history">
+
+    <typeAlias alias="activityHistoryDO" type="com.mockuai.marketingcenter.core.domain.ActivityHistoryDO"/>
+    <typeAlias alias="activityHistoryQTO" type="com.mockuai.marketingcenter.common.domain.qto.ActivityHistoryQTO"/>
+
+    <resultMap id="result" class="activityHistoryDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="activityId" column="activity_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+        <result property="num" column="num" jdbcType="BIGINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+      id,biz_code,activity_id,seller_id,order_id,user_id,item_id,sku_id,num,status,delete_mark,gmt_created,gmt_modified
+     </sql>
+
+    <sql id="queryWhere">
+        WHERE delete_mark = 0
+        <isNotNull property="id" prepend="AND">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="activityId" prepend="AND">
+            activity_id=#activityId#
+        </isNotNull>
+        <isNotNull property="userId" prepend="AND">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status=#status#
+        </isNotNull>
+        <isNotNull property="statusList" prepend="AND" >
+            status in (
+            <iterate property="statusList" conjunction=",">
+                #statusList[]#
+            </iterate>
+            )
+        </isNotNull>
+        <isNotNull property="activityList" prepend="AND" >
+            activity_id in (
+            <iterate property="activityList" conjunction=",">
+                #activityList[]#
+            </iterate>
+            )
+        </isNotNull>
+        <!--<isNotNull property="receiverId" prepend="and">-->
+            <!--receiver_id=#receiverId#-->
+        <!--</isNotNull>-->
+        <!--<isNotNull property="granterId" prepend="and">-->
+            <!--granter_id=#granterId#-->
+        <!--</isNotNull>-->
+        <!--<isNotNull property="orderId" prepend="and">-->
+            <!--order_id = #orderId#-->
+        <!--</isNotNull>-->
+    </sql>
+
+    <insert id="addActivityHistory" parameterClass="activityHistoryDO">
+        insert into activity_history(
+        biz_code,
+        activity_id,
+        seller_id,
+        order_id,
+        user_id,
+        item_id,
+        sku_id,
+        num,
+        status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #activityId#,
+        #sellerId#,
+        #orderId#,
+        #userId#,
+        #itemId#,
+        #skuId#,
+        #num#,
+        #status#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="queryActivityHistory" parameterClass="activityHistoryQTO" resultMap="result">
+        select
+        <include refid="activity_history.columnList"/>
+        from activity_history
+        <include refid="activity_history.queryWhere"/>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <update id="updateActivityHistoryStatus" parameterClass="activityHistoryDO">
+        UPDATE activity_history
+        SET gmt_modified = now(), status = #status#
+        WHERE activity_id = #activityId# AND order_id = #orderId# AND #status# > status AND biz_code = #bizCode#
+    </update>
+</sqlMap>

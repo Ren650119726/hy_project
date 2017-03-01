@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="/appcenter/css/bootstrap.min.css" >
+</head>
+<body>
+#parse("/common/navbar.vm")
+<div class="container">
+    $screen_content
+</div>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+
+    <dubbo:application name="mainweb_consumer"/>
+    <dubbo:registry address="zookeeper://${mainwebcenter.dubbo.registry.address}"/>
+
+    <dubbo:reference id="itemService" interface="com.mockuai.itemcenter.common.api.ItemService" check="false" timeout="5000" retries="0"/>
+    <dubbo:reference id="appService"
+                     interface="com.mockuai.appcenter.common.api.AppService" check="false"/>
+    <dubbo:reference id="shopService" interface="com.mockuai.shopcenter.api.ShopService" check="false"/>
+
+</beans>

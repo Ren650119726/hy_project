@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="guarantee">
+    <!--CREATE TABLE `guarantee_info` (-->
+    <!--`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增id',-->
+    <!--`guarantee_amount` bigint(20) NOT NULL DEFAULT '0' COMMENT '保证金金额',-->
+    <!--`user_id` bigint(20) NOT NULL COMMENT '用户id',-->
+    <!--`biz_code` varchar(255) NOT NULL DEFAULT '' COMMENT '企业标识码',-->
+    <!--`type` int(11) NOT NULL DEFAULT '1' COMMENT '保证金类型',-->
+    <!--`gmt_created` datetime NOT NULL COMMENT '交纳日期',-->
+    <!--`gmt_modified` datetime NOT NULL COMMENT '修改日期',-->
+    <!--`delete_mark` tinyint(4) NOT NULL DEFAULT '0' COMMENT '删除标志位',-->
+    <!--PRIMARY KEY (`id`)-->
+    <!--) ENGINE=InnoDB DEFAULT CHARSET=utf8;-->
+
+    <resultMap id="result" class="com.mockuai.usercenter.core.domain.UserGuaranteeDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="guaranteeAmount" column="guarantee_amount" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="type" column="type" jdbcType="INTEGER"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="column_set">
+        id,
+        guarantee_amount,
+        user_id,
+        biz_code,
+        type,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+    </sql>
+
+    <insert id="addGuaranteeInfo" parameterClass="com.mockuai.usercenter.core.domain.UserGuaranteeDO">
+        insert into guarantee_info(
+            guarantee_amount,
+            user_id,
+            biz_code,
+            type,
+            gmt_created,
+            gmt_modified,
+            delete_mark
+        )
+        values(
+            #guaranteeAmount#,
+            #userId#,
+            #bizCode#,
+            #type#,
+            now(),
+            now(),
+            0
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="selectById" resultMap="result" parameterClass="java.lang.Long">
+        select
+        *
+        from guarantee_info
+        where id = #id:BIGINT# and delete_mark = 0
+    </select>
+
+    <update id="updateGuaranteeInfo" parameterClass="com.mockuai.usercenter.core.domain.UserGuaranteeDO">
+        update guarantee_info set gmt_modified = now()
+        <isNotNull prepend="," property="guaranteeAmount" >
+            guarantee_amount  = #guaranteeAmount:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="," property="type" >
+            type = #type:INTEGER #
+        </isNotNull>
+        where id = #id:BIGINT#
+    </update>
+
+    <select id="queryGuaranteeInfo" resultMap="result" parameterClass="com.mockuai.usercenter.common.qto.UserGuaranteeQTO">
+        select
+        <include refid="guarantee.column_set" />
+        from guarantee_info
+        where delete_mark = 0
+        <isNotNull prepend="and" property="userId" >
+            user_id = #userId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="bizCode" >
+            biz_code = #bizCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="type" >
+            type = #type:INTEGER#
+        </isNotNull>
+        <isNotNull prepend="and" property="startTime">
+            gmt_created >= #startTime:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="and" property="endTime">
+            gmt_created <![CDATA[<=]]> #endTime:TIMESTAMP#
+        </isNotNull>
+        order by id desc limit #offset#,#count#
+    </select>
+
+    <select id="totalGuaranteeInfo" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.common.qto.UserGuaranteeQTO">
+        select count(*) from guarantee_info where delete_mark = 0
+        <isNotNull prepend="and" property="userId" >
+            user_id = #userId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="bizCode" >
+            biz_code = #bizCode:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="type" >
+            type = #type:INTEGER#
+        </isNotNull>
+        <isNotNull prepend="and" property="startTime">
+            gmt_created >= #startTime:TIMESTAMP#
+        </isNotNull>
+        <isNotNull prepend="and" property="endTime">
+            gmt_created <![CDATA[<=]]> #endTime:TIMESTAMP#
+        </isNotNull>
+    </select>
+
+    <update id="deleteGuaranteeInfo" parameterClass="java.lang.Long">
+        update guarantee_info set gmt_modified = now(),delete_mark = 1
+        where id = #id:BIGINT#
+    </update>
+
+</sqlMap>

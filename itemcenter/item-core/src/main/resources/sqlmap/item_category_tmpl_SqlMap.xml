@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_category_tmpl">
+    <typeAlias alias="ItemCategoryTmplDO" type="com.mockuai.itemcenter.core.domain.ItemCategoryTmplDO"/>
+    <typeAlias alias="ItemCategoryTmplQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemCategoryTmplQTO"/>
+
+    <resultMap class="ItemCategoryTmplDO" id="ItemCategoryTmplDOResult">
+        <result column="id" property="id"/>
+        <result column="cate_name" property="cateName"/>
+        <result column="cate_level" property="cateLevel"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="sort" property="sort"/>
+        <result column="top_id" property="topId"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="image_url" property="imageUrl"/>
+    </resultMap>
+
+    <insert id="ItemCategoryTmplDAO.addItemCategoryTmpl" parameterClass="ItemCategoryTmplDO">
+        insert into item_category_tmpl
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="cateName">
+                cate_name
+            </isNotNull>
+            <isNotNull prepend="," property="cateLevel">
+                cate_level
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                parent_id
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort
+            </isNotNull>
+            <isNotNull prepend="," property="topId">
+                top_id
+            </isNotNull>
+            <isNotNull prepend="," property="imageUrl">
+                image_url
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="cateName">
+                #cateName:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="cateLevel">
+                #cateLevel:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="parentId">
+                #parentId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                #sort:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="topId">
+                #topId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="imageUrl">
+                #imageUrl:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <sql id="item_category_tmpl_base_column_list">
+        id, cate_name, cate_level, parent_id, sort,top_id, image_url,
+        delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="ItemCategoryTmplDAO.queryWhere">
+        where delete_mark = 0
+        <!-- <dynamic prepend="where"> -->
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="topId">
+            top_id = #topId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="cateName">
+            cate_name like concat('%', #cateName#,'%')
+        </isNotNull>
+        <!-- </dynamic> -->
+    </sql>
+
+    <update id="ItemCategoryTmplDAO.updateItemCategoryTmpl">
+        update item_category_tmpl
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="cateName">
+                cate_name = #cateName#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort = #sort#
+            </isNotNull>
+            <isNotNull prepend="," property="imageUrl">
+                image_url = #imageUrl#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and id = #id#
+    </update>
+
+    <update id="ItemCategoryTmplDAO.deleteItemCategoryTmpl">
+        update item_category_tmpl
+        set gmt_modified=now(),delete_mark = 1
+        <include refid="ItemCategoryTmplDAO.queryWhere"/>
+    </update>
+
+    <!--<select id="ItemCategoryTmplDAO.getItemCategoryTmpl" resultMap="ItemCategoryTmplDOResult"-->
+    <!--parameterClass="ItemCategoryTmplQTO">-->
+    <!--select-->
+    <!--<include refid="item_category_tmpl_base_column_list"/>-->
+    <!--from item_category_tmpl-->
+    <!--<include refid="ItemCategoryTmplDAO.queryWhere"/>-->
+    <!--</select>-->
+
+    <sql id="ItemCategoryTmplDAO.qtoQueryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="parentId">
+            parent_id = #parentId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="cateLevel">
+            cate_level = #cateLevel#
+        </isNotNull>
+        <isNotNull prepend="AND" property="cateName">
+            cate_name = #cateName#
+        </isNotNull>
+        <isNotNull prepend="AND" property="cateLevel">
+            cate_level = #cateLevel#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty prepend="AND" property="idList">
+                id in
+                <iterate property="idList" conjunction="," close=")" open="(">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <!-- </dynamic> -->
+    </sql>
+
+    <select id="ItemCategoryTmplDAO.countItemCategoryTmpl" resultClass="Integer" parameterClass="ItemCategoryTmplQTO">
+        select count(1) from item_category_tmpl
+        <include refid="ItemCategoryTmplDAO.qtoQueryWhere"/>
+    </select>
+
+    <select id="ItemCategoryTmplDAO.queryItemCategoryTmpl" resultMap="ItemCategoryTmplDOResult"
+            parameterClass="ItemCategoryTmplQTO">
+        select
+        <include refid="item_category_tmpl_base_column_list"/>
+        from item_category_tmpl
+        <include refid="ItemCategoryTmplDAO.qtoQueryWhere"/>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+    <select id="ItemCategoryTmplDAO.getItemCategoryTmpl" resultMap="ItemCategoryTmplDOResult"
+            parameterClass="ItemCategoryTmplDO">
+        select
+        <include refid="item_category_tmpl_base_column_list"/>
+        from item_category_tmpl
+        where delete_mark = 0 and id = #id#
+    </select>
+
+    <!--TODO 目前只支持两级主营类目，所以查询叶子类目直接用cate_level=2，后续如果调整了类目层级，则这里也需要调整-->
+    <select id="ItemCategoryTmplDAO.queryItemLeafCategory" resultMap="ItemCategoryTmplDOResult"
+            parameterClass="java.lang.String">
+        SELECT
+        <include refid="item_category_tmpl_base_column_list"/>
+        FROM item_db.item_category_tmpl
+        where cate_level=2 and delete_mark=0;
+    </select>
+</sqlMap>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ActionConfig>
+	<filters>
+		<chain name="required">
+			<filter name="appCheckFilter" implClass="com.mockuai.itemcenter.core.filter.impl.AppCheckFilter"/>
+			<filter name="giftsFilter" implClass="com.mockuai.itemcenter.core.filter.impl.GiftsFilter"/>
+			<filter name="stockChangeFilter" implClass="com.mockuai.itemcenter.core.filter.impl.StockChangeFilter"/>
+			<filter name="notifyMsgFilter" implClass="com.mockuai.itemcenter.core.filter.impl.NotifyMsgFilter"/>
+		</chain>
+	</filters>
+</ActionConfig>

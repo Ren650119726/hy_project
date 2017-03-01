@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+    <bean id="grantBoxDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.GrantRuleDAOImpl"/>
+    <bean id="grantRuleDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.RuleModuleDAOImpl"/>
+    <bean id="virtualWealthDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.VirtualWealthDAOImpl"/>
+    <bean id="wealthAccountDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.WealthAccountDAOImpl"/>
+    <bean id="grantedWealthDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.GrantedWealthDAOImpl"/>
+    <bean id="usedWealthDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.UsedWealthDAOImpl"/>
+    <bean id="rmqMessageDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.RMQMessageDAOImpl"/>
+    <bean id="rechargeRecordDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.RechargeRecordDAOImpl"/>
+    <bean id="virtualWealthItemDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.VirtualWealthItemDAOImpl"/>
+    <bean id="usedLogDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.UsedLogDAOImpl"/>
+    <bean id="withdrawalsItemDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.WithdrawalItemDAOImpl"/>
+    <bean id="withdrawalsConfigDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.WithdrawalConfigDAOImpl"/>
+	<bean id="userAuthonAppDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.UserAuthonAppDAOImpl"/>
+    <bean id="bankInfoAppDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.BankInfoAppDAOImpl"/>
+    <bean id="withdrawalsItemAppDAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.WithdrawalsItemAppDAOImpl"/>
+    <bean id="withdrawalsItemLogDODAO" class="com.mockuai.virtualwealthcenter.core.dao.impl.WithdrawalsItemLogDODAOImpl"/>
+</beans>

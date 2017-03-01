@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="cart_item_service">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.CartItemServiceDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="cartId" column="cart_id" jdbcType="BIGINT"/>
+        <result property="sellerId" column="seller_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="serviceName" column="service_name" />
+        <result property="price" column="price" />
+        <result property="serviceImageUrl" column="service_image_url"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+        <result property="serviceId" column="service_id" />
+        
+        
+        
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        cart_id,
+        seller_id,
+        item_sku_id,
+        service_name,
+        price,
+        service_image_url,
+        service_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+	<!-- 只用来查询 登陆用户的购物车服务信息 -->
+   <select id="query" parameterClass="com.mockuai.tradecenter.common.domain.CartItemServiceQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from cart_item_service where 1=1 
+        and delete_mark = 0
+        <isNotNull property="cartId" prepend="and">
+            cart_id=#cartId#
+        </isNotNull>
+         
+      
+    </select>
+
+
+    <insert id="add" parameterClass="com.mockuai.tradecenter.core.domain.CartItemServiceDO">
+        insert into cart_item_service(
+        biz_code,
+        cart_id,
+        seller_id,
+        item_sku_id,
+        service_name,
+        price,
+        service_image_url,
+        service_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #cartId#,
+        #sellerId#,
+        #itemSkuId#,
+        #serviceName#,
+        #price#,
+        #serviceImageUrl#,
+        #serviceId#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+    
+    <delete id="delete" parameterClass="com.mockuai.tradecenter.common.domain.CartItemServiceQTO" >
+	  delete from cart_item_service	   
+	  where 1=1
+         <isNotNull property="cartId" prepend="and">
+            cart_id=#cartId#
+        </isNotNull>
+	</delete>
+
+
+   
+</sqlMap>

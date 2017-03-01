@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="item_property">
+    <typeAlias alias="ItemPropertyDO" type="com.mockuai.itemcenter.core.domain.ItemPropertyDO"/>
+    <typeAlias alias="ItemPropertyQTO" type="com.mockuai.itemcenter.common.domain.qto.ItemPropertyQTO"/>
+
+    <resultMap class="ItemPropertyDO" id="ItemPropertyDOResult">
+        <result column="id" property="id"/>
+        <result column="item_id" property="itemId"/>
+        <result column="property_value_id" property="propertyValueId"/>
+        <result column="item_property_tmpl_id" property="itemPropertyTmplId"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="name" property="name"/>
+        <result column="name_id" property="nameId"/>
+        <result column="value" property="value"/>
+        <result column="value_type" property="valueType"/>
+        <result column="sort" property="sort"/>
+        <result column="biz_mark" property="bizMark"/>
+        <result column="code" property="code"/>
+        <result column="biz_code" property="bizCode"/>
+        <result column="delete_mark" property="deleteMark"/>
+        <result column="gmt_created" property="gmtCreated"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+
+    <insert id="ItemPropertyDAO.addItemProperty" parameterClass="ItemPropertyDO">
+        insert into item_property
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                property_value_id
+            </isNotNull>
+            <isNotNull prepend="," property="itemPropertyTmplId">
+                item_property_tmpl_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                name
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                biz_mark
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                code
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark
+            ,gmt_created
+            ,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="propertyValueId">
+                #propertyValueId#
+            </isNotNull>
+            <isNotNull prepend="," property="itemPropertyTmplId">
+                #itemPropertyTmplId#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="name">
+                #name#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                #value#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                #valueType#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                #sort#
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                #bizMark:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                #code:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0
+            ,now()
+            ,now()
+            )
+        </dynamic>
+
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <insert id="ItemPropertyDAO.addItemPropertyList"  parameterClass="java.util.List">
+      insert into item_property(biz_code,seller_id,item_id,property_value_id,
+      name,value,code,delete_mark,gmt_created,gmt_modified,name_id)
+      values
+        <iterate  conjunction="," >
+            (#list[].bizCode#,#list[].sellerId#,#list[].itemId#,#list[].propertyValueId#,
+             #list[].name#,#list[].value#,#list[].code#,0,now(),now(),#list[].nameId#)
+        </iterate>
+
+
+    </insert>
+
+
+
+    <sql id="item_property_base_column_list">
+        id, item_id, property_value_id,item_property_tmpl_id,seller_id, name,name_id, value, value_type, sort, biz_mark,
+        code,biz_code,
+        delete_mark, gmt_created, gmt_modified
+    </sql>
+
+
+    <sql id="ItemPropertyDAO.queryWhere">
+        <!-- <dynamic prepend="where"> -->
+        where
+        <isNotNull property="deleteMark">
+            delete_mark = #deleteMark#
+        </isNotNull>
+        <isNull property="deleteMark">
+            delete_mark = 0
+        </isNull>
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="itemId" prepend="and">
+            item_id=#itemId#
+        </isNotNull>
+        <isNotNull property="sellerId" prepend="and">
+            seller_id=#sellerId#
+        </isNotNull>
+    </sql>
+
+    <update id="ItemPropertyDAO.updateItemProperty" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="name">
+                name = #name#
+            </isNotNull>
+            <isNotNull prepend="," property="value">
+                value = #value#
+            </isNotNull>
+            <isNotNull prepend="," property="valueType">
+                value_type = #valueType#
+            </isNotNull>
+            <isNotNull prepend="," property="sort">
+                sort = #sort#
+            </isNotNull>
+            <isNotNull prepend="," property="bizMark">
+                biz_mark = #bizMark#
+            </isNotNull>
+            <isNotNull prepend="," property="code">
+                code = #code#
+            </isNotNull>
+            <isNotNull prepend="," property="nameId">
+                name_id = #nameId#
+            </isNotNull>
+        </dynamic>
+        where delete_mark = 0 and seller_id = #sellerId# and id = #id#
+    </update>
+
+    <select id="ItemPropertyDAO.getItemProperty" resultMap="ItemPropertyDOResult" parameterClass="ItemPropertyDO">
+        select
+        <include refid="item_property_base_column_list"/>
+        from item_property
+        where delete_mark = 0 and seller_id = #sellerId# and id = #id#
+    </select>
+
+    <update id="ItemPropertyDAO.deleteItemProperty" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now(),delete_mark = 1
+        where delete_mark = 0 and seller_id = #sellerId# and id = #id#
+    </update>
+
+    <select id="ItemPropertyDAO.countItemProperty" resultClass="Integer" parameterClass="ItemPropertyQTO">
+        select count(1) from item_property
+        <include refid="ItemPropertyDAO.queryWhere"/>
+    </select>
+
+    <select id="ItemPropertyDAO.queryItemProperty" resultMap="ItemPropertyDOResult" parameterClass="ItemPropertyQTO">
+        select
+        <include refid="item_property_base_column_list"/>
+        from item_property
+        <include refid="ItemPropertyDAO.queryWhere"/>
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+
+   <select id="ItemPropertyDAO.countBy" resultClass="int" parameterClass="ItemPropertyQTO">
+       select count(0) from item_property
+       where delete_mark  = 0
+       <isNotNull property="code" prepend="and">
+           code  = #code#
+       </isNotNull>
+       <isNotNull property="propertyValueId" prepend="and">
+           property_value_id  = #propertyValueId#
+       </isNotNull>
+       <isNotNull property="nameId" prepend="and">
+           name_id  = #nameId#
+       </isNotNull>
+   </select>
+
+    <!-- 根据itemId 删除 -->
+    <update id="ItemPropertyDAO.deleteByItemId" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now(),delete_mark = 1 where item_id = #itemId# and seller_id = #sellerId# and delete_mark in
+        (0,2);
+    </update>
+
+    <update id="ItemPropertyDAO.trashByItemId" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now(),delete_mark = 2 where item_id = #itemId# and seller_id = #sellerId# and delete_mark = 0;
+    </update>
+
+    <update id="ItemPropertyDAO.recoveryByItemId" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now(),delete_mark = 0 where item_id = #itemId# and seller_id = #sellerId# and delete_mark = 2;
+    </update>
+
+    <update id="ItemPropertyDAO.emptyRecycleBin" parameterClass="ItemPropertyDO">
+        update item_property
+        set gmt_modified=now(),delete_mark = 1 where biz_code = #bizCode# and seller_id = #sellerId# and delete_mark =
+        2;
+    </update>
+
+</sqlMap>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="versionDeploy" >
+
+    <typeAlias alias="versionDeployDO" type="com.mockuai.rainbowcenter.core.domain.VersionDeployDO"/>
+
+    <resultMap id="BaseResultMap" class="versionDeployDO" >
+        <result property="id" column="id"  jdbcType="BIGINT" />
+        <result property="type" column="type"  jdbcType="TINYINT" />
+        <result property="desc" column="desc"  jdbcType="VARCHAR" />
+        <result property="version" column="version"  jdbcType="VARCHAR" />
+        <result property="isUpdate" column="is_update"  jdbcType="TINYINT" />
+        <result property="isForceUpdate" column="is_force_update"  jdbcType="TINYINT" />
+        <result property="appUrl" column="app_url"  jdbcType="VARCHAR" />
+        <result property="deleteMark" column="delete_mark"  jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created"  jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified"  jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <select id="selectVersionDeploy" resultMap="BaseResultMap">
+        select *  from version_deploy where delete_mark = 0
+    </select>
+
+</sqlMap>

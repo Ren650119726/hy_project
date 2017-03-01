@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+       default-autowire="byName">
+
+    <bean id="appManager" class="com.mockuai.seckillcenter.core.manager.impl.AppManagerImpl"/>
+    <bean id="seckillManager" class="com.mockuai.seckillcenter.core.manager.impl.SeckillManagerImpl"/>
+    <bean id="itemManager" class="com.mockuai.seckillcenter.core.manager.impl.ItemManagerImpl"/>
+    <bean id="tradeManager" class="com.mockuai.seckillcenter.core.manager.impl.TradeManagerImpl"/>
+    <bean id="redissonManger" class="com.mockuai.seckillcenter.core.manager.impl.RedissonMangerImpl">
+        <property name="env" value="${seckillcenter.redis.env}"/>
+        <property name="host" value="${seckillcenter.redis.host}"/>
+        <property name="port" value="${seckillcenter.redis.port}"/>
+        <property name="user" value="${seckillcenter.redis.user}"/>
+        <property name="password" value="${seckillcenter.redis.password}"/>
+    </bean>
+    <bean id="rmqMessageManager" class="com.mockuai.seckillcenter.core.manager.impl.RMQMessageManagerImpl"/>
+    <bean id="distributorManager" class="com.mockuai.seckillcenter.core.manager.impl.DistributorManagerImpl"/>
+    <bean id="orderHistoryManger" class="com.mockuai.seckillcenter.core.manager.impl.OrderHistoryMangerImpl"/>
+</beans>

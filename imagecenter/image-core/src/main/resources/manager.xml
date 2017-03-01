@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <context:component-scan base-package="com.mockuai.imagecenter.core.manager"/>
+
+
+    <bean id="recommendQrCodeManagerImpl" class="com.mockuai.imagecenter.core.manager.impl.RecommendQrCodeManagerImpl" >
+        <property name="defaultRecommendUrl" value="${imagecenter.recommend.url}"/>
+    </bean>
+    <bean id="shopQrCodeManagerImpl" class="com.mockuai.imagecenter.core.manager.impl.ShopQRCodeManagerImpl" >
+        <property name="defaultShopUrl" value="${imagecenter.shop.url}"/>
+    </bean>
+
+
+    <bean id="inviteRegisterQrcodeManageImpl" class="com.mockuai.imagecenter.core.manager.impl.InviteRegisterQrcodeManageImpl" >
+        <property name="defaultInviteRegisterUrl" value="${imagecenter.register.url}"/>
+    </bean>
+
+   <bean id="cacheManager" class="com.mockuai.imagecenter.core.manager.impl.CacheManagerImpl" >
+       <constructor-arg value="558c1e51d6e640c5.m.cnhzaliqshpub001.ocs.aliyuncs.com" />
+       <constructor-arg value="11211"/>
+       <constructor-arg value="558c1e51d6e640c5"/>
+       <constructor-arg value="hzkansQWSD123"/>
+
+           </bean>
+
+    <bean id="ossClientAPI" class="com.mockuai.imagecenter.core.api.impl.OSSClientAPI" init-method="init">
+        <constructor-arg>
+            <value>${imagecenter.oss.accesskey.id}</value>
+        </constructor-arg>
+        <constructor-arg>
+            <value>${imagecenter.oss.accesskey.secret}</value>
+        </constructor-arg>
+    </bean>
+</beans>

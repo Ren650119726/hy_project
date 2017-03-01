@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="grant_rule">
+
+    <typeAlias alias="grantRuleDO" type="com.mockuai.virtualwealthcenter.core.domain.GrantRuleDO"/>
+    <typeAlias alias="grantRuleQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.GrantRuleQTO"/>
+
+    <resultMap id="result" class="grantRuleDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="creatorId" column="creator_id" jdbcType="BIGINT"/>
+        <result property="ownerId" column="owner_id" jdbcType="BIGINT"/>
+        <result property="wealthType" column="wealth_type" jdbcType="TINYINT"/>
+        <result property="sourceType" column="source_type" jdbcType="TINYINT"/>
+        <result property="ruleType" column="rule_type" jdbcType="TINYINT"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+        id,
+        biz_code,
+        creator_id,
+        name,
+        owner_id,
+        wealth_type,
+        source_type,
+        rule_type,
+        status,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        WHERE delete_mark=0
+        <isNotNull property="id" prepend="AND">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="ownerId" prepend="AND">
+            owner_id=#ownerId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="sourceType" prepend="AND">
+            source_type=#sourceType#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="AND">
+            wealth_type=#wealthType#
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status=#status#
+        </isNotNull>
+    </sql>
+
+    <insert id="addGrantRule" parameterClass="grantRuleDO">
+        insert into grant_rule( biz_code, creator_id, owner_id, wealth_type, name, source_type, rule_type, status,
+        delete_mark, gmt_created, gmt_modified ) values( #bizCode#, #creatorId#, #ownerId#, #wealthType#, #name#,
+        #sourceType#, #ruleType#, #status#,0, now(), now() )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getGrantRule" resultMap="result" parameterClass="grantRuleDO">
+        select
+        <include refid="grant_rule.columnList"/>
+        from grant_rule
+        <include refid="grant_rule.queryWhere"/>
+    </select>
+
+    <select id="queryGrantRule" resultMap="result" parameterClass="grantRuleQTO">
+        select
+        <include refid="grant_rule.columnList"/>
+        from grant_rule
+        <include refid="grant_rule.queryWhere"/>
+        order by status DESC, gmt_created DESC
+    </select>
+
+    <update id="updateGrantRule" parameterClass="grantRuleDO">
+        update grant_rule set gmt_modified=now()
+        <isNotNull property="name" prepend=",">
+            name = #name#
+        </isNotNull>
+        <isNotNull property="status" prepend=",">
+            status=#status#
+        </isNotNull>
+        WHERE id=#id#
+        <isNotNull property="creatorId" prepend="AND">
+            creator_id=#creatorId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="AND">
+            biz_code=#bizCode#
+        </isNotNull>
+    </update>
+
+    <update id="deleteGrantRule" parameterClass="grantRuleDO">
+        update grant_rule set delete_mark = 1, gmt_modified=now()
+        <include refid="grant_rule.queryWhere"/>
+    </update>
+</sqlMap>

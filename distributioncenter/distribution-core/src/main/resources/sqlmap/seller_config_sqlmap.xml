@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="seller_config">
+
+    <!--CREATE TABLE `seller_config` (
+    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+    `level` tinyint(4) NOT NULL COMMENT '等级1，2，3',
+    `level_name` varchar(64) NOT NULL DEFAULT '' COMMENT '等级名称',
+    `under_count` int(11) NOT NULL COMMENT '直属人数',
+    `team_count` int(11) NOT NULL COMMENT '团队人数',
+    `gmt_created` datetime NOT NULL,
+    `gmt_modified` datetime NOT NULL,
+    `delete_mark` tinyint(4) NOT NULL,
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;-->
+
+<!--
+    INSERT INTO `seller_config` (`level`, `level_name`, `under_count`, `team_count`, `gmt_created`, `gmt_modified`, `delete_mark`)
+    VALUES
+    (1, '等级1', 0, 0, now(), now(), 0),
+    (2, '等级2', 0, 0, now(), now(), 0),
+    (3, '等级3', 0, 0, now(), now(), 0);-->
+
+    <resultMap id="BaseResultMap" class="com.mockuai.distributioncenter.core.domain.SellerConfigDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="level" column="level" jdbcType="TINYINT"/>
+        <result property="levelName" column="level_name" jdbcType="VARCHAR"/>
+        <result property="underCount" column="under_count" jdbcType="INTEGER"/>
+        <result property="teamCount" column="team_count" jdbcType="INTEGER"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="queryCondition">
+        WHERE delete_mark = 0
+        <isNotNull property="level" prepend="AND">
+            level = #level#
+        </isNotNull>
+        <isNotEmpty property="levelIds" prepend="AND">
+            id IN
+            <iterate open="(" close=")" conjunction="," property="levelIds">
+                #levelIds[]#
+            </iterate>
+        </isNotEmpty>
+    </sql>
+
+    <insert id="add_seller_config" parameterClass="com.mockuai.distributioncenter.core.domain.SellerConfigDO">
+        INSERT INTO seller_config
+        (
+        level,
+        level_name,
+        under_count,
+        team_count,
+        gmt_created,
+        gmt_modified,
+        delete_mark
+        )
+        VALUES (
+        #level#,
+        #levelName#,
+        #underCount#,
+        #teamCount#,
+        now(),
+        now(),
+        0
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="get_seller_config" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+        SELECT * FROM seller_config WHERE delete_mark = 0 AND id = #id#
+    </select>
+
+    <update id="update_seller_config" parameterClass="com.mockuai.distributioncenter.core.domain.SellerConfigDO">
+        UPDATE seller_config SET gmt_modified = now()
+        <isNotNull property="level" prepend=",">
+            level = #level#
+        </isNotNull>
+        <isNotNull property="levelName" prepend=",">
+            level_name = #levelName#
+        </isNotNull>
+        <isNotNull property="underCount" prepend=",">
+            under_count = #underCount#
+        </isNotNull>
+        <isNotNull property="teamCount" prepend=",">
+            team_count = #teamCount#
+        </isNotNull>
+        WHERE id = #id# AND delete_mark = 0
+    </update>
+
+    <select id="query_seller_config" parameterClass="com.mockuai.distributioncenter.common.domain.qto.SellerConfigQTO" resultMap="BaseResultMap">
+        SELECT * from seller_config
+        <include refid="queryCondition" />
+    </select>
+</sqlMap>

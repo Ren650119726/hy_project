@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="granted_wealth">
+
+    <typeAlias alias="grantedWealthDO" type="com.mockuai.virtualwealthcenter.core.domain.GrantedWealthDO"/>
+    <typeAlias alias="grantedWealthQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.GrantedWealthQTO"/>
+
+    <resultMap id="result" class="grantedWealthDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="wealthId" column="wealth_id" jdbcType="BIGINT"/>
+        <result property="wealthType" column="wealth_type" jdbcType="TINYINT"/>
+        <result property="sourceType" column="source_type" jdbcType="TINYINT"/>
+        <result property="amount" column="amount" jdbcType="BIGINT"/>
+        <result property="usedAmount" column="used_amount" jdbcType="BIGINT"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="orderSN" column="order_sn" jdbcType="VARCHAR"/>
+        <result property="shopId" column="shop_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+        <result property="text" column="text" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="receiverId" column="receiver_id" jdbcType="BIGINT"/>
+        <result property="granterId" column="granter_id" jdbcType="BIGINT"/>
+        <result property="grantedTime" column="granted_time" jdbcType="TIMESTAMP"/>
+        <result property="ruleSnapshot" column="rule_snapshot" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
+    <sql id="columnList">
+        id,
+        biz_code,
+        wealth_id,
+        wealth_type,
+        source_type,
+        amount,
+        used_amount,
+        order_id,
+        order_sn,
+        shop_id,
+        item_id,
+        sku_id,
+        text,
+        status,
+        receiver_id,
+        granter_id,
+        granted_time,
+        rule_snapshot,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="queryWhere">
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="wealthId" prepend="and">
+            wealth_id=#wealthId#
+        </isNotNull>
+        <isNotNull property="orderId" prepend="and">
+            order_id = #orderId#
+        </isNotNull>
+        <isNotNull property="receiverId" prepend="and">
+            receiver_id=#receiverId#
+        </isNotNull>
+        <isNotNull property="skuId" prepend="AND">
+            sku_id=#skuId#
+        </isNotNull>
+        <isNotNull property="wealthType" prepend="and">
+            wealth_type=#wealthType#
+        </isNotNull>
+        <isNotNull property="sourceType" prepend="and">
+            source_type=#sourceType#
+        </isNotNull>
+        <isNotNull property="granterId" prepend="and">
+            granter_id=#granterId#
+        </isNotNull>
+        <isNotNull property="currentDay" prepend="and">
+            granted_time >= #currentDay#
+        </isNotNull>
+        <isNotNull property="totalCombine" prepend="and">
+            1 >= status
+        </isNotNull>
+        <isNotNull property="status" prepend="AND">
+            status=#status#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="nonZero" prepend="and">
+            amount!=0
+        </isNotNull>
+        <isNotNull property="nonEmpty" prepend="and">
+            amount!=used_amount
+        </isNotNull>
+        <isNotNull property="nonStatus" prepend="and">
+            status!=#nonStatus#
+        </isNotNull>
+        <isNotNull property="willExpire" prepend="AND">
+            TIMESTAMPDIFF(DAY,gmt_created,now()) >= 300
+        </isNotNull>
+        <isNotNull property="expire" prepend="AND">
+            TIMESTAMPDIFF(DAY,gmt_created,now()) >= 360
+        </isNotNull>
+
+    </sql>
+
+    <insert id="addGrantedWealth" parameterClass="grantedWealthDO">
+        insert into granted_wealth(
+        biz_code,
+        wealth_id,
+        wealth_type,
+        source_type,
+        amount,
+        order_id,
+        order_sn,
+        shop_id,
+        item_id,
+        sku_id,
+        text,
+        status,
+        receiver_id,
+        granter_id,
+        granted_time,
+        rule_snapshot,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #wealthId#,
+        #wealthType#,
+        #sourceType#,
+        #amount#,
+        #orderId#,
+        #orderSN#,
+        #shopId#,
+        #itemId#,
+        #skuId#,
+        #text#,
+        #status#,
+        #receiverId#,
+        #granterId#,
+        now(),
+        #ruleSnapshot#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <insert id="addGrantedWealths" parameterClass="java.util.Map">
+        INSERT INTO granted_wealth(
+        biz_code,
+        wealth_id,
+        wealth_type,
+        source_type,
+        amount,
+        used_amount,
+        order_id,
+        order_sn,
+        shop_id,
+        item_id,
+        sku_id,
+        text,
+        status,
+        receiver_id,
+        granter_id,
+        granted_time,
+        rule_snapshot,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+         VALUES
+        <isNotNull property="grantedWealthDOs">
+            <iterate property="grantedWealthDOs" conjunction=",">
+                (
+                #grantedWealthDOs[].bizCode#,
+                #grantedWealthDOs[].wealthId#,
+                #grantedWealthDOs[].wealthType#,
+                #grantedWealthDOs[].sourceType#,
+                #grantedWealthDOs[].amount#,
+                #grantedWealthDOs[].usedAmount#,
+                #grantedWealthDOs[].orderId#,
+                #grantedWealthDOs[].orderSN#,
+                #grantedWealthDOs[].shopId#,
+                #grantedWealthDOs[].itemId#,
+                #grantedWealthDOs[].skuId#,
+                #grantedWealthDOs[].text#,
+                #grantedWealthDOs[].status#,
+                #grantedWealthDOs[].receiverId#,
+                #grantedWealthDOs[].granterId#,
+                now(),
+                #grantedWealthDOs[].ruleSnapshot#,
+                0,
+                now(),
+                now()
+                )
+            </iterate>
+        </isNotNull>
+    </insert>
+
+    <select id="queryGrantedWealth" parameterClass="grantedWealthQTO" resultMap="result">
+        select
+        <include refid="granted_wealth.columnList"/>
+        from granted_wealth where delete_mark = 0
+        <include refid="granted_wealth.queryWhere"/>
+        ORDER BY id desc
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="countOfQueryGrantedWealth" parameterClass="grantedWealthQTO" resultClass="java.lang.Integer">
+        select count(1) from granted_wealth where delete_mark = 0
+        <include refid="granted_wealth.queryWhere"/>
+    </select>
+
+    <select id="getGrantedWealth" parameterClass="grantedWealthDO" resultMap="result">
+        select
+        <include refid="granted_wealth.columnList"/>
+        from granted_wealth where delete_mark = 0
+        <isNotNull prepend="AND" property="orderId">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="wealthType">
+            wealth_type=#wealthType#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sourceType">
+            source_type=#sourceType#
+        </isNotNull>
+    </select>
+    <update id="updateGrantedWealth" parameterClass="grantedWealthDO">
+        UPDATE granted_wealth
+        SET gmt_modified=now()
+        <isNotNull property="status" prepend=",">
+            status=#status#
+        </isNotNull>
+        <isNotNull property="amount" prepend=",">
+            amount=#amount#
+        </isNotNull>
+        <isNotNull property="usedAmount" prepend=",">
+            used_amount=#usedAmount#
+        </isNotNull>
+        WHERE id=#id#
+    </update>
+
+	<!-- 批量更新状态 -->
+    <update id="batchUpdateStatus" parameterClass="java.util.Map">
+        UPDATE granted_wealth SET gmt_modified = now(), status = #status#
+        WHERE id in (
+        <isNotNull property="grantedWealthDOs">
+            <iterate property="grantedWealthDOs" conjunction=",">
+                #grantedWealthDOs[].id#
+            </iterate>
+        </isNotNull>
+        )
+    </update>
+	
+	<!-- 批量更新使用使用数量-->
+    <update id="decreaseAmount" parameterClass="java.util.Map">
+        UPDATE granted_wealth SET gmt_modified = now(), used_amount = CASE id
+        <isNotNull property="grantedWealthDOs">
+            <iterate property="grantedWealthDOs">
+                WHEN #grantedWealthDOs[].id# THEN used_amount + #grantedWealthDOs[].usedAmount#
+            </iterate>
+        </isNotNull>
+        END WHERE id in (
+        <isNotNull property="grantedWealthDOs">
+            <iterate property="grantedWealthDOs" conjunction=",">
+                #grantedWealthDOs[].id#
+            </iterate>
+        </isNotNull>
+        )
+    </update>
+    
+    
+    <!-- 客户管理 余额和嗨币的收入（2接口）-->
+    <select id="findCustomerGrantedPageList" resultMap="result" parameterClass="grantedWealthQTO">
+        select
+        <include refid="granted_wealth.columnList"/>
+        FROM granted_wealth
+        WHERE 
+        wealth_type = #wealthType# 
+        <isNotNull property="receiverId" prepend="AND">
+            receiver_id=#receiverId#
+        </isNotNull>
+        order by granted_time desc
+        <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+        </isNotNull>
+    </select>
+    
+    
+    <!-- 客户管理 余额和嗨币的收入 总条数（2接口）-->
+    <select id="findCustomerGrantedCount" resultClass="java.lang.Integer" parameterClass="grantedWealthQTO">
+        select
+        count(1)  
+        FROM granted_wealth
+        WHERE 
+        wealth_type = #wealthType# 
+        <isNotNull property="receiverId" prepend="AND">
+            receiver_id=#receiverId#
+        </isNotNull>
+    </select>
+    
+</sqlMap>

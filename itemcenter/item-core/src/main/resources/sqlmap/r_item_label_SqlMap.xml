@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="r_item_label">
+    <typeAlias alias="RItemLabelDO" type="com.mockuai.itemcenter.core.domain.RItemLabelDO"/>
+    <typeAlias alias="ItemLabelDO" type="com.mockuai.itemcenter.core.domain.ItemLabelDO"/>
+    <typeAlias alias="RItemLabelQTO" type="com.mockuai.itemcenter.common.domain.qto.RItemLabelQTO"/>
+
+    <resultMap class="RItemLabelDO" id="BaseResultMap">
+        <result column="id" jdbcType="BIGINT" property="id"/>
+        <result column="seller_id" jdbcType="BIGINT" property="sellerId"/>
+        <result column="biz_code" jdbcType="VARCHAR" property="bizCode"/>
+        <result column="delete_mark" jdbcType="TINYINT" property="deleteMark"/>
+        <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated"/>
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified"/>
+        <result column="item_id" jdbcType="BIGINT" property="itemId"/>
+        <result column="label_id" jdbcType="BIGINT" property="labelId"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, seller_id, biz_code, delete_mark, gmt_created, gmt_modified, item_id, label_id
+    </sql>
+
+
+    <select id="RItemLabelDAO.getRItemLabel" parameterClass="RItemLabelDO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from r_item_label
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#;
+    </select>
+
+    <select id="RItemLabelDAO.queryRItemLabel" parameterClass="RItemLabelQTO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from r_item_label
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="labelId">
+            label_id = #labelId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <!--<isNotEmpty property="idList" prepend="AND">-->
+            <!--id in-->
+            <!--<iterate property="idList" conjunction="," open="(" close=")">-->
+                <!--#idList[]#-->
+            <!--</iterate>-->
+        <!--</isNotEmpty>-->
+    </select>
+    <select id="RItemLabelDAO.countRItemLabel" parameterClass="RItemLabelQTO" resultClass="Long">
+        select count(0)
+        from r_item_label
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="labelId">
+            label_id = #labelId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="itemId">
+            item_id = #itemId#
+        </isNotNull>
+        <!--<isNotEmpty property="idList" prepend="AND">-->
+            <!--id in-->
+            <!--<iterate property="idList" conjunction="," open="(" close=")">-->
+                <!--#idList[]#-->
+            <!--</iterate>-->
+        <!--</isNotEmpty>-->
+    </select>
+
+
+    <delete id="RItemLabelDAO.deleteRItemLabel" parameterClass="RItemLabelDO">
+        delete from r_item_label
+        where id = #id:BIGINT# and seller_id = #sellerId# and biz_code = #bizCode#;
+    </delete>
+
+
+    <insert id="RItemLabelDAO.addRItemLabel" parameterClass="RItemLabelDO">
+        insert into r_item_label
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id
+            </isNotNull>
+            <isNotNull prepend="," property="labelId">
+                label_id
+            </isNotNull>
+            ,delete_mark,
+            gmt_created,
+            gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="labelId">
+                #labelId:BIGINT#
+            </isNotNull>
+            ,0,
+            now()
+            ,now()
+            )
+        </dynamic>
+    </insert>
+
+    <insert id="RItemLabelDAO.addRList" parameterClass="java.util.List">
+        insert into r_item_label(seller_id,biz_code,item_id,label_id,delete_mark, gmt_created,
+            gmt_modified)
+            values
+        <iterate  conjunction="," >
+        (#list[].sellerId#,#list[].bizCode#,#list[].itemId#,#list[].labelId#
+        ,0,now(),now())
+        </iterate>
+    </insert>
+
+
+    <update id="updateByPrimaryKeySelective" parameterClass="RItemLabelDO">
+        update r_item_label
+        <dynamic prepend="set">
+
+            gmt_modified = now()
+            <isNotNull prepend="," property="sellerId">
+                seller_id = #sellerId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code = #bizCode:VARCHAR#
+            </isNotNull>
+            <isNotNull prepend="," property="itemId">
+                item_id = #itemId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="labelId">
+                label_id = #labelId:BIGINT#
+            </isNotNull>
+        </dynamic>
+        where id = #id:BIGINT#
+    </update>
+
+    <update id="RItemLabelDAO.deleteByLabel" parameterClass="ItemLabelDO">
+        update r_item_label
+        set gmt_modified = now(),delete_mark = 1
+        where id &gt; 0 and label_id = #id#
+    </update>
+
+    <update id="RItemLabelDAO.deleteByItem" parameterClass="long">
+        update r_item_label
+        set gmt_modified = now(),delete_mark = 1
+        where id &gt; 0 and item_id = #itemId#
+    </update>
+
+</sqlMap>

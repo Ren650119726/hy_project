@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="supplier_extra_info">
+  <resultMap class="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO" id="BaseResultMap">
+    <result column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="show_name" jdbcType="VARCHAR" property="showName" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+    <result column="is_default" jdbcType="TINYINT" property="isDefault" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="tel" jdbcType="VARCHAR" property="tel" />
+    <result column="zip" jdbcType="VARCHAR" property="zip" />
+    <result column="division_id" jdbcType="TINYINT" property="divisionId" />
+    <result column="contact_name" jdbcType="VARCHAR" property="contactName" />
+    <result column="contact_position" jdbcType="VARCHAR" property="contactPosition" />
+    <result column="contact_idcard" jdbcType="VARCHAR" property="contactIdcard" />
+    <result column="contact_mobile" jdbcType="VARCHAR" property="contactMobile" />
+    <result column="contact_qq" jdbcType="VARCHAR" property="contactQq" />
+    <result column="contact_email" jdbcType="VARCHAR" property="contactEmail" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="buy_limit" jdbcType="TINYINT" property="buyLimit" />
+    <result column="storage_delivery_id" jdbcType="TINYINT" property="storageDeliveryId" />
+    <result column="license_no" jdbcType="VARCHAR" property="licenseNo" />
+    <result column="license_begin" jdbcType="INTEGER" property="licenseBegin" />
+    <result column="license_end" jdbcType="INTEGER" property="licenseEnd" />
+    <result column="license_addr" jdbcType="VARCHAR" property="licenseAddr" />
+    <result column="reg_capital" jdbcType="INTEGER" property="regCapital" />
+    <result column="bus_scope" jdbcType="VARCHAR" property="busScope" />
+    <result column="legal_person_name" jdbcType="VARCHAR" property="legalPersonName" />
+    <result column="contact_address" jdbcType="VARCHAR" property="contactAddress"/>
+    <result column="fax" jdbcType="VARCHAR" property="fax" />
+    <result column="website" jdbcType="VARCHAR" property="website" />
+    <result column="brands" jdbcType="VARCHAR" property="brands" />
+    <result column="tmall_website" jdbcType="VARCHAR" property="tmallWebsite" />
+    <result column="license_scan_img" jdbcType="VARCHAR" property="licenseScanImg" />
+    <result column="org_scan_img" jdbcType="VARCHAR" property="orgScanImg" />
+    <result column="tax_scan_img" jdbcType="VARCHAR" property="taxScanImg" />
+    <result column="idcard_front_img" jdbcType="VARCHAR" property="idcardFrontImg" />
+    <result column="idcard_reverse_img" jdbcType="VARCHAR" property="idcardReverseImg" />
+    <result column="auth_status" jdbcType="TINYINT" property="authStatus" />
+    <result column="is_capital" jdbcType="TINYINT" property="isCapital" />
+    <result column="guarantee_capital" jdbcType="BIGINT" property="guaranteeCapital" />
+    <result column="recruiter_id" jdbcType="BIGINT" property="recruiterId" />
+    <result column="company" jdbcType="INTEGER" property="company" />
+    <result column="straight_point" jdbcType="BIGINT" property="straightPoint" />
+    <result column="deleted" jdbcType="TINYINT" property="deleted" />
+    <result column="gmt_created" jdbcType="TIMESTAMP" property="gmtCreated" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+  </resultMap>
+  <resultMap class="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO" extends="supplier_extra_info.BaseResultMap" id="ResultMapWithBLOBs">
+    <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <iterate conjunction="or" prepend="where" property="oredCriteria" removeFirstPrepend="iterate">
+      <isEqual compareValue="true" property="oredCriteria[].valid">
+        (
+        <iterate conjunction="and" prepend="and" property="oredCriteria[].criteriaWithoutValue">
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate conjunction="and" prepend="and" property="oredCriteria[].criteriaWithSingleValue">
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate conjunction="and" prepend="and" property="oredCriteria[].criteriaWithListValue">
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate close=")" conjunction="," open="(" property="oredCriteria[].criteriaWithListValue[].values">
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate conjunction="and" prepend="and" property="oredCriteria[].criteriaWithBetweenValue">
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List">
+    id, user_id, show_name, supplier_name, is_default, address, tel, zip, division_id, 
+    contact_name, contact_position, contact_idcard, contact_mobile, contact_qq, contact_email, 
+    type, buy_limit, storage_delivery_id, license_no, license_begin, license_end, license_addr, 
+    reg_capital, bus_scope, legal_person_name,contact_address, fax, website, brands, tmall_website, license_scan_img, 
+    org_scan_img, tax_scan_img, idcard_front_img, idcard_reverse_img, auth_status, is_capital, 
+    guarantee_capital, recruiter_id, company, straight_point, deleted, gmt_created, gmt_modified
+  </sql>
+  <sql id="Blob_Column_List">
+    remark
+  </sql>
+  
+
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO">
+    insert into supplier_extra_info
+    <dynamic prepend="(">
+      <isNotNull prepend="," property="userId">
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="showName">
+        show_name
+      </isNotNull>
+      <isNotNull prepend="," property="supplierName">
+        supplier_name
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault">
+        is_default
+      </isNotNull>
+      <isNotNull prepend="," property="address">
+        address
+      </isNotNull>
+      <isNotNull prepend="," property="tel">
+        tel
+      </isNotNull>
+      <isNotNull prepend="," property="zip">
+        zip
+      </isNotNull>
+      <isNotNull prepend="," property="divisionId">
+        division_id
+      </isNotNull>
+      <isNotNull prepend="," property="contactName">
+        contact_name
+      </isNotNull>
+      <isNotNull prepend="," property="contactPosition">
+        contact_position
+      </isNotNull>
+      <isNotNull prepend="," property="contactIdcard">
+        contact_idcard
+      </isNotNull>
+      <isNotNull prepend="," property="contactMobile">
+        contact_mobile
+      </isNotNull>
+      <isNotNull prepend="," property="contactQq">
+        contact_qq
+      </isNotNull>
+      <isNotNull prepend="," property="contactEmail">
+        contact_email
+      </isNotNull>
+      <isNotNull prepend="," property="type">
+        type
+      </isNotNull>
+      <isNotNull prepend="," property="buyLimit">
+        buy_limit
+      </isNotNull>
+      <isNotNull prepend="," property="storageDeliveryId">
+        storage_delivery_id
+      </isNotNull>
+      <isNotNull prepend="," property="licenseNo">
+        license_no
+      </isNotNull>
+      <isNotNull prepend="," property="licenseBegin">
+        license_begin
+      </isNotNull>
+      <isNotNull prepend="," property="licenseEnd">
+        license_end
+      </isNotNull>
+      <isNotNull prepend="," property="licenseAddr">
+        license_addr
+      </isNotNull>
+      <isNotNull prepend="," property="regCapital">
+        reg_capital
+      </isNotNull>
+      <isNotNull prepend="," property="busScope">
+        bus_scope
+      </isNotNull>
+      <isNotNull prepend="," property="legalPersonName">
+        legal_person_name
+      </isNotNull>
+      <isNotNull prepend="," property="contactAddress">
+      	contact_address
+      </isNotNull>
+      <isNotNull prepend="," property="fax">
+        fax
+      </isNotNull>
+      <isNotNull prepend="," property="website">
+        website
+      </isNotNull>
+      <isNotNull prepend="," property="brands">
+        brands
+      </isNotNull>
+      <isNotNull prepend="," property="tmallWebsite">
+        tmall_website
+      </isNotNull>
+      <isNotNull prepend="," property="licenseScanImg">
+        license_scan_img
+      </isNotNull>
+      <isNotNull prepend="," property="orgScanImg">
+        org_scan_img
+      </isNotNull>
+      <isNotNull prepend="," property="taxScanImg">
+        tax_scan_img
+      </isNotNull>
+      <isNotNull prepend="," property="idcardFrontImg">
+        idcard_front_img
+      </isNotNull>
+      <isNotNull prepend="," property="idcardReverseImg">
+        idcard_reverse_img
+      </isNotNull>
+     
+      <isNotNull prepend="," property="isCapital">
+        is_capital
+      </isNotNull>
+      <isNotNull prepend="," property="guaranteeCapital">
+        guarantee_capital
+      </isNotNull>
+      <isNotNull prepend="," property="recruiterId">
+        recruiter_id
+      </isNotNull>
+      <isNotNull prepend="," property="company">
+        company
+      </isNotNull>
+      <isNotNull prepend="," property="straightPoint">
+        straight_point
+      </isNotNull>
+      <isNotNull prepend="," property="deleted">
+        deleted
+      </isNotNull>
+      <isNotNull prepend="," property="remark">
+        remark
+      </isNotNull>
+        ,auth_status,gmt_created,gmt_modified 
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(">
+      <isNotNull prepend="," property="userId">
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="showName">
+        #showName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="supplierName">
+        #supplierName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault">
+        #isDefault:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="address">
+        #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="tel">
+        #tel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="zip">
+        #zip:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="divisionId">
+        #divisionId:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="contactName">
+        #contactName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactPosition">
+        #contactPosition:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactIdcard">
+        #contactIdcard:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactMobile">
+        #contactMobile:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactQq">
+        #contactQq:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactEmail">
+        #contactEmail:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="type">
+        #type:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="buyLimit">
+        #buyLimit:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="storageDeliveryId">
+        #storageDeliveryId:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseNo">
+        #licenseNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseBegin">
+        #licenseBegin:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseEnd">
+        #licenseEnd:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseAddr">
+        #licenseAddr:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="regCapital">
+        #regCapital:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="busScope">
+        #busScope:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="legalPersonName">
+        #legalPersonName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactAddress">
+      	#contactAddress:VARCHAR#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="fax">
+        #fax:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="website">
+        #website:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="brands">
+        #brands:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="tmallWebsite">
+        #tmallWebsite:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseScanImg">
+        #licenseScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orgScanImg">
+        #orgScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="taxScanImg">
+        #taxScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idcardFrontImg">
+        #idcardFrontImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idcardReverseImg">
+        #idcardReverseImg:VARCHAR#
+      </isNotNull>
+      
+      <isNotNull prepend="," property="isCapital">
+        #isCapital:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="guaranteeCapital">
+        #guaranteeCapital:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="recruiterId">
+        #recruiterId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="company">
+        #company:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="straightPoint">
+        #straightPoint:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="remark">
+       #remark:LONGVARCHAR#
+      </isNotNull>
+      ,0,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+   <select id="selectById" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO">
+  	select
+  	<include refid="supplier_extra_info.Base_Column_List" />
+  	from supplier_extra_info where id = #id:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="selectByUserId" resultMap="BaseResultMap" parameterClass="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO">
+  	select 
+  	<include refid="supplier_extra_info.Base_Column_List" />
+  	from supplier_extra_info where user_id = #userId:BIGINT# and deleted = 0
+  </select>
+<update id="update" parameterClass="com.mockuai.usercenter.core.domain.SupplierExtraInfoDO">
+  update supplier_extra_info set gmt_modified = now()
+    
+      <isNotNull prepend="," property="showName">
+        show_name = #showName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="supplierName">
+        supplier_name = #supplierName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault">
+        is_default = #isDefault:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="address">
+        address = #address:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="tel">
+        tel = #tel:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="zip">
+        zip = #zip:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="divisionId">
+        division_id = #divisionId:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="contactName">
+        contact_name = #contactName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactPosition">
+        contact_position = #contactPosition:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactIdcard">
+        contact_idcard = #contactIdcard:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactMobile">
+        contact_mobile = #contactMobile:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactQq">
+        contact_qq = #contactQq:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactEmail">
+        contact_email = #contactEmail:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="type">
+        type = #type:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="buyLimit">
+        buy_limit = #buyLimit:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="storageDeliveryId">
+        storage_delivery_id = #storageDeliveryId:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseNo">
+        license_no = #licenseNo:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseBegin">
+        license_begin = #licenseBegin:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseEnd">
+        license_end = #licenseEnd:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseAddr">
+        license_addr = #licenseAddr:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="regCapital">
+        reg_capital = #regCapital:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="busScope">
+        bus_scope = #busScope:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="legalPersonName">
+        legal_person_name = #legalPersonName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="contactAddress">
+      	contact_address = #contactAddress:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="fax">
+        fax = #fax:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="website">
+        website = #website:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="brands">
+        brands = #brands:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="tmallWebsite">
+        tmall_website = #tmallWebsite:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="licenseScanImg">
+        license_scan_img = #licenseScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="orgScanImg">
+        org_scan_img = #orgScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="taxScanImg">
+        tax_scan_img = #taxScanImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idcardFrontImg">
+        idcard_front_img = #idcardFrontImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="idcardReverseImg">
+        idcard_reverse_img = #idcardReverseImg:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="authStatus">
+        auth_status = #authStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="isCapital">
+        is_capital = #isCapital:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="guaranteeCapital">
+        guarantee_capital = #guaranteeCapital:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="recruiterId">
+        recruiter_id = #recruiterId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="company">
+        company = #company:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="straightPoint">
+        straight_point = #straightPoint:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="gmtCreated">
+        gmt_modified = #gmtModified:TIMESTAMP#
+      </isNotNull>
+      <isNotNull prepend="," property="remark">
+        remark = #remark:LONGVARCHAR#
+      </isNotNull>
+    where user_id = #userId:BIGINT# and deleted = 0
+  </update>
+  
+  <update id="pass" parameterClass="java.lang.Long">
+  	update supplier_extra_info set auth_status=3,gmt_modified=now() where user_id =#userId:BIGINT# and deleted = 0
+  </update>
+  <update id="refuse" parameterClass="java.lang.Long">
+  	update supplier_extra_info set auth_status=1,gmt_modified=now() where user_id =#userId:BIGINT# and deleted = 0
+  </update>
+  <update id="ignore" parameterClass="java.lang.Long">
+  	update supplier_extra_info set auth_status=2,gmt_modified=now() where user_id =#userId:BIGINT# and deleted = 0
+  </update>
+  
+  <update id="delete" parameterClass="java.lang.Long">
+  	update supplier_extra_info set deleted=1,gmt_modified=now() where user_id = #userId:BIGINT#
+  </update>
+  <update id="restore" parameterClass="java.lang.Long">
+  	update supplier_extra_info set deleted=0,gmt_modified=now() where user_id = #userId:BIGINT#
+  </update>
+  
+</sqlMap>

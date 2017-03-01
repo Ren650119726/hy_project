@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">	
+    <bean name="cacheManager" class="com.mockuai.messagecenter.core.manager.impl.CacheManagerImpl" init-method="init">
+    	<property name="isLocal" value="${messagecenter.cache.isLocal}"/>
+    </bean>
+</beans>

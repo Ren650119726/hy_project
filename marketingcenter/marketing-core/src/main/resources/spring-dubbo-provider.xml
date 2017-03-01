@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"  
+  xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd  
+    http://code.alibabatech.com/schema/dubbo  
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">   
+  
+  <!-- 客户端调用的实现类 -->  
+  <!--<bean id="cartItemClient" class="com.mockuai.tradecenter.client.cart.impl.CartItemClientImpl"/>-->
+  
+  <!--<bean id="userCartItemClient" class="com.mockuai.tradecenter.client.cart.impl.UserCartItemClientImpl"/>-->
+  <bean id="marketingService" class="com.mockuai.marketingcenter.core.api.impl.MarketingServiceImpl" />
+  <!-- 提供方应用信息，用于计算依赖关系 -->  
+  <!-- <dubbo:application name="user_provider" /> -->
+  <!-- 使用multicast广播注册中心暴露服务地址-->
+  <!-- <dubbo:registry address="multicast://localhost:1234" /> -->   
+  <!-- 使用zookeeper注册中心暴露服务地址 -->  
+  <dubbo:registry address="zookeeper://${marketingcenter.dubbo.registry.address}" />
+  <!-- 用dubbo协议在20880端口暴露服务 -->  <!-- host="${marketingcenter.dubbo.provider.host}" -->
+  <dubbo:protocol name="dubbo" port="${marketingcenter.dubbo.provider.port}" host="${marketingcenter.dubbo.provider.host}"/>
+  
+  <!-- hessian协议在8080端口暴露服务 -->
+  <!--<dubbo:protocol name="hessian" port="8080" server="servlet"/>-->
+  <!--<dubbo:protocol contextpath="trade-core"/>-->
+  <!-- 声明需要暴露的服务接口 -->  
+<!--   <dubbo:service interface="com.mockuaickuai.tradecenter.client.cart.CartItemClient" ref="cartItemClient" protocol="dubbo"/>
+ -->
+
+  <!--<dubbo:service interface="com.mockuai.marketingcenter.common.api.MarketingService"
+                 ref="marketingService" protocol="dubbo" retries="0" timeout="3000"/>
+  -->
+  <dubbo:service interface="com.mockuai.marketingcenter.common.api.MarketingService"
+                 ref="marketingService" protocol="dubbo" retries="0" timeout="80000"/>
+</beans>

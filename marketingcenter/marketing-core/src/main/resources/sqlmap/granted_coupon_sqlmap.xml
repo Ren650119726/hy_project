@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="granted_coupon">
+
+    <typeAlias alias="grantedCouponDO" type="com.mockuai.marketingcenter.core.domain.GrantedCouponDO"/>
+    <typeAlias alias="grantedCouponDTO" type="com.mockuai.marketingcenter.common.domain.dto.GrantedCouponDTO"/>
+
+    <resultMap id="result" class="com.mockuai.marketingcenter.core.domain.GrantedCouponDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="coupon_id" property="couponId" jdbcType="BIGINT"/>
+        <result column="coupon_creator_id" property="couponCreatorId" jdbcType="BIGINT"/>
+        <result column="activity_id" property="activityId" jdbcType="BIGINT"/>
+        <result column="activity_creator_id" property="activityCreatorId" jdbcType="BIGINT"/>
+        <result column="code" property="code" jdbcType="VARCHAR"/>
+        <result column="activate_time" property="activateTime" jdbcType="TIMESTAMP"/>
+        <result column="use_time" property="useTime" jdbcType="TIMESTAMP"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="invalid_time" property="invalidTime" jdbcType="TIMESTAMP"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="granter_id" property="granterId" jdbcType="BIGINT"/>
+        <result column="receiver_id" property="receiverId" jdbcType="BIGINT"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="tool_code" property="toolCode" jdbcType="VARCHAR"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="text" property="text" jdbcType="VARCHAR"/>
+        <result column="grant_source" property="grantSource" jdbcType="TINYINT"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <resultMap id="grantedCouponSumDO" class="com.mockuai.marketingcenter.core.domain.GrantedCouponSumDO">
+        <result column="activity_id" property="activityId" jdbcType="BIGINT"/>
+        <result column="activity_creator_id" property="activityCreatorId" jdbcType="BIGINT"/>
+        <result column="count" property="count"/>
+    </resultMap>
+
+    <sql id="columnList">
+		id,
+		coupon_id,
+		coupon_creator_id,
+		activity_id,
+		activity_creator_id,
+		code,
+		activate_time,
+		use_time,
+		start_time,
+		end_time,
+		invalid_time,
+		order_id,
+		granter_id,
+		receiver_id,
+		status,
+		tool_code,
+		biz_code,
+		text,
+		grant_source,
+		delete_mark,
+		gmt_created,
+		gmt_modified
+	</sql>
+
+    <sql id="queryWhere">
+        where delete_mark=0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="and">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull prepend="AND" property="receiverId">
+            receiver_id = #receiverId#
+        </isNotNull>
+        <isNotNull property="activityIds">
+            <isNotEmpty property="activityIds" prepend="and">
+                activity_id in
+                <iterate property="activityIds" conjunction="," open="(" close=")">
+                    #activityIds[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull prepend="AND" property="couponId">
+            coupon_id = #couponId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="activityId">
+            activity_id = #activityId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="orderId">
+            order_id = #orderId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="granterId">
+            granter_id = #granterId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="AND" property="startTime">
+            gmt_created >= #startTime#
+        </isNotNull>
+        <isNotNull prepend="AND" property="endTime">
+            #endTime# >= gmt_created
+        </isNotNull>
+        <isNotNull prepend="AND" property="grantSource">
+            grant_source=#grantSource#
+        </isNotNull>
+    </sql>
+
+    <insert id="addGrantedCoupon" parameterClass="grantedCouponDO">
+        insert into granted_coupon
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">id</isNotNull>
+            <isNotNull prepend="," property="couponId">coupon_id</isNotNull>
+            <isNotNull prepend="," property="couponCreatorId">coupon_creator_id</isNotNull>
+            <isNotNull prepend="," property="activityId">activity_id</isNotNull>
+            <isNotNull prepend="," property="activityCreatorId">activity_creator_id</isNotNull>
+            <isNotNull prepend="," property="code">code</isNotNull>
+            ,activate_time
+            <isNotNull prepend="," property="useTime">use_time</isNotNull>
+            <isNotNull prepend="," property="startTime">start_time</isNotNull>
+            <isNotNull prepend="," property="endTime">end_time</isNotNull>
+            <isNotNull prepend="," property="invalidTime">invalid_time</isNotNull>
+            <isNotNull prepend="," property="orderId">order_id</isNotNull>
+            <isNotNull prepend="," property="granterId">granter_id</isNotNull>
+            <isNotNull prepend="," property="receiverId">receiver_id</isNotNull>
+            <isNotNull prepend="," property="status">`status`</isNotNull>
+            <isNotNull prepend="," property="toolCode">tool_code</isNotNull>
+            <isNotNull prepend="," property="bizCode">biz_code</isNotNull>
+            <isNotNull prepend="," property="text">text</isNotNull>
+            ,grant_source
+            ,delete_mark,gmt_created,gmt_modified)
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">#id#</isNotNull>
+            <isNotNull prepend="," property="couponId">#couponId#</isNotNull>
+            <isNotNull prepend="," property="couponCreatorId">#couponCreatorId#</isNotNull>
+            <isNotNull prepend="," property="activityId">#activityId#</isNotNull>
+            <isNotNull prepend="," property="activityCreatorId">#activityCreatorId#</isNotNull>
+            <isNotNull prepend="," property="code">#code#</isNotNull>
+            ,now()
+            <isNotNull prepend="," property="useTime">#useTime#</isNotNull>
+            <isNotNull prepend="," property="startTime">#startTime#</isNotNull>
+            <isNotNull prepend="," property="endTime">#endTime#</isNotNull>
+            <isNotNull prepend="," property="invalidTime">#invalidTime#</isNotNull>
+            <isNotNull prepend="," property="orderId">#orderId#</isNotNull>
+            <isNotNull prepend="," property="granterId">#granterId#</isNotNull>
+            <isNotNull prepend="," property="receiverId">#receiverId#</isNotNull>
+            <isNotNull prepend="," property="status">#status#</isNotNull>
+            <isNotNull prepend="," property="toolCode">#toolCode#</isNotNull>
+            <isNotNull prepend="," property="bizCode">#bizCode#</isNotNull>
+            <isNotNull prepend="," property="text">#text#</isNotNull>
+            ,#grantSource#
+            ,0,now(),now()
+            )
+        </dynamic>
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="batchAddGrantedCoupon" parameterClass="java.util.List">
+        <![CDATA[
+	        insert into granted_coupon(coupon_id,activity_id,code,activate_time,use_time,start_time,end_time,invalid_time,grantor_user_id,receiver_user_id,status,delete_mark,gmt_created,gmt_modified) values
+	    ]]>
+        <iterate conjunction=",">
+            <![CDATA[
+	            (#coupon[].couponId#,#coupon[].activityId#,#coupon[].code#,#coupon[].activiateTime#,#coupon[].useTime#,#coupon[].startTime#,#coupon[].endTime#,#coupon[].invalidTime##coupon[].grantorUserId#,#coupon[].receiverUserId#, #coupon[].status#,0,now(),now() )
+	        ]]>
+        </iterate>
+    </insert>
+
+    <update id="updateGrantedCoupon" parameterClass="grantedCouponDTO">
+        update granted_coupon
+        set gmt_modified = now()
+        <isNotNull prepend="," property="useTime">
+            use_time = now()
+        </isNotNull>
+        <isNotNull prepend="," property="status">
+            status = #status#
+        </isNotNull>
+        <isNotNull prepend="," property="orderId">
+            order_id = #orderId#
+        </isNotNull>
+        where receiver_id=#receiverId# and delete_mark=0
+        <isNotNull property="idList">
+            <isNotEmpty property="idList" prepend="and">
+                id in
+                <iterate property="idList" conjunction="," open="(" close=")">
+                    #idList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+    </update>
+
+    <update id="updateCouponStatus" parameterClass="java.util.Map">
+        update granted_coupon
+        set gmt_modified = now(), status=#toStatus#
+        where receiver_id=#receiverId# and delete_mark=0 and status=#fromStatus# and id in
+        <iterate property="idList" conjunction="," open="(" close=")">
+            #idList[]#
+        </iterate>
+    </update>
+
+    <update id="updateCouponReceiverId" parameterClass="java.util.Map">
+        update granted_coupon
+        set gmt_modified = now(), receiver_id=#toUserId#
+        where receiver_id=#fromUserId# and delete_mark=0 and id in
+        <iterate property="idList" conjunction="," open="(" close=")">
+            #idList[]#
+        </iterate>
+    </update>
+
+    <update id="deleteGrantedCoupon" parameterClass="grantedCouponDO">
+		update granted_coupon
+		set gmt_modified = now(), delete_mark=1
+		where id = #id# and receiver_id=#receiverId# and delete_mark=0
+	</update>
+
+
+    <select id="getGrantedCoupon" parameterClass="grantedCouponDO" resultMap="result">
+        select
+        <include refid="granted_coupon.columnList"/>
+        from granted_coupon
+        where id = #id# and receiver_id=#receiverId# and delete_mark=0
+    </select>
+
+    <!-- 该sql是为了满足洋东西的查询聚合优惠券需求-->
+    <select id="queryGrantedCouponSum"
+            parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultMap="grantedCouponSumDO">
+        select activity_id, activity_creator_id, sum(1) as count
+        from granted_coupon
+        <include refid="granted_coupon.queryWhere"/>
+        group by activity_id
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="queryGrantedCoupon" parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultMap="result">
+        select
+        <include refid="granted_coupon.columnList"/>
+        from granted_coupon
+        <include refid="granted_coupon.queryWhere"/>
+        ORDER BY id desc
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="queryCount" parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultClass="java.lang.Integer">
+        select count(1) from granted_coupon
+        <include refid="granted_coupon.queryWhere"/>
+    </select>
+
+    <sql id="queryWhereForCouponCode">
+        where delete_mark=0
+        <isNotNull property="codeList">
+            <isNotEmpty property="codeList" prepend="AND">
+                code in (
+                <iterate property="codeList" conjunction=",">
+                    #codeList[]#
+                </iterate>
+                )
+            </isNotEmpty>
+        </isNotNull>
+        <isNotNull property="receiverIdList">
+            <isNotEmpty property="receiverIdList" prepend="AND">
+                receiver_id in (
+                <iterate property="receiverIdList" conjunction=",">
+                    #receiverIdList[]#
+                </iterate>
+                )
+            </isNotEmpty>
+        </isNotNull>
+
+        <isNotNull prepend="AND" property="status">
+            <isEqual property="status" compareProperty="compareStatus">
+                status in (40, 50)
+            </isEqual>
+            <isNotEqual property="status" compareProperty="compareStatus">
+                status = #status#
+            </isNotEqual>
+        </isNotNull>
+        <isNotNull prepend="AND" property="couponId">
+            coupon_id = #couponId#
+        </isNotNull>
+
+    </sql>
+
+    <select id="queryGrantedCouponForCouponCode"
+            parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultMap="result">
+        select
+        <include refid="granted_coupon.columnList"/>
+        from granted_coupon
+        <include refid="granted_coupon.queryWhereForCouponCode"/>
+        <isNotNull property="count">
+            <![CDATA[limit #offset#,#count#]]>
+        </isNotNull>
+    </select>
+
+    <select id="queryGrantedCouponCountForCouponCode"
+            parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultClass="java.lang.Integer">
+        select count(1) from granted_coupon
+        <include refid="granted_coupon.queryWhereForCouponCode"/>
+    </select>
+
+    <select id="queryGrantedCountSecond" parameterClass="com.mockuai.marketingcenter.common.domain.qto.GrantedCouponQTO"
+            resultMap="result">
+        select
+        <include refid="granted_coupon.columnList"/>
+        from granted_coupon
+        where delete_mark = 0 and biz_code = #bizCode# and receiver_id = #receiverId#
+
+        <isNotNull property="statusList">
+            <isNotEmpty property="statusList" prepend="and">
+                status in
+                <iterate property="statusList" conjunction="," open="(" close=")">
+                    #statusList[]#
+                </iterate>
+            </isNotEmpty>
+        </isNotNull>
+
+        <isNotNull property="outOfDate">
+            <isEqual prepend="AND" property="outOfDate" compareValue="0">
+                (invalid_time IS NULL AND end_time >= now() OR (invalid_time IS NOT NULL AND invalid_time >= now()))
+            </isEqual>
+            <isEqual prepend="and" property="outOfDate" compareValue="1">
+                ((invalid_time IS NULL AND now() > end_time) OR (invalid_time IS NOT NULL AND now() > invalid_time))
+            </isEqual>
+        </isNotNull>
+    </select>
+
+</sqlMap>

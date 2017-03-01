@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="hk_protocol">
+
+    <typeAlias alias="hkProtocolDO" type="com.mockuai.distributioncenter.core.domain.HkProtocolDO"/>
+    <typeAlias alias="hkProtocolQTO" type="com.mockuai.distributioncenter.common.domain.qto.HkProtocolQTO"/>
+
+    <resultMap id="BaseResultMap" class="hkProtocolDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="proName" column="pro_name" jdbcType="VARCHAR"/>
+        <result property="content" column="content" jdbcType="BLOB"/>
+        <result property="proModel" column="pro_model" jdbcType="INT"/>
+        <result property="type" column="type" jdbcType="INT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="add" parameterClass="hkProtocolDO">
+        INSERT INTO hk_protocol
+        pro_name,
+        content,
+        pro_model,
+        type,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        ) VALUE (
+        #proName#,
+        #content#,
+        #proModel#,
+        #type#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey keyProperty="id" resultClass="java.lang.Long">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="getByProModel" parameterClass="hkProtocolQTO" resultMap="BaseResultMap">
+        SELECT * FROM hk_protocol WHERE pro_model = #proModel# AND delete_mark = 0
+    </select>
+
+
+    <select id="getProModelByUserId" parameterClass="hkProtocolQTO" resultMap="BaseResultMap">
+        SELECT b.id,b.pro_name,b.content,b.type,b.pro_model FROM hk_protocol_record a ,hk_protocol b WHERE
+        a.protocol_id = b.id
+         and user_id = #userId#
+         and a.delete_mark = 0
+        and b.delete_mark = 0
+    </select>
+
+</sqlMap>

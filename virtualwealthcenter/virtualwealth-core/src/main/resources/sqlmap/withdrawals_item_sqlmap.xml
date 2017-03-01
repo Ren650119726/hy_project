@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="withdrawals_item">
+
+    <typeAlias alias="withdrawalsItemDO" type="com.mockuai.virtualwealthcenter.core.domain.WithdrawalsItemDO"/>
+    <typeAlias alias="withdrawalsItemDTO" type="com.mockuai.virtualwealthcenter.common.domain.dto.WithdrawalsItemDTO"/>
+    <typeAlias alias="withdrawalsItemQTO" type="com.mockuai.virtualwealthcenter.common.domain.qto.WithdrawalsItemQTO"/>
+    <resultMap id="ItemDO" class="withdrawalsItemDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="withdrawalsNumber" column="withdrawalsNumber"  jdbcType="VARCHAR"/>
+        <result property="bizCode" column="biz_code"  jdbcType="VARCHAR"/>
+        <result property="withdrawalsStatus" column="withdrawalsStatus" jdbcType="TINYINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="withdrawalsNo" column="withdrawalsNo" jdbcType="VARCHAR"/>
+        <result property="withdrawalsAmount" column="withdrawalsAmount" jdbcType="DECIMAL"/>
+        <result property="withdrawalsRefuse" column="withdrawalsRefuse" jdbcType="VARCHAR"/>
+        <result property="withdrawalsType" column="withdrawalsType" jdbcType="TINYINT"/>
+        <result property="withdrawalsTime" column="withdrawalsTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <resultMap id="BaseResultMap" class="withdrawalsItemDTO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="userId" jdbcType="BIGINT"/>
+        <result property="withdrawalsNumber" column="withdrawalsNumber"  jdbcType="VARCHAR"/>
+        <result property="withdrawalsStatus" column="withdrawalsStatus" jdbcType="TINYINT"/>
+        <result property="withdrawalsNo" column="withdrawalsNo" jdbcType="VARCHAR"/>
+        <result property="withdrawalsBanklog" column="withdrawalsBanklog" jdbcType="VARCHAR"/>
+        <result property="withdrawalsRefuse" column="withdrawalsRefuse" jdbcType="VARCHAR"/>
+        <result property="withdrawalsAmount" column="withdrawalsAmount" jdbcType="DECIMAL"/>
+        <result property="withdrawalsType" column="withdrawalsType" jdbcType="TINYINT"/>
+        <result property="withdrawalsTime" column="withdrawalsTime" jdbcType="TIMESTAMP"/>
+        <result property="realName" column="realName" jdbcType="VARCHAR"/>
+        <result property="bankName" column="bankName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        a.id,
+        a.user_id  userId,
+        a.biz_code biz_code,
+        a.withdrawals_number   withdrawalsNumber,
+        a.withdrawals_status  withdrawalsStatus,
+        a.withdrawals_no withdrawalsNo,
+        a.withdrawals_amount withdrawalsAmount,
+        a.withdrawals_type withdrawalsType,
+        a.withdrawals_time   withdrawalsTime,
+        a.withdrawals_refuse withdrawalsRefuse,
+        a.withdrawals_banklog withdrawalsBanklog
+    </sql>
+
+    <select id="findList" resultMap="BaseResultMap" parameterClass="withdrawalsItemQTO">
+        select
+        <include refid="withdrawals_item.Base_Column_List"/>
+        ,b.bank_realname realName
+        ,b.bank_name bankName
+        FROM withdrawals_item a LEFT JOIN bank_info b ON a.withdrawals_no =  b.bank_no and b.user_id = a.user_id 
+        WHERE a.delete_mark = 0
+        <isNotNull property="userId" prepend="AND">
+            a.user_id=#userId#
+        </isNotNull>
+        <isNotNull property="withdrawalsStatus">
+            <isGreaterThan prepend="and" property="withdrawalsStatus" compareValue="0">
+                withdrawals_status = #withdrawalsStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotEmpty prepend="and" property="withdrawalsNumber">
+            withdrawals_number like  concat('%',#withdrawalsNumber#,'%')
+        </isNotEmpty>
+        <isGreaterThan prepend="and" property="startAmount" compareValue="0">
+            withdrawals_amount &gt;= #startAmount#
+        </isGreaterThan>
+        <isGreaterThan property="endAmount" compareValue="0">
+            <isGreaterEqual prepend="and" property="endAmount" compareProperty="startAmount">
+                withdrawals_amount &lt;= #endAmount#
+            </isGreaterEqual>
+        </isGreaterThan>
+
+
+        <isNotNull prepend="and" property="startTime">
+            a.withdrawals_time &gt;= str_to_date(#startTime#,'%Y-%m-%d %H:%i:%s')
+        </isNotNull>
+
+        <isNotNull prepend="and" property="endTime">
+            a.withdrawals_time &lt;= str_to_date(#endTime#,'%Y-%m-%d %H:%i:%s')
+        </isNotNull>
+
+
+        <isNotEmpty prepend="and" property="realName">
+            b.bank_realname like concat('%',#realName#,'%')
+        </isNotEmpty>
+
+        order by withdrawals_time desc
+        <isNotNull property="count" >
+            <isNotNull property="offset">
+                LIMIT #offset#, #count#
+            </isNotNull>
+        </isNotNull>
+
+    </select>
+
+    <select id="query" resultMap="ItemDO" parameterClass="withdrawalsItemQTO">
+        select
+        <include refid="withdrawals_item.Base_Column_List"/>
+        from withdrawals_item a
+        where a.delete_mark = 0 AND a.user_id=#userId#
+        order by withdrawals_time desc
+        <isNotNull property="count" >
+          LIMIT #offset#, #count#
+        </isNotNull>
+    </select>
+
+    <select id="countOfQuery" resultClass="java.lang.Integer" parameterClass="withdrawalsItemQTO">
+        select count(1) from withdrawals_item
+        where delete_mark = 0 AND user_id=#userId#
+    </select>
+
+    <update id="updateRecord" parameterClass="withdrawalsItemQTO">
+        update withdrawals_item
+        set withdrawals_dotype = #dotype#
+        ,gmt_modified = now()
+        <isEqual property="dotype" prepend="," compareValue="1">
+            withdrawals_status = 2
+        </isEqual>
+        <isEqual property="dotype" prepend="," compareValue="2">
+            withdrawals_status = 5
+        </isEqual>
+        <isEqual property="dotype" prepend="," compareValue="3">
+            withdrawals_status = 3
+        </isEqual>
+        <isNotNull prepend="," property="banklog">
+            withdrawals_banklog = #banklog#
+        </isNotNull>
+        <isNotNull prepend="," property="refuse">
+            withdrawals_refuse = #refuse#
+        </isNotNull>
+        where
+        withdrawals_number = #withdrawalsNumber#
+    </update>
+
+<!-- ZSX and b.user_id = a.user_id -->
+    <select id="count" resultClass="int">
+        select count(0)
+        FROM withdrawals_item a LEFT JOIN bank_info b ON a.withdrawals_no =  b.bank_no 
+        WHERE a.delete_mark = 0
+        <isNotNull property="userId" prepend="AND">
+            a.user_id=#userId#
+        </isNotNull>
+        <isNotNull property="withdrawalsStatus">
+            <isGreaterThan prepend="and" property="withdrawalsStatus" compareValue="0">
+                withdrawals_status = #withdrawalsStatus#
+            </isGreaterThan>
+        </isNotNull>
+        <isNotEmpty prepend="and" property="withdrawalsNumber">
+            withdrawals_number like  concat('%',#withdrawalsNumber#,'%')
+        </isNotEmpty>
+        <isGreaterThan prepend="and" property="startAmount" compareValue="0">
+            withdrawals_amount &gt;= #startAmount#
+        </isGreaterThan>
+        <isGreaterThan  property="endAmount" compareValue="0">
+            <isGreaterEqual prepend="and" property="endAmount" compareProperty="startAmount">
+                withdrawals_amount &lt;= #endAmount#
+            </isGreaterEqual>
+        </isGreaterThan>
+
+
+        <isNotNull prepend="and" property="startTime">
+            a.withdrawals_time &gt;= str_to_date(#startTime#,'%Y-%m-%d %H:%i:%s')
+        </isNotNull>
+
+        <isNotNull prepend="and" property="endTime">
+            a.withdrawals_time &lt;= str_to_date(#endTime#,'%Y-%m-%d %H:%i:%s')
+        </isNotNull>
+
+        <isNotEmpty prepend="and" property="realName">
+            b.bank_realname like concat('%',#realName#,'%')
+        </isNotEmpty>
+
+
+
+    </select>
+<!-- ZSX and a.user_id = b.user_id  -->
+    <select id="getWithdrawalItem"  parameterClass="string" resultMap= "ItemDO">
+        select
+        a.user_id,a.biz_code,
+        <include refid="withdrawals_item.Base_Column_List"/>
+        ,b.bank_realname realName
+        ,b.bank_name bankName
+        FROM withdrawals_item a LEFT JOIN bank_info b ON a.withdrawals_no =  b.bank_no 
+        WHERE a.delete_mark = 0 
+        and   withdrawals_number = #withdrawalsNumber#
+    </select>
+
+    <select id="getWithdrawalItemSimple"  parameterClass="string" resultMap= "ItemDO">
+        select
+        a.user_id,a.biz_code,
+        <include refid="withdrawals_item.Base_Column_List"/>
+        from withdrawals_item a
+        where a.delete_mark = 0
+        and   withdrawals_number = #withdrawalsNumber#
+    </select>
+
+
+</sqlMap>

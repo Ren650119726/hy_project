@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_invoice">
+
+    <!--CREATE TABLE `order_invoice` (-->
+    <!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+    <!--`biz_code` varchar(64) NOT NULL COMMENT '应用唯一标志符',-->
+    <!--`order_id` bigint(20) NOT NULL COMMENT '所属订单ID',-->
+    <!--`user_id` bigint(20) NOT NULL COMMENT '下单用户ID',-->
+    <!--`invoice_type` tinyint(4) NOT NULL COMMENT '发票类型',-->
+    <!--`invoice_title` varchar(256) NOT NULL COMMENT '发票抬头',-->
+    <!--`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',-->
+    <!--`gmt_created` date NOT NULL COMMENT '记录创建时间',-->
+    <!--`gmt_modified` date NOT NULL COMMENT '记录最后一次修改时间',-->
+    <!--PRIMARY KEY (`id`)-->
+    <!--) ENGINE=InnoDB AUTO_INCREMENT=384 DEFAULT CHARSET=utf8-->
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderInvoiceDO">
+        <result property="id" column="id"/>
+        <result property="bizCode" column="biz_code"/>
+        <result property="orderId" column="order_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="invoiceType" column="invoice_type"/>
+        <result property="invoiceTitle" column="invoice_title"/>
+        <result property="deleteMark" column="delete_mark"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+
+    <sql id="select_column_set">
+        id,
+        biz_code,
+        order_id,
+        user_id,
+        invoice_type,
+        invoice_title,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="dynamic_set_clause">
+        <isNotNull property="id" prepend=",">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="orderId" prepend=",">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend=",">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend=",">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="invoiceType" prepend=",">
+            invoice_type=#invoiceType#
+        </isNotNull>
+        <isNotNull property="invoiceTitle" prepend=",">
+            invoice_title=#invoiceTitle#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend=",">
+            delete_mark=#deleteMark#
+        </isNotNull>
+        <isNotNull property="gmtCreated" prepend=",">
+            gmt_created=#gmtCreated#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend=",">
+            gmt_modified=#gmtModified#
+        </isNotNull>
+    </sql>
+
+    <sql id="dynamic_where_clause">
+        <isNotNull property="id" prepend="and">
+            id=#id#
+        </isNotNull>
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="userId" prepend="and">
+            user_id=#userId#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            biz_code=#bizCode#
+        </isNotNull>
+        <isNotNull property="invoiceType" prepend="and">
+            invoice_type=#invoiceType#
+        </isNotNull>
+        <isNotNull property="invoiceTitle" prepend="and">
+            invoice_title=#invoiceTitle#
+        </isNotNull>
+        <isNotNull property="deleteMark" prepend="and">
+            delete_mark=#deleteMark#
+        </isNotNull>
+        <isNotNull property="gmtCreated" prepend="and">
+            gmt_created=#gmtCreated#
+        </isNotNull>
+        <isNotNull property="gmtModified" prepend="and">
+            gmt_modified=#gmtModified#
+        </isNotNull>
+    </sql>
+
+    <insert id="addOrderInvoice" parameterClass="com.mockuai.tradecenter.core.domain.OrderInvoiceDO">
+        insert into order_invoice(
+        biz_code,
+        order_id,
+        user_id,
+        invoice_type,
+        invoice_title,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #orderId#,
+        #userId#,
+        #invoiceType#,
+        #invoiceTitle#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+
+
+    <select id="getOrderInvoice" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="order_invoice.select_column_set"/>
+        from order_invoice
+        where 1=1
+                
+        <isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+        
+        and order_id = #orderId:BIGINT#
+    </select>
+
+</sqlMap>

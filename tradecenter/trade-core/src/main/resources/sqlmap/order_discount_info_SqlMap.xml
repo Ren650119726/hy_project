@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="order_discount_info">
+
+    <!--CREATE TABLE `order_discount_info` (-->
+    <!--`id` bigint(20) NOT NULL AUTO_INCREMENT,-->
+    <!--`biz_code` varchar(64) NOT NULL COMMENT '应用唯一标志符',-->
+    <!--`order_id` bigint(20) NOT NULL COMMENT '所属订单ID',-->
+    <!--`order_item_id` bigint(20) DEFAULT NULL COMMENT '所属订单商品ID',-->
+    <!--`item_id` bigint(20) DEFAULT NULL COMMENT '商品ID',-->
+    <!--`item_sku_id` bigint(20) DEFAULT NULL COMMENT '商品sku的ID',-->
+    <!--`distributor_id` bigint(20) DEFAULT NULL COMMENT '订单来源分销商id',-->
+    <!--`user_id` bigint(20) NOT NULL COMMENT '下单用户ID',-->
+    <!--`discount_type` int(8) NOT NULL COMMENT '优惠类型 1为营销活动 2为虚拟财富',-->
+    <!--`discount_code` varchar(64) NOT NULL COMMENT '优惠标志码',-->
+    <!--`discount_desc` varchar(512) DEFAULT NULL COMMENT '优惠描述',-->
+    <!--`discount_amount` bigint(20) NOT NULL COMMENT '本优惠记录所占优惠额度',-->
+    <!--`market_activity_id` bigint(20) NOT NULL COMMENT '关联的营销活动id',-->
+    <!--`user_coupon_id` bigint(20) NOT NULL COMMENT '所使用的优惠券id',-->
+    <!--`activity_discount_amount` bigint(20) NOT NULL COMMENT '关联的营销活动金额',-->
+    <!--`delete_mark` tinyint(4) NOT NULL COMMENT '逻辑删除标志',-->
+    <!--`gmt_created` date NOT NULL COMMENT '记录创建时间',-->
+    <!--`gmt_modified` date NOT NULL COMMENT '记录最后一次修改时间',-->
+    <!--PRIMARY KEY (`id`)-->
+    <!--) ENGINE=InnoDB AUTO_INCREMENT=384 DEFAULT CHARSET=utf8-->
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.OrderDiscountInfoDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="orderId" column="order_id" jdbcType="BIGINT"/>
+        <result property="orderItemId" column="order_item_id" jdbcType="BIGINT"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="itemSkuId" column="item_sku_id" jdbcType="BIGINT"/>
+        <result property="distributorId" column="distributor_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="discountType" column="discount_type" jdbcType="INTEGER"/>
+        <result property="discountCode" column="discount_code" jdbcType="VARCHAR"/>
+        <result property="discountDesc" column="discount_desc" jdbcType="VARCHAR"/>
+        <result property="discountAmount" column="discount_amount" jdbcType="BIGINT"/>
+        <result property="marketActivityId" column="market_activity_id" jdbcType="BIGINT"/>
+        <result property="subMarketActivityId" column="sub_market_activity_id" jdbcType="BIGINT"/>
+        <result property="userCouponId" column="user_coupon_id" jdbcType="BIGINT"/>
+        <result property="activityDiscountAmount" column="activity_discount_amount" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+    <resultMap id="statisticsActivityInfoDTO" class="com.mockuai.tradecenter.common.domain.StatisticsActivityInfoDTO">
+        <result property="orderCount" column="orderCount" jdbcType="BIGINT"/>
+        <result property="cancelOrderCount" column="cancelOrderCount" jdbcType="BIGINT"/>
+        <result property="waitPaidOrderCount" column="waitPaidOrderCount" jdbcType="BIGINT"/>
+        <result property="paidOrderCount" column="paidOrderCount" jdbcType="BIGINT"/>
+        <result property="refundOrderCount" column="refundOrderCount" jdbcType="BIGINT"/>
+        <result property="totalAmount" column="totalAmount" jdbcType="BIGINT"/>
+        <result property="cancelOrderAmount" column="cancelOrderAmount" jdbcType="BIGINT"/>
+        <result property="paidOrderAmount" column="paidOrderAmount" jdbcType="BIGINT"/>
+        <result property="refundOrderAmount" column="refundOrderAmount" jdbcType="BIGINT"/>
+        <result property="averageAmount" column="averageAmount" jdbcType="BIGINT"/>
+        <result property="discountAmount" column="discountAmount" jdbcType="BIGINT"/>
+        <result property="waitPaidOrderAmount" column="waitPaidOrderAmount" jdbcType="BIGINT"/>
+        <result property="participants" column="participants" jdbcType="BIGINT"/>
+
+    </resultMap>
+
+    <resultMap id="saleRank" class="com.mockuai.tradecenter.common.domain.SaleRankDTO">
+        <result property="saleCount" column="saleCount" jdbcType="BIGINT"/>
+        <result property="itemName" column="itemName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+
+    <sql id="column_set">
+        id,
+        biz_code,
+        order_id,
+        order_item_id,
+        item_id,
+        item_sku_id,
+        distributor_id,
+        user_id,
+        discount_type,
+        discount_code,
+        discount_desc,
+        discount_amount,
+        market_activity_id,
+        sub_market_activity_id,
+        user_coupon_id,
+        activity_discount_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <insert id="addOrderDiscountInfo" parameterClass="com.mockuai.tradecenter.core.domain.OrderDiscountInfoDO">
+        insert into order_discount_info(
+        biz_code,
+        order_id,
+        order_item_id,
+        item_id,
+        item_sku_id,
+        distributor_id,
+        user_id,
+        discount_type,
+        discount_code,
+        discount_desc,
+        discount_amount,
+        market_activity_id,
+        sub_market_activity_id,
+        user_coupon_id,
+        activity_discount_amount,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #orderId#,
+        #orderItemId#,
+        #itemId#,
+        #itemSkuId#,
+        #distributorId#,
+        #userId#,
+        #discountType#,
+        #discountCode#,
+        #discountDesc#,
+        #discountAmount#,
+        #marketActivityId#,
+        #subMarketActivityId#,
+        #userCouponId#,
+        #activityDiscountAmount#,
+        0,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+
+    <select id="queryOrderDiscountInfo" parameterClass="java.util.Map"
+            resultMap="result">
+        select
+        <include refid="order_discount_info.column_set"/>
+        from order_discount_info where 1=1 
+        <isNotNull property="userId" prepend="and">
+			user_id=#userId#
+		</isNotNull>
+        and order_id = #orderId# and delete_mark = 0
+    </select>
+
+
+
+    <!-- 查询订单总数 总金额-->
+    <select id="queryActivityOrder" resultMap="statisticsActivityInfoDTO" parameterClass="com.mockuai.tradecenter.core.domain.OrderDiscountInfoDO">
+            SELECT COUNT( id) orderCount ,COUNT(DISTINCT user_id) participants,
+           IFNULL( SUM(IF(order_status = 10,1,0)),0) waitPaidOrderCount,
+           IFNULL( SUM(IF(order_status IN (30,35,40,50,60,90),1,0)),0) paidOrderCount,
+           IFNULL( SUM(IF(order_status IN( 20,21),1,0)),0) cancelOrderCount ,
+            IFNULL( SUM(IF(order_status IN (70,80),1,0)),0) refundOrderCount,
+            IFNULL(SUM(total_amount),0) totalAmount ,
+            IFNULL(SUM(IF(order_status IN (30,35,40,50,60,90),total_amount,0)),0) paidOrderAmount,
+            IFNULL(SUM(IF(order_status IN (20,21),total_amount,0)),0) cancelOrderAmount ,
+            IFNULL(SUM(IF(order_status IN (70,80),total_amount,0)),0) refundOrderAmount,
+            IFNULL( SUM(IF(order_status = 10,total_amount,0)),0) waitPaidOrderAmount,
+            ROUND(IFNULL(SUM(total_amount)/COUNT(id),0)) averageAmount,
+            IFNULL(SUM(IF(order_status IN (30,35,40,50,60,90),discount_amount,0)),0) discountAmount
+            FROM (
+                SELECT    o.id ,o.user_id,o.total_amount,o.discount_amount,o.order_status
+            FROM user_order o,   order_discount_info i
+            WHERE o.id = i.order_id AND i.discount_code = 'ReachMultipleReduceTool'
+            AND   i.market_activity_id = #marketActivityId# GROUP BY o.id
+            ) a
+    </select>
+
+   <select id="querySaleRankByLimitBuy" resultMap="saleRank" parameterClass="long">
+        SELECT
+          o.`item_name` itemName
+          ,  COUNT(0) saleCount
+        FROM
+          order_item o,
+          order_discount_info d
+        WHERE o.order_id = d.order_id
+        AND d.discount_code = 'TIME_RANGE_DISCOUNT'
+        AND d.market_activity_id = #activityId#
+        GROUP BY o.item_id
+        ORDER BY COUNT(0) DESC
+        LIMIT 10
+   </select>
+</sqlMap>

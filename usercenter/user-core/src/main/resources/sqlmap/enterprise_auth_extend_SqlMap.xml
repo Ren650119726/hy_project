@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="enterprise_auth_extend" >
+  <!--CREATE TABLE `enterprise_auth_extend` (-->
+  <!--`id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',-->
+  <!--`biz_code` varchar(32) NOT NULL COMMENT '应用CODE',-->
+  <!--`user_id` bigint(20) NOT NULL COMMENT '用户ID',-->
+  <!--`company_name` varchar(32) NOT NULL COMMENT '公司名称',-->
+  <!--`license_reg_no` varchar(32) NOT NULL COMMENT '营业执照注册号',-->
+  <!--`license_start_time` varchar(32) NOT NULL COMMENT '营业执照开始时间',-->
+  <!--`license_end_time` varchar(32) NOT NULL COMMENT '营业执照结束时间',-->
+  <!--`reg_capital` bigint NOT NULL default '0' COMMENT '注册资本',-->
+  <!--`biz_scope_desc` varchar(32) NOT NULL COMMENT '营业范围描述',-->
+  <!--`org_code_cert_img` varchar(32) NOT NULL COMMENT '组织机构码扫描件',-->
+  <!--`tax_reg_cert_img` varchar(32) NOT NULL COMMENT '税务注册扫描件',-->
+  <!--`delete_mark` tinyint(1) NOT NULL COMMENT '0正常/1已删除',-->
+  <!--`gmt_created` datetime NOT NULL COMMENT '创建时间',-->
+  <!--`gmt_modified` datetime NOT NULL COMMENT '最近一次修改时间',-->
+  <!--PRIMARY KEY (`id`)-->
+  <!--) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='企业认证扩展信息'-->
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.EnterpriseAuthExtendDO" >
+    <result property="id" column="id" jdbcType="BIGINT" />
+    <result property="bizCode" column="biz_code" jdbcType="VARCHAR" />
+    <result property="userId" column="user_id" jdbcType="BIGINT" />
+    <result property="companyName" column="company_name" jdbcType="VARCHAR" />
+    <result property="licenseRegNo" column="license_reg_no" jdbcType="VARCHAR" />
+    <result property="licenseStartTime" column="license_start_time" jdbcType="VARCHAR" />
+    <result property="licenseEndTime" column="license_end_time" jdbcType="VARCHAR" />
+    <result property="regCapital" column="reg_capital" jdbcType="BIGINT" />
+    <result property="bizScopeDesc" column="biz_scope_desc" jdbcType="VARCHAR" />
+    <result property="orgCodeCertImg" column="org_code_cert_img" jdbcType="VARCHAR" />
+    <result property="taxRegCertImg" column="tax_reg_cert_img" jdbcType="VARCHAR" />
+    <result property="deleteMark" column="delete_mark" jdbcType="TINYINT" />
+    <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+    <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+    <result property="licenseLocation" column="license_location" jdbcType="VARCHAR" />
+    <result property="webSite" column="web_site" jdbcType="VARCHAR" />
+    <result property="bizLicenseImg" column="biz_license_img" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,
+    biz_code,
+    user_id,
+    company_name,
+    license_reg_no,
+    license_start_time,
+    license_end_time,
+    reg_capital,
+    biz_scope_desc,
+    org_code_cert_img,
+    tax_reg_cert_img,
+    biz_license_img,
+    delete_mark,
+    license_location,
+    web_site,
+    gmt_created,
+    gmt_modified
+  </sql>
+  
+  <insert id="addEnterpriseAuthExtend" parameterClass="com.mockuai.usercenter.core.domain.EnterpriseAuthExtendDO" >
+    insert into enterprise_auth_extend(
+    biz_code,
+    user_id,
+    company_name,
+    license_reg_no,
+    license_start_time,
+    license_end_time,
+    reg_capital,
+    biz_scope_desc,
+    org_code_cert_img,
+    tax_reg_cert_img,
+    biz_license_img,
+    delete_mark,
+    license_location,
+    web_site,
+    gmt_created,
+    gmt_modified
+    )
+    values(
+    #bizCode#,
+    #userId#,
+    #companyName#,
+    #licenseRegNo#,
+    #licenseStartTime#,
+    #licenseEndTime#,
+    #regCapital#,
+    #bizScopeDesc#,
+    #orgCodeCertImg#,
+    #bizLicenseImg#,
+    #taxRegCertImg#,
+    0,
+    #licenseLocation#,
+    #webSite#,
+    now(),
+    now()
+    )
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+  <select id="getEnterpriseAuthExtend" resultMap="BaseResultMap" parameterClass="java.lang.Long">
+  	select *
+    from enterprise_auth_extend
+    where user_id = #userId:BIGINT# and delete_mark = 0
+  </select>
+
+  <select id="queryEnterpriseAuthExtend" resultMap="BaseResultMap" parameterClass="java.util.List">
+    select *
+    from enterprise_auth_extend
+    where delete_mark = 0
+    <isNotNull property="userIdList">
+      user_id in
+      <iterate  property="userIdList" conjunction="," open="(" close=")"  >
+        #userIdList[]#
+      </iterate>
+    </isNotNull>
+  </select>
+
+  <update id="updateEnterpriseAuthExtend" parameterClass="com.mockuai.usercenter.core.domain.EnterpriseAuthExtendDO" >
+    update enterprise_auth_extend set gmt_modified = now()
+    <isNotNull prepend="," property="companyName">
+      company_name = #companyName:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="licenseRegNo">
+      license_reg_no = #licenseRegNo:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="regCapital">
+      reg_capital = #regCapital:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="bizScopeDesc">
+      biz_scope_desc = #bizScopeDesc:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="licenseStartTime">
+      license_start_time = #licenseStartTime:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="licenseEndTime">
+      license_end_time = #licenseEndTime:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="orgCodeCertImg">
+      org_code_cert_img = #orgCodeCertImg:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="taxRegCertImg">
+      tax_reg_cert_img = #taxRegCertImg:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="bizLicenseImg">
+      biz_license_img = #bizLicenseImg:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="licenseLocation">
+      license_location = #licenseLocation:VARCHAR#
+    </isNotNull>
+    <isNotNull prepend="," property="webSite">
+      web_site = #webSite:VARCHAR#
+    </isNotNull>
+    where id = #id:BIGINT# and delete_mark = 0
+  </update>
+  
+</sqlMap>

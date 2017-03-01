@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans default-autowire="byName">
+	<!-- <bean id="orderDAO" class="com.mockuaickuai.tradecenter.core.dao.impl.DefaultOrderDAO"/> -->
+	
+	<bean id="userCartItemDao" class="com.mockuai.tradecenter.core.dao.impl.UserCartItemDaoImpl"/>
+
+	<!--<bean id="orderLogDao" class ="com.mockuai.tradecenter.core.dao.impl.OrderLogDaoImpl"/>-->
+
+	<!--<bean id="sellerOrderDao" class="com.mockuai.tradecenter.core.dao.impl.SellerOrderDaoImpl" />-->
+	
+	<!--<bean id="returnOrderDao" class="com.mockuai.tradecenter.core.dao.impl.ReturnOrderDaoImpl" />-->
+	
+	<!--<bean id="returnOrderItemDao" class="com.mockuai.tradecenter.core.dao.impl.ReturnOrderItemDaoImpl" />-->
+	
+	<!--<bean id="deliveryNoticeDao" class="com.mockuai.tradecenter.core.dao.impl.DeliveryNoticeDaoImpl" />-->
+	
+	<bean id="orderDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderDAOImpl">
+		<property name="sqlMapClientSlave" ref="sqlMapClientSlave"/> 
+	</bean>
+	<bean id="dataDAO" class="com.mockuai.tradecenter.core.dao.impl.DataDAOImpl"/>
+	<bean id="orderItemDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderItemDAOImpl"/>
+	<bean id="orderConsigneeDAO" class="com.mockuai.tradecenter.core.dao.impl.OrderConsigneeDAOImpl" />
+	<bean id="orderPaymentDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderPaymentDAOImpl"/>
+	<bean id="orderInvoiceDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderInvoiceDAOImpl"/>
+	<bean id="orderDiscountInfoDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderDiscountInfoDAOImpl"/>
+
+	
+	<bean id="orderViewDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderViewDAOImpl"/>
+	<bean id="sellerTransLogDAO" class ="com.mockuai.tradecenter.core.dao.impl.SellerTransLogDAOImpl"/>
+	<bean id="sellerMoneyDAO" class ="com.mockuai.tradecenter.core.dao.impl.SellerMoneyDAOImpl"/>
+	<bean id="withdrawInfoDAO" class ="com.mockuai.tradecenter.core.dao.impl.WithdrawInfoDAOImpl"/>
+	
+	<bean id="withdrawBatchDAO" class ="com.mockuai.tradecenter.core.dao.impl.WithdrawBatchDAOImpl"/>
+	
+	<bean id="refundDAO" class ="com.mockuai.tradecenter.core.dao.impl.RefundDAOImpl"/>
+	
+	<bean id="refundItemImageDAO" class ="com.mockuai.tradecenter.core.dao.impl.RefundItemImageDAOImpl"/>
+	
+	<bean id="orderStoreDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderStoreDAOImpl"/>
+	
+	<bean id="orderServiceDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderServiceDAOImpl"/>
+	
+	<bean id="cartItemServiceDAO" class ="com.mockuai.tradecenter.core.dao.impl.CartItemServiceDAOImpl"/>
+	
+	<bean id="bizLockDAO" class ="com.mockuai.tradecenter.core.dao.impl.BizLockDAOImpl"/>
+	
+	<bean id="tradeNotifyLogDAO" class ="com.mockuai.tradecenter.core.dao.impl.TradeNotifyLogDAOImpl"/>
+	
+	
+	<bean id="tradeConfigDAO" class ="com.mockuai.tradecenter.core.dao.impl.TradeConfigDAOImpl"/>
+	
+	<bean id="tradePaymentConfigDAO" class ="com.mockuai.tradecenter.core.dao.impl.TradePaymentConfigDAOImpl"/>
+	
+	<bean id="orderTrackDAO" class ="com.mockuai.tradecenter.core.dao.impl.OrderTrackDAOImpl"/>
+	
+	
+</beans>

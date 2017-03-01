@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+            http://www.springframework.org/schema/context    
+            http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+       default-autowire="byName">
+
+    <context:component-scan base-package="com.mockuai.virtualwealthcenter.core.message"/>
+
+	
+	
+    <bean class="com.mockuai.virtualwealthcenter.core.message.consumer.BaseConsumer">
+        <property name="address" value="${virtualwealthcenter.rocketmq.address}"/>
+        <property name="port" value="${virtualwealthcenter.rocketmq.port}"/>
+        <property name="consumeGroup" value="${virtualwealthcenter.rocketmq.group}"/>
+    </bean>
+    <bean class="com.mockuai.virtualwealthcenter.core.message.producer.BaseProducer">
+        <property name="address" value="${virtualwealthcenter.rocketmq.address}"/>
+        <property name="port" value="${virtualwealthcenter.rocketmq.port}"/>
+    </bean>
+
+    <context:component-scan base-package="com.mockuai.virtualwealthcenter.core.rule"/>
+    <context:component-scan base-package="com.mockuai.virtualwealthcenter.core.service.action"/>
+
+    <bean id="actionHolder" class="com.mockuai.virtualwealthcenter.core.service.action.ActionHolder"/>
+    <bean id="appContext" class="com.mockuai.virtualwealthcenter.core.service.AppContext"/>
+    <bean id="requestDispatcher" class="com.mockuai.virtualwealthcenter.core.service.RequestDispatcher">
+        <property name="actionHolder" ref="actionHolder"/>
+        <property name="appContext" ref="appContext"/>
+    </bean>
+</beans>

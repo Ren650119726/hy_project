@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="trade_notify_log">
+
+  
+
+
+    <resultMap id="result" class="com.mockuai.tradecenter.core.domain.TradeNotifyLogDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="type" column="type" />
+        <result property="status" column="status"/>
+         <result property="orderId" column="order_id"/>
+         <result property="tradeAmount" column="trade_amount"/>
+          <result property="innerBillNo" column="inner_bill_no"/>
+          <result property="outBillNo" column="out_bill_no"/>
+          <result property="outErrorMsg" column="out_error_msg"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="DATE"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="DATE"/>
+    </resultMap>
+
+
+    <sql id="column_set">
+        id,
+        type,
+        status,
+        order_id,
+        trade_amount,
+        inner_bill_no,
+        out_bill_no,
+        out_error_msg,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+   <select id="getTradeNofityLog" parameterClass="com.mockuai.tradecenter.common.domain.TradeNotifyLogQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from trade_notify_log where 1=1 
+        <isNotNull property="outBillNo" prepend="and">
+            out_bill_no=#outBillNo#
+        </isNotNull>
+         <isNotNull property="type" prepend="and">
+            type=#type#
+        </isNotNull>
+       
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+    </select>
+
+    <select id="queryTradeNotifyLog" parameterClass="com.mockuai.tradecenter.common.domain.TradeNotifyLogQTO"
+            resultMap="result">
+        select
+        <include refid="column_set"/>
+        from trade_notify_log where 1=1
+
+        <isNotNull property="outBillNo" prepend="and">
+            out_bill_no=#outBillNo#
+        </isNotNull>
+        <isNotNull property="type" prepend="and">
+            type=#type#
+        </isNotNull>
+        <isNotNull property="status" prepend="and">
+            status=#status#
+        </isNotNull>
+
+        <isNotNull property="orderId" prepend="and">
+            order_id=#orderId#
+        </isNotNull>
+        <isNotNull property="startDate" prepend="and">
+            gmt_created  &gt;=#startDate#
+        </isNotNull>
+        <isNotNull property="endDate" prepend="and">
+            gmt_created  &lt;=#endDate#
+        </isNotNull>
+        <isNotEmpty property="orderIds" prepend="AND">
+            order_id IN
+            <iterate open="(" close=")" property="orderIds" conjunction=",">
+                #orderIds[]#
+            </iterate>
+        </isNotEmpty>
+        limit #offset#,#count#
+    </select>
+
+
+
+
+    <insert id="addTradeNofifyLog" parameterClass="com.mockuai.tradecenter.core.domain.TradeNotifyLogDO">
+        insert into trade_notify_log(
+        type,
+        status,
+        order_id,
+        trade_amount,
+        inner_bill_no,
+        out_bill_no,
+        out_error_msg,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #type#,
+        #status#,
+        #orderId#,
+        #tradeAmount#,
+        #innerBillNo#,
+        #outBillNo#,
+        #outErrorMsg#,
+        now(),
+        now()
+        )
+        <selectKey resultClass="long" keyProperty="id">
+            select
+            LAST_INSERT_ID() as value
+        </selectKey>
+    </insert>
+    
+  
+   
+</sqlMap>

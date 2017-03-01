@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="user_baby_info" >
+  <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.UserBabyInfoDO" >
+    <result column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="baby_name" property="babyName" jdbcType="VARCHAR"/>
+    <result column="baby_status" property="babyStatus" jdbcType="TINYINT" />
+    <result column="baby_sex" property="babySex" jdbcType="TINYINT" />
+    <result column="baby_birthday" property="babyBirthday" jdbcType="INTEGER" />
+    <result column="expected_childbirth_date" property="expectedChildbirthDate" jdbcType="INTEGER" />
+    <result column="is_default" property="isDefault" jdbcType="TINYINT"/>
+    <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+    <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <iterate property="oredCriteria" conjunction="or" prepend="where" removeFirstPrepend="iterate" >
+      <isEqual property="oredCriteria[].valid" compareValue="true" >
+        (
+        <iterate prepend="and" property="oredCriteria[].criteriaWithoutValue" conjunction="and" >
+          $oredCriteria[].criteriaWithoutValue[]$
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithSingleValue" conjunction="and" >
+          $oredCriteria[].criteriaWithSingleValue[].condition$ #oredCriteria[].criteriaWithSingleValue[].value#
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithListValue" conjunction="and" >
+          $oredCriteria[].criteriaWithListValue[].condition$
+          <iterate property="oredCriteria[].criteriaWithListValue[].values" open="(" close=")" conjunction="," >
+            #oredCriteria[].criteriaWithListValue[].values[]#
+          </iterate>
+        </iterate>
+        <iterate prepend="and" property="oredCriteria[].criteriaWithBetweenValue" conjunction="and" >
+          $oredCriteria[].criteriaWithBetweenValue[].condition$
+          #oredCriteria[].criteriaWithBetweenValue[].values[0]# and
+          #oredCriteria[].criteriaWithBetweenValue[].values[1]#
+        </iterate>
+        )
+      </isEqual>
+    </iterate>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id,baby_name, baby_status, baby_sex, baby_birthday, expected_childbirth_date,is_default,deleted, gmt_created, 
+    gmt_modified
+  </sql>
+  
+  <select id="selectBabyById" resultMap="BaseResultMap" parameterClass="java.lang.Long" >
+    select 
+    <include refid="user_baby_info.Base_Column_List" />
+    from user_baby_info
+    where id = #id:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="countByUserId" parameterClass="java.lang.Long" resultClass="java.lang.Integer" >
+    select count(1) from user_baby_info where user_id = #userId:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="getBabys" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="user_baby_info.Base_Column_List" /> from user_baby_info where user_id = #userId:BIGINT# and deleted = 0
+  </select>
+  
+  <select id="getDefBaby" parameterClass="java.lang.Long" resultMap="BaseResultMap">
+  	select <include refid="user_baby_info.Base_Column_List" /> from user_baby_info where user_id = #userId:BIGINT# and is_default = 1 and deleted = 0
+  </select>
+  
+  
+  
+  <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.UserBabyInfoDO" >
+    insert into user_baby_info
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="userId" >
+        user_id
+      </isNotNull>
+      <isNotNull prepend="," property="babyName" >
+        baby_name
+      </isNotNull>
+      <isNotNull prepend="," property="babyStatus" >
+        baby_status
+      </isNotNull>
+      <isNotNull prepend="," property="babySex" >
+        baby_sex
+      </isNotNull>
+      <isNotNull prepend="," property="babyBirthday" >
+        baby_birthday
+      </isNotNull>
+      <isNotNull prepend="," property="expectedChildbirthDate" >
+        expected_childbirth_date
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault" >
+        is_default
+      </isNotNull>
+      ,deleted,gmt_created, gmt_modified
+      )
+    </dynamic>
+    values
+    <dynamic prepend="(" >
+      <isNotNull prepend="," property="userId" >
+        #userId:BIGINT#
+      </isNotNull>
+      <isNotNull prepend="," property="babyName" >
+        #babyName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="babyStatus" >
+        #babyStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="babySex" >
+        #babySex:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="babyBirthday" >
+        #babyBirthday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="expectedChildbirthDate" >
+        #expectedChildbirthDate:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault" >
+        #isDefault:TINYINT#
+      </isNotNull>
+      ,0,now(),now()
+      )
+    </dynamic>
+    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+	</selectKey>
+  </insert>
+  
+   <update id="updateBaby" parameterClass="com.mockuai.usercenter.core.domain.UserBabyInfoDO" >
+    update user_baby_info set gmt_modified = now()
+      <isNotNull prepend="," property="babyName" >
+        baby_name = #babyName:VARCHAR#
+      </isNotNull>
+      <isNotNull prepend="," property="babyStatus" >
+        baby_status = #babyStatus:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="babySex" >
+        baby_sex = #babySex:TINYINT#
+      </isNotNull>
+      <isNotNull prepend="," property="babyBirthday" >
+        baby_birthday = #babyBirthday:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="expectedChildbirthDate" >
+        expected_childbirth_date = #expectedChildbirthDate:INTEGER#
+      </isNotNull>
+      <isNotNull prepend="," property="isDefault" >
+        is_default = #isDefault:TINYINT#
+      </isNotNull>
+    where id = #id:BIGINT# and deleted = 0
+  </update>
+  
+  <update id="updateNonDef" parameterClass="java.lang.Long">
+  	update user_baby_info set gmt_modified = now(),is_default = 0 where id = #id:BIGINT# and deleted = 0
+  </update>
+  
+  <update id="deleteUserBaby" parameterClass="java.lang.Long">
+  	update user_baby_info set gmt_modified = now(),deleted=1 where user_id = #userId:BIGINT# and deleted = 0
+  </update>
+  
+  <update id="deleteBaby" parameterClass="com.mockuai.usercenter.core.domain.UserBabyInfoDO">
+  	update user_baby_info set gmt_modified = now(),deleted=1 where id = #id:BIGINT# and user_id = #userId:BIGINT# and deleted = 0
+  </update>
+  <update id="restoreUserBaby" parameterClass="java.lang.Long">
+  	update user_baby_info set gmt_modified = now(),deleted=0 where user_id = #userId:BIGINT# and deleted = 1
+  </update>
+  
+  
+  
+</sqlMap>

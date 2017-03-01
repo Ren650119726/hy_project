@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="property">
+
+    <typeAlias alias="propertyDO" type="com.mockuai.marketingcenter.core.domain.PropertyDO"/>
+    <typeAlias alias="propertyQTO" type="com.mockuai.marketingcenter.common.domain.qto.PropertyQTO"/>
+
+    <resultMap id="result" class="propertyDO">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="owner_type" property="ownerType" jdbcType="TINYINT"/>
+        <result column="owner_id" property="ownerId" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="pkey" property="pkey" jdbcType="VARCHAR"/>
+        <result column="value" property="value" jdbcType="VARCHAR"/>
+        <result column="value_type" property="valueType" jdbcType="TINYINT"/>
+        <result column="creator_type" property="creatorType" jdbcType="TINYINT"/>
+        <result column="creator_id" property="creatorId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="columnList">
+     id,
+     owner_type,
+     owner_id,
+     name,
+     pkey,
+     value,
+     value_type,
+     creator_type,
+     creator_id,
+     biz_code,
+     delete_mark,
+     gmt_created,
+     gmt_modified
+   </sql>
+
+    <insert id="addProperty" parameterClass="propertyDO">
+        insert into property
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">id</isNotNull>
+            <isNotNull prepend="," property="ownerType">owner_type</isNotNull>
+            <isNotNull prepend="," property="ownerId">owner_id</isNotNull>
+            <isNotNull prepend="," property="name">name</isNotNull>
+            <isNotNull prepend="," property="pkey">pkey</isNotNull>
+            <isNotNull prepend="," property="value">value</isNotNull>
+            <isNotNull prepend="," property="valueType">value_type</isNotNull>
+            <isNotNull prepend="," property="creatorType">creator_type</isNotNull>
+            <isNotNull prepend="," property="creatorId">creator_id</isNotNull>
+            <isNotNull prepend="," property="bizCode">biz_code</isNotNull>
+            ,delete_mark,gmt_created,gmt_modified )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">#id#</isNotNull>
+            <isNotNull prepend="," property="ownerType">#ownerType#</isNotNull>
+            <isNotNull prepend="," property="ownerId">#ownerId#</isNotNull>
+            <isNotNull prepend="," property="name">#name#</isNotNull>
+            <isNotNull prepend="," property="pkey">#pkey#</isNotNull>
+            <isNotNull prepend="," property="value">#value#</isNotNull>
+            <isNotNull prepend="," property="valueType">#valueType#</isNotNull>
+            <isNotNull prepend="," property="creatorType">#creatorType#</isNotNull>
+            <isNotNull prepend="," property="creatorId">#creatorId#</isNotNull>
+            <isNotNull prepend="," property="bizCode">#bizCode#</isNotNull>
+            ,0,now(),now() )
+        </dynamic>
+
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+
+    <select id="queryProperty" resultMap="result" parameterClass="propertyQTO">
+        select
+        <include refid="property.columnList"/>
+        from property where delete_mark=0
+        <isNotNull prepend="and" property="id">
+            id = #id:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="creatorId">
+            creator_id = #creatorId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="ownerId">
+            owner_id = #ownerId:BIGINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="ownerType">
+            owner_type = #ownerType:TINYINT#
+        </isNotNull>
+        <isNotNull prepend="and" property="pkey">
+            pkey = #pkey:VARCHAR#
+        </isNotNull>
+        <isNotNull prepend="and" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="ownerIdList" prepend="and">
+            owner_id in
+            <iterate property="ownerIdList" conjunction="," open="(" close=")">
+                #ownerIdList[]#
+            </iterate>
+        </isNotNull>
+    </select>
+
+</sqlMap>

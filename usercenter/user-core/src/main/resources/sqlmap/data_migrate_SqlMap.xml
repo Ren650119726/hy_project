@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="data_migrate">
+
+    <resultMap id="userResult" class="com.mockuai.usercenter.core.domain.UserDO" >
+        <result property="id" column="id"  jdbcType="BIGINT" />
+        <result property="bizCode" column="biz_code"  jdbcType="VARCHAR" />
+        <result property="type" column="type"  jdbcType="TINYINT" />
+        <result property="name" column="name"  jdbcType="VARCHAR" />
+        <result property="password" column="password"  jdbcType="VARCHAR" />
+        <result property="imgUrl" column="img_url"  jdbcType="VARCHAR" />
+        <result column="experience" property="experience" jdbcType="BIGINT" />
+        <result property="phone" column="phone"  jdbcType="VARCHAR" />
+        <result property="mobile" column="mobile"  jdbcType="VARCHAR" />
+        <result property="email" column="email"  jdbcType="VARCHAR" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="roleMark" column="role_mark"  jdbcType="BIGINT" />
+        <result property="inviterId" column="inviter_id"  jdbcType="BIGINT" />
+        <result property="invitationCode" column="invitation_code"  jdbcType="VARCHAR" />
+        <result property="originUserId" column="origin_user_id"  jdbcType="BIGINT" />
+        <result property="deleteMark" column="delete_mark"  jdbcType="TINYINT" />
+        <result property="gmtCreated" column="gmt_created"  jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified"  jdbcType="TIMESTAMP" />
+    </resultMap>
+
+    <resultMap id="userOpenInfoResult" class="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="openType" column="open_type" jdbcType="TINYINT"/>
+        <result property="openId" column="open_id" jdbcType="VARCHAR"/>
+        <result property="openUid" column="open_uid" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="user_column_set" >
+        id,
+        biz_code,
+        type,
+        name,
+        password,
+        img_url,
+        experience,
+        phone,
+        mobile,
+        email,
+        status,
+        role_mark,
+        inviter_id,
+        invitation_code,
+        origin_user_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+    <sql id="user_open_info_column_set">
+        id,
+        biz_code,
+        user_id,
+        open_type,
+        open_id,
+        open_uid,
+        name,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+
+
+    <insert id="insertUserOpenInfo" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        insert into user_open_info(
+        biz_code,
+        user_id,
+        open_type,
+        open_id,
+        open_uid,
+        name,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode#,
+        #userId#,
+        #openType#,
+        #openId#,
+        #openUid#,
+        #name#,
+        #deleteMark#,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUserOpenInfo" resultMap="userOpenInfoResult" parameterClass="com.mockuai.usercenter.core.domain.UserOpenInfoDO">
+        select
+        <include refid="data_migrate.user_open_info_column_set"/>
+        from user_open_info
+        where open_type = #openType# and open_uid = #openUid#
+    </select>
+
+    <insert id="insertUser" parameterClass="com.mockuai.usercenter.core.domain.UserDO">
+        insert into user(
+        biz_code,
+        type,
+        name,
+        password,
+        img_url,
+        experience,
+        phone,
+        mobile,
+        email,
+        role_mark,
+        inviter_id,
+        invitation_code,
+        status,
+        origin_user_id,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+        )
+        values(
+        #bizCode:VARCHAR#,
+        #type#,
+        #name:VARCHAR#,
+        #password:VARCHAR#,
+        #imgUrl:VARCHAR#,
+        #experience:BIGINT#,
+        #phone:VARCHAR#,
+        #mobile:VARCHAR#,
+        #email:VARCHAR#,
+        #roleMark#,
+        #inviterId:BIGINT#,
+        #invitationCode:VARCHAR#,
+        #status#,
+        #originUserId#,
+        #deleteMark#,
+        now(),
+        now()
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="getUserByOrigin" resultMap="userResult" parameterClass="java.lang.Long" >
+        select
+        <include refid="data_migrate.user_column_set" />
+        from user
+        where origin_user_id = #originUserId# and type=3
+    </select>
+
+</sqlMap>

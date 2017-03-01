@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="STDFEE">
+	<typeAlias alias="StdFee" type="com.mockuai.deliverycenter.core.domain.fee.StdFee" />
+	
+	<sql id="columList">
+		   id as id,
+		   name as name,
+		   code as code,
+		   remark as remark,
+		   allow_default as allowDefault,
+		   sort as sort,
+		   first_weight as firstWeight,
+		   continue_weight as continueWeight,
+		   weight_unit as weightUnit,
+		   first_fee as firstFee,
+		   continue_fee as continueFee,
+		   fee_limit_mark as feeLimitMark,
+		   min_fee as minFee,
+		   max_fee as maxFee,
+		   deleted as deleted,
+		   gmt_created as gmtCreated,
+		   gmt_modified as gmtModified
+	</sql>
+
+	<insert id="addStdFee" parameterClass="StdFee">
+		insert into delivery_std_fee
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">id </isNotNull>
+			<isNotNull prepend="," property="name">name </isNotNull>
+			<isNotNull prepend="," property="code">code </isNotNull>
+			<isNotNull prepend="," property="remark">remark </isNotNull>
+			<isNotNull prepend="," property="allowDefault">allow_default </isNotNull>
+			<isNotNull prepend="," property="sort">sort </isNotNull>
+			<isNotNull prepend="," property="firstWeight">first_weight </isNotNull>
+			<isNotNull prepend="," property="continueWeight">continue_weight </isNotNull>
+			<isNotNull prepend="," property="weightUnit">weight_unit </isNotNull>
+			<isNotNull prepend="," property="firstFee">first_fee </isNotNull>
+			<isNotNull prepend="," property="continueFee">continue_fee </isNotNull>
+			<isNotNull prepend="," property="feeLimitMark">fee_limit_mark </isNotNull>
+			<isNotNull prepend="," property="minFee">min_fee </isNotNull>
+			<isNotNull prepend="," property="maxFee">max_fee </isNotNull>
+			,deleted,gmt_created,gmt_modified
+			)
+		</dynamic>
+		values
+		<dynamic prepend="(">
+			<isNotNull prepend="," property="id">#id:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="name">#name:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="code">#code:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="remark">#remark:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="allowDefault">#allowDefault:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="sort">#sort:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="firstWeight">#firstWeight:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="continueWeight">#continueWeight:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="weightUnit">#weightUnit:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="firstFee">#firstFee:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="continueFee">#continueFee:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="feeLimitMark">#feeLimitMark:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="minFee">#minFee:VARCHAR#</isNotNull>
+			<isNotNull prepend="," property="maxFee">#maxFee:VARCHAR#</isNotNull>
+			,0,now(),now()
+			)
+		</dynamic>
+		<selectKey resultClass="java.lang.Integer" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateStdFee" parameterClass="StdFee">
+		update delivery_std_fee
+		set gmt_modified = now()
+		<isNotNull prepend="," property="id"> 
+			id = #id:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="code"> 
+			code = #code:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="remark"> 
+			remark = #remark:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="allowDefault"> 
+			allow_default = #allowDefault:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="sort"> 
+			sort = #sort:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="firstWeight"> 
+			first_weight = #firstWeight:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="continueWeight"> 
+			continue_weight = #continueWeight:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="weightUnit"> 
+			weight_unit = #weightUnit:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="firstFee"> 
+			first_fee = #firstFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="continueFee"> 
+			continue_fee = #continueFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="feeLimitMark"> 
+			fee_limit_mark = #feeLimitMark:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="minFee"> 
+			min_fee = #minFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="maxFee"> 
+			max_fee = #maxFee:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="," property="deleted"> 
+			deleted = #deleted:VARCHAR#
+		</isNotNull>
+		where id = #id:BIGINT# and deleted=0
+	</update>
+
+	<delete id="deleteStdFee" parameterClass="StdFee">
+		delete from delivery_std_fee 
+		where id = #id:BIGINT# and deleted=0
+	</delete>
+
+	<select id="getStdFee"  parameterClass="StdFee" resultClass="StdFee">
+		select
+		<include refid="STDFEE.columList" />
+		from delivery_std_fee
+		where id = #id:BIGINT# and deleted=0
+	</select>
+	
+	<sql id="queryWhere">
+		where deleted=0
+		<isNotNull prepend="AND" property="name"> 
+			name = #name:VARCHAR#
+		</isNotNull>
+		<isNotNull prepend="AND" property="code"> 
+			code = #code:VARCHAR#
+		</isNotNull>
+	</sql>
+	
+	<select id="queryStdFee" parameterClass="com.mockuai.deliverycenter.common.qto.fee.StdFeeQTO" resultClass="StdFee">
+		select
+		<include refid="STDFEE.columList" />
+		from delivery_std_fee
+		<include refid="STDFEE.queryWhere" />
+			order by sort asc,id desc
+		<isNotNull property="startRow">
+			<![CDATA[limit #startRow#,#pageSize#]]>
+		</isNotNull>
+	</select>
+	
+	<select id="queryCount" parameterClass="com.mockuai.deliverycenter.common.qto.fee.StdFeeQTO" resultClass="java.lang.Long">
+		select count(1) from delivery_std_fee
+		<include refid="STDFEE.queryWhere" />
+	</select>
+</sqlMap>

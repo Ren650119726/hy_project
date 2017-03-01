@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="limited_goods_correlation">
+
+    <typeAlias alias="limitedGoodsCorrelationDO" type="com.mockuai.marketingcenter.core.domain.LimitedGoodsCorrelationDO"/>
+    <resultMap id="result" class="limitedGoodsCorrelationDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="activityId" column="activity_id" jdbcType="BIGINT"/>
+        <result property="activityType" column="activity_type" jdbcType="TINYINT"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="itemId" column="item_id" jdbcType="BIGINT"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="columnList">
+        id,
+        activity_id,
+        item_id,
+        activity_type,
+        start_time,
+        end_time,
+        delete_mark,
+        gmt_created,
+        gmt_modified
+    </sql>
+    <!--定时任务或手动失效在活动结束修改商品状态-->
+    <update id="stopActivity"  parameterClass = "limitedGoodsCorrelationDO">
+        update limited_goods_correlation set
+        gmt_modified = now(),delete_mark=1
+        where
+        delete_mark = 0
+        <isNotNull property="itemId" >
+            and item_id = #itemId#
+        </isNotNull>
+        <isNotNull property="activityType" >
+            and activity_type = #activityType#
+        </isNotNull>
+        <isNotNull property="activityId" >
+            and activity_id = #activityId#
+        </isNotNull>
+    </update>
+    <!--添加活动商品-->
+    <insert id="addActivityGoods" parameterClass = "limitedGoodsCorrelationDO">
+    insert into limited_goods_correlation
+    (activity_id,
+        item_id,
+        activity_type,
+        start_time,
+        end_time,
+        delete_mark,
+        gmt_created,
+        gmt_modified) values
+    (#activityId#,#itemId#,#activityType#,#startTime#,#endTime#,0,now(),now())
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <!--根据商品id查信息-->
+    <select id="selectMsgByItemID" resultMap="result" parameterClass="java.util.Map">
+        select
+        <include refid="limited_goods_correlation.columnList"/>
+        from limited_goods_correlation WHERE delete_mark =0
+        <isNotNull property="itemId" >
+            and item_id = #itemId#
+        </isNotNull>
+    </select>
+    <!--查信息-->
+    <select id="selectMsgByGoods" resultMap="result" parameterClass="limitedGoodsCorrelationDO">
+        select
+        <include refid="limited_goods_correlation.columnList"/>
+        from limited_goods_correlation WHERE
+        <isNotNull  prepend="and" property="itemId" >
+             item_id = #itemId#
+        </isNotNull>
+        <isNotNull prepend="and" property="activityId" >
+             activity_id = #activityId#
+        </isNotNull>
+        <isNotNull prepend="and" property="activityType">
+            activity_type = #activityType#
+        </isNotNull>
+    </select>
+    <!--删除商品信息-->
+    <delete id="delteCorrelationGoods" parameterClass="map">
+        delete from limited_goods_correlation where activity_id = #activityId#
+    </delete>
+    <!--根据item_id取出最近活动开始时间活动id-->
+    <select id="selectCurrentActivityId" resultMap="result" parameterClass="map">
+        SELECT  <include refid="limited_goods_correlation.columnList"/>
+        from limited_goods_correlation where item_id =#itemId# and
+        delete_mark = 0 ORDER BY start_time asc LIMIT 1
+    </select>
+
+</sqlMap>

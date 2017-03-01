@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="trade_record" >
+    <resultMap id="ResultMap" class="com.mockuai.usercenter.core.domain.TradeRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR" />
+        <result property="tradeNo" column="trade_no" jdbcType="VARCHAR" />
+        <result property="type" column="type" jdbcType="TINYINT" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="totalFee" column="total_fee" jdbcType="NUMERIC" />
+        <result property="gmtValid" column="gmt_valid" jdbcType="TIMESTAMP" />
+        <result property="gmtInvalid" column="gmt_invalid" jdbcType="TIMESTAMP" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINY_INT" />
+        <result property="mobile" column="mobile" jdbcType="VARCHAR" />
+        <result property="isMultiMall" column="is_multi_mall" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" class="com.mockuai.usercenter.core.domain.TradeRecordDO">
+        <result property="id" column="id" jdbcType="BIGINT" />
+        <result property="userId" column="user_id" jdbcType="BIGINT" />
+        <result property="contactName" column="contact_name" jdbcType="VARCHAR" />
+        <result property="tradeNo" column="trade_no" jdbcType="VARCHAR" />
+        <result property="type" column="type" jdbcType="TINYINT" />
+        <result property="bizCode" column="biz_code" jdbcType="VARCHAR" />
+        <result property="status" column="status" jdbcType="TINYINT" />
+        <result property="totalFee" column="total_fee" jdbcType="NUMERIC" />
+        <result property="gmtValid" column="gmt_valid" jdbcType="TIMESTAMP" />
+        <result property="gmtInvalid" column="gmt_invalid" jdbcType="TIMESTAMP" />
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP" />
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP" />
+        <result property="deleteMark" column="delete_mark" jdbcType="TINY_INT" />
+        <result property="isMultiMall" column="is_multi_mall" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        user_id,
+        contact_name,
+        trade_no,
+        type,
+        status,
+        biz_code,
+        total_fee,
+        gmt_valid,
+        gmt_invalid,
+        gmt_created,
+        gmt_modified,
+        delete_mark,
+        is_multi_mall
+    </sql>
+
+    <insert id="insert" parameterClass="com.mockuai.usercenter.core.domain.TradeRecordDO" >
+        insert into trade_record (
+        user_id,
+        trade_no,
+        contact_name,
+        type,
+        status,
+        biz_code,
+        total_fee,
+        gmt_valid,
+        gmt_invalid,
+        gmt_created,
+        gmt_modified,
+        delete_mark,
+        is_multi_mall
+        )
+        values (
+        #userId#,
+        #tradeNo#,
+        #contactName#,
+        #type#,
+        #status#,
+        #bizCode#,
+        #totalFee#,
+        #gmtValid#,
+        #gmtInvalid#,
+        now(),
+        now(),
+        0,
+        #isMultiMall#
+        )
+        <selectKey resultClass="java.lang.Long" keyProperty="id">
+            SELECT  LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <select id="queryAll" resultMap="ResultMap" >
+        select trade_record.*, user.mobile from trade_record, user where trade_record.user_id = user.id and trade_record.delete_mark = 0;
+    </select>
+
+    <select id="queryByUserId" parameterClass="java.lang.Long" resultMap="BaseResultMap" >
+        select * from trade_record where user_id = #userId# and delete_mark = 0;
+    </select>
+
+    <select id="query" resultMap="ResultMap" parameterClass="com.mockuai.usercenter.common.qto.TradeRecordQTO">
+        select trade_record.*, user.mobile from trade_record, user where trade_record.user_id = user.id and trade_record.delete_mark = 0
+        <isNotNull property="contactName" prepend="and">
+            contact_name like concat('%',#contactName:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull property="userId" prepend="and">
+            user_id = #userId#
+        </isNotNull>
+        <isNotNull property="mobile" prepend="and">
+            mobile = #mobile#
+        </isNotNull>
+        <isNotNull property="tradeNo" prepend="and">
+            trade_no = #tradeNo#
+        </isNotNull>
+        <isNotNull property="type" prepend="and">
+            trade_record.type = #type#
+        </isNotNull>
+        <isNotNull property="status" prepend="and">
+            trade_record.status = #status#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            trade_record.biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="isMultiMall" prepend=",">
+            is_multi_mall = #isMultiMall#
+        </isNotNull>
+        order by trade_record.id desc limit #offset#, #count#
+    </select>
+
+    <select id="totalCount" resultClass="java.lang.Long" parameterClass="com.mockuai.usercenter.common.qto.TradeRecordQTO">
+        select count(*) from trade_record, user where trade_record.user_id = user.id and trade_record.delete_mark = 0
+        <isNotNull property="contactName" prepend="and">
+            contact_name like concat('%',#contactName:VARCHAR#,'%')
+        </isNotNull>
+        <isNotNull property="userId" prepend="and">
+            user_id = #userId#
+        </isNotNull>
+        <isNotNull property="mobile" prepend="and">
+            mobile = #mobile#
+        </isNotNull>
+        <isNotNull property="tradeNo" prepend="and">
+            trade_no = #tradeNo#
+        </isNotNull>
+        <isNotNull property="type" prepend="and">
+            trade_record.type = #type#
+        </isNotNull>
+        <isNotNull property="status" prepend="and">
+            trade_record.status = #status#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend="and">
+            trade_record.biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="isMultiMall" prepend=",">
+            is_multi_mall = #isMultiMall#
+        </isNotNull>
+    </select>
+
+    <update id="updateByUserId" parameterClass="com.mockuai.usercenter.core.domain.TradeRecordDO">
+        update trade_record set gmt_modified = now()
+        <isNotNull property="status" prepend=",">
+            status = #status#
+        </isNotNull>
+        <isNotNull property="bizCode" prepend=",">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull property="type" prepend=",">
+            type = #type#
+        </isNotNull>
+        <isNotNull property="gmtValid" prepend=",">
+            gmt_valid = #gmtValid#
+        </isNotNull>
+        <isNotNull property="gmtInvalid" prepend=",">
+            gmt_invalid = #gmtInvalid#
+        </isNotNull>
+        <isNotNull property="totalFee" prepend=",">
+            total_fee = #totalFee#
+        </isNotNull>
+        <isNotNull property="tradeNo" prepend=",">
+            trade_no = #tradeNo#
+        </isNotNull>
+        <isNotNull property="isMultiMall" prepend=",">
+            is_multi_mall = #isMultiMall#
+        </isNotNull>
+        where user_id = #userId#
+    </update>
+
+    <update id="deleteByUserId" parameterClass="java.lang.Long">
+        update trade_record set delete_mark = 1 where delete_mark = 0 and user_id = #userId#;
+    </update>
+</sqlMap>

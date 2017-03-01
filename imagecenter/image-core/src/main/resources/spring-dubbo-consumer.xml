@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://code.alibabatech.com/schema/dubbo
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd ">
+
+    <dubbo:application name="image_consumer"/>
+    <dubbo:registry address="zookeeper://${imagecenter.dubbo.registry.address}"/>
+
+    <dubbo:reference id="itemService" interface="com.mockuai.itemcenter.common.api.ItemService" check="false"/>
+    <dubbo:reference id="distributionService"
+                     interface="com.mockuai.distributioncenter.common.api.DistributionService" check="false"/>
+    <dubbo:reference id="userDispatchService"
+                     interface="com.mockuai.usercenter.common.api.UserDispatchService" check="false"/>
+    <dubbo:reference id="appService"
+                     interface="com.mockuai.appcenter.common.api.AppService" check="false"/>
+</beans>

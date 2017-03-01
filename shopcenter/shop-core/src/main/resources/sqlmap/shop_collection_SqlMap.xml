@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="ShopCollection">
+    <typeAlias alias="shopCollectionDO" type="com.mockuai.shopcenter.core.domain.ShopCollectionDO"/>
+    <typeAlias alias="shopCollectionQTO" type="com.mockuai.shopcenter.domain.qto.ShopCollectionQTO"/>
+
+    <resultMap class="shopCollectionDO" id="shopCollectionDOResult">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" jdbcType="BIGINT"/>
+        <result column="seller_id" property="sellerId" jdbcType="BIGINT"/>
+        <result column="shop_id" property="shopId" jdbcType="BIGINT"/>
+        <result column="biz_code" property="bizCode" jdbcType="VARCHAR"/>
+        <result column="delete_mark" property="deleteMark" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="DATETIME"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="DATETIME"/>
+    </resultMap>
+
+    <sql id="shop_collection_base_column_list">
+        id, user_id, seller_id, shop_id, biz_code,delete_mark, gmt_created, gmt_modified
+    </sql>
+
+    <sql id="ShopCollectionDAO.queryWhere">
+        where delete_mark = 0
+        <isNotNull prepend="AND" property="id">
+            id = #id#
+        </isNotNull>
+        <isNotNull prepend="AND" property="userId">
+            user_id = #userId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="sellerId">
+            seller_id = #sellerId#
+        </isNotNull>
+        <isNotNull prepend="AND" property="bizCode">
+            biz_code = #bizCode#
+        </isNotNull>
+        <isNotNull prepend="AND" property="shopId">
+            shop_id = #shopId#
+        </isNotNull>
+    </sql>
+
+    <select id="getShopCollection" resultMap="shopCollectionDOResult" parameterClass="shopCollectionDO">
+        select
+        <include refid="shop_collection_base_column_list"/>
+        from shop_collection
+        <include refid="ShopCollectionDAO.queryWhere"/>
+    </select>
+
+    <update id="updateShopCollection">
+        update shop_collection
+        set gmt_modified=now()
+        <dynamic prepend="">
+            <isNotNull prepend="," property="userId">
+                user_id = #userId#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id = #sellerId#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id = #shopId#
+            </isNotNull>
+            <isNotNull prepend="," property="deleteMark">
+                delete_mark = #deleteMark#
+            </isNotNull>
+        </dynamic>
+        <include refid="ShopCollectionDAO.queryWhere"/>
+    </update>
+
+    <insert id="addShopCollection" parameterClass="shopCollectionDO">
+        insert into shop_collection
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                id
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                user_id
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                seller_id
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                shop_id
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                biz_code
+            </isNotNull>
+            ,delete_mark,gmt_created,gmt_modified
+            )
+        </dynamic>
+        values
+        <dynamic prepend="(">
+            <isNotNull prepend="," property="id">
+                #id:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="userId">
+                #userId:BIGINT#
+            </isNotNull>
+            <isNotNull prepend="," property="sellerId">
+                #sellerId:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="shopId">
+                #shopId:INTEGER#
+            </isNotNull>
+            <isNotNull prepend="," property="bizCode">
+                #bizCode:VARCHAR#
+            </isNotNull>
+            ,0,now(),now()
+            )
+        </dynamic>
+        <selectKey keyProperty="id" resultClass="Long">
+            SELECT
+            LAST_INSERT_ID();
+        </selectKey>
+    </insert>
+
+    <delete id="deleteShopCollectionByShopId" parameterClass="shopCollectionDO">
+        delete from shop_collection
+        where seller_id =#sellerId# and user_id = #userId#
+    </delete>
+
+    <select id="countShopCollection" resultClass="Integer" parameterClass="shopCollectionQTO">
+        select count(1) from shop_collection
+        <include refid="ShopCollectionDAO.queryWhere"/>
+    </select>
+
+    <select id="queryShopCollectionList" resultMap="shopCollectionDOResult"
+            parameterClass="shopCollectionQTO">
+        select
+        <include refid="shop_collection_base_column_list"/>
+        from shop_collection
+        <include refid="ShopCollectionDAO.queryWhere"/>
+        order by gmt_created desc
+        <isNotNull property="needPaging">
+            limit #offset#,#pageSize#
+        </isNotNull>
+    </select>
+</sqlMap>

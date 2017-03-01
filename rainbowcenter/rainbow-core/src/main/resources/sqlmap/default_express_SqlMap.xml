@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="defaultExpress">
+    <typeAlias alias="defaultExpressDO" type="com.mockuai.rainbowcenter.core.domain.DefaultExpressDO"/>
+    <typeAlias alias="defaultExpressQTO" type="com.mockuai.rainbowcenter.common.qto.DefaultExpressQTO"/>
+
+    <resultMap id="BaseResultMap" class="defaultExpressDO">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="expressNo" column="express_no" jdbcType="VARCHAR"/>
+        <result property="explain" column="explain" jdbcType="VARCHAR"/>
+        <result property="gmtCreated" column="gmt_created" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="deleteMark" column="delete_mark" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <select id="getDefaultExpress" resultMap="BaseResultMap">
+        select * from default_express where delete_mark=0
+    </select>
+</sqlMap>
